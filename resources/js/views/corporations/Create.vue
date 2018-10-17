@@ -1,0 +1,109 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-header">
+                Corporations / Create New Corporation
+            </div>
+            <div class="card-body">
+                <div v-if="ifReady">
+                    <form v-on:submit.prevent="createNewCorporation">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Street</label>
+                                    <input type="text" class="form-control" v-model="street" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" class="form-control" v-model="city" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>State</label>
+                                    <input type="text" class="form-control" v-model="state" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Zip Code</label>
+                                    <input type="text" class="form-control" v-model="zip_code" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Country</label>
+                                    <input type="text" class="form-control" v-model="country" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Fax</label>
+                                    <input type="text" class="form-control" v-model="fax" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-sm">Create New Corporation</button>
+                    </form>
+                </div>
+
+                <div v-else>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        data() {
+            return {
+                ifReady: true,
+                name:'',
+                description: '',
+                street: '',
+                city: '',
+                state: '',
+                zip_code: '',
+                country: '',
+                fax: ''
+            };
+        },
+
+        methods: {
+            createNewCorporation() {
+                this.ifReady = false;
+                axios.post('/api/corporations', this.$data).then(res => {
+                    this.$router.push({ name: 'corporations.index' });
+                    Broadcast.$emit('NewCorporationCreated', {});
+                }).catch(err => {
+                    console.log(err);
+                });
+            }
+        }
+    }
+</script>
