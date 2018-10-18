@@ -183,4 +183,33 @@ class ItemsController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllItems()
+    {
+        if (cache()->has('items')) {
+            return response()->json([
+                'response' => true,
+                'message'  => 'Resources successfully retrieve.',
+                'items'    => cache('items', 5)
+            ], 200);
+        }
+
+        if (! $items = $this->item->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resources successfully retrieve.',
+            'items'    => $items
+        ], 200);
+    }
 }

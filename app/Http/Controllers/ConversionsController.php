@@ -183,4 +183,33 @@ class ConversionsController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllConversions()
+    {
+        if (cache()->has('conversions')) {
+            return response()->json([
+                'response'    => true,
+                'message'     => 'Resources successfully retrieve.',
+                'conversions' => cache('conversions', 5)
+            ], 200);
+        }
+
+        if (! $conversions = $this->conversion->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'    => true,
+            'message'     => 'Resources successfully retrieve.',
+            'conversions' => $conversions
+        ], 200);
+    }
 }

@@ -24,7 +24,6 @@ class ContactsController extends Controller
     public function __construct(ContactRepository $contact)
     {
         $this->contact = $contact;
-        $this->middleware('check.corporation')->only('store');
     }
 
     /**

@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Conversions
     Route::match(['put', 'patch'], 'conversions/{conversion}/restore', 'ConversionsController@restore');
     Route::delete('conversions/{conversion}/force-delete', 'ConversionsController@forceDestroy');
+    Route::get('conversions/retrieve-all-conversions', 'ConversionsController@getAllConversions');
     Route::resource('conversions', 'ConversionsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -102,6 +103,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Items
     Route::match(['put', 'patch'], 'items/{item}/restore', 'ItemsController@restore');
     Route::delete('items/{item}/force-delete', 'ItemsController@forceDestroy');
+    Route::get('items/retrieve-all-items', 'ItemsController@getAllItems');
     Route::resource('items', 'ItemsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -111,6 +113,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Item Types
     Route::match(['put', 'patch'], 'item-types/{itemType}/restore', 'ItemTypesController@restore');
     Route::delete('item-types/{itemType}/force-delete', 'ItemTypesController@forceDestroy');
+    Route::get('item-types/retrieve-all-item-types', 'ItemTypesController@getAllItemTypes');
     Route::resource('item-types', 'ItemTypesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -165,6 +168,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Unit Of Measurements
     Route::match(['put', 'patch'], 'unit-of-measurements/{unitOfMeasurement}/restore', 'UnitOfMeasurementsController@restore');
     Route::delete('unit-of-measurements/{unitOfMeasurement}/force-delete', 'UnitOfMeasurementsController@forceDestroy');
+    Route::get('unit-of-measurements/retrieve-all-unit-of-measurements', 'UnitOfMeasurementsController@getAllUnitOfMeasurements');
     Route::resource('unit-of-measurements', 'UnitOfMeasurementsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -174,6 +178,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Warehouses
     Route::match(['put', 'patch'], 'warehouses/{warehouse}/restore', 'WarehousesController@restore');
     Route::delete('warehouses/{warehouse}/force-delete', 'WarehousesController@forceDestroy');
+    Route::get('warehouses/retrieve-all-warehouses', 'WarehousesController@getAllWarehouses');
     Route::resource('warehouses', 'WarehousesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
