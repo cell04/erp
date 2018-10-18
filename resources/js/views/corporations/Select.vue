@@ -48,7 +48,7 @@ export default {
             });
         } else {
             let promise = new Promise((resolve, reject) => {
-                axios.get('/api/corporations/retrieve-all-corporations').then(res => {
+                axios.get('/api/corporations/get-all-corporations').then(res => {
                     this.corporations = res.data.corporations;
                     localStorage.setItem('corporations', JSON.stringify(res.data.corporations));
                     resolve();
