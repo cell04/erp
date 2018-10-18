@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Illuminate\Support\Facades\Storage;
-
 abstract class Repository
 {
     /**
@@ -24,13 +22,23 @@ abstract class Repository
     }
 
     /**
-     * Get all resources with filters in the storage.
+     * Get all resources in the storage.
      *
      * @return array json object
      */
     public function all()
     {
         return $this->model->all();
+    }
+
+    /**
+     * Get all resources in the storage using specified id.
+     *
+     * @return array json object
+     */
+    public function allUsingSpecifiedId($id)
+    {
+        return $this->model->where('id', $id)->get();
     }
 
     /**
@@ -162,11 +170,6 @@ abstract class Repository
         return $this->model->findOrFail($id);
     }
 
-    public function find($id)
-    {
-        return $this->model->find($id);
-    }
-
     /**
      * Find the resource using the specified id or else fail with user.
      *
@@ -220,11 +223,6 @@ abstract class Repository
      * @return boolean
      */
     public function store($request)
-    {
-        return $this->model->create($request->all());
-    }
-
-    public function create($request)
     {
         return $this->model->create($request->all());
     }
@@ -300,17 +298,6 @@ abstract class Repository
     }
 
     /**
-     * Retrieve latest resources using specified category.
-     *
-     * @param $cat
-     * @return array json object
-     */
-    public function getUsingCategory($category, $field = 'category')
-    {
-        return $this->news->where($field, $category)->latest()->limit(4)->get();
-    }
-
-    /**
      * Create pagination with filters for the resources.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -332,17 +319,5 @@ abstract class Repository
             ->withPath(
                 $this->model->createPaginationUrl($request, $removePage)
             );
-    }
-
-    public function getModel()
-    {
-        return
-                get_class($this->model);
-    }
-
-    public function getLastId()
-    {
-        return
-                $this->model->count();
     }
 }
