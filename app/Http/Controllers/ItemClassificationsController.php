@@ -183,4 +183,33 @@ class ItemClassificationsController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllItemClassifications()
+    {
+        if (cache()->has('item-classifications')) {
+            return response()->json([
+                'response'             => true,
+                'message'              => 'Resources successfully retrieve.',
+                'item_classifications' => cache('item-classifications', 5)
+            ], 200);
+        }
+
+        if (! $itemClassifications = $this->itemClassification->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resources successfully retrieve.',
+            'item_classifications' => $itemClassifications
+        ], 200);
+    }
 }

@@ -15,7 +15,7 @@ class WarehousesController extends Controller
      * @var App\Repositories\WarehouseRepository
      */
     protected $warehouse;
-    
+
     /**
      * Create new instance of warehouse controller.
      *
@@ -25,7 +25,7 @@ class WarehousesController extends Controller
     {
         $this->warehouse = $warehouse;
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -38,10 +38,10 @@ class WarehousesController extends Controller
                 'message' => 'Failed to retrieve resource'
             ], 400);
         }
-    
+
         return $data;
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -51,27 +51,27 @@ class WarehousesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            
+
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
                 'errors'  => $validator->errors()
             ], 400);
         }
-    
+
         if (! $this->warehouse->store($request)) {
             return response()->json([
                 'message' => 'Failed to store resource'
             ], 500);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully stored'
         ], 200);
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -85,13 +85,13 @@ class WarehousesController extends Controller
                 'message' => 'Resource does not exist'
             ], 400);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully retrieve',
             'warehouse' => $warehouse
         ], 200);
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -102,27 +102,27 @@ class WarehousesController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            
+
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
                 'errors'  => $validator->errors()
             ], 400);
         }
-    
+
         if (! $this->warehouse->update($request, $id)) {
             return response()->json([
                 'message' => 'Failed to update resource'
             ], 500);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully updated'
         ], 200);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -136,12 +136,12 @@ class WarehousesController extends Controller
                 'message' => 'Failed to delete resource'
             ], 400);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully deleted'
         ], 200);
     }
-    
+
     /**
      * Restore the specified resource from storage.
      *
@@ -155,12 +155,12 @@ class WarehousesController extends Controller
                 'message' => 'Failed to restore resource'
             ], 400);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully restored'
         ], 200);
     }
-    
+
     /**
      * Forcefully remove the specified resource from storage.
      *
@@ -174,9 +174,38 @@ class WarehousesController extends Controller
                 'message' => 'Failed to permanently delete resource'
             ], 400);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully deleted permanently'
+        ], 200);
+    }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllWarehouses()
+    {
+        if (cache()->has('warehouses')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'warehouses' => cache('warehouses', 5)
+            ], 200);
+        }
+
+        if (! $warehouses = $this->warehouse->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'warehouses' => $warehouses
         ], 200);
     }
 }

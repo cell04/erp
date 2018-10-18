@@ -182,4 +182,33 @@ class ItemPricelistsController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources using specified id.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllItemPricelistsUsingId($id)
+    {
+        if (cache()->has('item-pricelists')) {
+            return response()->json([
+                'response'        => true,
+                'message'         => 'Resources successfully retrieve.',
+                'item_pricelists' => cache('item-pricelists', 5)
+            ], 200);
+        }
+
+        if (! $itemPricelists = $this->itemPricelist->allUsingSpecifiedId($id)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'        => true,
+            'message'         => 'Resources successfully retrieve.',
+            'item_pricelists' => $itemPricelists
+        ], 200);
+    }
 }

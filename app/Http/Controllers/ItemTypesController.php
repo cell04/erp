@@ -183,4 +183,33 @@ class ItemTypesController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllItemTypes()
+    {
+        if (cache()->has('item-types')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'item_types' => cache('item-types', 5)
+            ], 200);
+        }
+
+        if (! $itemTypes = $this->itemType->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'item_types' => $itemTypes
+        ], 200);
+    }
 }

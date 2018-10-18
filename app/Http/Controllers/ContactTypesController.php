@@ -183,4 +183,33 @@ class ContactTypesController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllContactTypes()
+    {
+        if (cache()->has('content-types')) {
+            return response()->json([
+                'response'      => true,
+                'message'       => 'Resources successfully retrieve.',
+                'contact_types' => cache('content-types', 5)
+            ], 200);
+        }
+
+        if (! $contactTypes = $this->contactType->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resources successfully retrieve.',
+            'contact_types' => $contactTypes
+        ], 200);
+    }
 }
