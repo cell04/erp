@@ -42,20 +42,16 @@
             });*/
 
             axios.get('/api/auth/user').then(res => {
-                /*Broadcast.$emit('System Initialized', {});
-                localStorage.setItem('user', JSON.stringify(res.data.user));*/
                 this.user = res.data.user;
             });
 
-            Broadcast.$on('CacheReloaded', (event) => {
-                this.user = this.$store.state.user;
-
-                if (JSON.parse(localStorage.getItem('selectedCorporation')) instanceof Object == false) {
-                    this.$router.push({ name: 'corporations.select' });
-                } else {
-                    this.corporation = JSON.parse(localStorage.getItem('selectedCorporation'));
-                }
-            });
+            if (JSON.parse(localStorage.getItem('selectedCorporation')) instanceof Object == false) {
+                this.$router.push({ name: 'corporations.select' });
+            } else {
+                this.$store.state.selectedCorporation = JSON.parse(localStorage.getItem('selectedCorporation'));
+                this.corporation = JSON.parse(localStorage.getItem('selectedCorporation'));
+                axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
+            }
 
             Broadcast.$on('ChangeCorporation', (event) => {
                 this.corporation = event.corporation;
