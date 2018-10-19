@@ -212,4 +212,34 @@ class ItemClassificationsController extends Controller
             'item_classifications' => $itemClassifications
         ], 200);
     }
+
+    /**
+     * Retrieve all resources by using specified item type id.
+     *
+     * @param  int $id Item Type Id
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllItemClassificationByItemTypeId($id)
+    {
+        if (cache()->has('item-classifications')) {
+            return response()->json([
+                'response'             => true,
+                'message'              => 'Resources successfully retrieve.',
+                'item_classifications' => cache('item-classifications', 5)
+            ], 200);
+        }
+
+        if (! $itemClassifications = $this->itemClassification->getAllByItemTypeId($id)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resources successfully retrieve.',
+            'item_classifications' => $itemClassifications
+        ], 200);
+    }
 }

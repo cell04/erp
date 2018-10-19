@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class AuthController extends Controller
 {
     /**
@@ -38,16 +40,17 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $http = new \GuzzleHttp\Client(['verify' => false ]);
+        $url  = 'https://inventory.dev/oauth/token';
 
         try {
-            $response = $http->post('https://taravel.dev/oauth/token', [
+            $response = $http->post($url, [
                 'form_params' => [
                     'grant_type'    => 'password',
                     'client_id'     => '2',
-                    'client_secret' => 'IQPx60DZ2KgPolPmZy1EqKH6kCDrrOZIm0ickFbD',
+                    'client_secret' => 'zrnayMlbRt6qHGu0EQTwrWMYmSJZzYYeKnSvhpuW', // get it from oauth_clients
                     'username'      => $request->email,
                     'password'      => $request->password,
-                    'scope'         => '',
+                    'scope'         => '*',
                 ],
             ]);
 
@@ -88,6 +91,11 @@ class AuthController extends Controller
         return response()->json('Logged out successfully', 200);
     }
 
+    /**
+     * Get authenticated user.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function user()
     {
         return response()->json([
