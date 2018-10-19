@@ -28,7 +28,7 @@
                     </thead>
                     <tbody v-if="items">
                         <tr :key="item.id" v-for="item in items">
-                            <td>{{ item.SKU }}</td>
+                            <td>{{ item.stock_keeping_unit }}</td>
                             <td>{{ item.name }}</td>
                             <td>{{ item.description }}</td>
                             <td>

@@ -61,6 +61,7 @@
         },
 
         mounted() {
+            // Load All Item Type List
             new Promise((resolve, reject) => {
                axios.get("/api/item-types/get-all-item-types/").then(res => {
                 this.itemTypesList = res.data.item_types;

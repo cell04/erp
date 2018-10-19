@@ -32,13 +32,13 @@
                                     <label>Item Classification</label>
                                     <select class="form-control" v-model="newItem.classification_type_id" required>
                                         <option value="" disabled hidden>-- Select Item Classification --</option>
-                                        <option v-for="classification in itemClassificationsList.classifications" v-bind:value="classification.id">{{ classification.name }}</option>
+                                        <option v-for="itemClass in itemClassList" v-bind:value="itemClass.id">{{ itemClass.name }}</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Purchase Unit</label>
@@ -57,9 +57,9 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <br />
+                        <!-- <br />
                         <br />
                         <table class="table table-hover table-sm" v-if="conversionsList.length>0">
                             <thead>
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> -->
 
                         <button type="submit" class="btn btn-success btn-sm">Create New Item</button>
 
@@ -182,6 +182,7 @@
                     }]
                 },
                 itemTypesList: [],
+                itemClassList: [],
                 accountsList: [],
                 itemClassificationsList: [],
                 unitsList: [],
@@ -192,7 +193,7 @@
 
         mounted() {
             let promise = new Promise((resolve, reject) => {
-                axios.get("/api/item-types/retrieve-all-item-types/").then(res => {
+                axios.get("/api/item-types/get-all-item-types/").then(res => {
                     console.log(res);
                     this.ifReady = true;
                     this.itemTypesList = res.data.item_types;
@@ -203,8 +204,20 @@
                 });
             });
 
+            let promiseItemClass = new Promise((resolve, reject) => {
+                axios.get("/api/item-classifications/get-all-item-classifications/").then(res => {
+                    // console.log('getItemClass: ' + JSON.stringify(res.data.item_classifications));
+                    this.ifReady = true;
+                    this.itemClassList = res.data.item_classifications;
+                    if (!res.data.response) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
+
             let promise2 = new Promise((resolve, reject) => {
-                axios.get("/api/accounts/retrieve-all-accounts/").then(res => {
+                axios.get("/api/accounts/get-all-accounts/").then(res => {
                     console.log(res);
                     this.ifReady = true;
                     this.accountsList = res.data.accounts;
