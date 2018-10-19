@@ -29,13 +29,6 @@
         },
 
         created() {
-            if (JSON.parse(localStorage.getItem('selectedCorporation')) instanceof Object == false) {
-                this.$router.push({ name: 'corporations.select' });
-            } else {
-                this.$store.state.selectedCorporation = JSON.parse(localStorage.getItem('selectedCorporation'));
-                axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
-            }
-
             Broadcast.$on('ChangeCorporation', (event) => {
                 axios.defaults.headers.common['CORPORATION-ID'] = event.corporation.id;
             });

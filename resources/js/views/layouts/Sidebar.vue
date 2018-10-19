@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-
+            
             <li class="nav-item">
                 <a class="nav-link" href="#items" data-toggle="collapse" aria-expanded="false" aria-controls="items">
                     Items <i class="float-right fas fa-caret-down"></i>
@@ -55,6 +55,38 @@
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'item-types.index' }">View Item Types</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#itemClass" data-toggle="collapse" aria-expanded="false" aria-controls="itemClass">
+                    Item Classifications <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="itemClass">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'item-classifications.create' }">Create New Item Classification</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'item-classifications.index' }">View Item Classifications</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#itemPricelist" data-toggle="collapse" aria-expanded="false" aria-controls="itemPricelist">
+                    Item Pricelists <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="itemPricelist">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'item-pricelists.create' }">Create New Item Pricelist</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'item-pricelists.index' }">View Item Pricelists</router-link>
                     </li>
                 </ul>
             </div>
@@ -151,6 +183,21 @@
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'contacts.index' }">View Contacts</router-link>
+                    </li>
+                </ul>
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="#contact-types" data-toggle="collapse" aria-expanded="false" aria-controls="contact-types">
+                    Contact Type <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="contact-types">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'contact-types.create' }">Create New Contact Type</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'contact-types.index' }">View Contact Types</router-link>
                     </li>
                 </ul>
             </div>

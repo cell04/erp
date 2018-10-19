@@ -1,5 +1,10 @@
 <?php
 
+// Auth
+Route::post('/auth/login', 'AuthController@login');
+Route::post('/auth/logout', 'AuthController@logout');
+Route::get('/auth/user', 'AuthController@user');
+
 Route::group(['middleware' => 'auth:api'], function () {
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
@@ -9,9 +14,6 @@ Route::group(['middleware' => 'auth:api'], function () {
             'index', 'store', 'show', 'update', 'destroy'
         ]
     ]);
-
-    // Auth
-    Route::get('/auth/user', 'AuthController@user');
 
     // Branches
     Route::match(['put', 'patch'], 'branches/{contact}/restore', 'BranchesController@restore');
@@ -85,6 +87,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::match(['put', 'patch'], 'item-classifications/{itemClassification}/restore', 'ItemClassificationsController@restore');
     Route::delete('item-classifications/{itemClassification}/force-delete', 'ItemClassificationsController@forceDestroy');
     Route::get('item-classifications/get-all-item-classifications', 'ItemClassificationsController@getAllItemClassifications');
+    Route::post('item-classifications/get-all-item-classifications-by-item-type-id', 'ItemClassificationsController@getAllItemClassificationByItemTypeId');
     Route::resource('item-classifications', 'ItemClassificationsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'

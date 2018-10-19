@@ -21,13 +21,15 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Display Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="itemTypes">
-                        <tr :key="id" v-for="{ id, name, description } in itemTypes">
+                        <tr :key="id" v-for="{ id, name, display_name, description } in itemTypes">
                             <td>{{ name }}</td>
+                            <td>{{ display_name }}</td>
                             <td>{{ description }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'item-types.view', params: { id: id }}">
@@ -154,7 +156,7 @@
         const params = { page, per_page,searchColumnName, searchColumnDescription,order_by };
 
         axios.get('/api/item-types', { params }).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             callback(error, error.res.data);

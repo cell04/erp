@@ -50,6 +50,15 @@ class Contact extends Model
     }
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'contactType'
+    ];
+
+    /**
      * The contact belongs to a corporation.
      *
      * @return object

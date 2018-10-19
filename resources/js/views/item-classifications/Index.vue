@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Items / View Items
+                {{ componentVal }} / View {{ componentVal }}
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Items - Total Items {{ this.meta.total }}
+                                List of Item Types - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -20,20 +20,24 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">SKU</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Display Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="items">
-                        <tr :key="item.id" v-for="item in items">
-                            <td>{{ item.stock_keeping_unit }}</td>
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.description }}</td>
+                    <tbody v-if="itemClassification">
+                        <tr :key="id" v-for="{ id, name, display_name, description } in itemClassification">
+                            <td>{{ name }}</td>
+                            <td>{{ display_name }}</td>
+                            <td>{{ description }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'items.view', params: { id: item.id }}">
+                                <router-link class="text-info" :to="{ name: 'item-classifications.view', params: { id: id }}">
                                     View
+                                </router-link>
+                                |
+                                <router-link class="text-info" :to="{ name: 'item-classifications.edit', params: { id: id }}">
+                                    Edit
                                 </router-link>
                             </td>
                         </tr>
@@ -90,7 +94,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Items</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -105,93 +109,67 @@
                 </form>
             </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Search For Items</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label>SKU</label>
-                                <input type="text" class="form-control" v-model="searchColumnSKU" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
 
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
 
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea class="form-control" v-model="searchColumnDescription" maxlength="1000" required></textarea>
-                            </div>
+        </div>
+        <div  class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Search Item Types</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
 
-                            <div class="form-group">
-                                <label>Order By</label>
-                                <select class="form-control" v-model="order_by">
-                                    <option value="desc">Newest</option>
-                                    <option value="asc">Oldest</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" v-model="searchColumnDescription" maxlength="1000" required></textarea>
                         </div>
-                        <div class="modal-footer clearfix">
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
-                            <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+
+                        <div class="form-group">
+                            <label>Order By</label>
+                            <select class="form-control" v-model="order_by">
+                                <option value="desc">Newest</option>
+                                <option value="asc">Oldest</option>
+                            </select>
                         </div>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
 
 <script>
-    const getItems = (
-        page,
-        per_page,
-        searchColumnSKU,
-        searchColumnName,
-        searchColumnDescription,
-        order_by,
-        callback
-        ) => {
-        const params = {
-            page,
-            per_page,
-            searchColumnSKU,
-            searchColumnName,
-            searchColumnDescription,
-            order_by,
-        };
+    const getItemClassification = (page, per_page, searchColumnName, searchColumnDescription, order_by, callback) => {
+        const params = { page, per_page,searchColumnName, searchColumnDescription,order_by };
 
-        axios.get('/api/items', { params }).then(res => {
+        axios.get('/api/item-classifications', { params }).then(res => {
             console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
-            if (error.response.status == 401) {
-                location.reload();
-            }
-
-            if (error.response.status == 500) {
-                alert('Kindly report this issue to the devs.');
-            }
+            callback(error, error.res.data);
         });
     };
 
     export default {
         data() {
             return {
-                items: null,
-                searchColumnSKU: '',
-                searchColumnName: '',
-                searchColumnDescription: '',
+                componentVal: 'Item Classification',
+                itemClassification: null,
+                searchColumnName: null,
+                searchColumnDescription: null,
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -216,45 +194,27 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getItems(
-                    to.query.page,
-                    10,
-                    to.query.searchColumnSKU,
+                getItemClassification(to.query.page, 10,
                     to.query.searchColumnName,
-                    to.query.searchColumnDescription,
-                    to.query.order_by,
-                    (err, data) => {
+                    to.query.searchColumnDescription,to.query.order_by, (err, data) => {
                         next(vm => vm.setData(err, data));
-                    }
-                    );
+                    });
             } else {
-                getItems(
-                    to.query.page,
-                    to.query.per_page,
-                    to.query.searchColumnSKU,
+                getItemClassification(to.query.page, to.query.per_page,
                     to.query.searchColumnName,
-                    to.query.searchColumnDescription,
-                    to.query.order_by,
-                    (err, data) => {
+                    to.query.searchColumnDescription,to.query.order_by, (err, data) => {
                         next(vm => vm.setData(err, data));
-                    }
-                    );
+                    });
             }
         },
 
         beforeRouteUpdate (to, from, next) {
-            getItems(
-                to.query.page,
-                this.meta.per_page,
-                this.searchColumnSKU,
-                this.searchColumnName,
-                this.searchColumnDescription,
-                this.order_by,
-                (err, data) => {
+            getItemClassification(to.query.page, this.meta.per_page,
+                to.query.searchColumnName,
+                to.query.searchColumnDescription,to.query.order_by,(err, data) => {
                     this.setData(err, data);
                     next();
-                }
-            );
+                });
         },
 
         computed: {
@@ -265,20 +225,33 @@
                 return this.meta.current_page - 1;
             },
             paginatonCount() {
-                if (! this.meta) { return; }
+                if (! this.meta) {
+                    return;
+                }
+
                 const { current_page, last_page } = this.meta;
+
                 return `${current_page} of ${last_page}`;
             },
             pageCount() {
-                if (this.meta.last_page > 10) { return false; }
+                if (this.meta.last_page > 10) {
+                    return false;
+                }
+
                 return true;
             },
             isPrevDisabled() {
-                if (this.links.prev == null) { return 'disabled'; }
+                if (this.links.prev == null) {
+                    return 'disabled';
+                }
+
                 return;
             },
             isNextDisabled() {
-                if (this.links.next == null) { return 'disabled'; }
+                if (this.links.next == null) {
+                    return 'disabled';
+                }
+
                 return;
             }
         },
@@ -287,80 +260,59 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: 1,
-                        per_page: this.meta.per_page,
-                        searchColumnSKU: this.searchColumnSKU,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        order_by: this.order_by
+                        per_page: this.meta.per_page
                     },
                 });
             },
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'item-classifications.index',
                     query: {
                         page,
-                        per_page: this.meta.per_page,
-                        searchColumnSKU: this.searchColumnSKU,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        order_by: this.order_by
+                        per_page: this.meta.per_page
                     },
                 });
             },
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: this.meta.last_page,
-                        per_page: this.meta.per_page,
-                        searchColumnSKU: this.searchColumnSKU,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        order_by: this.order_by
+                        per_page: this.meta.per_page
                     },
                 });
             },
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page,
-                        searchColumnSKU: this.searchColumnSKU,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        order_by: this.order_by
+                        per_page: this.meta.per_page
                     },
                 });
             },
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: this.prevPage,
-                        per_page: this.meta.per_page,
-                        searchColumnSKU: this.searchColumnSKU,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        order_by: this.order_by
+                        per_page: this.meta.per_page
                     }
                 });
             },
-            setData(err, { data: items, links, meta }) {
+            setData(err, { data: itemClassification, links, meta }) {
                 this.pageNumbers = [];
-
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.items = items;
+                    this.itemClassification = itemClassification;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -421,14 +373,10 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: 1,
-                        per_page: this.meta.per_page,
-                        searchColumnSKU: this.searchColumnSKU,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        order_by: this.order_by
+                        per_page: this.meta.per_page
                     }
                 });
             },
@@ -436,11 +384,10 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnSKU: this.searchColumnSKU,
                         searchColumnName: this.searchColumnName,
                         searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
@@ -448,7 +395,6 @@
                 });
             },
             clear() {
-                this.searchColumnSKU         = '';
                 this.searchColumnName        = '';
                 this.searchColumnDescription = '';
                 this.order_by                = 'desc';

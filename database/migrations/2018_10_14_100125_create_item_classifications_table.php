@@ -20,6 +20,11 @@ class CreateItemClassificationsTable extends Migration
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
+            $table->integer('item_type_id')->unsigned();
+            $table->foreign('item_type_id')
+                ->references('id')
+                ->on('item_types')
+                ->onDelete('cascade');
             $table->string('name');
             $table->string('display_name');
             $table->text('description');
