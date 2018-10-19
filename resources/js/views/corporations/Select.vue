@@ -37,7 +37,8 @@ export default {
         };
     },
     created() {
-        if ( !localStorage.getItem('corporations')) {
+        console.log( localStorage.getItem('corporations'))
+        if ( localStorage.getItem('corporations') != null ) {
             let promise = new Promise((resolve, reject) => {
                 this.corporations = JSON.parse(localStorage.getItem('corporations'));
                 resolve();
