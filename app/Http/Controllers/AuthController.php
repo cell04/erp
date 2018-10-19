@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -40,14 +41,16 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $http = new \GuzzleHttp\Client(['verify' => false ]);
-        $url  = 'https://inventory.dev/oauth/token';
+        $url  = env('APP_URL') . '/oauth/token';
+
+        $clientSecret = DB::table('oauth_clients')->where('name', 'Inventory Password Grant Client')->first()->secret;
 
         try {
             $response = $http->post($url, [
                 'form_params' => [
                     'grant_type'    => 'password',
                     'client_id'     => '2',
-                    'client_secret' => 'zrnayMlbRt6qHGu0EQTwrWMYmSJZzYYeKnSvhpuW', // get it from oauth_clients
+                    'client_secret' => $clientSecret,
                     'username'      => $request->email,
                     'password'      => $request->password,
                     'scope'         => '*',
