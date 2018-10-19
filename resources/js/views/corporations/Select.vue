@@ -37,13 +37,9 @@ export default {
         };
     },
     created() {
-        if (localStorage.getItem('corporations') != null) {
+        if ( !localStorage.getItem('corporations')) {
             let promise = new Promise((resolve, reject) => {
-                try{
-                    this.corporations = JSON.parse(localStorage.getItem('corporations'));
-                }catch(e){
-                    console.error('Unable to Fetch Corporations: \n',e)
-                }
+                this.corporations = JSON.parse(localStorage.getItem('corporations'));
                 resolve();
             });
 
@@ -53,6 +49,7 @@ export default {
         } else {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/corporations/get-all-corporations').then(res => {
+                    console.log(res)
                     this.corporations = res.data.corporations;
                     localStorage.setItem('corporations', JSON.stringify(res.data.corporations));
                     resolve();
