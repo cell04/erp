@@ -11,12 +11,15 @@
                             <div class="col-12">
                                 <span class="chart-1">
                                     <div class="p-1 mb-3">
-                                        <span class="h3"> Sales Report </span> <small class="text-muted">as of  Jan 7, 2018 6:00 AM</small>
+                                        <span class="h3"> Sales Report </span>
                                         <a class="btn btn-primary btn-outline-primary btn-sm float-right" href="#" role="button">View Report</a>
                                     </div>
                                     <div class="card">
                                         <div class="card-body">
                                             <canvas id="chart1" class="chart"></canvas>
+                                        </div>
+                                        <div class="card-footer">
+                                            <small class="text-muted">Last updated 3 mins ago</small>
                                         </div>
                                     </div>
                                 </span>
@@ -29,56 +32,53 @@
                                 <div class="row">
 
                                     <!-- Daily PO -->
-                                    <div class="col-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-5 text-center align-middle">
-                                                        <span class="sub-header">20</span>
-                                                    </div>
-                                                    <div class="col-7">
-                                                        <canvas id="chart2" height="200"></canvas>
-                                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="card card-min">
+                                            <div class="card-body row">
+                                                <div class="col-md-5 col-sm-12 text-center  center">
+                                                    <span class="display-4">100</span>
+                                                </div>
+                                                <div class="col-md-7 col-sm-12 ">
+                                                    <canvas id="chart2" height="200"></canvas>
                                                 </div>
                                             </div>
                                             <div class="card-footer text-center">
-                                                Purchase Order Issued </div>
+                                                Today's Issued Purchase Order
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Daily RO -->
-                                    <div class="col-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-5 text-center align-middle">
-                                                        <span class="sub-header">10</span>
-                                                    </div>
-                                                    <div class="col-7">
-                                                        <canvas id="chart3" height="200"></canvas>
-                                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="card card-min">
+                                            <div class="card-body row">
+                                                <div class="col-md-5 col-sm-12 text-center  center">
+                                                    <span class="display-4 ">2</span>
+                                                </div>
+                                                <div class="col-md-7 col-sm-12 ">
+                                                    <canvas id="chart3" height="200"></canvas>
                                                 </div>
                                             </div>
                                             <div class="card-footer text-center">
-                                                Recieved Order Issued </div>
+                                                Today's Issued Recieved Order
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Daily Income -->
-                                    <div class="col-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-6 text-center align-middle">
-                                                        <span class="sub-header">P1.5K</span>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <canvas id="chart4" height="200"></canvas>
-                                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="card card-min">
+                                            <div class="card-body row">
+                                                <div class="col-md-5 col-sm-12 text-center  center">
+                                                    <span class="display-4">2.5K</span>
+                                                </div>
+                                                <div class="col-md-7 col-sm-12 ">
+                                                    <canvas id="chart4" height="200"></canvas>
                                                 </div>
                                             </div>
                                             <div class="card-footer text-center">
-                                                Today's Profit </div>
+                                                Today's Profit
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -91,12 +91,15 @@
                             <!-- Weekly, Daily or Monthly Sales Chart -->
                             <div class="col-6">
                                 <div class="p-1 mb-3">
-                                    <span class="h5"> Weekly Sales Chart </span> <small class="text-muted">as of  Jan 7, 2018 6:00 AM</small>
+                                    <span class="h5"> Sales Comparison </span>
                                     <a class="btn btn-primary btn-outline-primary btn-sm float-right" href="#" role="button">View Report</a>
                                 </div>
                                 <div class="card">
                                     <div class="card-body">
                                         <canvas id="chart5" height="250"></canvas>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Last updated 3 mins ago</small>
                                     </div>
                                 </div>
                             </div>
@@ -104,12 +107,15 @@
                             <!-- Weekly Purchase Order Comparison -->
                             <div class="col-6">
                                 <div class="p-1 mb-3">
-                                    <span class="h5"> Weekly Purchase Order </span> <small class="text-muted">as of  Jan 7, 2018 6:00 AM</small>
+                                    <span class="h5"> Purchase Comparison </span>
                                     <a class="btn btn-primary btn-outline-primary btn-sm float-right" href="#" role="button">View Report</a>
                                 </div>
                                 <div class="card">
                                     <div class="card-body">
                                         <canvas id="chart6" height="250"></canvas>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Last updated 3 mins ago</small>
                                     </div>
                                 </div>
                             </div>
@@ -123,22 +129,47 @@
                 <div class="col-3">
 
                     <div class="row">
-                        <!-- Display Top 10 Products -->
+                        <!-- Change Corporation -->
                         <div class="col-12">
                             <div class="card">
+                                <router-link :to="{ name: 'corporations.select' }">
+                                    <a class="btn btn-primary btn-lg btn-block active" role="button" aria-pressed="false">Switch Corporation</a>
+                                </router-link>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <!-- Display Top 10 Products -->
+                        <div class="col-12">
+                            <div class="card ">
                                 <div class="card-header">
                                     <span class="subcontent-header"> Today's Top Products</span>
-
-                                    <span class="float-right view-all font-center"> <a href="">View All</a> </span>
-
+                                    <a class="btn btn-primary btn-outline-primary btn-sm float-right" href="#" role="button">View Report</a>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"> <span class="float-left">1. &nbsp;</span>Item 1 <span
-                                            class="badge badge-secondary float-right">200</span></li>
-                                    <li class="list-group-item"> <span class="float-left">2. &nbsp;</span>Food Item 200
-                                        <span class="badge badge-secondary float-right">120</span></li>
-                                    <li class="list-group-item"> <span class="float-left">3. &nbsp;</span>Acme Item
-                                        <span class="badge badge-secondary float-right">80</span></li>
+
+                                    <li class="list-group-item"> <span class="float-left">
+                                        1. &nbsp;</span>Item 1
+                                        <span class="badge badge-secondary float-right">200</span>
+                                    </li>
+                                    <li class="list-group-item"> <span class="float-left">
+                                        2. &nbsp;</span>Acme 2000
+                                        <span class="badge badge-secondary float-right">100</span>
+                                    </li>
+                                    <li class="list-group-item"> <span class="float-left">
+                                        3. &nbsp;</span>Product 100
+                                        <span class="badge badge-secondary float-right">30</span>
+                                    </li>
+                                    <li class="list-group-item"> <span class="float-left">
+                                        4. &nbsp;</span>Sample 600
+                                        <span class="badge badge-secondary float-right">20</span>
+                                    </li>
+                                    <li class="list-group-item"> <span class="float-left">
+                                        5. &nbsp;</span>Item 500
+                                        <span class="badge badge-secondary float-right">10</span>
+                                    </li>
+
                                 </ul>
                             </div>
                         </div>
@@ -150,12 +181,33 @@
                             <div class="card">
                                 <div class="card-header">
                                     <span class="subcontent-header"> Latest Purchase Orders</span>
-                                    <span class="float-right view-all font-center"> <a href="">View All</a> </span>
+                                    <a class="btn btn-primary btn-outline-primary btn-sm float-right" href="#" role="button">View Report</a>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"> <a href="">PO-201810170000000006</a> </li>
-                                    <li class="list-group-item"> <a href="">PO-201810170000000006</a> </li>
-                                    <li class="list-group-item"> <a href="">PO-201810170000000006</a> </li>
+                                    <li class="list-group-item"> <a href="">PO-201810170000000007</a> </li>
+                                    <li class="list-group-item"> <a href="">PO-201810170000000008</a> </li>
+                                    <li class="list-group-item"> <a href="">PO-201810170000000007</a> </li>
+                                    <li class="list-group-item"> <a href="">PO-201810170000000007</a> </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <!-- Display Top 5 Latest P.O -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="subcontent-header"> Latest Recieved Orders</span>
+                                    <a class="btn btn-primary btn-outline-primary btn-sm float-right" href="#" role="button">View Report</a>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"> <a href="">RO-201810170000000006</a> </li>
+                                    <li class="list-group-item"> <a href="">RO-201810170000000007</a> </li>
+                                    <li class="list-group-item"> <a href="">RO-201810170000000008</a> </li>
+                                    <li class="list-group-item"> <a href="">RO-201810170000000008</a> </li>
+                                    <li class="list-group-item"> <a href="">RO-201810170000000008</a> </li>
                                 </ul>
                             </div>
                         </div>
@@ -455,24 +507,57 @@
 
             let chartLabel6 = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
             let chartData6 = [
-            {
-                label: 'January',
-                fillColor: 'blue',
-                data: [3, 7, 4, 6],
-                backgroundColor: 'rgba(54, 162, 235, 1)',
-            },
-            {
-                label: 'February',
-                fillColor: 'red',
-                data: [4, 3, 5, 7],
-                backgroundColor: 'rgba(54, 162, 235, 1)',
-            },
-            {
-                label: 'March',
-                fillColor: 'green',
-                data: [7, 2, 6, 9],
-                backgroundColor: 'rgba(54, 162, 235, 1)',
-            },
+                {
+                    label: 'January',
+                    fillColor: 'blue',
+                    data: [3, 7, 4, 6],
+                    backgroundColor: bkdColors,
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                },
+                {
+                    label: 'February',
+                    fillColor: 'red',
+                    data: [4, 3, 5, 7],
+                    backgroundColor: bkdColors,
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                },
+                {
+                    label: 'March',
+                    fillColor: 'green',
+                    data: [7, 2, 6, 9],
+                    backgroundColor: bkdColors,
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                },
             ];
 
             // Chart 6
@@ -497,27 +582,12 @@
 </script>
 
 <style>
-    .card {
-    /* width: 100%; */
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .card-min {
         min-height: 200px;
-    }
-    .chart {
-    /* width: 100%; */
-    /* height: 100%; */
-    }
-
-    .chart-1 {
-    }
-
-    .sub-header {
-    font-size: 2.3em;
-    }
-
-    .view-all {
-    font-size: 0.75em;
-    }
-
-    .subcontent-header {
-    font-size: 0.8em;
     }
 </style>
