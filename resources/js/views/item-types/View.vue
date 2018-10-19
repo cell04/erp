@@ -9,14 +9,20 @@
                     <fieldset>
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="itemType.name" id="name" readonly>
+                            <input type="text" class="form-control" v-model="itemTypes.name" id="name" readonly>
                         </div>
+
+                        <div class="form-group">
+                            <label for="name">Display Name</label>
+                            <input type="text" class="form-control" v-model="itemTypes.display_name" id="name" readonly>
+                        </div>
+
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" v-model="itemType.description" id="description" readonly></textarea>
+                            <textarea class="form-control" v-model="itemTypes.description" id="description" readonly></textarea>
                         </div>
                     </fieldset>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewItemTypes">Back</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="viewItemTypes">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType">Edit {{componentVal}}</button>
                 </div>
                 <div v-else>
@@ -31,7 +37,7 @@
             <div class="card-header">
                 Classifications
             </div>
-            <div class="card-body">
+            <!-- <div class="card-body">
                 <div v-if="ifReady">
                    <table class="table table-hover table-sm">
                        <thead>
@@ -51,13 +57,13 @@
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div><br/>
         <div class="card">
             <div class="card-header">
                 Add Classification To {{componentVal}}
             </div>
-            <div class="card-body">
+            <!-- <div class="card-body">
                 <div v-if="ifReady">
                     <fieldset>
                         <div class="form-group">
@@ -76,7 +82,7 @@
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -88,7 +94,7 @@ export default {
             componentVal: 'Item Type',
             ifReady: false,
             accountType: '',
-            itemType: [],
+            itemTypes: [],
             classificationType: {},
             classifications: []
         };
@@ -103,10 +109,10 @@ export default {
         getItemTypes() {
             new Promise((resolve, reject) => {
                 axios.get('/api/item-types/' + this.$route.params.id).then((res) => {
-                    console.log(res.data)
+                    // console.log('Item Typs:' + JSON.stringify(res.data));
                     this.ifReady= true;
-                    this.itemType = res.data.item_type;
-                    this.classifications = res.data.item_type.classifications
+                    this.itemTypes = res.data.itemType;
+                    // this.classifications = res.data.item_type.classifications
                     if (! res.data.response) {
                         return;
                     }
@@ -122,26 +128,26 @@ export default {
         editItemType() {
             this.$router.push({
                 name: 'item-types.edit',
-                params: { id: this.itemType.id }
+                params: { id: this.itemTypes.id }
             });
         },
-        addClassificationType() {
-            var vm = this
-            this.classificationType.item_type_id = this.itemType.id
-            new Promise((resolve, reject) => {
-                axios.post('/api/item-type-classifications', this.classificationType).then((res) => {
-                    console.log(res)
-                    this.ifReady= true;
-                    this.$router.push({
-                        name: 'item-types.index'
-                    });
-                    if (! res.data.response) {
-                        return;
-                    }
-                    resolve();
-                });
-            });
-        }
+        // addClassificationType() {
+        //     var vm = this
+        //     this.classificationType.item_type_id = this.itemTypes.id
+        //     new Promise((resolve, reject) => {
+        //         axios.post('/api/item-type-classifications', this.classificationType).then((res) => {
+        //             console.log(res)
+        //             this.ifReady= true;
+        //             this.$router.push({
+        //                 name: 'item-types.index'
+        //             });
+        //             if (! res.data.response) {
+        //                 return;
+        //             }
+        //             resolve();
+        //         });
+        //     });
+        // }
     },
 
     computed: {

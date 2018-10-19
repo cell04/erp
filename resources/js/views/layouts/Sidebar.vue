@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-
+            
             <li class="nav-item">
                 <a class="nav-link" href="#items" data-toggle="collapse" aria-expanded="false" aria-controls="items">
                     Items <i class="float-right fas fa-caret-down"></i>
@@ -183,6 +183,21 @@
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'contacts.index' }">View Contacts</router-link>
+                    </li>
+                </ul>
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="#contact-types" data-toggle="collapse" aria-expanded="false" aria-controls="contact-types">
+                    Contact Type <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="contact-types">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'contact-types.create' }">Create New Contact Type</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'contact-types.index' }">View Contact Types</router-link>
                     </li>
                 </ul>
             </div>

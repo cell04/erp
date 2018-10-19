@@ -31,6 +31,15 @@ const ContactsEdit = () => import('./views/contacts/Edit');
 const ContactsView = () => import('./views/contacts/View');
 
 /**
+ * Contact Types
+ *
+ */
+const ContactTypesIndex = () => import('./views/contact-types/Index');
+const ContactTypesCreate = () => import('./views/contact-types/Create');
+const ContactTypesEdit = () => import('./views/contact-types/Edit');
+const ContactTypesView = () => import('./views/contact-types/View');
+
+/**
  * Types
  */
 const TypesIndex = () => import('./views/types/Index');
@@ -60,8 +69,10 @@ const UsersEdit = () => import('./views/users/Edit');
 const SettingsIndex = () => import('./views/settings/Index.vue');
 const SettingsUsersIndex = () => import('./views/settings/users/Index.vue');
 const SettingsUnitsIndex = () => import('./views/settings/units/Index.vue');
-const SettingsConversionsIndex = () => import('./views/settings/conversions/Index.vue');
-const SettingsPaymentTermsIndex = () => import('./views/settings/payment_terms/Index.vue');
+const SettingsConversionsIndex = () =>
+    import('./views/settings/conversions/Index.vue');
+const SettingsPaymentTermsIndex = () =>
+    import('./views/settings/payment_terms/Index.vue');
 
 /**
  * Authentication
@@ -89,9 +100,13 @@ const ItemPricelistsCreate = () => import('./views/item-pricelists/Create');
  * Item Classification
  *
  */
-const ItemClassificationsIndex = () => import('./views/item-classifications/Index');
-const ItemClassificationsCreate = () => import('./views/item-classifications/Create');
-const ItemClassificationsView = () => import('./views/item-classifications/View');
+const ItemClassificationsIndex = () =>
+    import('./views/item-classifications/Index');
+const ItemClassificationsCreate = () =>
+    import('./views/item-classifications/Create');
+const ItemClassificationsView = () =>
+    import('./views/item-classifications/View');
+    const ItemClassificationsEdit = () => import('./views/item-classifications/Edit');
 
 /**
  * Item Types
@@ -148,19 +163,70 @@ const router = new Router({
 
         // settings
         { path: '/settings', name: 'settings.index', component: SettingsIndex },
-        { path: '/settings/users', name: 'settings.users', component: SettingsUsersIndex },
-        { path: '/settings/units', name: 'settings.units', component: SettingsUnitsIndex },
-        { path: '/settings/conversions', name: 'settings.conversions', component: SettingsConversionsIndex },
-        { path: '/settings/payment_terms', name: 'settings.paymentTerms', component: SettingsPaymentTermsIndex },
+        {
+            path: '/settings/users',
+            name: 'settings.users',
+            component: SettingsUsersIndex,
+        },
+        {
+            path: '/settings/units',
+            name: 'settings.units',
+            component: SettingsUnitsIndex,
+        },
+        {
+            path: '/settings/conversions',
+            name: 'settings.conversions',
+            component: SettingsConversionsIndex,
+        },
+        {
+            path: '/settings/payment_terms',
+            name: 'settings.paymentTerms',
+            component: SettingsPaymentTermsIndex,
+        },
 
         // authentication
-        { path: '/auth/login', name: 'auth.login', component: Login, meta: { requiresVisitor: true } },
+        {
+            path: '/auth/login',
+            name: 'auth.login',
+            component: Login,
+            meta: { requiresVisitor: true },
+        },
 
         // Contacts
         { path: '/contacts', name: 'contacts.index', component: ContactsIndex },
-        { path: '/contacts/create', name: 'contacts.create', component: ContactsCreate },
-        { path: '/contacts/:id', name: 'contacts.view', component: ContactsView },
-        { path: '/contacts/:id/edit', name: 'contacts.edit', component: ContactsEdit },
+        {
+            path: '/contacts/create',
+            name: 'contacts.create',
+            component: ContactsCreate,
+        },
+        {
+            path: '/contacts/:id',
+            name: 'contacts.view',
+            component: ContactsView,
+        },
+        {
+            path: '/contacts/:id/edit',
+            name: 'contacts.edit',
+            component: ContactsEdit,
+        },
+
+        // Contact Types
+        { path: '/contact-types', name: 'contact-types.index', component: ContactTypesIndex },
+        {
+            path: '/contact-types/create',
+            name: 'contact-types.create',
+            component: ContactTypesCreate,
+        },
+        {
+            path: '/contact-types/:id',
+            name: 'contact-types.view',
+            component: ContactTypesView,
+        },
+        {
+            path: '/contact-types/:id/edit',
+            name: 'contact-types.edit',
+            component: ContactTypesEdit,
+        },
 
         // Users
         { path: '/users', name: 'users.index', component: UsersIndex },
@@ -169,26 +235,87 @@ const router = new Router({
         { path: '/users/:id/edit', name: 'users.edit', component: UsersEdit },
 
         // corporation
-        { path: '/corporations/select', name: 'corporations.select', component: CorporationsSelect, },
-        { path: '/corporations', name: 'corporations.index', component: CorporationsIndex },
-        { path: '/corporations/create', name: 'corporations.create', component: CorporationsCreate },
-        { path: '/corporations/:id', name: 'corporations.view', component: CorporationsView },
-        { path: '/corporations/:id/edit', name: 'corporations.edit', component: CorporationsEdit },
+        {
+            path: '/corporations/select',
+            name: 'corporations.select',
+            component: CorporationsSelect,
+        },
+        {
+            path: '/corporations',
+            name: 'corporations.index',
+            component: CorporationsIndex,
+        },
+        {
+            path: '/corporations/create',
+            name: 'corporations.create',
+            component: CorporationsCreate,
+        },
+        {
+            path: '/corporations/:id',
+            name: 'corporations.view',
+            component: CorporationsView,
+        },
+        {
+            path: '/corporations/:id/edit',
+            name: 'corporations.edit',
+            component: CorporationsEdit,
+        },
 
         // item pricelists
-        { path: '/item-pricelists', name: 'item-pricelists.index', component: ItemPricelistsIndex },
-        { path: '/item-pricelists/create', name: 'item-pricelists.create', component: ItemPricelistsCreate },
+        {
+            path: '/item-pricelists',
+            name: 'item-pricelists.index',
+            component: ItemPricelistsIndex,
+        },
+        {
+            path: '/item-pricelists/create',
+            name: 'item-pricelists.create',
+            component: ItemPricelistsCreate,
+        },
 
         // item classification
-        { path: '/item-classifications', name: 'item-classifications.index', component: ItemClassificationsIndex },
-        { path: '/item-classifications/create', name: 'item-classifications.create', component: ItemClassificationsCreate },
-        { path: '/item-classifications/:id', name: 'item-classifications.view', component: ItemClassificationsView },
+        {
+            path: '/item-classifications',
+            name: 'item-classifications.index',
+            component: ItemClassificationsIndex,
+        },
+        {
+            path: '/item-classifications/create',
+            name: 'item-classifications.create',
+            component: ItemClassificationsCreate,
+        },
+        {
+            path: '/item-classifications/:id',
+            name: 'item-classifications.view',
+            component: ItemClassificationsView,
+        },
+        {
+            path: '/item-classifications/:id/edit',
+            name: 'item-classifications.edit',
+            component: ItemClassificationsEdit,
+        },
 
         // item types
-        { path: '/item-types', name: 'item-types.index', component: ItemTypesIndex },
-        { path: '/item-types/create', name: 'item-types.create', component: ItemTypesCreate },
-        { path: '/item-types/:id', name: 'item-types.view', component: ItemTypesView },
-        { path: '/item-types/:id/edit', name: 'item-types.edit', component: ItemTypesEdit },
+        {
+            path: '/item-types',
+            name: 'item-types.index',
+            component: ItemTypesIndex,
+        },
+        {
+            path: '/item-types/create',
+            name: 'item-types.create',
+            component: ItemTypesCreate,
+        },
+        {
+            path: '/item-types/:id',
+            name: 'item-types.view',
+            component: ItemTypesView,
+        },
+        {
+            path: '/item-types/:id/edit',
+            name: 'item-types.edit',
+            component: ItemTypesEdit,
+        },
 
         // items
         { path: '/items', name: 'items.index', component: ItemsIndex },
@@ -196,13 +323,33 @@ const router = new Router({
         { path: '/items/:id', name: 'items.view', component: ItemsView },
 
         // item types
-        { path: '/general-items', name: 'general-items.index', component: GeneralItemsIndex },
-        { path: '/general-items/create', name: 'general-items.create', component: GeneralItemsCreate },
+        {
+            path: '/general-items',
+            name: 'general-items.index',
+            component: GeneralItemsIndex,
+        },
+        {
+            path: '/general-items/create',
+            name: 'general-items.create',
+            component: GeneralItemsCreate,
+        },
 
         // purchase-orders
-        { path: '/purchase-orders', name: 'purchase-orders.index', component: PurchaseOrdersIndex },
-        { path: '/purchase-orders/create', name: 'purchase-orders.create', component: PurchaseOrdersCreate },
-        { path: '/purchase-orders/:id', name: 'purchase-orders.view', component: PurchaseOrdersView },
+        {
+            path: '/purchase-orders',
+            name: 'purchase-orders.index',
+            component: PurchaseOrdersIndex,
+        },
+        {
+            path: '/purchase-orders/create',
+            name: 'purchase-orders.create',
+            component: PurchaseOrdersCreate,
+        },
+        {
+            path: '/purchase-orders/:id',
+            name: 'purchase-orders.view',
+            component: PurchaseOrdersView,
+        },
 
         // bills
         { path: '/bills', name: 'bills.index', component: BillsIndex },
@@ -210,21 +357,61 @@ const router = new Router({
         { path: '/bills/:id', name: 'bills.view', component: BillsView },
 
         // receive orders
-        { path: '/received-orders', name: 'receive-orders.index', component: ReceiveOrdersIndex },
-        { path: '/purchase-orders/:po_id/receive/create', name: 'receive-orders.create', component: ReceiveOrdersCreate },
-        { path: '/received-orders/:id', name: 'receive-orders.view', component: ReceiveOrdersView },
+        {
+            path: '/received-orders',
+            name: 'receive-orders.index',
+            component: ReceiveOrdersIndex,
+        },
+        {
+            path: '/purchase-orders/:po_id/receive/create',
+            name: 'receive-orders.create',
+            component: ReceiveOrdersCreate,
+        },
+        {
+            path: '/received-orders/:id',
+            name: 'receive-orders.view',
+            component: ReceiveOrdersView,
+        },
 
         // branches
         { path: '/branches', name: 'branches.index', component: BranchesIndex },
-        { path: '/branches/create', name: 'branches.create', component: BranchesCreate },
-        { path: '/branches/:id', name: 'branches.view', component: BranchesView },
-        { path: '/branches/:id/edit', name: 'branches.edit', component: BranchesEdit },
+        {
+            path: '/branches/create',
+            name: 'branches.create',
+            component: BranchesCreate,
+        },
+        {
+            path: '/branches/:id',
+            name: 'branches.view',
+            component: BranchesView,
+        },
+        {
+            path: '/branches/:id/edit',
+            name: 'branches.edit',
+            component: BranchesEdit,
+        },
 
         // categories
-        { path: '/categories', name: 'categories.index', component: CategoriesIndex },
-        { path: '/categories/create', name: 'categories.create', component: CategoriesCreate },
-        { path: '/categories/:id', name: 'categories.view', component: CategoriesView },
-        { path: '/categories/:id/edit', name: 'categories.edit', component: CategoriesEdit },
+        {
+            path: '/categories',
+            name: 'categories.index',
+            component: CategoriesIndex,
+        },
+        {
+            path: '/categories/create',
+            name: 'categories.create',
+            component: CategoriesCreate,
+        },
+        {
+            path: '/categories/:id',
+            name: 'categories.view',
+            component: CategoriesView,
+        },
+        {
+            path: '/categories/:id/edit',
+            name: 'categories.edit',
+            component: CategoriesEdit,
+        },
 
         // types
         { path: '/types', name: 'types.index', component: TypesIndex },
@@ -233,10 +420,26 @@ const router = new Router({
         { path: '/types/:id/edit', name: 'types.edit', component: TypesEdit },
 
         // warehouses
-        { path: '/warehouses', name: 'warehouses.index', component: WarehousesIndex },
-        { path: '/warehouses/create', name: 'warehouses.create', component: WarehousesCreate },
-        { path: '/warehouses/:id', name: 'warehouses.view', component: WarehousesView },
-        { path: '/warehouses/:id/edit', name: 'warehouses.edit', component: WarehousesEdit },
+        {
+            path: '/warehouses',
+            name: 'warehouses.index',
+            component: WarehousesIndex,
+        },
+        {
+            path: '/warehouses/create',
+            name: 'warehouses.create',
+            component: WarehousesCreate,
+        },
+        {
+            path: '/warehouses/:id',
+            name: 'warehouses.view',
+            component: WarehousesView,
+        },
+        {
+            path: '/warehouses/:id/edit',
+            name: 'warehouses.edit',
+            component: WarehousesEdit,
+        },
     ],
 });
 

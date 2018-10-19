@@ -9,12 +9,17 @@
                     <fieldset>
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="itemType.name" id="name">
+                            <input type="text" class="form-control" v-model="name" id="name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Display Name</label>
+                            <input type="text" class="form-control" v-model="display_name" id="name">
                         </div>
 
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" v-model="itemType.description" id="description"></textarea>
+                            <textarea class="form-control" v-model="description" id="description"></textarea>
                         </div>
 
                         <!-- <div class="form-group">
@@ -23,8 +28,8 @@
                         </div> -->
                     </fieldset>
 
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewItemTypes">Back</button>
-                    <button type="button" class="btn btn-danger btn-sm" :disabled="isDisabled" @click.prevent="updateItemType">Update {{componentVal}}</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes">Back</button>
+                    <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType">Update {{componentVal}}</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -42,45 +47,56 @@
         data() {
             return {
                 componentVal: 'Item Type',
-                ifReady: false,
+                ifReady: true,
                 accountType: '',
-                itemType: [],
+                itemTypes: [],
                 isDisabled: false,
+                id: '',
+                name: '',
+                display_name:'',
+                description: ''
             };
         },
 
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/item-types/' + this.$route.params.id).then((res) => {
-                    console.log(res)
-                    this.ifReady= true;
-                    this.itemType = res.data.item_type;
+                    this.itemTypes = res.data.itemType;
+
+                     this.id = res.data.itemType.id;
+                     this.name = res.data.itemType.name;
+                     this.display_name = res.data.itemType.display_name;
+                     this.description = res.data.itemType.description;
+
                     if (! res.data.response) { return; }
                     resolve();
                 });
+            });
+            promise.then(() => {
+                this.ifReady = true;
             });
         },
 
         methods: {
             viewItemTypes() {
                 this.$router.push({
-                    name: 'item-types.index'
+                    name: 'item-types.view',
+                    params: { id: this.$route.params.id }
                 });
             },
             updateItemType() {
-                this.isDisabled = true;
                 this.ifReady = false;
-                console.log(this.$data)
-                axios.put('/api/item-types/' + this.$route.params.id, this.$data.itemType).then((res)=>{
-                    if(! res.data.response){
-                        alert("error")
-                    }
+                axios.put('/api/item-types/' + this.$route.params.id, this.$data).then((res)=>{
                     this.$router.push({
                         name: 'item-types.view',
                         params: { id: this.$route.params.id }
-                    })
-                    return;
+                    });
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
                 });
+
+
             }
         }
     }

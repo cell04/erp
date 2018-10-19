@@ -1,46 +1,15 @@
 <template>
     <div>
-        <div class="card my-4">
-            <ul class="nav nav-pills nav-justified">
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.index' }">
-                        System
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.users' }">
-                        Users
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link active p-3" :to="{ name: 'settings.units' }">
-                        Units
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.conversions' }">
-                        Conversions
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3 " :to="{ name: 'settings.paymentTerms' }">
-                        Payment Terms
-                    </router-link>
-                </li>
-            </ul>
-        </div>
-
         <div class="card">
             <div class="card-header clearfix">
-                Units / View Units
-                <button type="button" class="btn btn-primary float-right" @click.prevent="setUnit('','','','create')" >+ New Unit</button>
+                {{componentVal}}s / View {{componentVal}}
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Units - Total Units {{ this.meta.total }}
+                                List of {{componentVal}} - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -51,18 +20,25 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Abbreviation</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Contact Person</th>
+                            <th scope="col">Email Address</th>
+                            <th scope="col">Mobile Number</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Options</th>
                         </tr>
                     </thead>
-                    <tbody v-if="units">
-                        <tr :key="id" v-for="{ id, name, abbreviation } in units">
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
+                    <tbody v-if="contacts">
+                        <tr v-for="{ id, company, company_address, person, email, mobile_number, type } in contacts">
+                            <td>{{ id }}</td>
+                            <td>{{ company }}</td>
+                            <td>{{ person }}</td>
+                            <td>{{ email }}</td>
+                            <td>{{ mobile_number }}</td>
+                            <td>{{ type }}</td>
                             <td>
-                                <button class="btn btn-primary" @click.prevent="setUnit(id,name,abbreviation,'view')">View</button>
-                                <button class="btn btn-danger" @click.prevent="setUnit(id,name,abbreviation,'update')">Edit</button>
+                                <router-link class="text-info" :to="{ name: 'contacts.view', params: { id: id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -82,7 +58,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -103,7 +79,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -118,8 +94,8 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
-                    <div class="input-group">
+                    <label class="sr-only" for="Number of Items">Number of Items</label>
+                    <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
                         </div>
@@ -132,52 +108,16 @@
                     </div>
                 </form>
             </div>
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Unit</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form v-on:submit.prevent="createNewUnit">
-                    <div class="modal-body">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" :readonly=" modal.type === 'view' ? true : false" v-model="modal.name" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Abbreviation</label>
-                                <input type="text" class="form-control" :readonly=" modal.type === 'view' ? true : false" v-model="modal.abbreviation" required>
-                            </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" v-if="modal.type === 'create'">Save Unit</button>
-                        <button type="submit" class="btn btn-primary" v-if="modal.type === 'update'">Update Unit</button>
-                    </div>
-                </form>
-                </div>
-            </div>
-        </div>
-
-
         </div>
     </div>
 </template>
-
 <script>
-const getunits = (page, per_page, callback) => {
+const getContacts = (page, per_page, callback) => {
     const params = { page, per_page };
 
     axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
 
-    axios.get('/api/unit-of-measurements', { params }).then(res => {
+    axios.get('/api/contacts', { params }).then(res => {
         callback(null, res.data);
     }).catch(error => {
         callback(error, error.res.data);
@@ -188,7 +128,7 @@ export default {
     data() {
         return {
             componentVal: 'Contact',
-            units: null,
+            contacts: null,
             meta: {
                 current_page: null,
                 from: null,
@@ -206,35 +146,29 @@ export default {
             },
             error: null,
             showProgress: false,
-            pageNumbers: [],
-            modal: {
-                id:'',
-                name:'',
-                abbreviation:'',
-                type:''
-            }
+            pageNumbers: []
         };
     },
 
     beforeRouteEnter (to, from, next) {
         if (to.query.per_page == null) {
-            getunits(to.query.page, 10, (err, data) => {
+            getContacts(to.query.page, 10, (err, data) => {
                 next(vm => vm.setData(err, data));
             });
         } else {
-            getunits(to.query.page, to.query.per_page, (err, data) => {
+            getContacts(to.query.page, to.query.per_page, (err, data) => {
                 next(vm => vm.setData(err, data));
             });
         }
     },
 
     beforeRouteUpdate (to, from, next) {
-        getunits(to.query.page, this.meta.per_page, (err, data) => {
+        getContacts(to.query.page, this.meta.per_page, (err, data) => {
             this.setData(err, data);
             next();
         });
     },
-
+    
     computed: {
         nextPage() {
             return this.meta.current_page + 1;
@@ -275,58 +209,10 @@ export default {
     },
 
     methods: {
-        toggleModal( val ) {
-            $('#modal').modal(val)
-        },
-        setUnit(id,name,abbreviation, type){
-            this.modal.id = id;
-            this.modal.name = name;
-            this.modal.abbreviation = abbreviation;
-            this.modal.type = type
-            this.toggleModal('show')
-        },
-         createNewUnit () {
-             console.log(this.modal);
-             switch (this.modal.type) {
-                 case 'update':
-                    axios.post(`/api/unit-of-measurements', ${this.modal.id}`, this.modal).then((res)=>{
-                        if(! res.data.response){
-                            alert("error");
-                        }
-                        
-                        this.toggleModal('hide')
-                        this.refresh()
-                    });
-
-                    break;
-
-                case 'create':
-                     axios.post('/api/unit-of-measurements', this.modal).then((res)=>{
-                        if(! res.data.response){
-                            alert("error");
-                        }
-                        
-                        this.toggleModal('hide')
-                        this.refresh()
-                    });
-                    
-                    break;
-             }
-        },
-        refresh(){
-            this.showProgress = true;
-            this.$router.go({
-                name: 'settings.units',
-                query: {
-                    page: this.meta.current_page,
-                    per_page: this.meta.per_page
-                },
-            });
-        },
         goToFirstPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'contacts.index',
                 query: {
                     page: 1,
                     per_page: this.meta.per_page
@@ -336,7 +222,7 @@ export default {
         goToPage(page = null) {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'contacts.index',
                 query: {
                     page,
                     per_page: this.meta.per_page
@@ -346,7 +232,7 @@ export default {
         goToLastPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'contacts.index',
                 query: {
                     page: this.meta.last_page,
                     per_page: this.meta.per_page
@@ -356,7 +242,7 @@ export default {
         goToNextPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'contacts.index',
                 query: {
                     page: this.nextPage,
                     per_page: this.meta.per_page
@@ -366,20 +252,20 @@ export default {
         goToPreviousPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'contacts.index',
                 query: {
                     page: this.prevPage,
                     per_page: this.meta.per_page
                 }
             });
         },
-        setData(err, { data: units, links, meta }) {
+        setData(err, { data: contacts, links, meta }) {
             this.pageNumbers = [];
 
             if (err) {
                 this.error = err.toString();
             } else {
-                this.units = units;
+                this.contacts = contacts;
                 this.links = links;
                 this.meta = meta;
             }
@@ -440,7 +326,7 @@ export default {
         changePerPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'contacts.index',
                 query: {
                     page: 1,
                     per_page: this.meta.per_page
