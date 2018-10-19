@@ -21,13 +21,15 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Display Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="itemClassification">
-                        <tr :key="id" v-for="{ id, name, description } in itemClassification">
+                        <tr :key="id" v-for="{ id, name, display_name, description } in itemClassification">
                             <td>{{ name }}</td>
+                            <td>{{ display_name }}</td>
                             <td>{{ description }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'item-classifications.view', params: { id: id }}">

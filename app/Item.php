@@ -50,6 +50,15 @@ class Item extends Model
     }
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'itemType', 'itemClassification'
+    ];
+
+    /**
      * The item belongs to a corporation.
      *
      * @return object

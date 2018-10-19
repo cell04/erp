@@ -22,7 +22,7 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewItemClassification">Back</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent.default="viewItemClassification">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification">Edit Item Class</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal">Delete Item Class</button>
                 </div>

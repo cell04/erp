@@ -13,6 +13,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Display Name</label>
+                            <input type="text" class="form-control" v-model="display_name" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+
+                        <div class="form-group">
                             <label>Description</label>
                             <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
                         </div>
@@ -38,6 +43,7 @@
             return {
                 ifReady: true,
                 name:'',
+                display_name:'',
                 description: ''
             };
         },

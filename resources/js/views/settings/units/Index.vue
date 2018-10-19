@@ -175,11 +175,11 @@
 const getunits = (page, per_page, callback) => {
     const params = { page, per_page };
 
-    Vue.http.get('/api/units', { params }).then(res => {
-        console.log(res)
+    axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
+
+    axios.get('/api/unit-of-measurements', { params }).then(res => {
         callback(null, res.data);
     }).catch(error => {
-        console.error(error)
         callback(error, error.res.data);
     });
 };
@@ -286,32 +286,30 @@ export default {
             this.toggleModal('show')
         },
          createNewUnit () {
+             console.log(this.modal);
              switch (this.modal.type) {
                  case 'update':
-                    this.$http.put(`/api/units/${this.modal.id}`, this.modal)
-                    .then(res => {
-                        console.log(JSON.stringify(res.data));
-                        alert(`Success! Unit updated successfully`);
+                    axios.post(`/api/unit-of-measurements', ${this.modal.id}`, this.modal).then((res)=>{
+                        if(! res.data.response){
+                            alert("error");
+                        }
+                        
                         this.toggleModal('hide')
                         this.refresh()
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! Can't update unit`);
                     });
 
                     break;
 
                 case 'create':
-                    this.$http.post('/api/units', this.modal)
-                    .then(res => {
-                        console.log(JSON.stringify(res.data));
-                        alert(`Success! New unit created successfully`);
+                     axios.post('/api/unit-of-measurements', this.modal).then((res)=>{
+                        if(! res.data.response){
+                            alert("error");
+                        }
+                        
                         this.toggleModal('hide')
                         this.refresh()
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! Can't create new unit`);
                     });
+                    
                     break;
              }
         },
