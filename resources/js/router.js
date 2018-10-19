@@ -106,6 +106,7 @@ const ItemClassificationsCreate = () =>
     import('./views/item-classifications/Create');
 const ItemClassificationsView = () =>
     import('./views/item-classifications/View');
+    const ItemClassificationsEdit = () => import('./views/item-classifications/Edit');
 
 /**
  * Item Types
@@ -287,6 +288,11 @@ const router = new Router({
             path: '/item-classifications/:id',
             name: 'item-classifications.view',
             component: ItemClassificationsView,
+        },
+        {
+            path: '/item-classifications/:id/edit',
+            name: 'item-classifications.edit',
+            component: ItemClassificationsEdit,
         },
 
         // item types
