@@ -183,11 +183,12 @@
 <script>
 const getconversions = (page, per_page, callback) => {
     const params = { page, per_page };
-    Vue.http.get('/api/conversions', { params }).then(res => {
-        console.log(res)
+
+    axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
+
+    axios.get('/api/conversions', { params }).then(res => {
         callback(null, res.data);
     }).catch(error => {
-        console.error(error)
         callback(error, error.res.data);
     });
 };
@@ -248,19 +249,6 @@ export default {
         });
     },
 
-    mounted() {
-        let promise = new Promise((resolve, reject) => {
-            this.$http.get("/api/units/").then(res => {
-                console.log(res);
-                this.units = res.body.data;
-                if (!res.data.response) {
-                return;
-                }
-                resolve();
-            });
-        });
-    },
-
     computed: {
         nextPage() {
             return this.meta.current_page + 1;
@@ -315,30 +303,27 @@ export default {
          createNewconversion () {
              switch (this.modal.type) {
                 case 'update':
-                    this.$http.put(`/api/conversions/${this.modal.id}`, this.modal)
-                    .then(res => {
-                        console.log(JSON.stringify(res.data));
-                        alert(`Success! Conversion updated successfully`);
+                    axios.post(`/api/conversions', ${this.modal.id}`, this.modal).then((res)=>{
+                        if(! res.data.response){
+                            alert("error");
+                        }
+                        
                         this.toggleModal('hide')
                         this.refresh()
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! Can't update conversion`);
                     });
 
                     break;
 
                 default:
-                    this.$http.post('/api/conversions', this.modal)
-                    .then(res => {
-                        console.log(JSON.stringify(res.data));
-                        alert(`Success! New Conversion created successfully`);
+                    axios.post('/api/conversions', this.modal).then((res)=>{
+                        if(! res.data.response){
+                            alert("error");
+                        }
+                        
                         this.toggleModal('hide')
                         this.refresh()
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! Can't create new conversion`);
                     });
+
                     break;
              }
         },

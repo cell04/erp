@@ -17,7 +17,7 @@
                             {{ user.name }} <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" :to="{ name: 'corporations.select' }">Settings</router-link>
+                            <router-link class="dropdown-item" :to="{ name: 'settings.index' }">Settings</router-link>
                             <a class="dropdown-item" href="#" v-on:click.stop.prevent="logout">Logout</a>
                         </div>
                     </li>

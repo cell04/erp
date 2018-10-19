@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-
+            
             <li class="nav-item">
                 <a class="nav-link" href="#items" data-toggle="collapse" aria-expanded="false" aria-controls="items">
                     Items <i class="float-right fas fa-caret-down"></i>
