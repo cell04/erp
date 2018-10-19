@@ -21,11 +21,13 @@ class CreateConversionsTable extends Migration
                 ->on('corporations')
                 ->onDelete('cascade');
             $table->integer('unit_of_measurement_from_id')->unsigned();
+            $table->decimal('from_value', 20, 2);
             $table->foreign('unit_of_measurement_from_id')
                 ->references('id')
                 ->on('unit_of_measurements')
                 ->onDelete('cascade');
             $table->integer('unit_of_measurement_to_id')->unsigned();
+            $table->decimal('to_value', 20, 2);
             $table->foreign('unit_of_measurement_to_id')
                 ->references('id')
                 ->on('unit_of_measurements')
