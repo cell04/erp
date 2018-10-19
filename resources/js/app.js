@@ -17,9 +17,11 @@ import App from './views/layouts/App';
 import store from './store';
 import router from './router';
 import VueSelect from 'vue-select';
+import ChartJS from 'chart.js';
 
 // Global Broadcasting
 window.Broadcast = new Vue();
+window.Chart = ChartJS;
 
 // Components
 Vue.component('vue-select', VueSelect);

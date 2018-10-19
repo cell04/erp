@@ -39,7 +39,11 @@ export default {
     created() {
         if (localStorage.getItem('corporations') != null) {
             let promise = new Promise((resolve, reject) => {
-                this.corporations = JSON.parse(localStorage.getItem('corporations'));
+                try{
+                    this.corporations = JSON.parse(localStorage.getItem('corporations'));
+                }catch(e){
+                    console.error('Unable to Fetch Corporations: \n',e)
+                }
                 resolve();
             });
 
