@@ -409,16 +409,19 @@
                 )
             );
 
+            const chartlabel5 = ['Week No. 1', 'Week No. 2', 'Week No. 4'];
+            const chartdata5 = [200, 25, 400, 38];
+
             // Chart 5
             var chart1 = new Chart(
                 document.getElementById('chart5'),
                 createBasicConfig(
                     'bar',
-                    days2,
+                    chartlabel5,
                     [
                         {
                             label: 'Sales',
-                            data: traffic2,
+                            data: chartdata5,
                             backgroundColor: bkdColors,
                             borderColor: [
                                 'rgba(54, 162, 235, 1)',
@@ -450,45 +453,42 @@
                 )
             );
 
+            let chartLabel6 = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+            let chartData6 = [
+            {
+                label: 'January',
+                fillColor: 'blue',
+                data: [3, 7, 4, 6],
+                backgroundColor: 'rgba(54, 162, 235, 1)',
+            },
+            {
+                label: 'February',
+                fillColor: 'red',
+                data: [4, 3, 5, 7],
+                backgroundColor: 'rgba(54, 162, 235, 1)',
+            },
+            {
+                label: 'March',
+                fillColor: 'green',
+                data: [7, 2, 6, 9],
+                backgroundColor: 'rgba(54, 162, 235, 1)',
+            },
+            ];
+
             // Chart 6
             var chart6 = new Chart(
-                document.getElementById('chart6'),
-                createBasicConfig(
-                    'bar',
-                    days2,
-                    [
-                        {
-                            label: 'Sales',
-                            data: traffic2,
-                            backgroundColor: bkdColors,
-                            borderColor: [
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                            ],
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            lineTension: 0,
-                        },
-                    ],
+            document.getElementById('chart6'),
+            createBasicConfig('bar', chartLabel6, chartData6, {
+                scales: {
+                yAxes: [
                     {
-                        scales: {
-                            yAxes: [
-                            {
-                                ticks: {
-                                beginAtZero: true,
-                                },
-                            },
-                            ],
-                        },
-                    }
-                )
+                    ticks: {
+                        beginAtZero: true,
+                    },
+                    },
+                ],
+                },
+            })
             );
         }
      }
