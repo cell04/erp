@@ -61,7 +61,7 @@
                             <td>{{ name }}</td>
                             <td>{{ abbreviation }}</td>
                             <td>
-                                <button class="btn btn-primary" @click.prevent="setUnit(id,name,abbreviation,'view')">View</button>
+                                <!-- <button class="btn btn-primary" @click.prevent="setUnit(id,name,abbreviation,'view')">View</button> -->
                                 <button class="btn btn-danger" @click.prevent="setUnit(id,name,abbreviation,'update')">Edit</button>
                             </td>
                         </tr>
@@ -118,7 +118,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Units</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -139,7 +139,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Unit</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Unit</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -289,25 +289,23 @@ export default {
              console.log(this.modal);
              switch (this.modal.type) {
                  case 'update':
-                    axios.post(`/api/unit-of-measurements', ${this.modal.id}`, this.modal).then((res)=>{
-                        if(! res.data.response){
-                            alert("error");
-                        }
-                        
+                    axios.put(`/api/unit-of-measurements/${this.modal.id}`, this.modal).then((res)=>{
                         this.toggleModal('hide')
                         this.refresh()
+                    }).catch(err => {
+                        console.log(err);
+                        alert("Can't update unit");
                     });
-
+                    
                     break;
 
                 case 'create':
                      axios.post('/api/unit-of-measurements', this.modal).then((res)=>{
-                        if(! res.data.response){
-                            alert("error");
-                        }
-                        
                         this.toggleModal('hide')
                         this.refresh()
+                    }).catch(err => {
+                        console.log(err);
+                        alert("Can't create unit");
                     });
                     
                     break;
