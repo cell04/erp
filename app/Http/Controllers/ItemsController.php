@@ -55,7 +55,15 @@ class ItemsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'corporation_id'                    =>  'required|numeric',
+            'item_type_id'                      =>  'required|numeric',
+            'item_classification_id'            =>  'required|numeric',
+            'name'                              =>  'required|string|min:3|max:255',
+            'description'                       =>  'required|string|min:3|max:255',
+            'stock_keeping_unit'                =>  'required|string|min:3|max:255',
+            'purchase_unit_of_measurement_id'   =>  'required|numeric',
+            'default_unit_of_measurement_id'    =>  'required|numeric',
+            // 'conversions.*.conversion_id'       =>  'required|numeric'
         ]);
 
         if ($validator->fails()) {
