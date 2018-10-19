@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Item Types / View Item Types
+                {{ componentVal }} / View {{ componentVal }}
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -26,17 +26,17 @@
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="itemTypes">
-                        <tr :key="id" v-for="{ id, name, display_name, description } in itemTypes">
+                    <tbody v-if="itemClassification">
+                        <tr :key="id" v-for="{ id, name, display_name, description } in itemClassification">
                             <td>{{ name }}</td>
                             <td>{{ display_name }}</td>
                             <td>{{ description }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'item-types.view', params: { id: id }}">
+                                <router-link class="text-info" :to="{ name: 'item-classifications.view', params: { id: id }}">
                                     View
                                 </router-link>
                                 |
-                                <router-link class="text-info" :to="{ name: 'item-types.edit', params: { id: id }}">
+                                <router-link class="text-info" :to="{ name: 'item-classifications.edit', params: { id: id }}">
                                     Edit
                                 </router-link>
                             </td>
@@ -152,11 +152,11 @@
 </template>
 
 <script>
-    const getItemTypes = (page, per_page, searchColumnName, searchColumnDescription, order_by, callback) => {
+    const getItemClassification = (page, per_page, searchColumnName, searchColumnDescription, order_by, callback) => {
         const params = { page, per_page,searchColumnName, searchColumnDescription,order_by };
 
-        axios.get('/api/item-types', { params }).then(res => {
-            // console.log(res.data);
+        axios.get('/api/item-classifications', { params }).then(res => {
+            console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             callback(error, error.res.data);
@@ -166,8 +166,8 @@
     export default {
         data() {
             return {
-                componentVal: 'Contact',
-                itemTypes: null,
+                componentVal: 'Item Classification',
+                itemClassification: null,
                 searchColumnName: null,
                 searchColumnDescription: null,
                 order_by: 'desc',
@@ -194,13 +194,13 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getItemTypes(to.query.page, 10,
+                getItemClassification(to.query.page, 10,
                     to.query.searchColumnName,
                     to.query.searchColumnDescription,to.query.order_by, (err, data) => {
                         next(vm => vm.setData(err, data));
                     });
             } else {
-                getItemTypes(to.query.page, to.query.per_page,
+                getItemClassification(to.query.page, to.query.per_page,
                     to.query.searchColumnName,
                     to.query.searchColumnDescription,to.query.order_by, (err, data) => {
                         next(vm => vm.setData(err, data));
@@ -209,7 +209,7 @@
         },
 
         beforeRouteUpdate (to, from, next) {
-            getItemTypes(to.query.page, this.meta.per_page,
+            getItemClassification(to.query.page, this.meta.per_page,
                 to.query.searchColumnName,
                 to.query.searchColumnDescription,to.query.order_by,(err, data) => {
                     this.setData(err, data);
@@ -260,7 +260,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-types.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
@@ -270,7 +270,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-types.index',
+                    name: 'item-classifications.index',
                     query: {
                         page,
                         per_page: this.meta.per_page
@@ -280,7 +280,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-types.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page
@@ -290,7 +290,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-types.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page
@@ -300,19 +300,19 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-types.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page
                     }
                 });
             },
-            setData(err, { data: itemTypes, links, meta }) {
+            setData(err, { data: itemClassification, links, meta }) {
                 this.pageNumbers = [];
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.itemTypes = itemTypes;
+                    this.itemClassification = itemClassification;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -373,7 +373,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-types.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
@@ -384,7 +384,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-types.index',
+                    name: 'item-classifications.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
