@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\ItemPricelistResource;
 use App\Repositories\ItemPricelistRepository;
+use Illuminate\Support\Facades\Validator;
 
 class ItemPricelistsController extends Controller
 {

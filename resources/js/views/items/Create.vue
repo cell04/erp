@@ -7,30 +7,40 @@
             <div class="card-body">
                 <div v-if="ifReady">
                     <form v-on:submit.prevent="createNewItem">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" v-model="newItem.name" autocomplete="off" minlength="2" maxlength="255" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SKU</label>
+                                    <input class="form-control" v-model="stock_keeping_unit" maxlength="1000" required></input>
+                                </div>
+                            </div>
                         </div>
-
+                        
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" v-model="newItem.description" maxlength="1000" required></textarea>
+                            <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Item Type</label>
-                                    <select class="form-control" v-model="newItem.item_type_id" v-on:change="onSelectItemType(newItem.item_type_id)" required>
+                                    <select class="form-control" v-model="item_type_id" v-on:change="selectItemType(item_type_id)"  required>
                                         <option value="" disabled hidden>-- Select Item Type --</option>
-                                        <option v-for="item in itemTypesList" v-bind:value="item.id">{{ item.name }}</option>
+                                        <option v-for="itemType in itemTypesList" v-bind:value="itemType.id">{{ itemType.name }}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Item Classification</label>
-                                    <select class="form-control" v-model="newItem.classification_type_id" required>
+                                    <select class="form-control" v-model="item_classification_id" v-on:change="selectItemClass(item_classification_id)"  required>
                                         <option value="" disabled hidden>-- Select Item Classification --</option>
                                         <option v-for="itemClass in itemClassList" v-bind:value="itemClass.id">{{ itemClass.name }}</option>
                                     </select>
@@ -165,10 +175,7 @@
             return {
                 ifReady: true,
                 newItem: {
-                    name: "",
-                    description: "",
                     purchase_price: "",
-                    classification_type_id: "",
                     asset_account_id: "",
                     cogs_account_id: "",
                     expense_account_id: "",
@@ -176,13 +183,18 @@
                     default_unit_id: "",
                     purchase_unit_id: "",
                     conversion_id: "",
-                    item_type_id: "",
                     conversions: [{
                         conversion_id: ""
                     }]
                 },
+                item_type_id: '',
+                item_classification_id: '',
+                name: '',
+                description: '',
+                stock_keeping_unit: '',
                 itemTypesList: [],
                 itemClassList: [],
+
                 accountsList: [],
                 itemClassificationsList: [],
                 unitsList: [],
@@ -216,36 +228,39 @@
                 });
             });
 
-            let promise2 = new Promise((resolve, reject) => {
-                axios.get("/api/accounts/get-all-accounts/").then(res => {
-                    console.log(res);
-                    this.ifReady = true;
-                    this.accountsList = res.data.accounts;
-                    if (!res.data.response) {
-                        return;
-                    }
-                    resolve();
-                });
-            });
+            // let promise2 = new Promise((resolve, reject) => {
+            //     axios.get("/api/accounts/get-all-accounts/").then(res => {
+            //         console.log(res);
+            //         this.ifReady = true;
+            //         this.accountsList = res.data.accounts;
+            //         if (!res.data.response) {
+            //             return;
+            //         }
+            //         resolve();
+            //     });
+            // });
 
-            let promise3 = new Promise((resolve, reject) => {
-                axios.get("/api/units/retrieve-all-units/").then(res => {
-                    console.log(res.data);
-                    this.ifReady = true;
-                    this.unitsList = res.data.units;
+            // let promise3 = new Promise((resolve, reject) => {
+            //     axios.get("/api/units/retrieve-all-units/").then(res => {
+            //         console.log(res.data);
+            //         this.ifReady = true;
+            //         this.unitsList = res.data.units;
 
-                    if (!res.data.response) {
-                        return;
-                    }
+            //         if (!res.data.response) {
+            //             return;
+            //         }
 
-                    resolve();
-                });
-            });
+            //         resolve();
+            //     });
+            // });
         },
 
         methods: {
-            onSelectItemType(id) {
-                this.itemClassificationsList = this.itemTypesList.find(item => item.id === id );
+            selectItemType(id) {
+                this.item_type_id = id;
+            },
+            selectItemClass(id) {
+                this.item_classification_id = id;
             },
             onSelectPurchaseUnit(id) {
                 const formData = {
@@ -292,14 +307,14 @@
             createNewItem() {
                 this.ifReady = false;
 
-                axios.post("/api/items", this.newItem).then(res => {
+                axios.post("/api/items", this.$data).then(res => {
                     this.$router.push({ name: "items.index" });
                 }).catch(err => {
                     this.ifReady = true;
-                    alert("Error!");
                     console.log(err);
                 });
             }
+            
         }
     };
 </script>

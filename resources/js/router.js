@@ -95,6 +95,8 @@ const CorporationsSelect = () => import('./views/corporations/Select');
  */
 const ItemPricelistsIndex = () => import('./views/item-pricelists/Index');
 const ItemPricelistsCreate = () => import('./views/item-pricelists/Create');
+const ItemPricelistsView = () => import('./views/item-pricelists/View');
+const ItemPricelistsEdit = () => import('./views/item-pricelists/Edit');
 
 /**
  * Item Classification
@@ -124,6 +126,7 @@ const ItemTypesEdit = () => import('./views/item-types/Edit');
 const ItemsIndex = () => import('./views/items/Index');
 const ItemsCreate = () => import('./views/items/Create');
 const ItemsView = () => import('./views/items/View');
+const ItemsEdit = () => import('./views/items/Edit');
 
 /**
  * General Items
@@ -272,6 +275,16 @@ const router = new Router({
             name: 'item-pricelists.create',
             component: ItemPricelistsCreate,
         },
+        {
+            path: '/item-pricelists/:id',
+            name: 'item-pricelists.view',
+            component: ItemPricelistsView,
+        },
+        {
+            path: '/item-pricelists/:id/edit',
+            name: 'item-pricelists.edit',
+            component: ItemPricelistsEdit,
+        },
 
         // item classification
         {
@@ -321,6 +334,7 @@ const router = new Router({
         { path: '/items', name: 'items.index', component: ItemsIndex },
         { path: '/items/create', name: 'items.create', component: ItemsCreate },
         { path: '/items/:id', name: 'items.view', component: ItemsView },
+        { path: '/items/:id/edit', name: 'items.edit', component: ItemsEdit },
 
         // item types
         {
