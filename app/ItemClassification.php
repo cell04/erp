@@ -47,7 +47,7 @@ class ItemClassification extends Model
             }
         });
     }
-
+    protected $with = ['itemType'];
     /**
      * The classification belongs to a corporation.
      *

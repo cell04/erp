@@ -7,12 +7,17 @@
             <div class="card-body">
                 <div v-if="ifReady">
                     <form v-on:submit.prevent="createNewItemPricelist">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Item</label>
                             <select class="form-control" v-model="item_id" v-on:change="selectItem(item_id)" required>
                                 <option value="" disabled hidden>-- Select Item --</option>
                                 <option v-for="item in itemsList" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
+                        </div> -->
+
+                        <div class="form-group">
+                            <label>Item</label>
+                            <vue-select v-model="itemId" @input="selectItem()" label="name" :options="itemsList"></vue-select>
                         </div>
 
                         <div class="form-group">
@@ -39,6 +44,7 @@
         data() {
             return {
                 itemsList: [],
+                itemId: null,
                 ifReady: true,
                 item_id: '',
                 price: '',
@@ -62,11 +68,11 @@
         },
 
         methods: {
-            selectItem(id) {
-                this.item_id = id;
-                console.log('selected item_id: ' + id);
-                // console.log('getItemPrice')
+            selectItem() {
+                this.item_id = this.itemId.id;
+                console.log('selected item_id: ' + this.item_id);
             },
+
             createNewItemPricelist() {
                 this.ifReady = false;
 
