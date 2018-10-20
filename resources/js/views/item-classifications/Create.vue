@@ -48,11 +48,9 @@
     export default {
         data() {
             return {
-                item_type_id: '',
                 itemTypesList: [],
                 ifReady: true,
-                theItemTypes: [],
-                itemType: null,
+                item_type_id: '',
                 name: '',
                 display_name: '',
                 description: '',
@@ -65,7 +63,7 @@
             new Promise((resolve, reject) => {
                axios.get("/api/item-types/get-all-item-types/").then(res => {
                 this.itemTypesList = res.data.item_types;
-                console.log('getItemType: ' + JSON.stringify(res.data));
+                // console.log('getItemType: ' + JSON.stringify(res.data));
                     if (!res.data.response) {
                         return;
                     }
@@ -76,11 +74,9 @@
         },
 
         methods: {
-            selectItemType() {
-                // this will be added to insert payload
-                console.log('get item type id: ' + this.item_type_id);
+            selectItemType(id) {
+                this.item_type_id = id;
             },
-
             createNewItemClass() {
                 this.ifReady = false;
 

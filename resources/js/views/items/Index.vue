@@ -35,6 +35,10 @@
                                 <router-link class="text-info" :to="{ name: 'items.view', params: { id: item.id }}">
                                     View
                                 </router-link>
+                                |
+                                <router-link class="text-info" :to="{ name: 'items.edit', params: { id: item.id }}">
+                                    Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>

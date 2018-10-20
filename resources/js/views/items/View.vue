@@ -19,17 +19,17 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Item Type</label>
-                                    <input type="text" class="form-control" v-model="item.classification_type.classifiable.name" id="name" readonly>
+                                    <input type="text" class="form-control" v-model="item.item_type.name" id="type" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Item Classification</label>
-                                    <input type="text" class="form-control" v-model="item.classification_type.name" id="name" readonly>
+                                    <input type="text" class="form-control" v-model="item.item_classification.name" id="class" readonly>
                                 </div>
                             </div>
                         </div>
-                        <br />
+                        <!-- <br />
                         <br />
                         <table class="table table-hover table-sm">
                             <thead>
@@ -116,10 +116,12 @@
                             </tbody>
                         </table>
                         <br />
-                        <br />
+                        <br /> -->
 
                     </fieldset>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewItems">Back</button>
+                    <button type="button" class="btn btn-outline-info btn-sm" @click.prevent="viewItems">Back</button>
+                    <button type="button" class="btn btn-info btn-sm" @click.prevent="editItems">Edit Item</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent="openDeleteItemModal">Delete Item</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -129,6 +131,27 @@
             </div>
         </div>
         <br>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteItemModal" tabindex="-1" role="dialog" aria-labelledby="deleteItemTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete <b><u>{{item.name}}</u></b> ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteItem">Confirm Delete</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -139,7 +162,11 @@
                 componentVal: "Item",
                 ifReady: false,
                 accountType: "",
-                item: [],
+                item: '',
+                itemType: '',
+                itemClass: '',
+                item_type_id: '',
+                item_classification_id: '',
                 conversions: [],
                 price_histories: []
             };
@@ -153,11 +180,10 @@
             getItem() {
                 new Promise((resolve, reject) => {
                     axios.get("/api/items/" + this.$route.params.id).then(res => {
-                        console.log(res);
-                        this.ifReady = true;
+                        // console.log(res);
                         this.item = res.data.item;
-                        this.conversions = res.data.item.conversions;
-                        this.price_histories = res.data.item.item_price_histories;
+                        this.ifReady = true;
+
                         if (!res.data.response) {
                             return;
                         }
@@ -165,9 +191,39 @@
                     });
                 });
             },
+
+            getItemTypeName() {
+                new Promise((resolve, reject) => {
+                    axios.get("/api/item-types/" + this.item_type_id).then(res => {
+                        // this.item = res.data;
+                        console.log('get item type name: ' + JSON.stringify(res.data.itemType));
+                    });
+                });
+            },
+
             viewItems() {
                 this.$router.push({
                     name: "items.index"
+                });
+            },
+
+            editItems () {
+                this.$router.push({
+                    name: 'items.edit',
+                    params: { id: this.item.id }
+                });
+            },
+
+            openDeleteItemModal() {
+                $('#deleteItemModal').modal('show');
+            },
+
+            deleteItem() {
+                axios.delete('/api/items/' + this.$route.params.id).then(res => {
+                    $('#deleteItemModal').modal('hide');
+                    this.$router.push({ name: 'items.index' });
+                }).catch(err => {
+                    console.log(err);
                 });
             }
         }
