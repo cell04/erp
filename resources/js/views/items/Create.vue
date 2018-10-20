@@ -21,14 +21,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>Description</label>
                             <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Type</label>
                                     <select class="form-control" v-model="item_type_id" v-on:change="selectItemType(item_type_id)"  required>
@@ -37,7 +37,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Classification</label>
                                     <select class="form-control" v-model="item_classification_id" v-on:change="selectItemClass(item_classification_id)"  required>
@@ -46,7 +46,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Unit of Measurement</label>
                                     <select class="form-control" v-model="default_unit_of_measurement_id" v-on:change="selectUnit(default_unit_of_measurement_id)"  required>
@@ -160,7 +160,7 @@
             selectItemClass(id) {
                 this.item_classification_id = id;
             },
-           
+
             createNewItem() {
                 this.ifReady = false;
 
@@ -171,7 +171,7 @@
                     console.log(err);
                 });
             }
-            
+
         }
     };
 </script>

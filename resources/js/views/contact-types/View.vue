@@ -6,52 +6,26 @@
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
-                <fieldset disabled>
-                    <div class="form-group">
-                        <label for="type">Type</label>
-                        <select v-model="type" class="form-control">
-                            <option v-for="contact in contact_type" :key="contact.id" :value="contact.value">{{contact.contact_name}}</option>
-                        </select>
-
-                    </div>
-
-                    <div class="form-group">
-                        <label for="person">Full Name</label>
-                        <input type="text" class="form-control" v-model="person" id="person" required></input>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="mobile_number">Mobile No.</label>
-                                <input type="text" class="form-control" v-model="mobile_number" id="mobile_number">
+                    <fieldset disabled>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Display Name</label>
+                                <input type="text" class="form-control" v-model="display_name" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
                         </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" v-model="email" id="email">
-                            </div>
+                        <div class="form-group">
+                            <label for="description">Desciption</label>
+                            <textarea class="form-control" v-model="description" rows="3" maxlength="500" required></textarea>
                         </div>
+                    </fieldset>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="company">Company Name</label>
-                                <input type="text" class="form-control" v-model="company" id="company" autocomplete="off" minlength="2" maxlength="255">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="company_address">Company Address</label>
-                        <input type="text" class="form-control" v-model="company_address" id="company_address">
-                    </div>
-                </fieldset>
-
-                <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewContact">Back</button>
-                <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editContact">Edit {{componentVal}}</button>
-                <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteContactModal">Delete {{componentVal}}</button>
+                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewContactTypes">Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editContactType">Edit Contact Type</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteContactTypeModal">Delete Contact Type</button>
                 </div>
 
                 <div v-else>
@@ -63,29 +37,20 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="deleteContactModal" tabindex="-1" role="dialog" aria-labelledby="deleteContactTitle" aria-hidden="true">
+        <div class="modal fade" id="deleteContactTypeModal" tabindex="-1" role="dialog" aria-labelledby="deleteContactTypeTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this contact?</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this contact type?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this {{componentVal}}? <br><br>
-                        Deleting this {{componentVal}} will delete the following data <br><br>
-                        - departments <br>
-                        - sub-departments <br>
-                        - budgets <br>
-                        - journals <br>
-                        - journal entries <br>
-                        - vouchers <br>
-                        - voucher entries <br>
-                        - statistics <br>
-                        - metrics <br><br>
+                        Are you sure you want to delete this contact type? <br><br>
+                        Deleting this contact type will delete the following data <br><br>
 
-                        that are all related to this {{componentVal}}.
+                        that are all related to this contact type.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteContact">Confirm Delete</button>
@@ -98,92 +63,62 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            ifReady: false,
-            componentVal: 'contact',
-            id: '',
-            type:'',
-            person: '',
-            mobile_number: '',
-            email: '',
-            company: '',
-            company_address: '',
-            contact_type:[
-                {'value':1, 'contact_name': "Supplier"},
-                {'value':2, 'contact_name': "Customer"},
-                {'value':3, 'contact_name': "Employee"},
-
-            ],
-        };
-    },
-
-    mounted() {
-
-        let promise = new Promise((resolve, reject) => {
-            axios.get('/api/contacts/' + this.$route.params.id).then((res) => {
-                if (! res.data.response) {
-                    // Failed, do something
-                    return;
-                }
-                this.id = res.data.contact.id;
-                this.type = res.data.contact.type;
-                this.person = res.data.contact.person;
-                this.mobile_number = res.data.contact.mobile_number;
-                this.email = res.data.contact.email;
-                this.company = res.data.contact.company;
-                this.company_address = res.data.contact.company_address;
-                resolve();
-            });
-        });
-
-        promise.then(() => {
-            this.ifReady = true;
-        });
-
-    },
-
-    methods: {
-
-        viewContact() {
-            this.$router.push({
-                name: 'contacts.index'
-            });
-        },
-        editContact() {
-            this.$router.push({
-                name: 'contacts.edit',
-                params: { id: this.id }
-            });
+    export default {
+        data() {
+            return {
+                ifReady: false,
+                name: '',
+                display_name: '',
+                description: ''
+            };
         },
 
-        openDeleteContactModal() {
-            $('#deleteContactModal').modal('show');
-        },
+        mounted() {
+            let promise = new Promise((resolve, reject) => {
+                axios.get('/api/contact-types/' + this.$route.params.id).then(res => {
+                    this.name         = res.data.contactType.name;
+                    this.display_name = res.data.contactType.display_name;
+                    this.description  = res.data.contactType.description;
 
-        deleteContact() {
-
-            $('#deleteContactModal').modal('hide');
-
-            axios.delete('/api/contacts/' + this.$route.params.id).then((res) => {
-                if (! res.data.response) {
-                    // FALSE / FAILED
-                    // DO SOMETHING
-                    return;
-                }
-
-                this.$router.push({
-                    name: 'contacts.index'
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
                 });
-
-                return;
             });
-        }
-    },
 
-    computed: {
-        // Add ES6 methods here that needs caching
+            promise.then(() => {
+                this.ifReady = true;
+            });
+        },
+
+        methods: {
+            viewContactTypes() {
+                this.$router.push({ name: 'contact-types.index' });
+            },
+            editContact() {
+                this.$router.push({
+                    name: 'contacts.edit',
+                    params: { id: this.id }
+                });
+            },
+
+            openDeleteContactTypeModal() {
+                $('#deleteContactTypeModal').modal('show');
+            },
+
+            deleteContactType() {
+                $('#deleteContactTypeModal').modal('hide');
+
+                this.ifReady = false;
+
+                axios.delete('/api/contacts/' + this.$route.params.id).then((res) => {
+                    this.$router.push({ name: 'contact-types.index' });
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
+                    return;
+                });
+            }
+        }
     }
-}
 </script>
