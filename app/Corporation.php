@@ -35,21 +35,6 @@ class Corporation extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * Run functions on boot.
-     *
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (request()->headers->get('CORPORATION-ID')) {
-                $model->corporation_id = request()->headers->get('CORPORATION-ID');
-            }
-        });
-    }
-
-    /**
      * The corporation has many audit trails.
      *
      * @return array object
