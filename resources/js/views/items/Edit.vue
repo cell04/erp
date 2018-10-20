@@ -13,6 +13,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="name">SKU</label>
+                            <input type="text" class="form-control" v-model="stock_keeping_unit" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="description">Description</label>
                             <textarea class="form-control" v-model="description" autocomplete="off" minlength="2" maxlength="255" required ></textarea>
                         </div>
@@ -62,6 +67,7 @@
                 item_type_id: '',
                 item_classification_id: '',
                 id: '',
+                stock_keeping_unit: '',
                 name: '',
                 description: '',
                 status: 1
@@ -71,10 +77,11 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/items/' + this.$route.params.id).then(res => {
-                    // console.log('Items: ' + JSON.stringify(res.data));
+                    console.log('Items: ' + JSON.stringify(res.data));
                     this.id = res.data.item.id;
                     this.name = res.data.item.name;
                     this.description = res.data.item.description;
+                    this.stock_keeping_unit = res.data.item.stock_keeping_unit;
                     this.item_type_id = res.data.item.item_type_id;
                     this.item_classification_id = res.data.item.item_classification_id;
                     this.getItemType();

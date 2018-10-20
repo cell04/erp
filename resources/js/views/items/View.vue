@@ -12,6 +12,10 @@
                             <input type="text" class="form-control" v-model="item.name" id="name" readonly>
                         </div>
                         <div class="form-group">
+                            <label for="name">SKU</label>
+                            <input type="text" class="form-control" v-model="item.stock_keeping_unit" id="name" readonly>
+                        </div>
+                        <div class="form-group">
                             <label for="description">Description</label>
                             <textarea class="form-control" v-model="item.description" id="description" readonly></textarea>
                         </div>
@@ -29,95 +33,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <br />
-                        <br />
-                        <table class="table table-hover table-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Conversions</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="conversions">
-                                <tr :key="conversion.id" v-for="conversion in conversions">
-                                    <td>{{ conversion.from_value }} {{ conversion.from_unit.name }} = {{ conversion.to_value }} {{ conversion.to_unit.name }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br />
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Purchase Unit</label>
-                                    <input type="text" class="form-control" v-model="item.purchase_uom.name" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Default Unit</label>
-                                    <input type="text" class="form-control" v-model="item.default_uom.name" id="name" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Purchase Price</label>
-                                    <input type="text" class="form-control" v-model="item.purchase_price" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Asset Account</label>
-                                    <input type="text" class="form-control" v-model="item.asset_account.name" id="name" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Cost of Goods Sold Account</label>
-                                    <input type="text" class="form-control" v-model="item.cogs_account.name" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Expense Account</label>
-                                    <input type="text" class="form-control" v-model="item.expense_account.name" id="name" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Sales Account</label>
-                                    <input type="text" class="form-control" v-model="item.sales_account.name" id="name" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br />
-                        <br />
-                        Price History
-                        <table class="table table-hover table-sm" v-if="price_histories">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Unit Price</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr :key="history.id" v-for="history in price_histories">
-                                    <td>{{ history.updated_at }}</td>
-                                    <td>{{ history.unit_price }}</td>
-                                    <td>{{ history.status }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br />
-                        <br /> -->
-
                     </fieldset>
                     <button type="button" class="btn btn-outline-info btn-sm" @click.prevent="viewItems">Back</button>
                     <button type="button" class="btn btn-info btn-sm" @click.prevent="editItems">Edit Item</button>

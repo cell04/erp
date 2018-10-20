@@ -26,8 +26,8 @@
                         </tr>
                     </thead>
                     <tbody v-if="items">
-                        <tr v-for="{ id, item_id, price } in items">
-                            <td>{{ item_id }}</td>
+                        <tr v-for="{ id, item, price } in items">
+                            <td>{{ item.name }}</td>
                             <td>{{ price }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: id }}">View</router-link>
