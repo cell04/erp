@@ -24,7 +24,7 @@ class Item extends Model
      */
     protected $fillable = [
         'corporation_id', 'item_type_id', 'item_classification_id','name', 'description',
-        'stock_keeping_unit', 'purchase_unit_of_measurement_id', 'default_unit_of_measurement_id'
+        'stock_keeping_unit'
     ];
 
     /**
