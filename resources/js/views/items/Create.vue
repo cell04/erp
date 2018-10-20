@@ -46,6 +46,15 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Unit of Measurement</label>
+                                    <select class="form-control" v-model="default_unit_of_measurement_id" v-on:change="selectUnit(default_unit_of_measurement_id)"  required>
+                                        <option value="" disabled hidden>-- Select Unit of Measurement --</option>
+                                        <option v-for="unit in itemUnitList" v-bind:value="unit.id">{{ unit.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-sm">Create New Item</button>
@@ -87,8 +96,10 @@
                 name: '',
                 description: '',
                 stock_keeping_unit: '',
+                default_unit_of_measurement_id: '',
                 itemTypesList: [],
                 itemClassList: [],
+                itemUnitList: [],
 
                 accountsList: [],
                 itemClassificationsList: [],
@@ -122,12 +133,30 @@
                     resolve();
                 });
             });
+
+            let promiseUnit = new Promise((resolve, reject) => {
+                axios.get("/api/unit-of-measurements/get-all-unit-of-measurements/").then(res => {
+                    console.log('getUnit: ' + JSON.stringify(res.data));
+                    this.ifReady = true;
+                    this.itemUnitList = res.data.unit_of_measurements;
+                    if (!res.data.response) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
         },
 
         methods: {
+            selectUnit(id) {
+                this.default_unit_of_measurement_id = id;
+                console.log(this.default_unit_of_measurement_id);
+            },
+
             selectItemType(id) {
                 this.item_type_id = id;
             },
+
             selectItemClass(id) {
                 this.item_classification_id = id;
             },

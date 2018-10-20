@@ -7,14 +7,21 @@
             <div class="card-body">
                 <div v-if="ifReady">
                     <fieldset>
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="item.name" id="name" readonly>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" v-model="item.name" id="name" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">SKU</label>
+                                    <input type="text" class="form-control" v-model="item.stock_keeping_unit" id="name" readonly>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="name">SKU</label>
-                            <input type="text" class="form-control" v-model="item.stock_keeping_unit" id="name" readonly>
-                        </div>
+                        
                         <div class="form-group">
                             <label for="description">Description</label>
                             <textarea class="form-control" v-model="item.description" id="description" readonly></textarea>
@@ -30,6 +37,12 @@
                                 <div class="form-group">
                                     <label>Item Classification</label>
                                     <input type="text" class="form-control" v-model="item.item_classification.name" id="class" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Unit of Measurement</label>
+                                    <input type="text" class="form-control" v-model="item.default_unit_of_measurement_id" id="class" readonly>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +108,7 @@
             getItem() {
                 new Promise((resolve, reject) => {
                     axios.get("/api/items/" + this.$route.params.id).then(res => {
-                        // console.log(res);
+                        console.log(res);
                         this.item = res.data.item;
                         this.ifReady = true;
 
