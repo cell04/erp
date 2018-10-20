@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\PurchaseOrder;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseOrderRepository extends Repository
 {
@@ -15,5 +16,22 @@ class PurchaseOrderRepository extends Repository
     {
         parent::__construct($purchaseOrder);
         $this->purchaseOrder = $purchaseOrder;
+    }
+
+    public function store($request)
+    {   
+        return DB::transaction(function () use ($request) {
+            $purchaseOrder = $this->purchaseOrder->create($request->all());
+            $purchaseOrder->purchaseOrderItem->createMany($request->purchase_order_items);
+
+            return $purchaseOrder;
+        });
+    }
+
+    public function findOrFail($id)
+    {
+        return $this->purchaseOrder->with(['contact', 'user', 'receiveOrders', 'warehouse', 'purchaseOrderItem' => function ($query) {
+                $query->with('item', 'unitOfMeasurement', 'itemPricelist');
+            }])->findOrFail($id);
     }
 }
