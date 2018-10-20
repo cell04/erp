@@ -13,8 +13,16 @@
                         </div>
 
                         <div class="form-group">
+                            <input type="text" class="form-control" v-model="conversions.convert_from.name">
+                        </div>
+
+                        <div class="form-group">
                             <label for="name">To</label>
                             <input type="text" class="form-control" v-model="conversions.to_value">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" v-model="conversions.convert_to.name">
                         </div>
 
                     </fieldset>
