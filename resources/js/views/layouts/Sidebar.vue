@@ -42,6 +42,22 @@
                     </li>
                 </ul>
             </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#conversions" data-toggle="collapse" aria-expanded="false" aria-controls="conversions">
+                    Conversions <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="conversions">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'conversions.create' }">Create New Conversion</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'conversions.index' }">View Conversions</router-link>
+                    </li>
+                </ul>
+            </div>
             
             <li class="nav-item">
                 <a class="nav-link" href="#items" data-toggle="collapse" aria-expanded="false" aria-controls="items">

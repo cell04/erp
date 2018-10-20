@@ -105,6 +105,16 @@ const UnitOfMeasurementsView = () => import('./views/unit-of-measurements/View')
 const UnitOfMeasurementsEdit = () => import('./views/unit-of-measurements/Edit');
 
 /**
+ * Conversions
+ *
+ */
+const ConversionsIndex = () => import('./views/conversions/Index');
+const ConversionsCreate = () => import('./views/conversions/Create');
+const ConversionsView = () => import('./views/conversions/View');
+const ConversionsEdit = () => import('./views/conversions/Edit');
+
+
+/**
  * Item Pricelist
  *
  */
@@ -296,6 +306,12 @@ const router = new Router({
         { path: '/unit-of-measurements/create', name: 'unit-of-measurements.create', component: UnitOfMeasurementsCreate },
         { path: '/unit-of-measurements/:id', name: 'unit-of-measurements.view', component: UnitOfMeasurementsView },
         { path: '/unit-of-measurements/:id/edit', name: 'unit-of-measurements.edit', component: UnitOfMeasurementsEdit },
+
+        // conversions
+        { path: '/conversions', name: 'conversions.index', component: ConversionsIndex },
+        { path: '/conversions/create', name: 'conversions.create', component: ConversionsCreate },
+        { path: '/conversions/:id', name: 'conversions.view', component: ConversionsView },
+        { path: '/conversions/:id/edit', name: 'conversions.edit', component: ConversionsEdit },
 
         // item pricelists
         {
