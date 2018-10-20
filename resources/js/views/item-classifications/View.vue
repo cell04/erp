@@ -8,6 +8,11 @@
                 <div v-if="ifReady">
                     <fieldset disabled>
                         <div class="form-group">
+                            <label for="name">Item Type</label>
+                            <input type="text" class="form-control" v-model="itemTypeId.name" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" v-model="itemClass.name" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
@@ -63,6 +68,7 @@
         data() {
             return {
                 ifReady: false,
+                itemTypeId: '',
                 itemClass: ''
             };
         },
@@ -70,8 +76,14 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/item-classifications/' + this.$route.params.id).then(res => {
-                    this.itemClass = res.data.itemClassification;
-                    console.log('Item Class: ' + JSON.stringify(res.data));
+                    const getItemTypeId = res.data.itemClassification.item_type_id;
+                    // Query Item Type
+                    let promise = new Promise((resolve, reject) => {
+                        axios.get('/api/item-types/' + getItemTypeId).then(res2 => {
+                            this.itemClass = res.data.itemClassification;
+                            this.itemTypeId = res2.data.itemType;
+                        });
+                    });
                     resolve();
                 });
             });

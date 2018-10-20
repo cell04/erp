@@ -49,6 +49,15 @@ class ItemPricelist extends Model
     }
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item'
+    ];
+
+    /**
      * The item pricelist belongs to a corporation.
      *
      * @return object

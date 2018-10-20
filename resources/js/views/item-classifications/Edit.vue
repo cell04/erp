@@ -8,6 +8,14 @@
                 <div v-if="ifReady">
                     <form v-on:submit.prevent="editItemClassification">
                         <div class="form-group">
+                            <label>Item Type</label>
+                            <select class="form-control" v-model="item_type_id" v-on:change="selectItemType(item_type_id)" required>
+                                <option value="" disabled hidden>-- Select Item Type --</option>
+                                <option v-for="item in itemTypesList" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
@@ -41,7 +49,9 @@
         data() {
             return {
                 ifReady: true,
+                itemTypesList: [],
                 id: '',
+                item_type_id: '',
                 name: '',
                 display_name: '',
                 description: '',
@@ -53,11 +63,12 @@
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/item-classifications/' + this.$route.params.id).then(res => {
                     // console.log('Item Class:' + JSON.stringify(res.data))
-                    this.id               = res.data.itemClassification.id;
-                    this.name             = res.data.itemClassification.name;
-                    this.display_name     = res.data.itemClassification.display_name;
-                    this.description      = res.data.itemClassification.description;
-                   
+                    this.id = res.data.itemClassification.id;
+                    this.name = res.data.itemClassification.name;
+                    this.display_name = res.data.itemClassification.display_name;
+                    this.description = res.data.itemClassification.description;
+                    this.item_type_id = res.data.itemClassification.item_type_id;
+                    this.getAllItemType();
                     resolve();
                 });
             });
@@ -68,10 +79,26 @@
         },
 
         methods: {
+            getAllItemType() {
+                new Promise((resolve, reject) => {
+                    axios.get("/api/item-types/get-all-item-types/").then(res => {
+                        this.itemTypesList = res.data.item_types;
+                        // console.log('getItemType: ' + JSON.stringify(res.data));
+                            if (!res.data.response) {
+                                return;
+                            }
+                        resolve();
+                    });
+                });
+            },
+
+            selectItemType() {
+                console.log('Item Type: ' + this.item_type_id);
+            },
+
             viewItemClassification() {
                 this.$router.push({
-                    name: 'item-classifications.view',
-                    params: { id: this.$route.params.id }
+                    name: 'item-classifications.index'
                 });
             },
             updateItemClassification() {

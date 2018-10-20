@@ -23,8 +23,7 @@ class ItemClassification extends Model
      * @var array
      */
     protected $fillable = [
-        // 'corporation_id', 'item_type_id', 'name', 'description'
-        'corporation_id', 'name', 'display_name', 'description'
+        'corporation_id', 'item_type_id', 'name', 'display_name', 'description'
     ];
 
     /**
