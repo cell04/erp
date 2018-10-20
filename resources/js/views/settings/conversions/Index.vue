@@ -13,8 +13,8 @@
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.units' }">
-                        Units
+                    <router-link class="nav-link p-3" :to="{ name: 'settings.units.index' }">
+                        Unit of Measurements
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">
@@ -57,12 +57,12 @@
                         </tr>
                     </thead>
                     <tbody v-if="conversions">
-                        <tr :key="id" v-for="{ id, from_id, from_value, to_id, to_value } in conversions">
+                        <tr :key="id" v-for="{ id, unit_of_measurement_from_id, from_value, unit_of_measurement_to_id, to_value } in conversions">
                             <td>{{ from_value }}</td>
                             <td>{{ to_value }}</td>
                             <td>
-                                <button class="btn btn-primary" @click.prevent="setConversion(id, from_id, from_value, to_id, to_value, 'view')">View</button>
-                                <button class="btn btn-danger" @click.prevent="setConversion(id, from_id, from_value, to_id, to_value, 'update')">Edit</button>
+                                <!-- <button class="btn btn-primary" @click.prevent="setConversion(id, unit_of_measurement_from_id, from_value, unit_of_measurement_to_id, to_value, 'view')">View</button> -->
+                                <button class="btn btn-danger" @click.prevent="setConversion(id, unit_of_measurement_from_id, from_value, unit_of_measurement_to_id, to_value, 'update')">Edit</button>
                             </td>
                         </tr>
                     </tbody>
@@ -118,7 +118,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Conversion</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -139,7 +139,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">New Conversion</h5>
+                            <h5 class="modal-title">Conversion</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -148,28 +148,29 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>From</label>
-                                    <input type="number" min="0.01" class="form-control" placeholder="0" v-model="modal.from_value">
+                                    <input type="number" class="form-control" placeholder="0" v-model="modal.from_value" :readonly=" modal.type === 'view' ? true : false">
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control" v-model="modal.from_id">
+                                    <select class="form-control" v-model="modal.unit_of_measurement_from_id" :readonly=" modal.type === 'view' ? true : false">
                                         <option value="" disabled hidden>Select Unit</option>
-                                        <option v-for="unit in units" v-bind:value="modal.from_unit_id">{{ unit.name }}</option>
+                                        <option v-for="unit in units" v-bind:value="unit.id">{{ unit.name }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>To</label>
-                                    <input type="number" min="0.01" class="form-control" placeholder="0" v-model="modal.to_value">
+                                    <input type="number" class="form-control" placeholder="0" v-model="modal.to_value" :readonly=" modal.type === 'view' ? true : false">
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control" v-model="modal.to_id">
+                                    <select class="form-control" v-model="modal.unit_of_measurement_to_id" :readonly=" modal.type === 'view' ? true : false">
                                         <option value="" disabled hidden>Select Unit</option>
-                                        <option v-for="unit in units" v-bind:value="modal.to_unit_id">{{ unit.name }}</option>
+                                        <option v-for="unit in units" v-bind:value="unit.id">{{ unit.name }}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" @click.prevent="createNewconversion()" >Save Conversion</button>
+                                <button type="submit" class="btn btn-primary" v-if="modal.type === 'create'">Save Conversion</button>
+                                <button type="submit" class="btn btn-primary" v-if="modal.type === 'update'">Update Conversion</button>
                             </div>
                         </form>
                     </div>
@@ -196,7 +197,7 @@ const getconversions = (page, per_page, callback) => {
 export default {
     data() {
         return {
-            componentVal: 'Contact',
+            componentVal: 'Conversions',
             conversions: null,
             meta: {
                 current_page: null,
@@ -220,12 +221,10 @@ export default {
             modal: {
                 id:'',
                 type:'',
-                from_id:'',
+                unit_of_measurement_from_id:'',
                 from_value: '',
-                from_unit_id:'',
-                to_id: '',
+                unit_of_measurement_to_id: '',
                 to_value: '',
-                to_unit_id: ''
             }
         };
     },
@@ -288,42 +287,55 @@ export default {
         }
     },
 
+    mounted() {
+        let promise = new Promise((resolve, reject) => {
+            axios.get("/api/unit-of-measurements/get-all-unit-of-measurements/").then(res => {
+                console.log(res);
+                this.units = res.data.unit_of_measurements;
+                if (!res.data.response) {
+                return;
+                }
+                resolve();
+            });
+        });
+    },
+
     methods: {
         toggleModal( val ) {
             $('#modal').modal(val)
         },
-        setConversion(id, from_id, from_value, to_id, to_value, type){
+        setConversion(id, unit_of_measurement_from_id, from_value, unit_of_measurement_to_id, to_value, type){
             this.modal.id = id;
-            this.modal.from_id = from_id;
+            this.modal.unit_of_measurement_from_id = unit_of_measurement_from_id;
             this.modal.from_value = from_value;
-            this.modal.to_id = to_id;
-            this.modal.to_value = this.modal.to_value;
+            this.modal.unit_of_measurement_to_id = unit_of_measurement_to_id;
+            this.modal.to_value = to_value;
+            this.modal.type = type
             this.toggleModal('show')
         },
-         createNewconversion () {
+         createNewConversion () {
+             console.log(this.modal);
              switch (this.modal.type) {
                 case 'update':
-                    axios.post(`/api/conversions', ${this.modal.id}`, this.modal).then((res)=>{
-                        if(! res.data.response){
-                            alert("error");
-                        }
-                        
+                    axios.put(`/api/conversions/${this.modal.id}`, this.modal).then((res)=>{
                         this.toggleModal('hide')
                         this.refresh()
+                    }).catch(err => {
+                        console.log(err);
+                        alert("Can't update unit");
                     });
-
+                    
                     break;
 
-                default:
-                    axios.post('/api/conversions', this.modal).then((res)=>{
-                        if(! res.data.response){
-                            alert("error");
-                        }
-                        
+                case 'create':
+                     axios.post('/api/conversions', this.modal).then((res)=>{
                         this.toggleModal('hide')
                         this.refresh()
+                    }).catch(err => {
+                        console.log(err);
+                        alert("Can't create unit");
                     });
-
+                    
                     break;
              }
         },
