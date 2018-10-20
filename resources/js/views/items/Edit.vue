@@ -41,6 +41,15 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Unit of Measurement</label>
+                                    <select class="form-control" v-model="default_unit_of_measurement_id" v-on:change="selectUnit(default_unit_of_measurement_id)"  required>
+                                        <option value="" disabled hidden>-- Select Unit of Measurement --</option>
+                                        <option v-for="unit in itemUnitList" v-bind:value="unit.id">{{ unit.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItems">Back</button>
@@ -64,10 +73,12 @@
                 ifReady: true,
                 itemTypesList: [],
                 itemClassList: [],
+                itemUnitList: [],
                 item_type_id: '',
                 item_classification_id: '',
                 id: '',
                 stock_keeping_unit: '',
+                default_unit_of_measurement_id: '',
                 name: '',
                 description: '',
                 status: 1
@@ -84,8 +95,10 @@
                     this.stock_keeping_unit = res.data.item.stock_keeping_unit;
                     this.item_type_id = res.data.item.item_type_id;
                     this.item_classification_id = res.data.item.item_classification_id;
+                    this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id
                     this.getItemType();
                     this.getClassType();
+                    this.getUnit();
                     resolve();
                 });
             });
@@ -103,6 +116,10 @@
                 this.item_classification_id = id;
             },
 
+            selectUnit(id) {
+                this.default_unit_of_measurement_id = id;
+            },
+
             getItemType() {
                 let promise = new Promise((resolve, reject) => {
                     axios.get('/api/item-types/get-all-item-types/').then(res2 => {
@@ -118,6 +135,16 @@
                     axios.get('/api/item-classifications/get-all-item-classifications/').then(res3 => {
                         // console.log('Items: ' + JSON.stringify(res3.data));
                         this.itemClassList = res3.data.item_classifications;
+                        resolve();
+                    });
+                });
+            },
+
+            getUnit() {
+                let promise = new Promise((resolve, reject) => {
+                    axios.get('/api/unit-of-measurements/get-all-unit-of-measurements/').then(res3 => {
+                        // console.log('Items: ' + JSON.stringify(res3.data));
+                        this.itemUnitList = res3.data.unit_of_measurements;
                         resolve();
                     });
                 });
