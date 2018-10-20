@@ -13,8 +13,8 @@
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.units' }">
-                        Units
+                    <router-link class="nav-link p-3" :to="{ name: 'settings.units.index' }">
+                        Unit of Measurements
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">

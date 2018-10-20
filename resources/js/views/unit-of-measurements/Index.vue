@@ -1,41 +1,9 @@
 <template>
     <div>
-        <div class="card my-4">
-            <ul class="nav nav-pills nav-justified">
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.index' }">
-                        System
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.users' }">
-                        Users
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link active p-3" :to="{ name: 'settings.units.index' }">
-                        Unit of Measurements
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.conversions' }">
-                        Conversions
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3 " :to="{ name: 'settings.paymentTerms' }">
-                        Payment Terms
-                    </router-link>
-                </li>
-            </ul>
-        </div>
 
         <div class="card">
             <div class="card-header clearfix">
                 {{componentVal}} / View {{componentVal}}
-                <router-link :to="{name: 'settings.units.create'}">
-                    <button type="button" class="btn btn-primary float-right">Create New Unit of Measurement</button>
-                </router-link>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -63,7 +31,7 @@
                             <td>{{ name }}</td>
                             <td>{{ abbreviation }}</td>
                             <td>
-                                 <router-link class="text-info" :to="{ name: 'settings.units.view', params: { id: id }}">View</router-link>
+                                 <router-link class="text-info" :to="{ name: 'unit-of-measurements.view', params: { id: id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -245,7 +213,7 @@ export default {
         goToFirstPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'unit-of-measurements.index',
                 query: {
                     page: 1,
                     per_page: this.meta.per_page
@@ -255,7 +223,7 @@ export default {
         goToPage(page = null) {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'unit-of-measurements.index',
                 query: {
                     page,
                     per_page: this.meta.per_page
@@ -265,7 +233,7 @@ export default {
         goToLastPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'unit-of-measurements.index',
                 query: {
                     page: this.meta.last_page,
                     per_page: this.meta.per_page
@@ -275,7 +243,7 @@ export default {
         goToNextPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'unit-of-measurements.index',
                 query: {
                     page: this.nextPage,
                     per_page: this.meta.per_page
@@ -285,7 +253,7 @@ export default {
         goToPreviousPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'unit-of-measurements.index',
                 query: {
                     page: this.prevPage,
                     per_page: this.meta.per_page
@@ -359,7 +327,7 @@ export default {
         changePerPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'settings.units',
+                name: 'unit-of-measurements.index',
                 query: {
                     page: 1,
                     per_page: this.meta.per_page

@@ -26,6 +26,22 @@
                     </li>
                 </ul>
             </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#unit-of-measurements" data-toggle="collapse" aria-expanded="false" aria-controls="unit-of-measurements">
+                    Unit of Measurements <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="unit-of-measurements">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'unit-of-measurements.create' }">Create New Unit of Measurement</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'unit-of-measurements.index' }">View Unit of Measurements</router-link>
+                    </li>
+                </ul>
+            </div>
             
             <li class="nav-item">
                 <a class="nav-link" href="#items" data-toggle="collapse" aria-expanded="false" aria-controls="items">

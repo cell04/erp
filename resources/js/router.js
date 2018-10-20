@@ -67,8 +67,14 @@ const UsersEdit = () => import('./views/users/Edit');
  * Settings
  */
 const SettingsIndex = () => import('./views/settings/Index.vue');
+
 const SettingsUsersIndex = () => import('./views/settings/users/Index.vue');
+
 const SettingsUnitsIndex = () => import('./views/settings/units/Index.vue');
+const SettingsUnitsCreate = () => import('./views/settings/units/Create.vue');
+const SettingsUnitsEdit = () => import('./views/settings/units/Edit.vue');
+const SettingsUnitsView = () => import('./views/settings/units/View.vue');
+
 const SettingsConversionsIndex = () =>
     import('./views/settings/conversions/Index.vue');
 const SettingsPaymentTermsIndex = () =>
@@ -88,6 +94,15 @@ const CorporationsCreate = () => import('./views/corporations/Create');
 const CorporationsView = () => import('./views/corporations/View');
 const CorporationsEdit = () => import('./views/corporations/Edit');
 const CorporationsSelect = () => import('./views/corporations/Select');
+
+/**
+ * Unit of Measurements
+ *
+ */
+const UnitOfMeasurementsIndex = () => import('./views/unit-of-measurements/Index');
+const UnitOfMeasurementsCreate = () => import('./views/unit-of-measurements/Create');
+const UnitOfMeasurementsView = () => import('./views/unit-of-measurements/View');
+const UnitOfMeasurementsEdit = () => import('./views/unit-of-measurements/Edit');
 
 /**
  * Item Pricelist
@@ -163,26 +178,41 @@ const router = new Router({
 
         // settings
         { path: '/settings', name: 'settings.index', component: SettingsIndex },
-        {
-            path: '/settings/users',
-            name: 'settings.users',
-            component: SettingsUsersIndex,
-        },
-        {
-            path: '/settings/units',
-            name: 'settings.units',
-            component: SettingsUnitsIndex,
-        },
-        {
-            path: '/settings/conversions',
-            name: 'settings.conversions',
-            component: SettingsConversionsIndex,
-        },
-        {
-            path: '/settings/payment_terms',
-            name: 'settings.paymentTerms',
-            component: SettingsPaymentTermsIndex,
-        },
+        // {
+        //     path: '/settings/users',
+        //     name: 'settings.users',
+        //     component: SettingsUsersIndex,
+        // },
+        // {
+        //     path: '/settings/units',
+        //     name: 'settings.units.index',
+        //     component: SettingsUnitsIndex,
+        // },
+        // {
+        //     path: '/settings/units/create',
+        //     name: 'settings.units.create',
+        //     component: SettingsUnitsCreate,
+        // },
+        // {
+        //     path: '/settings/units/:id',
+        //     name: 'settings.units.view',
+        //     component: SettingsUnitsView,
+        // },
+        // {
+        //     path: '/settings/units/:id/edit',
+        //     name: 'settings.units.edit',
+        //     component: SettingsUnitsEdit,
+        // },
+        // {
+        //     path: '/settings/conversions',
+        //     name: 'settings.conversions',
+        //     component: SettingsConversionsIndex,
+        // },
+        // {
+        //     path: '/settings/payment_terms',
+        //     name: 'settings.paymentTerms',
+        //     component: SettingsPaymentTermsIndex,
+        // },
 
         // authentication
         {
@@ -260,6 +290,12 @@ const router = new Router({
             name: 'corporations.edit',
             component: CorporationsEdit,
         },
+
+        // unit-of-measurements
+        { path: '/unit-of-measurements', name: 'unit-of-measurements.index', component: UnitOfMeasurementsIndex },
+        { path: '/unit-of-measurements/create', name: 'unit-of-measurements.create', component: UnitOfMeasurementsCreate },
+        { path: '/unit-of-measurements/:id', name: 'unit-of-measurements.view', component: UnitOfMeasurementsView },
+        { path: '/unit-of-measurements/:id/edit', name: 'unit-of-measurements.edit', component: UnitOfMeasurementsEdit },
 
         // item pricelists
         {
