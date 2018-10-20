@@ -66,7 +66,7 @@ class Conversion extends Model
      */
     public function convertFrom()
     {
-        return $this->belongsTo(UnitOfMeasurement::class);
+        return $this->belongsTo(UnitOfMeasurement::class, 'unit_of_measurement_from_id');
     }
 
     /**
@@ -76,6 +76,6 @@ class Conversion extends Model
      */
     public function convertTo()
     {
-        return $this->belongsTo(UnitOfMeasurement::class);
+        return $this->belongsTo(UnitOfMeasurement::class, 'unit_of_measurement_to_id');
     }
 }

@@ -16,4 +16,18 @@ class ConversionRepository extends Repository
         parent::__construct($conversion);
         $this->conversion = $conversion;
     }
+
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
+    }
 }

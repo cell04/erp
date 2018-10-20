@@ -55,7 +55,10 @@ class ConversionsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'unit_of_measurement_from_id'       =>  'required|numeric',
+            'from_value'                        =>  'required|numeric',
+            'unit_of_measurement_to_id'         =>  'required|numeric',
+            'to_value'                          =>  'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +109,10 @@ class ConversionsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'unit_of_measurement_from_id'       =>  'required|numeric',
+            'from_value'                        =>  'required|numeric',
+            'unit_of_measurement_to_id'         =>  'required|numeric',
+            'to_value'                          =>  'required|numeric'
         ]);
 
         if ($validator->fails()) {

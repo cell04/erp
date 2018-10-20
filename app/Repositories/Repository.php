@@ -81,6 +81,7 @@ abstract class Repository
         return $this->model->filter($request)
             ->orderBy('created_at', $orderBy)
             ->paginate($length)
+            ->with('convertFrom', 'convertTo')
             ->withPath(
                 $this->model->createPaginationUrl($request, $removePage)
             );

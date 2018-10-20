@@ -98,4 +98,14 @@ class PurchaseOrder extends Model
     {
         return $this->belongsTo(Warehouse::class);
     }
+
+    /**
+     * The purchase order belongs to a warehouse.
+     *
+     * @return object
+     */
+    public function purchaseOrderItem()
+    {
+        return $this->hasMany(PurchaseOrderItem::class);
+    }
 }
