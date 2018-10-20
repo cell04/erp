@@ -30,7 +30,7 @@ class CreateContactsTable extends Migration
             $table->string('person');
             $table->string('email')->unique();
             $table->string('mobile_number')->nullable();
-            $table->decimal('credit_limit', 10, 2);
+            $table->decimal('credit_limit', 20, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

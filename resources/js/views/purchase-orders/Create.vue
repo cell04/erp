@@ -121,7 +121,6 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/retrieve-all-contacts/").then(res => {
-                    console.log(res);
                     this.contacts = res.data.contacts;
                     if (!res.data.response) {
                         return;
@@ -132,7 +131,6 @@
 
             let promise2 = new Promise((resolve, reject) => {
                 axios.get("/api/sub-departments/retrieve-all-sub-departments/").then(res => {
-                    console.log(res);
                     this.sub_departments = res.data.sub_departments;
                     if (! res.data.response) { return; }
                     resolve();
@@ -141,7 +139,6 @@
 
             let promise3 = new Promise((resolve, reject) => {
                 axios.get("/api/items/retrieve-all-items/").then(res => {
-                    console.log(res);
                     this.itemsList = res.data.items;
                     if (!res.data.response) {
                         return;

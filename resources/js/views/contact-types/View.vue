@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Contacts / View Contacts
+                Contact Types / View Contact Types
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -12,15 +12,13 @@
                         <select v-model="type" class="form-control">
                             <option v-for="contact in contact_type" :key="contact.id" :value="contact.value">{{contact.contact_name}}</option>
                         </select>
-                       
+
                     </div>
 
                     <div class="form-group">
                         <label for="person">Full Name</label>
                         <input type="text" class="form-control" v-model="person" id="person" required></input>
                     </div>
-
-              
 
                     <div class="row">
                         <div class="col-md-4">
@@ -45,13 +43,12 @@
                         </div>
                     </div>
 
-
                     <div class="form-group">
                         <label for="company_address">Company Address</label>
                         <input type="text" class="form-control" v-model="company_address" id="company_address">
                     </div>
                 </fieldset>
-                
+
                 <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewContact">Back</button>
                 <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editContact">Edit {{componentVal}}</button>
                 <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteContactModal">Delete {{componentVal}}</button>
@@ -62,8 +59,6 @@
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                     </div>
                 </div>
-                
-
             </div>
         </div>
 
@@ -119,7 +114,7 @@ export default {
                 {'value':1, 'contact_name': "Supplier"},
                 {'value':2, 'contact_name': "Customer"},
                 {'value':3, 'contact_name': "Employee"},
-                
+
             ],
         };
     },

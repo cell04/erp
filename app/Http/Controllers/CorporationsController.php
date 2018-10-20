@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Corporation;
-use App\Http\Resources\CorporationResource;
-use App\Repositories\CorporationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\CorporationResource;
+use App\Repositories\CorporationRepository;
 
 class CorporationsController extends Controller
 {
@@ -34,10 +33,13 @@ class CorporationsController extends Controller
      */
     public function index()
     {
-        if (! $data = CorporationResource::collection($this->corporation->paginateWithFilters(request(), request()->per_page, request()->order_by))) {
+        $data = CorporationResource::collection(
+            $this->corporation->paginateWithFilters(request(), request()->per_page, request()->order_by)
+        );
+
+        if (! $data) {
             return response()->json([
-                'response' => false,
-                'message'  => 'Failed to retrieve resource.'
+                'message' => 'Failed to retrieve resource'
             ], 400);
         }
 

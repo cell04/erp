@@ -20,7 +20,6 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Company Name</th>
                             <th scope="col">Contact Person</th>
                             <th scope="col">Email Address</th>
@@ -30,13 +29,12 @@
                         </tr>
                     </thead>
                     <tbody v-if="contacts">
-                        <tr v-for="{ id, company, company_address, person, email, mobile_number, type } in contacts">
-                            <td>{{ id }}</td>
+                        <tr v-for="{ id, company, company_address, person, email, mobile_number, contact_type } in contacts">
                             <td>{{ company }}</td>
                             <td>{{ person }}</td>
                             <td>{{ email }}</td>
                             <td>{{ mobile_number }}</td>
-                            <td>{{ type }}</td>
+                            <td>{{ contact_type.name }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'contacts.view', params: { id: id }}">View</router-link>
                             </td>
@@ -168,7 +166,7 @@ export default {
             next();
         });
     },
-    
+
     computed: {
         nextPage() {
             return this.meta.current_page + 1;
