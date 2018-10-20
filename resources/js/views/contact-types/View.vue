@@ -53,7 +53,7 @@
                         that are all related to this contact type.
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteContact">Confirm Delete</button>
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteContactType">Confirm Delete</button>
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -67,6 +67,7 @@
         data() {
             return {
                 ifReady: false,
+                id: '',
                 name: '',
                 display_name: '',
                 description: ''
@@ -76,6 +77,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/contact-types/' + this.$route.params.id).then(res => {
+                    this.id         = res.data.contactType.id;
                     this.name         = res.data.contactType.name;
                     this.display_name = res.data.contactType.display_name;
                     this.description  = res.data.contactType.description;
@@ -95,9 +97,9 @@
             viewContactTypes() {
                 this.$router.push({ name: 'contact-types.index' });
             },
-            editContact() {
+            editContactType() {
                 this.$router.push({
-                    name: 'contacts.edit',
+                    name: 'contact-types.edit',
                     params: { id: this.id }
                 });
             },
@@ -111,7 +113,7 @@
 
                 this.ifReady = false;
 
-                axios.delete('/api/contacts/' + this.$route.params.id).then((res) => {
+                axios.delete('/api/contact-types/' + this.$route.params.id).then((res) => {
                     this.$router.push({ name: 'contact-types.index' });
                 }).catch(err => {
                     this.ifReady = true;
