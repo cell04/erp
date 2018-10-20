@@ -23,11 +23,11 @@ class ConversionRepository extends Repository
         $orderBy = 'desc',
         $removePage = true
     ) {
-        return $this->model->filter($request)
+        return $this->conversion->filter($request)
             ->orderBy('created_at', $orderBy)
             ->paginate($length)
             ->withPath(
-                $this->model->createPaginationUrl($request, $removePage)
+                $this->conversion->createPaginationUrl($request, $removePage)
             );
     }
 }

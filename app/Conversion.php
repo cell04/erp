@@ -16,6 +16,7 @@ class Conversion extends Model
      * @var string
      */
     protected $table = 'conversions';
+    protected $with = ['convertFrom', 'convertTo'];
 
     /**
      * The attributes that are mass assignable.
