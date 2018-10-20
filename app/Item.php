@@ -23,7 +23,8 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'item_type_id', 'item_classification_id', 'name', 'description', 'stock_keeping_unit'
+        'corporation_id', 'item_type_id', 'item_classification_id','name', 'description',
+        'stock_keeping_unit', 'purchase_unit_of_measurement_id', 'default_unit_of_measurement_id'
     ];
 
     /**
@@ -85,5 +86,25 @@ class Item extends Model
     public function itemClassification()
     {
         return $this->belongsTo(ItemClassification::class);
+    }
+
+    /**
+     * The item belongs to a purchase unit of measurement.
+     *
+     * @return object
+     */
+    public function purchaseUnitOfMeasurement()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class, 'purchase_unit_of_measurement_id');
+    }
+
+    /**
+     * The item belongs to a default unit of measurement.
+     *
+     * @return object
+     */
+    public function defaultUnitOfMeasurement()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class, 'default_unit_of_measurement_id');
     }
 }

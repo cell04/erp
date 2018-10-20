@@ -23,7 +23,8 @@ class Conversion extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'unit_of_measurement_from_id', 'unit_of_measurement_to_id'
+        'corporation_id', 'unit_of_measurement_from_id', 'from_value', 
+        'unit_of_measurement_to_id', 'to_value'
     ];
 
     /**
