@@ -23,7 +23,7 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'item_type_id', 'item_classification_id','name', 
+        'corporation_id', 'item_type_id', 'item_classification_id','name',
         'description', 'stock_keeping_unit', 'default_unit_of_measurement_id'
     ];
 
@@ -55,7 +55,7 @@ class Item extends Model
      * @var array
      */
     protected $with = [
-        'itemType', 'itemClassification'
+        'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
     ];
 
     /**

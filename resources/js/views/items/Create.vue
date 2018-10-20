@@ -48,111 +48,6 @@
                             </div>
                         </div>
 
-                        <!-- <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Purchase Unit</label>
-                                    <select class="form-control" v-model="newItem.purchase_unit_id" v-on:change="onSelectPurchaseUnit(newItem.purchase_unit_id)" required>
-                                        <option value="" disabled hidden>-- Select Purchase Unit --</option>
-                                        <option v-for="unit in unitsList" v-bind:value="unit.id">{{ unit.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Default Unit</label>
-                                    <select class="form-control" v-model="newItem.default_unit_id" v-on:change="onSelectDefaultUnit(newItem.default_unit_id)" required>
-                                        <option value="" disabled hidden>-- Select Default Unit --</option>
-                                        <option v-for="unit in unitsList" v-bind:value="unit.id">{{ unit.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <!-- <br />
-                        <br />
-                        <table class="table table-hover table-sm" v-if="conversionsList.length>0">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Conversions</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in newItem.conversions">
-                                    <td>
-                                        <select class="form-control" v-model="item.conversion_id" required>
-                                            <option value="" disabled hidden>-- Select Conversion --</option>
-                                            <option v-for="conversion in conversionsList" v-bind:value="conversion.id">
-                                                {{ conversion.from_value }} {{ conversion.from_unit_name }} = {{ conversion.to_value }} {{ conversion.to_unit_name }}
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm mt-1"  @click="deleteConversionRow(index)">Remove</button>
-                                    </td>
-                                </tr>
-                                <div class="ml-1">
-                                    <button type="button" class="btn btn-raised btn-primary btn-sm mt-2" @click="addConversionRow">
-                                        Add Row
-                                    </button>
-                                </div>
-
-                            </tbody>
-                        </table>
-                        <br />
-                        <br />
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Purchase Price</label>
-                                    <input type="number" class="form-control" v-model="newItem.purchase_price" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Asset Account</label>
-                                    <select class="form-control" v-model="newItem.asset_account_id" required>
-                                        <option value="" disabled hidden>-- Select Asset Account --</option>
-                                        <option v-for="account in accountsList" v-bind:value="account.id">{{ account.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Cost of Goods Sold Account</label>
-                                    <select class="form-control" v-model="newItem.cogs_account_id" required>
-                                        <option value="" disabled hidden>-- Select COGS Account --</option>
-                                        <option v-for="account in accountsList" v-bind:value="account.id">{{ account.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Expense Account</label>
-                                    <select class="form-control" v-model="newItem.expense_account_id" required>
-                                        <option value="" disabled hidden>-- Select Expense Account --</option>
-                                        <option v-for="account in accountsList" v-bind:value="account.id">{{ account.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Sales Account</label>
-                                    <select class="form-control" v-model="newItem.sales_account_id" required>
-                                        <option value="" disabled hidden>-- Select Sales Account --</option>
-                                        <option v-for="account in accountsList" v-bind:value="account.id">{{ account.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div> -->
-
                         <button type="submit" class="btn btn-success btn-sm">Create New Item</button>
 
                     </form>
@@ -227,32 +122,6 @@
                     resolve();
                 });
             });
-
-            // let promise2 = new Promise((resolve, reject) => {
-            //     axios.get("/api/accounts/get-all-accounts/").then(res => {
-            //         console.log(res);
-            //         this.ifReady = true;
-            //         this.accountsList = res.data.accounts;
-            //         if (!res.data.response) {
-            //             return;
-            //         }
-            //         resolve();
-            //     });
-            // });
-
-            // let promise3 = new Promise((resolve, reject) => {
-            //     axios.get("/api/units/retrieve-all-units/").then(res => {
-            //         console.log(res.data);
-            //         this.ifReady = true;
-            //         this.unitsList = res.data.units;
-
-            //         if (!res.data.response) {
-            //             return;
-            //         }
-
-            //         resolve();
-            //     });
-            // });
         },
 
         methods: {
@@ -262,48 +131,7 @@
             selectItemClass(id) {
                 this.item_classification_id = id;
             },
-            onSelectPurchaseUnit(id) {
-                const formData = {
-                    purchase_unit_id: id
-                }
-                axios
-                .post("/api/items/default-units", formData)
-                .then(res => {
-                    this.defaultUnitsList = res.data
-                    console.log(res)
-                })
-                .catch(err => {
-                    this.newItem.default_unit_id = undefined;
-                    alert("Error!");
-                    console.log(err);
-                });
-            },
-            onSelectDefaultUnit(id) {
-                const formData = {
-                    purchase_unit_id: this.newItem.purchase_unit_id,
-                    default_unit_id: id
-                }
-
-                console.log('form data', formData)
-
-                axios.post("/api/items/conversions", formData).then(res => {
-                    this.conversionsList = [];
-                    this.conversionsList = res;
-                }).catch(err => {
-                    this.newItem.default_unit_id = undefined;
-                    this.conversionsList = [];
-                    alert("Error!");
-                    console.log(err);
-                });
-            },
-            addConversionRow() {
-                this.newItem.conversions.push({
-                    conversion_id: ""
-                });
-            },
-            deleteConversionRow(index) {
-                this.newItem.conversions.splice(index, 1);
-            },
+           
             createNewItem() {
                 this.ifReady = false;
 

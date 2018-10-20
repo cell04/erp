@@ -20,7 +20,6 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Country</th>
@@ -30,7 +29,6 @@
                     </thead>
                     <tbody v-if="corporations">
                         <tr v-for="{ id, name, description, street, zip_code, country, fax } in corporations">
-                            <td>{{ id }}</td>
                             <td>{{ name }}</td>
                             <td>{{ description }}</td>
                             <td>{{ country }}</td>
@@ -108,7 +106,7 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
+            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchCorporations" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">

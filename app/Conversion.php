@@ -23,7 +23,7 @@ class Conversion extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'unit_of_measurement_from_id', 'from_value', 
+        'corporation_id', 'unit_of_measurement_from_id', 'from_value',
         'unit_of_measurement_to_id', 'to_value'
     ];
 
@@ -37,6 +37,15 @@ class Conversion extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'convertFrom', 'convertTo'
+    ];
 
     /**
      * Run functions on boot.
