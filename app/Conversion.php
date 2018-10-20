@@ -27,6 +27,10 @@ class Conversion extends Model
         'unit_of_measurement_to_id', 'to_value'
     ];
 
+    protected $with = [
+        'convertFrom', 'convertTo'
+    ];
+
     /**
      * The attributes that should be mutated to dates.
      *
