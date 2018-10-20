@@ -35,19 +35,11 @@ class PurchaseOrderRepository extends Repository
         $removePage = true
     ) {
         return $this->purchaseOrder->filter($request)
-            ->where('corporation_id', request()->headers->get('CORPORATION-ID'))
             ->orderBy('created_at', $orderBy)
             ->paginate($length)
-            ->with('convertFrom', 'convertTo')
             ->withPath(
                 $this->purchaseOrder->createPaginationUrl($request, $removePage)
             );
-    }
-
-    public function all()
-    {
-        return $this->purchaseOrder->where('corporation_id', request()->headers->get('CORPORATION-ID'))
-            ->get();
     }
 
     public function findOrFail($id)
