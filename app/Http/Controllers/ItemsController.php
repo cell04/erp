@@ -61,7 +61,6 @@ class ItemsController extends Controller
             'name'                              =>  'required|string|min:3|max:255',
             'description'                       =>  'required|string|min:3|max:255',
             'stock_keeping_unit'                =>  'required|string|min:3|max:255',
-            'purchase_unit_of_measurement_id'   =>  'required|numeric',
             'default_unit_of_measurement_id'    =>  'required|numeric',
             // 'conversions.*.conversion_id'       =>  'required|numeric'
         ]);

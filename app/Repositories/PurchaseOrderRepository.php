@@ -28,20 +28,6 @@ class PurchaseOrderRepository extends Repository
         });
     }
 
-    public function paginateWithFilters(
-        $request = null,
-        $length = 10,
-        $orderBy = 'desc',
-        $removePage = true
-    ) {
-        return $this->purchaseOrder->filter($request)
-            ->orderBy('created_at', $orderBy)
-            ->paginate($length)
-            ->withPath(
-                $this->purchaseOrder->createPaginationUrl($request, $removePage)
-            );
-    }
-
     public function findOrFail($id)
     {
         return $this->purchaseOrder->with(['contact', 'user', 'receiveOrders', 'warehouse', 'purchaseOrderItem' => function ($query) {

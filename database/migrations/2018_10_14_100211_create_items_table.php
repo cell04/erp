@@ -25,11 +25,6 @@ class CreateItemsTable extends Migration
                 ->references('id')
                 ->on('item_types')
                 ->onDelete('cascade');
-            $table->integer('purchase_unit_of_measurement_id')->unsigned();
-            $table->foreign('purchase_unit_of_measurement_id')
-                ->references('id')
-                ->on('unit_of_measurements')
-                ->onDelete('cascade');
             $table->integer('default_unit_of_measurement_id')->unsigned();
             $table->foreign('default_unit_of_measurement_id')
                 ->references('id')
