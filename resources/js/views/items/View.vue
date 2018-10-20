@@ -42,7 +42,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Unit of Measurement</label>
-                                    <input type="text" class="form-control" v-model="item.default_unit_of_measurement_id" id="class" readonly>
+                                    <input type="text" class="form-control" v-model="item.default_unit_of_measurement.name" id="class" readonly>
                                 </div>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
             getItem() {
                 new Promise((resolve, reject) => {
                     axios.get("/api/items/" + this.$route.params.id).then(res => {
-                        console.log(res);
+                        // console.log(JSON.stringify(res.data.item));
                         this.item = res.data.item;
                         this.ifReady = true;
 
@@ -116,15 +116,6 @@
                             return;
                         }
                         resolve();
-                    });
-                });
-            },
-
-            getItemTypeName() {
-                new Promise((resolve, reject) => {
-                    axios.get("/api/item-types/" + this.item_type_id).then(res => {
-                        // this.item = res.data;
-                        console.log('get item type name: ' + JSON.stringify(res.data.itemType));
                     });
                 });
             },
