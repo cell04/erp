@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        
         <div class="card">
             <div class="card-header clearfix">
                 {{componentVal}} / View {{componentVal}}
@@ -10,7 +10,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Units - Total Units {{ this.meta.total }}
+                                List of {{componentVal}} - Total {{componentVal}} {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -21,17 +21,17 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Abbreviation</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="units">
-                        <tr :key="id" v-for="{ id, name, abbreviation } in units">
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
+                    <tbody v-if="conversions">
+                        <tr :key="id" v-for="{ id, unit_of_measurement_from_id, from_value, unit_of_measurement_to_id, to_value } in conversions">
+                            <td>{{ from_value }}</td>
+                            <td>{{ to_value }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'unit-of-measurements.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'conversions.view', params: { id: id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -87,7 +87,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Units</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Conversion</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -107,12 +107,12 @@
 </template>
 
 <script>
-const getunits = (page, per_page, callback) => {
+const getconversions = (page, per_page, callback) => {
     const params = { page, per_page };
 
     axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
 
-    axios.get('/api/unit-of-measurements', { params }).then(res => {
+    axios.get('/api/conversions', { params }).then(res => {
         callback(null, res.data);
     }).catch(error => {
         callback(error, error.res.data);
@@ -122,8 +122,8 @@ const getunits = (page, per_page, callback) => {
 export default {
     data() {
         return {
-            componentVal: 'Unit of Measurements',
-            units: null,
+            componentVal: 'Conversions',
+            conversions: null,
             meta: {
                 current_page: null,
                 from: null,
@@ -142,29 +142,32 @@ export default {
             error: null,
             showProgress: false,
             pageNumbers: [],
+            units: [],
             modal: {
                 id:'',
-                name:'',
-                abbreviation:'',
-                type:''
+                type:'',
+                unit_of_measurement_from_id:'',
+                from_value: '',
+                unit_of_measurement_to_id: '',
+                to_value: '',
             }
         };
     },
 
     beforeRouteEnter (to, from, next) {
         if (to.query.per_page == null) {
-            getunits(to.query.page, 10, (err, data) => {
+            getconversions(to.query.page, 10, (err, data) => {
                 next(vm => vm.setData(err, data));
             });
         } else {
-            getunits(to.query.page, to.query.per_page, (err, data) => {
+            getconversions(to.query.page, to.query.per_page, (err, data) => {
                 next(vm => vm.setData(err, data));
             });
         }
     },
 
     beforeRouteUpdate (to, from, next) {
-        getunits(to.query.page, this.meta.per_page, (err, data) => {
+        getconversions(to.query.page, this.meta.per_page, (err, data) => {
             this.setData(err, data);
             next();
         });
@@ -209,11 +212,27 @@ export default {
         }
     },
 
+    mounted() {
+        let promise = new Promise((resolve, reject) => {
+            axios.get("/api/unit-of-measurements/get-all-unit-of-measurements/").then(res => {
+                console.log(res);
+                this.units = res.data.unit_of_measurements;
+                if (!res.data.response) {
+                return;
+                }
+                resolve();
+            });
+        });
+    },
+
     methods: {
+        toggleModal( val ) {
+            $('#modal').modal(val)
+        },
         goToFirstPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'unit-of-measurements.index',
+                name: 'conversions.index',
                 query: {
                     page: 1,
                     per_page: this.meta.per_page
@@ -223,7 +242,7 @@ export default {
         goToPage(page = null) {
             this.showProgress = true;
             this.$router.push({
-                name: 'unit-of-measurements.index',
+                name: 'conversions.index',
                 query: {
                     page,
                     per_page: this.meta.per_page
@@ -233,7 +252,7 @@ export default {
         goToLastPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'unit-of-measurements.index',
+                name: 'conversions.index',
                 query: {
                     page: this.meta.last_page,
                     per_page: this.meta.per_page
@@ -243,7 +262,7 @@ export default {
         goToNextPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'unit-of-measurements.index',
+                name: 'conversions.index',
                 query: {
                     page: this.nextPage,
                     per_page: this.meta.per_page
@@ -253,20 +272,21 @@ export default {
         goToPreviousPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'unit-of-measurements.index',
+                name: 'conversions.index',
                 query: {
                     page: this.prevPage,
                     per_page: this.meta.per_page
                 }
             });
         },
-        setData(err, { data: units, links, meta }) {
+        setData(err, { data: conversions, links, meta }) {
             this.pageNumbers = [];
 
             if (err) {
                 this.error = err.toString();
             } else {
-                this.units = units;
+                console.log(conversions)
+                this.conversions = conversions;
                 this.links = links;
                 this.meta = meta;
             }
@@ -327,7 +347,7 @@ export default {
         changePerPage() {
             this.showProgress = true;
             this.$router.push({
-                name: 'unit-of-measurements.index',
+                name: 'conversions.index',
                 query: {
                     page: 1,
                     per_page: this.meta.per_page

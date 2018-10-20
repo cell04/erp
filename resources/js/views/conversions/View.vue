@@ -8,20 +8,20 @@
                 <div v-if="ifReady">
                     <fieldset disabled>
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="unit_of_measurements.name">
+                            <label for="name">From</label>
+                            <input type="text" class="form-control" v-model="conversions.from_value">
                         </div>
 
                         <div class="form-group">
-                            <label for="name">Abbreviation</label>
-                            <input type="text" class="form-control" v-model="unit_of_measurements.abbreviation">
+                            <label for="name">To</label>
+                            <input type="text" class="form-control" v-model="conversions.to_value">
                         </div>
 
                     </fieldset>
 
                     <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewUnitOfMeasurements">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUnitOfMeasurements">Edit Unit of Measurement</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUnitOfMeasurementModal">Delete Unit of Measurement</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUnitOfMeasurements">Edit {{componentVal}}</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteConversionModal">Delete {{componentVal}}</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -32,20 +32,20 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="deleteUnitOfMeasurementModal" tabindex="-1" role="dialog" aria-labelledby="deleteUnitOfMeasurementTitle" aria-hidden="true">
+        <div class="modal fade" id="deleteConversionModal" tabindex="-1" role="dialog" aria-labelledby="deleteConversionTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Unit of Measurement?</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this {{componentVal}}?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this Unit of Measurement? <br><br>
+                        Are you sure you want to delete this {{componentVal}}? <br><br>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteCorporation">Confirm Delete</button>
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteConversion">Confirm Delete</button>
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -58,17 +58,17 @@
     export default {
         data() {
             return {
-                componentVal: 'Unit of Measurement',
+                componentVal: 'Conversion',
                 ifReady: false,
-                unit_of_measurements: ''
+                conversions: ''
             };
         },
 
         mounted() {
             let promise = new Promise((resolve, reject) => {
-                axios.get('/api/unit-of-measurements/' + this.$route.params.id).then(res => {
+                axios.get('/api/conversions/' + this.$route.params.id).then(res => {
                     console.log(res)
-                    this.unit_of_measurements = res.data.unitOfMeasurement;
+                    this.conversions = res.data.conversion;
                     resolve();
                 });
             });
@@ -81,23 +81,23 @@
         methods: {
             viewUnitOfMeasurements() {
                 this.$router.push({
-                    name: 'unit-of-measurements.index'
+                    name: 'conversions.index'
                 });
             },
             editUnitOfMeasurements() {
                 this.$router.push({
-                    name: 'unit-of-measurements.edit',
-                    params: { id: this.unit_of_measurements.id }
+                    name: 'conversions.edit',
+                    params: { id: this.conversions.id }
                 });
             },
-            openDeleteUnitOfMeasurementModal() {
-                $('#deleteUnitOfMeasurementModal').modal('show');
+            openDeleteConversionModal() {
+                $('#deleteConversionModal').modal('show');
             },
-            deleteCorporation() {
-                $('#deleteUnitOfMeasurementModal').modal('hide');
+            deleteConversion() {
+                $('#deleteConversionModal').modal('hide');
 
-                axios.delete('/api/unit-of-measurements/' + this.$route.params.id).then(res => {
-                    this.$router.push({ name: 'unit-of-measurements.index' });
+                axios.delete('/api/conversions/' + this.$route.params.id).then(res => {
+                    this.$router.push({ name: 'conversions.index' });
                 }).catch(err => {
                     alert("Error!");
                     console.log(err);
