@@ -6,16 +6,16 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ReceiveOrder extends Model
+class StockRequest extends Model
 {
     use SoftDeletes, Filtering;
 
     /**
-     * Receive Order table.
+     * Stock Requests table.
      *
      * @var string
      */
-    protected $table = 'receive_orders';
+    protected $table = 'stock_requests';
 
     /**
      * The attributes that are mass assignable.
@@ -23,8 +23,8 @@ class ReceiveOrder extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'purchase_order_id', 'contact_id', 'user_id',
-        'number', 'reference_number', 'receive_date', 'status'
+        'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type', 'user_id',
+        'stock_requestable_to_id', 'stock_requestable_to_type', 'status', 'approve_by'
     ];
 
     /**
@@ -50,7 +50,7 @@ class ReceiveOrder extends Model
     }
 
     /**
-     * The receive order belongs to a corporation.
+     * The invoice belongs to a corporation
      *
      * @return object
      */
@@ -60,27 +60,33 @@ class ReceiveOrder extends Model
     }
 
     /**
-     * The receive order belongs to a contact.
-     *
-     * @return object
+     * Get all of the owning stock requestable from from models.
      */
-    public function contact()
+    public function stockRequestableFrom()
     {
-        return $this->belongsTo(Contact::class);
+        return $this->morphTo();
     }
 
     /**
-     * The receive order belongs to a purchase order.
-     *
-     * @return object
+     * Get all of the owning stock requestable to from models.
      */
-    public function purchaseOrder()
+    public function stockRequestableTo()
     {
-        return $this->belongsTo(PurchaseOrder::class);
+        return $this->morphTo();
     }
 
     /**
-     * The receive order belongs to a user.
+     * The stock request is approved by a user.
+     *
+     * @return object
+     */
+    public function approveBy()
+    {
+        return $this->belongsTo(User::class, 'approve_by');
+    }
+
+    /**
+     * The stock request is created by a user.
      *
      * @return object
      */
@@ -90,12 +96,12 @@ class ReceiveOrder extends Model
     }
 
     /**
-     * The receive order has many receive order items.
+     * The stock request has many stock request items.
      *
-     * @return object
+     * @return array object
      */
-    public function receiveOrderItems()
+    public function stockRequestItems()
     {
-        return $this->hasMany(ReceiveOrderItem::class);
+        return $this->hasMany(StockRequestItem::class);
     }
 }

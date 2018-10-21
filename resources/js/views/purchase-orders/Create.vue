@@ -112,7 +112,7 @@
                 reference_number: "",
                 contact_id: "",
                 order_date: "",
-                sub_department_id: "",
+                warehouse_id: "",
                 items: [],
                 amount: ""
             };
