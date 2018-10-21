@@ -6,16 +6,16 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Item extends Model
+class StockRequest extends Model
 {
     use SoftDeletes, Filtering;
 
     /**
-     * Items table.
+     * Stock Requests table.
      *
      * @var string
      */
-    protected $table = 'items';
+    protected $table = 'stock_requests';
 
     /**
      * The attributes that are mass assignable.
@@ -23,8 +23,8 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'item_type_id', 'item_classification_id','name',
-        'description', 'stock_keeping_unit', 'default_unit_of_measurement_id'
+        'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type',
+        'stock_requestable_to_id', 'stock_requestable_to_type', 'status', 'approve_by'
     ];
 
     /**
@@ -33,15 +33,6 @@ class Item extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-
-    /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = [
-        'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
-    ];
 
     /**
      * Run functions on boot.
@@ -59,7 +50,7 @@ class Item extends Model
     }
 
     /**
-     * The item belongs to a corporation.
+     * The invoice belongs to a corporation
      *
      * @return object
      */
@@ -69,32 +60,38 @@ class Item extends Model
     }
 
     /**
-     * The item belongs to an item type.
-     *
-     * @return object
+     * Get all of the owning stock requestable from from models.
      */
-    public function itemType()
+    public function stockRequestableFrom()
     {
-        return $this->belongsTo(ItemType::class);
+        return $this->morphTo();
     }
 
     /**
-     * The item the belongs to an item classification.
-     *
-     * @return object
+     * Get all of the owning stock requestable to from models.
      */
-    public function itemClassification()
+    public function stockRequestableTo()
     {
-        return $this->belongsTo(ItemClassification::class);
+        return $this->morphTo();
     }
 
     /**
-     * The item belongs to a default unit of measurement.
+     * The stock request is approved by a user.
      *
      * @return object
      */
-    public function defaultUnitOfMeasurement()
+    public function approveBy()
     {
-        return $this->belongsTo(UnitOfMeasurement::class, 'default_unit_of_measurement_id');
+        return $this->belongsTo(User::class, 'approve_by');
+    }
+
+    /**
+     * The stock request has many stock request items.
+     *
+     * @return array object
+     */
+    public function stockRequestItems()
+    {
+        return $this->hasMany(StockRequestItem::class);
     }
 }

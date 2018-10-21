@@ -6,16 +6,16 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Item extends Model
+class StockRequestItem extends Model
 {
     use SoftDeletes, Filtering;
 
     /**
-     * Items table.
+     * Stock Request Items table.
      *
      * @var string
      */
-    protected $table = 'items';
+    protected $table = 'stock_request_items';
 
     /**
      * The attributes that are mass assignable.
@@ -23,8 +23,8 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'item_type_id', 'item_classification_id','name',
-        'description', 'stock_keeping_unit', 'default_unit_of_measurement_id'
+        'corporation_id', 'stock_request_id',
+        'item_id', 'quantity', 'unit_of_measurement_id'
     ];
 
     /**
@@ -33,15 +33,6 @@ class Item extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-
-    /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = [
-        'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
-    ];
 
     /**
      * Run functions on boot.
@@ -59,7 +50,7 @@ class Item extends Model
     }
 
     /**
-     * The item belongs to a corporation.
+     * The stock request item belongs to a corporation.
      *
      * @return object
      */
@@ -69,32 +60,32 @@ class Item extends Model
     }
 
     /**
-     * The item belongs to an item type.
+     * The stock request item belongs to a stock request
      *
      * @return object
      */
-    public function itemType()
+    public function stockRequest()
     {
-        return $this->belongsTo(ItemType::class);
+        return $this->belongsTo(StockRequest::class);
     }
 
     /**
-     * The item the belongs to an item classification.
+     * The stock request item belongs to an item.
      *
      * @return object
      */
-    public function itemClassification()
+    public function item()
     {
-        return $this->belongsTo(ItemClassification::class);
+        return $this->belongsTo(Item::class);
     }
 
     /**
-     * The item belongs to a default unit of measurement.
+     * The stock request item belongs to a unit of measurement.
      *
      * @return object
      */
-    public function defaultUnitOfMeasurement()
+    public function unitOfMeasurement()
     {
-        return $this->belongsTo(UnitOfMeasurement::class, 'default_unit_of_measurement_id');
+        return $this->belongsTo(UnitOfMeasurement::class);
     }
 }
