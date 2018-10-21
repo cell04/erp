@@ -6,16 +6,16 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Stock extends Model
+class StockTransfer extends Model
 {
     use SoftDeletes, Filtering;
 
     /**
-     * Stocks table.
+     * Stock Transfers table.
      *
      * @var string
      */
-    protected $table = 'stocks';
+    protected $table = 'stock_transfers';
 
     /**
      * The attributes that are mass assignable.
@@ -23,8 +23,8 @@ class Stock extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'stockable_id', 'stockable_type',
-        'quantity', 'unit_of_measurement_id'
+        'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
+        'stock_transferable_to_id', 'stock_transferable_to_type'
     ];
 
     /**
@@ -50,7 +50,7 @@ class Stock extends Model
     }
 
     /**
-     * The stock belongs to a corporation
+     * The stock transfer belongs to a corporation
      *
      * @return object
      */
@@ -60,10 +60,38 @@ class Stock extends Model
     }
 
     /**
-     * Get all of the owning stockable models.
+     * Get all of the owning stock transferable from from models.
      */
-    public function stockable()
+    public function stockTransferableFrom()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get all of the owning stock transferable to from models.
+     */
+    public function stockTransferableTo()
+    {
+        return $this->morphTo();
+    }
+
+    /**
+     * The stock request is created by a user.
+     *
+     * @return object
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The stock request has many stock request items.
+     *
+     * @return array object
+     */
+    public function stockRequestItems()
+    {
+        return $this->hasMany(StockRequestItem::class);
     }
 }

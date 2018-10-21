@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Purchase Orders / Create New Purchase Order
+                {{componentVal}}s / Create New {{componentVal}}
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -86,7 +86,7 @@
                             <button type="button" class="btn btn-primary btn-sm" @click="addRow">Add Row</button>
                         </table>
 
-                        <button type="submit" class="btn btn-success btn-sm">Create New Purchase Order</button>
+                        <button type="submit" class="btn btn-success btn-sm mt-5">Create New {{componentVal}}</button>
                     </form>
                 </div>
 
@@ -105,6 +105,10 @@
     export default {
         data() {
             return {
+                componentVal: "Stock Request",
+                warehouseId : null,
+                branchId: null,
+                type: null,
                 ifReady: true,
                 contacts: "",
                 warehouses: "",
@@ -112,17 +116,21 @@
                 reference_number: "",
                 contact_id: "",
                 order_date: "",
-                warehouse_id: "",
+                sub_department_id: "",
                 items: [],
                 amount: ""
             };
         },
 
         mounted() {
+            this.warehouseId = this.$route.params.id;
+            this.branchId = this.$route.params.id;
+            this.type = this.$route.query.type;
+
             let promise = new Promise((resolve, reject) => {
-                axios.get("/api/contacts/get-all-contacts/").then(res => {
-                    this.contacts = res.data.contacts;
-                    if (!res.data.response) {
+                axios.get("/api/warehouses/"+ this.warehouseId).then(res => {
+                    console.log(res);
+                    if (!res.data) {
                         return;
                     }
                     resolve();
@@ -130,17 +138,9 @@
             });
 
             let promise2 = new Promise((resolve, reject) => {
-                axios.get("/api/warehouses/get-all-warehouses").then(res => {
-                    this.warehouses = res.data.warehouses;
-                    if (! res.data.response) { return; }
-                    resolve();
-                });
-            });
-
-            let promise3 = new Promise((resolve, reject) => {
-                axios.get("/api/items/get-all-items/").then(res => {
-                    this.itemsList = res.data.items;
-                    if (!res.data.response) {
+                axios.get("/api/branches/"+ this.branchId).then(res2 => {
+                    console.log(res2);
+                    if (!res2.data) {
                         return;
                     }
                     resolve();

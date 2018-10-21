@@ -43,6 +43,11 @@
                             <textarea class="form-control" v-model="company_address" rows="3"></textarea>
                         </div>
 
+                        <div class="form-group">
+                            <label>Credit Limit</label>
+                            <input type="number" class="form-control" placeholder="0" v-model="credit_limit" minlength="2" maxlength="255" required>
+                        </div>
+
                         <button type="submit" class="btn btn-success btn-sm">Create New Contact</button>
                     </form>
                 </div>
@@ -71,6 +76,7 @@
                 email: '',
                 company: '',
                 company_address: '',
+                credit_limit: ''
             };
         },
 

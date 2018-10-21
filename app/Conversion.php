@@ -26,7 +26,7 @@ class Conversion extends Model
         'corporation_id', 'unit_of_measurement_from_id', 'from_value',
         'unit_of_measurement_to_id', 'to_value'
     ];
-
+    
     /**
      * The attributes that should be mutated to dates.
      *

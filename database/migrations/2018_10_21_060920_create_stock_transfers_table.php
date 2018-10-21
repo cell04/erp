@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAuditTrailsTable extends Migration
+class CreateStockTransfersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAuditTrailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('audit_trails', function (Blueprint $table) {
+        Schema::create('stock_transfers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
             $table->foreign('corporation_id')
@@ -25,8 +25,15 @@ class CreateAuditTrailsTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
-            $table->string('module');
-            $table->text('description');
+            $table->integer('stock_request_id')->unsigned();
+            $table->foreign('stock_request_id')
+                ->references('id')
+                ->on('stock_requests')
+                ->onDelete('cascade');
+            $table->integer('stock_transferable_from_id')->unsigned();
+            $table->string('stock_transferable_from_type');
+            $table->integer('stock_transferable_to_id')->unsigned();
+            $table->string('stock_transferable_to_type');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -39,6 +46,6 @@ class CreateAuditTrailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audit_trails');
+        Schema::dropIfExists('stock_transfers');
     }
 }
