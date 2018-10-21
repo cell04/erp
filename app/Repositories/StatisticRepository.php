@@ -59,7 +59,7 @@ class StatisticRepository
        ]);
 
 
-        return ($modelNames[$this->settings->{'Model'}])::all(); 
+        return ($this->modelNames[$this->settings->{'Model'}])::all(); 
 
         return $this->settings;
     }
