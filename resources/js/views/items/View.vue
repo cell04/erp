@@ -27,19 +27,19 @@
                             <textarea class="form-control" v-model="item.description" id="description" readonly></textarea>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Type</label>
                                     <input type="text" class="form-control" v-model="item.item_type.name" id="type" readonly>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Classification</label>
                                     <input type="text" class="form-control" v-model="item.item_classification.name" id="class" readonly>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Unit of Measurement</label>
                                     <input type="text" class="form-control" v-model="item.default_unit_of_measurement.name" id="class" readonly>
