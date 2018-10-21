@@ -231,72 +231,9 @@
         };
     };
 
-    const days2 = [
-    'Dec 31',
-    'Jan 1',
-    'Jan 2',
-    'Jan 3',
-    'Jan 4',
-    'Jan 5',
-    'Jan 6',
-    'Jan 7',
-    'Jan 8',
-    ];
-    const traffic2 = [200, 25, 400, 38, 309, 275, 484, 111, 232, 345];
+    const generateChart = ( chartElement, chartOptions ) => ( chartElement && chartOptions ) ? new Chart( chartElement, chartOptions) :  new Chart()
+    const convertToDate = strDate => new Date(strDate).toDateString()
 
-    const bkdColors = [
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-    ];
-
-    const generateChart = ( chartType, chartElement , chartLabel, chartData ) => {
-        return new Chart(
-            chartElement,
-            createBasicConfig(
-                chartType,
-                chartLabel,
-                [
-                    {
-                        label: 'Sales',
-                        data: chartData,
-                        backgroundColor: bkdColors,
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                        ],
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        lineTension: 0,
-                    },
-                ],
-                {
-                    scales: {
-                        yAxes: [
-                            {
-                                ticks: {
-                                    beginAtZero: true,
-                                },
-                            },
-                        ],
-                    },
-                }
-            )
-        );
-    }
     export default {
         data() {
             return {
@@ -318,202 +255,15 @@
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/statistics/test-payload').then(res => {
                     const response = res.data.payload
-                    const labels = response.map( data => data.date)
+                    const labels = response.map( data => convertToDate(data.date))
                     const data = response.map( data => data.data)
-                    this.salesReportChart = generateChart('bar', 'chart1', labels, data)
-
-                    resolve();
-                });
-            });
-
-            promise.then(() => {
-                this.ifReady = true;
-            });
-
-            // Chart 2
-            var chart2 = new Chart(
-                document.getElementById('chart2'),
-                createBasicConfig(
-                    'line',
-                    days2,
-                    [
-                    {
-                        data: traffic2,
-                        backgroundColor: bkdColors,
-                        borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                        ],
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        lineTension: 0,
-                        fill: false,
-                    },
-                    ],
-                    {
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        yAxes: [
-                        {
-                            display: false,
-                            gridLines: {
-                            display: false,
-                            },
-                            ticks: {
-                            beginAtZero: true,
-                            },
-                        },
-                        ],
-                        xAxes: [
-                        {
-                            display: false,
-                        },
-                        ],
-                    },
-                    }
-                )
-            );
-
-             // Chart 3
-            var chart3 = new Chart(
-                document.getElementById('chart3'),
-                createBasicConfig(
-                    'line',
-                    days2,
-                    [
-                    {
-                        data: traffic2,
-                        backgroundColor: bkdColors,
-                        borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                        ],
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        lineTension: 0,
-                        fill: false,
-                    },
-                    ],
-                    {
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        yAxes: [
-                        {
-                            display: false,
-                            gridLines: {
-                            display: false,
-                            },
-                            ticks: {
-                            beginAtZero: true,
-                            },
-                        },
-                        ],
-                        xAxes: [
-                        {
-                            display: false,
-                        },
-                        ],
-                    },
-                    }
-                )
-            );
-
-             // Chart 4
-            var chart4 = new Chart(
-                document.getElementById('chart4'),
-                createBasicConfig(
-                    'line',
-                    days2,
-                    [
-                    {
-                        data: traffic2,
-                        backgroundColor: bkdColors,
-                        borderColor: [
-                         'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                        ],
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        lineTension: 0,
-                        fill: false,
-                    },
-                    ],
-                    {
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        yAxes: [
-                        {
-                            display: false,
-                            gridLines: {
-                            display: false,
-                            },
-                            ticks: {
-                            beginAtZero: true,
-                            },
-                        },
-                        ],
-                        xAxes: [
-                        {
-                            display: false,
-                        },
-                        ],
-                    },
-                    }
-                )
-            );
-
-            const chartlabel5 = ['Week No. 1', 'Week No. 2', 'Week No. 4'];
-            const chartdata5 = [200, 25, 400, 38];
-
-            // Chart 5
-            var chart1 = new Chart(
-                document.getElementById('chart5'),
-                createBasicConfig(
-                    'bar',
-                    chartlabel5,
+                    const options = createBasicConfig( 'bar', labels,
                     [
                         {
                             label: 'Sales',
-                            data: chartdata5,
-                            backgroundColor: bkdColors,
-                            borderColor: [
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                            ],
+                            data: data,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
                             borderWidth: 2,
                             pointRadius: 0,
                             lineTension: 0,
@@ -522,87 +272,101 @@
                     {
                         scales: {
                             yAxes: [
-                            {
-                                ticks: {
-                                beginAtZero: true,
+                                {
+                                    ticks: {
+                                        beginAtZero: true,
+                                    },
                                 },
-                            },
                             ],
                         },
-                    }
-                )
-            );
+                    })
 
-            let chartLabel6 = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-            let chartData6 = [
-                {
-                    label: 'January',
-                    fillColor: 'blue',
-                    data: [3, 7, 4, 6],
-                    backgroundColor: bkdColors,
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
+                    const options2 = createBasicConfig( 'line', labels,
+                    [
+                        {
+                            data: data,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            lineTension: 0,
+                            fill: false,
+                        },
                     ],
-                },
-                {
-                    label: 'February',
-                    fillColor: 'red',
-                    data: [4, 3, 5, 7],
-                    backgroundColor: bkdColors,
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                    ],
-                },
-                {
-                    label: 'March',
-                    fillColor: 'green',
-                    data: [7, 2, 6, 9],
-                    backgroundColor: bkdColors,
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                    ],
-                },
-            ];
+                    {
+                        legend: {
+                                display: false,
+                        },
+                        scales: {
+                            yAxes: [
+                                {
+                                    display: false,
+                                    gridLines: {
+                                    display: false,
+                                    },
+                                    ticks: {
+                                    beginAtZero: true,
+                                    },
+                                },
+                            ],
+                            xAxes: [
+                                {
+                                    display: false,
+                                }
+                            ],
+                        },
+                    })
 
-            // Chart 6
-            var chart6 = new Chart(
-            document.getElementById('chart6'),
-            createBasicConfig('bar', chartLabel6, chartData6, {
-                    scales: {
-                    yAxes: [
+                    let chartSampleLabel = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    let chartSampleData = [
+                        {
+                            label: 'January',
+                            fillColor: 'blue',
+                            data: [3, 7, 4, 6],
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                        },
+                        {
+                            label: 'February',
+                            fillColor: 'red',
+                            data: [4, 3, 5, 7],
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                        },
+                        {
+                            label: 'March',
+                            fillColor: 'green',
+                            data: [7, 2, 6, 9],
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                        },
+                    ];
+
+                    const options3 = createBasicConfig('bar', chartSampleLabel, chartSampleData, {
+                        scales: {
+                        yAxes: [
                             {
                             ticks: {
                                 beginAtZero: true,
                             },
                             },
                         ],
-                    },
-                })
-            );
+                        },
+                    })
+
+                    this.salesReportChart = generateChart('chart1', options)
+                    this.todaysPurchaseOrderChart = generateChart('chart2', options2)
+                    this.todaysReceivedOrderChart = generateChart('chart3', options2)
+                    this.todaysProfitChart = generateChart('chart4', options2)
+                    this.salesComparisonChart = generateChart('chart5', options)
+                    this.purchaseComparisonChart = generateChart('chart6', options3)
+                    resolve();
+                });
+            });
+
+            promise.then(() => {
+                this.ifReady = true;
+            });
         }
      }
 
