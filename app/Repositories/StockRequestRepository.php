@@ -39,4 +39,15 @@ class StockRequestRepository extends Repository
         $this->branch       = $branch;
         $this->warehouse    = $warehouse;
     }
+
+    // public function store($request)
+    // {
+    //     if ($request->stock_requestable_from_type == 'Warehouse') {
+
+    //     }
+
+    //     if ($request->stock_requestable_from_type == 'Branch') {
+
+    //     }
+    // }
 }

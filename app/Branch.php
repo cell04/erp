@@ -68,4 +68,14 @@ class Branch extends Model
     {
         return $this->morphMany(Stock::class, 'stockable');
     }
+
+    public function stockRequestFrom()
+    {
+        return $this->morphMany(StockRequest::class, 'stock_requestable_from');
+    }
+
+    public function stockRequestTo()
+    {
+        return $this->morphMany(StockRequest::class, 'stock_requestable_to');
+    }
 }

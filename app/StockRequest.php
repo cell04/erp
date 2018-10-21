@@ -23,7 +23,7 @@ class StockRequest extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type',
+        'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type', 'user_id',
         'stock_requestable_to_id', 'stock_requestable_to_type', 'status', 'approve_by'
     ];
 
@@ -83,6 +83,16 @@ class StockRequest extends Model
     public function approveBy()
     {
         return $this->belongsTo(User::class, 'approve_by');
+    }
+
+    /**
+     * The stock request is created by a user.
+     *
+     * @return object
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**
