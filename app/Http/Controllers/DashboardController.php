@@ -26,7 +26,7 @@ class DashboardController extends Controller
     public function test()
     {
         return response()->json([
-            'message' => 'test'
+            'payload' => $this->dashboard->testPayload()
         ], 200);
     }
 }

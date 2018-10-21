@@ -197,4 +197,8 @@ Route::group(['middleware' => 'auth:api'], function () {
             'index', 'store', 'show', 'update', 'destroy'
         ]
     ]);
+
+    //Stats
+    Route::get('statistics/test-payload', 'DashboardController@testPayload');
+
 });
