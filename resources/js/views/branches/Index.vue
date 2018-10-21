@@ -38,7 +38,8 @@
                             <td>{{ zip_code }}</td>
                             <td>{{ telephone_number }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'branches.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'branches.view', params: { id: id }}">View</router-link><br />
+                                <router-link class="text-info" :to="{ name: 'stock-requests.create', params: { id: id },  query: { type: 'branch' }}">Create Stock Request</router-link>
                             </td>
                         </tr>
                     </tbody>

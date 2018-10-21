@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Warehouses / View Warehouses
+                Purchase Orders / View Purchase Orders
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Warehouses - Total Items {{ this.meta.total }}
+                                List of Purchase Orders - Total Purchase Orders {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -20,24 +20,32 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Country</th>
-                            <th scope="col">Zip Code</th>
-                            <th scope="col">Telephone Number</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Purchase Order #</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Reference #</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="warehouses">
-                        <tr v-for="{ id, name, city, country, zip_code, telephone_number } in warehouses">
-                            <td>{{ name }}</td>
-                            <td>{{ city }}</td>
-                            <td>{{ country }}</td>
-                            <td>{{ zip_code }}</td>
-                            <td>{{ telephone_number }}</td>
+                    <tbody v-if="orders">
+                        <tr :key="order.id" v-for="order in orders">
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.purchase_order_number }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>{{ order.reference_number }}</td>
+                            <td>{{ order.amount }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'warehouses.view', params: { id: id }}">View</router-link><br />
-                                <router-link class="text-info" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create Stock Request</router-link>
+                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: order.id }}">
+                                    View
+                                </router-link>
+
+                                <router-link v-if="order.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { po_id: order.id }}">
+                                    <button class="btn btn-success">Receive PO</button>
+                                </router-link>
+
+                                <button v-if="order.status === 'Issued'" @click="closePO(order.id, order.purchase_order_number)" class="btn btn-danger">Close PO</button>
+
                             </td>
                         </tr>
                     </tbody>
@@ -57,7 +65,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -78,7 +86,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -93,7 +101,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Warehouses</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Orders</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -107,91 +115,89 @@
                     </div>
                 </form>
             </div>
-        </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchWarehouses" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Search Warehouses</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+            <!-- Modal -->
+            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Search For Orders</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label for="address">Address</label>
-                            <textarea class="form-control" v-model="searchColumnAddress" required></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3 form-group">
-                                <label for="city">City</label>
-                                <input type="text" class="form-control" v-model="searchColumnCity" autocomplete="off" minlength="2" maxlength="255" required>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="text" class="form-control" v-model="searchDate" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-                            <div class="col-md-3 form-group">
-                                <label for="country">Country</label>
-                                <input type="text" class="form-control" v-model="searchColumnCountry" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="zip_code">Zip Code</label>
-                                <input type="text" class="form-control" v-model="searchColumnZipCode" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="telephone_number">Telephone Number</label>
-                                <input type="text" class="form-control" v-model="searchColumnTelephoneNumber" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label>Order By</label>
-                            <select class="form-control" v-model="order_by">
-                                <option value="desc">Newest</option>
-                                <option value="asc">Oldest</option>
-                            </select>
+                            <div class="form-group">
+                                <label>Purchase Order #</label>
+                                <textarea class="form-control" v-model="searchPurchaseOrderNumber" maxlength="1000" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Status</label>
+                                <input type="text" class="form-control" v-model="searchStatus" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Reference #</label>
+                                <input type="text" class="form-control" v-model="searchReferenceNumber" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Total</label>
+                                <input type="text" class="form-control" v-model="searchTotal" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Order By</label>
+                                <select class="form-control" v-model="order_by">
+                                    <option value="desc">Newest</option>
+                                    <option value="asc">Oldest</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer clearfix">
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <div class="modal-footer clearfix">
+                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
+                            <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
 
 <script>
-    const getWarehouses = (
+    const getPurchaseOrders = (
         page,
         per_page,
-        searchColumnName,
-        searchColumnAddress,
-        searchColumnCity,
-        searchColumnCountry,
-        searchColumnZipCode,
-        searchColumnTelephoneNumber,
+        searchDate,
+        searchPurchaseOrderNumber,
+        searchStatus,
+        searchReferenceNumber,
+        searchTotal,
         order_by,
         callback
-    ) => {
+        ) => {
         const params = {
             page,
             per_page,
-            searchColumnName,
-            searchColumnAddress,
-            searchColumnCity,
-            searchColumnCountry,
-            searchColumnZipCode,
-            searchColumnTelephoneNumber,
-            order_by
+            searchDate,
+            searchPurchaseOrderNumber,
+            searchStatus,
+            searchReferenceNumber,
+            searchTotal,
+            order_by,
         };
 
-        axios.get('/api/warehouses', { params }).then(res => {
+        axios.get('/api/purchase-orders', { params }).then(res => {
+            console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -207,13 +213,12 @@
     export default {
         data() {
             return {
-                warehouses: null,
-                searchColumnName: '',
-                searchColumnAddress: '',
-                searchColumnCity: '',
-                searchColumnCountry: '',
-                searchColumnZipCode: '',
-                searchColumnTelephoneNumber: '',
+                orders: null,
+                searchDate: '',
+                searchPurchaseOrderNumber: '',
+                searchStatus: '',
+                searchReferenceNumber: '',
+                searchTotal: '',
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -238,54 +243,51 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getWarehouses(
+                getPurchaseOrders(
                     to.query.page,
                     10,
-                    to.query.searchColumnName,
-                    to.query.searchColumnAddress,
-                    to.query.searchColumnCity,
-                    to.query.searchColumnCountry,
-                    to.query.searchColumnZipCode,
-                    to.query.searchColumnTelephoneNumber,
+                    to.query.searchDate,
+                    to.query.searchPurchaseOrderNumber,
+                    to.query.searchStatus,
+                    to.query.searchReferenceNumber,
+                    to.query.searchTotal,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                );
+                    );
             } else {
-                getWarehouses(
+                getPurchaseOrders(
                     to.query.page,
                     to.query.per_page,
-                    to.query.searchColumnName,
-                    to.query.searchColumnAddress,
-                    to.query.searchColumnCity,
-                    to.query.searchColumnCountry,
-                    to.query.searchColumnZipCode,
-                    to.query.searchColumnTelephoneNumber,
+                    to.query.searchDate,
+                    to.query.searchPurchaseOrderNumber,
+                    to.query.searchStatus,
+                    to.query.searchReferenceNumber,
+                    to.query.searchTotal,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                );
+                    );
             }
         },
 
         beforeRouteUpdate (to, from, next) {
-            getWarehouses(
+            getPurchaseOrders(
                 to.query.page,
                 this.meta.per_page,
-                this.searchColumnName,
-                this.searchColumnAddress,
-                this.searchColumnCity,
-                this.searchColumnCountry,
-                this.searchColumnZipCode,
-                this.searchColumnTelephoneNumber,
+                this.searchDate,
+                this.searchPurchaseOrderNumber,
+                this.searchStatus,
+                this.searchReferenceNumber,
+                this.searchTotal,
                 this.order_by,
                 (err, data) => {
                     this.setData(err, data);
                     next();
                 }
-            );
+                );
         },
 
         computed: {
@@ -296,51 +298,52 @@
                 return this.meta.current_page - 1;
             },
             paginatonCount() {
-                if (! this.meta) {
-                    return;
-                }
-
+                if (! this.meta) { return; }
                 const { current_page, last_page } = this.meta;
-
                 return `${current_page} of ${last_page}`;
             },
             pageCount() {
-                if (this.meta.last_page > 10) {
-                    return false;
-                }
-
+                if (this.meta.last_page > 10) { return false; }
                 return true;
             },
             isPrevDisabled() {
-                if (this.links.prev == null) {
-                    return 'disabled';
-                }
-
+                if (this.links.prev == null) { return 'disabled'; }
                 return;
             },
             isNextDisabled() {
-                if (this.links.next == null) {
-                    return 'disabled';
-                }
-
+                if (this.links.next == null) { return 'disabled'; }
                 return;
             }
         },
 
         methods: {
+            closePO(id, po_number) {
+                const formData = {
+                    purchase_order_id: id
+                };
+                if (confirm(`Are you sure you want to close ${po_number}`)) {
+                    axios.post("/api/purchase-orders/close", formData).then(res => {
+                        console.log(JSON.stringify(res.data));
+                        alert(`Success! ${po_number} is now closed`);
+                        location.reload();
+                    }).catch(err => {
+                        console.log(err);
+                        alert(`Error! Can't close purchase order`);
+                    });
+                }
+            },
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAddress: this.searchColumnAddress,
-                        searchColumnCity: this.searchColumnCity,
-                        searchColumnCountry: this.searchColumnCountry,
-                        searchColumnZipCode: this.searchColumnZipCode,
-                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -348,16 +351,15 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAddress: this.searchColumnAddress,
-                        searchColumnCity: this.searchColumnCity,
-                        searchColumnCountry: this.searchColumnCountry,
-                        searchColumnZipCode: this.searchColumnZipCode,
-                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -365,16 +367,15 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAddress: this.searchColumnAddress,
-                        searchColumnCity: this.searchColumnCity,
-                        searchColumnCountry: this.searchColumnCountry,
-                        searchColumnZipCode: this.searchColumnZipCode,
-                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -382,16 +383,14 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAddress: this.searchColumnAddress,
-                        searchColumnCity: this.searchColumnCity,
-                        searchColumnCountry: this.searchColumnCountry,
-                        searchColumnZipCode: this.searchColumnZipCode,
-                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        per_page: this.meta.per_page,searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -399,27 +398,26 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAddress: this.searchColumnAddress,
-                        searchColumnCity: this.searchColumnCity,
-                        searchColumnCountry: this.searchColumnCountry,
-                        searchColumnZipCode: this.searchColumnZipCode,
-                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     }
                 });
             },
-            setData(err, { data: warehouses, links, meta }) {
+            setData(err, { data: orders, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.warehouses = warehouses;
+                    this.orders = orders;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -480,45 +478,43 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAddress: this.searchColumnAddress,
-                        searchColumnCity: this.searchColumnCity,
-                        searchColumnCountry: this.searchColumnCountry,
-                        searchColumnZipCode: this.searchColumnZipCode,
-                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     }
                 });
-            },search() {
+            },
+            search() {
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAddress: this.searchColumnAddress,
-                        searchColumnCity: this.searchColumnCity,
-                        searchColumnCountry: this.searchColumnCountry,
-                        searchColumnZipCode: this.searchColumnZipCode,
-                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchColumnName            = '';
-                this.searchColumnAddress         = '';
-                this.searchColumnCity            = '';
-                this.searchColumnCountry         = '';
-                this.searchColumnZipCode         = '';
-                this.searchColumnTelephoneNumber = '';
-                this.order_by                    = 'desc';
+                this.searchDate                   = '';
+                this.searchPurchaseOrderNumber    = '';
+                this.searchStatus                 = '';
+                this.searchReferenceNumber        = '';
+                this.searchTotal                  = '';
+                this.order_by                     = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');
