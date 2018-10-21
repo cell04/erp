@@ -60,7 +60,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-footer text-center">
-                                                Today's Issued Recieved Order
+                                                Today's Issued Received Order
                                             </div>
                                         </div>
                                     </div>
@@ -199,7 +199,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <span class="subcontent-header"> Latest Recieved Orders</span>
+                                    <span class="subcontent-header"> Latest Received Orders</span>
                                     <a class="btn btn-primary btn-outline-primary btn-sm float-right" href="#" role="button">View Report</a>
                                 </div>
                                 <ul class="list-group list-group-flush">

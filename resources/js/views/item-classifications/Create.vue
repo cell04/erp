@@ -7,12 +7,10 @@
             <div class="card-body">
                 <div v-if="ifReady">
                     <form v-on:submit.prevent="createNewItemClass">
+                        
                         <div class="form-group">
                             <label>Item Type</label>
-                            <select class="form-control" v-model="item_type_id" v-on:change="selectItemType(item_type_id)" required>
-                                <option value="" disabled hidden>-- Select Item Type --</option>
-                                <option v-for="item in itemTypesList" v-bind:value="item.id">{{ item.name }}</option>
-                            </select>
+                            <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
                         </div>
 
                         <div class="form-group">
@@ -50,6 +48,7 @@
             return {
                 itemTypesList: [],
                 ifReady: true,
+                itemTypeId: null,
                 item_type_id: '',
                 name: '',
                 display_name: '',
@@ -74,9 +73,15 @@
         },
 
         methods: {
-            selectItemType(id) {
-                this.item_type_id = id;
+            selectItemType() {
+                this.item_type_id = this.itemTypeId.id;
+                console.log('GetItemTypeId: ' + this.item_type_id);
             },
+
+            // selectItemType(id) {
+            //     this.item_type_id = id;
+            // },
+
             createNewItemClass() {
                 this.ifReady = false;
 
