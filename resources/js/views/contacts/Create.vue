@@ -8,12 +8,10 @@
                 <div v-if="ifReady">
                     <form ref="createNewContactForm" role="form" method="POST" accept-charset="utf-8" v-on:submit.prevent="createNewContact">
                         <div class="form-group">
-                            <label for="Type">Type</label>
-                            <select v-model="type" class="form-control">
-                                <option disabled value="">Please select one this is a required field</option>
-                                <option value="1">Supplier</option>
-                                <option value="2">Customer</option>
-                                <option value="3">Employee</option>
+                            <label>Contact Type</label>
+                            <select class="form-control" v-model="contact_type_id" v-on:change="selectContactType(contact_type_id)"  required>
+                                <option value="" disabled hidden>-- Select Item Type --</option>
+                                <option v-for="contactType in contactTypesList" v-bind:value="contactType.id">{{ contactType.display_name }}</option>
                             </select>
                         </div>
 
@@ -48,6 +46,11 @@
                             <textarea class="form-control" v-model="company_address" rows="3"></textarea>
                         </div>
 
+                        <div class="form-group">
+                            <label>Credit Limit</label>
+                            <input type="number" class="form-control" placeholder="0" v-model="credit_limit" minlength="2" maxlength="255" required>
+                        </div>
+
                         <button type="submit" class="btn btn-success btn-sm">Create New Contact</button>
                     </form>
                 </div>
@@ -67,20 +70,36 @@ export default {
     data() {
         return {
             ifReady: true,
-            type:'',
+            contactTypesList: [],
+            contact_type_id:'',
             person: '',
             mobile_number: '',
             email: '',
             company: '',
             company_address: '',
+            credit_limit: ''
         };
     },
 
     mounted() {
-
+        let promise = new Promise((resolve, reject) => {
+                axios.get("/api/contacts-type/get-all-contacts-type/").then(res => {
+                    console.log(res);
+                    this.ifReady = true;
+                    this.contactTypesList = res.data.contact_types;
+                    if (!res.data.response) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
     },
 
     methods: {
+        selectContactType(id) {
+                this.contact_type_id = id;
+        },
+
         createNewContact() {            
             this.ifReady = false;
             axios.post('/api/contacts', this.$data).then((res)=>{

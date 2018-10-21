@@ -53,4 +53,14 @@ class ReceiveOrderItem extends Model
     {
         return $this->belongsTo(ItemPricelist::class);
     }
+
+    /**
+     * The receive order item belongs to a unit of measurement.
+     *
+     * @return object
+     */
+    public function unitOfMeasurement()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class);
+    }
 }

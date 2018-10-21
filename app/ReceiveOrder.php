@@ -88,4 +88,14 @@ class ReceiveOrder extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * The receive order has many receive order items.
+     *
+     * @return object
+     */
+    public function receiveOrderItems()
+    {
+        return $this->hasMany(ReceiveOrderItem::class);
+    }
 }

@@ -26,7 +26,7 @@
                                 <label>Warehouse</label>
                                 <select class="form-control" v-model="sub_department_id" required>
                                     <option value="" disabled hidden>Select Warehouse</option>
-                                    <option :key="department.id" v-for="department in sub_departments" v-bind:value="department.id">{{ department.name }}</option>
+                                    <option :key="warehouse.id" v-for="warehouse in warehouses" v-bind:value="warehouse.id">{{ warehouse.name }}</option>
                                 </select>
                             </div>
 
@@ -107,12 +107,12 @@
             return {
                 ifReady: true,
                 contacts: "",
-                sub_departments: "",
+                warehouses: "",
                 itemsList: "",
                 reference_number: "",
                 contact_id: "",
                 order_date: "",
-                sub_department_id: "",
+                warehouse_id: "",
                 items: [],
                 amount: ""
             };
@@ -120,7 +120,7 @@
 
         mounted() {
             let promise = new Promise((resolve, reject) => {
-                axios.get("/api/contacts/retrieve-all-contacts/").then(res => {
+                axios.get("/api/contacts/get-all-contacts/").then(res => {
                     console.log(res);
                     this.contacts = res.data.contacts;
                     if (!res.data.response) {
@@ -131,16 +131,16 @@
             });
 
             let promise2 = new Promise((resolve, reject) => {
-                axios.get("/api/sub-departments/retrieve-all-sub-departments/").then(res => {
+                axios.get("/api/warehouses/get-all-warehouses/").then(res => {
                     console.log(res);
-                    this.sub_departments = res.data.sub_departments;
+                    this.warehouses = res.data.warehouses;
                     if (! res.data.response) { return; }
                     resolve();
                 });
             });
 
             let promise3 = new Promise((resolve, reject) => {
-                axios.get("/api/items/retrieve-all-items/").then(res => {
+                axios.get("/api/items/get-all-items/").then(res => {
                     console.log(res);
                     this.itemsList = res.data.items;
                     if (!res.data.response) {
