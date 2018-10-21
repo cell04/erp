@@ -40,14 +40,26 @@ class StockRequestRepository extends Repository
         $this->warehouse    = $warehouse;
     }
 
-    // public function store($request)
-    // {
-    //     if ($request->stock_requestable_from_type == 'Warehouse') {
+    public function store($request)
+    {
+        if ($request->stock_requestable_from_type == 'Warehouse') {
+            $branch = this->branch->find($request->stock_requestable_from_id);
+            $stockRequest = $branch->stockRequestFrom()->create($request->all());
+            $stockRequest->stockRequestItems($request->stock_request->items);
+        }
 
-    //     }
+        if ($request->stock_requestable_from_type == 'Branch') {
+            $branch = this->branch->find($request->stock_requestable_from_id);
+            $stockRequest = $branch->stockRequestFrom()->create($request->all());
+            $stockRequest->stockRequestItems($request->stock_request->items);
+        }
 
-    //     if ($request->stock_requestable_from_type == 'Branch') {
+        // if ($request->stock_requestable_to_type == 'Warehouse') {
 
-    //     }
-    // }
+        // }
+
+        // if ($request->stock_requestable_to_type == 'Branch') {
+            
+        // }
+    }
 }
