@@ -27,7 +27,7 @@ use App\UserRolePermission;
 use App\Warehouse;
 
 
-class DashboardRepository extends Repository
+class DashboardRepository
 {
     // All functions here
 
