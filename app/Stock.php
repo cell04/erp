@@ -50,7 +50,7 @@ class Stock extends Model
     }
 
     /**
-     * The invoice belongs to a corporation
+     * The stock belongs to a corporation
      *
      * @return object
      */

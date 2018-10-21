@@ -20,6 +20,11 @@ class CreateStockRequestsTable extends Migration
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
             $table->integer('stock_requestable_from_id')->unsigned();
             $table->string('stock_requestable_from_type');
             $table->integer('stock_requestable_to_id')->unsigned();
@@ -27,11 +32,6 @@ class CreateStockRequestsTable extends Migration
             $table->smallInteger('status')->default(0);
             $table->integer('approve_by')->unsigned()->nullable();
             $table->foreign('approve_by')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
