@@ -24,6 +24,7 @@
                     </fieldset>
                     <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="viewItemTypes">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType">Edit {{componentVal}}</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemType">Delete Item Type</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -32,58 +33,28 @@
                 </div>
             </div>
         </div>
-        <br>
-        <div class="card">
-            <div class="card-header">
-                Classifications
-            </div>
-            <!-- <div class="card-body">
-                <div v-if="ifReady">
-                   <table class="table table-hover table-sm">
-                       <thead>
-                        <th>Name</th>
-                       </thead>
 
-                       <tbody>
-                           <tr v-for="classification in classifications" :key="classification.id">
-                               <td> {{ classification.name }} </td>
-                           </tr>
-                       </tbody>
-
-                   </table>
-                </div>
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+        <!-- Modal -->
+        <div class="modal fade" id="deleteItemTypeModal" tabindex="-1" role="dialog" aria-labelledby="deleteItemTypeTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Item Type?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete <b><u>{{ itemTypes.name }}</u></b>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteItemType">Confirm Delete</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-            </div> -->
-        </div><br/>
-        <div class="card">
-            <div class="card-header">
-                Add Classification To {{componentVal}}
             </div>
-            <!-- <div class="card-body">
-                <div v-if="ifReady">
-                    <fieldset>
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="classificationType.name" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" v-model="classificationType.description" id="description"></textarea>
-                        </div>
-                    </fieldset>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="addClassificationType">Add {{componentVal}}</button>
-                </div>
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                    </div>
-                </div>
-            </div> -->
         </div>
+        
     </div>
 </template>
 
@@ -131,23 +102,17 @@ export default {
                 params: { id: this.itemTypes.id }
             });
         },
-        // addClassificationType() {
-        //     var vm = this
-        //     this.classificationType.item_type_id = this.itemTypes.id
-        //     new Promise((resolve, reject) => {
-        //         axios.post('/api/item-type-classifications', this.classificationType).then((res) => {
-        //             console.log(res)
-        //             this.ifReady= true;
-        //             this.$router.push({
-        //                 name: 'item-types.index'
-        //             });
-        //             if (! res.data.response) {
-        //                 return;
-        //             }
-        //             resolve();
-        //         });
-        //     });
-        // }
+        openDeleteItemType() {
+            $('#deleteItemTypeModal').modal('show');
+        },
+        deleteItemType() {
+            axios.delete('/api/item-types/' + this.$route.params.id).then(res => {
+                this.$router.push({ name: 'item-types.index' });
+                $('#deleteItemTypeModal').modal('hide');
+            }).catch(err => {
+                console.log(err);
+            });
+        }
     },
 
     computed: {

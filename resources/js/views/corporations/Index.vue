@@ -287,7 +287,7 @@
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             } else {
                 getCorporations(
                     to.query.page,
@@ -304,7 +304,7 @@
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             }
         },
 
@@ -325,7 +325,7 @@
                     this.setData(err, data);
                     next();
                 }
-                );
+            );
         },
 
         computed: {

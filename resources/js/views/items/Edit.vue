@@ -23,22 +23,24 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Type</label>
-                                    <select class="form-control" v-model="item_type_id" v-on:change="selectItemType(item_type_id)"  required>
-                                        <option value="" disabled hidden>-- Select Item Type --</option>
-                                        <option v-for="itemType in itemTypesList" v-bind:value="itemType.id">{{ itemType.name }}</option>
-                                    </select>
+                                    <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Classification</label>
-                                    <select class="form-control" v-model="item_classification_id" v-on:change="selectItemClass(item_classification_id)"  required>
-                                        <option value="" disabled hidden>-- Select Item Classification --</option>
-                                        <option v-for="itemClass in itemClassList" v-bind:value="itemClass.id">{{ itemClass.name }}</option>
-                                    </select>
+                                    <vue-select v-model="itemClassId" @input="selectClassType()" label="name" :options="itemClassList"></vue-select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Unit of Measurement</label>
+                                    <vue-select v-model="itemUnitId" @input="selectUnit()" label="name" :options="itemUnitList"></vue-select>
                                 </div>
                             </div>
                         </div>
@@ -62,12 +64,17 @@
         data() {
             return {
                 ifReady: true,
+                itemTypeId: null,
+                itemClassId: null,
+                itemUnitId: null,
                 itemTypesList: [],
                 itemClassList: [],
+                itemUnitList: [],
                 item_type_id: '',
                 item_classification_id: '',
                 id: '',
                 stock_keeping_unit: '',
+                default_unit_of_measurement_id: '',
                 name: '',
                 description: '',
                 status: 1
@@ -77,15 +84,21 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/items/' + this.$route.params.id).then(res => {
-                    console.log('Items: ' + JSON.stringify(res.data));
+                    // console.log('Items: ' + JSON.stringify(res.data));
                     this.id = res.data.item.id;
                     this.name = res.data.item.name;
                     this.description = res.data.item.description;
                     this.stock_keeping_unit = res.data.item.stock_keeping_unit;
                     this.item_type_id = res.data.item.item_type_id;
                     this.item_classification_id = res.data.item.item_classification_id;
+                    this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id;
+
+                    this.itemTypeId = res.data.item.item_type;
+                    this.itemClassId = res.data.item.item_classification;
+                    this.itemUnitId = res.data.item.default_unit_of_measurement;
                     this.getItemType();
                     this.getClassType();
+                    this.getUnit();
                     resolve();
                 });
             });
@@ -95,12 +108,19 @@
         },
 
         methods: {
-            selectItemType (id) {
-                this.item_type_id = id;
+            selectItemType() {
+                this.item_type_id = this.itemTypeId.id;
+                console.log('GetItemTypeId: ' + this.item_type_id);
             },
 
-            selectItemClass(id) {
-                this.item_classification_id = id;
+            selectClassType() {
+                this.item_classification_id = this.itemClassId.id;
+                console.log('GetItemClassId: ' + this.item_classification_id);
+            },
+
+            selectUnit() {
+                this.default_unit_of_measurement_id = this.itemUnitId.id;
+                console.log('GetUnitId: ' + this.default_unit_of_measurement_id);
             },
 
             getItemType() {
@@ -118,6 +138,16 @@
                     axios.get('/api/item-classifications/get-all-item-classifications/').then(res3 => {
                         // console.log('Items: ' + JSON.stringify(res3.data));
                         this.itemClassList = res3.data.item_classifications;
+                        resolve();
+                    });
+                });
+            },
+
+            getUnit() {
+                let promise = new Promise((resolve, reject) => {
+                    axios.get('/api/unit-of-measurements/get-all-unit-of-measurements/').then(res3 => {
+                        // console.log('Items: ' + JSON.stringify(res3.data));
+                        this.itemUnitList = res3.data.unit_of_measurements;
                         resolve();
                     });
                 });

@@ -27,10 +27,10 @@
                         </tr>
                     </thead>
                     <tbody v-if="conversions">
-                        <tr v-for="{ id, from_value, to_value } in conversions">
+                        <tr v-for="{ id, from_value, convert_from, to_value, convert_to } in conversions">
                             <td>{{ id }}</td>
-                            <td>{{ from_value }}</td>
-                            <td>{{ to_value }}</td>
+                            <td>{{ from_value }} {{ convert_from.name }}</td>
+                            <td>{{ to_value }} {{ convert_to.name }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'conversions.view', params: { id: id }}">View</router-link>
                             </td>
@@ -120,10 +120,17 @@
                             </div>
 
                             <div class="form-group">
+                                <input type="text" class="form-control" v-model="searchColumnFromName" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group">
                                 <label>To</label>
                                 <input type="text" class="form-control" v-model="searchColumnToValue" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
+                            <div class="form-group">
+                                <input type="text" class="form-control" v-model="searchColumnToName" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
 
                             <div class="form-group">
                                 <label>Order By</label>

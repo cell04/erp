@@ -2,53 +2,27 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Contacts / Create New Contact
+                Contact Types / Create New Contact Type
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
-                    <form ref="createNewContactForm" role="form" method="POST" accept-charset="utf-8" v-on:submit.prevent="createNewContact">
-                        <div class="form-group">
-                            <label for="Type">Type</label>
-                            <select v-model="type" class="form-control">
-                                <option disabled value="">Please select one this is a required field</option>
-                                <option value="1">Supplier</option>
-                                <option value="2">Customer</option>
-                                <option value="3">Employee</option>
-                            </select>
-                        </div>
-
+                    <form v-on:submit.prevent="createNewContactType">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="person">Person Full Name</label>
-                                    <input type="text" class="form-control" v-model="person">
-                                </div>
+                            <div class="col-md-6 form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="mobile_number">Person Mobile No.</label>
-                                    <input type="number" class="form-control" v-model="mobile_number" id="mobile_number">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="email">Person Email</label>
-                                    <input type="email" class="form-control" v-model="email" id="email">
-                                </div>
+                            <div class="col-md-6 form-group">
+                                <label>Display Name</label>
+                                <input type="text" class="form-control" v-model="display_name" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label for="company">Company Name</label>
-                            <input type="text" class="form-control" v-model="company" id="company" autocomplete="off" minlength="2" maxlength="255">
+                            <label for="description">Desciption</label>
+                            <textarea class="form-control" v-model="description" rows="3" maxlength="500" required></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="company_address">Company Address</label>
-                            <textarea class="form-control" v-model="company_address" rows="3"></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-success btn-sm">Create New Contact</button>
+                        <button type="submit" class="btn btn-success btn-sm">Create New Contact Type</button>
                     </form>
                 </div>
 
@@ -63,38 +37,25 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            ifReady: true,
-            type:'',
-            person: '',
-            mobile_number: '',
-            email: '',
-            company: '',
-            company_address: '',
-        };
-    },
+    export default {
+        data() {
+            return {
+                ifReady: true,
+                name: '',
+                display_name: '',
+                description: ''
+            };
+        },
 
-    mounted() {
-
-    },
-
-    methods: {
-        createNewContact() {            
-            this.ifReady = false;
-            axios.post('/api/contacts', this.$data).then((res)=>{
-                if(! res.data.response){
-                    alert("error");
-                }
-                
-                this.$router.push({ name: 'contacts.index' });
-            });
+        methods: {
+            createNewContactType() {
+                this.ifReady = false;
+                axios.post('/api/contact-types', this.$data).then(res => {
+                    this.$router.push({ name: 'contact-types.index' });
+                }).catch(err => {
+                    console.log(err);
+                });
+            }
         }
-    },
-
-    computed: {
-        // Add ES6 methods here that needs caching
     }
-}
 </script>

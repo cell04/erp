@@ -176,7 +176,7 @@
         };
 
         axios.get('/api/items', { params }).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {

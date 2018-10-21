@@ -166,8 +166,29 @@
 </template>
 
 <script>
-    const getWarehouses = (page, per_page, callback) => {
-        const params = { page, per_page };
+    const getWarehouses = (
+        page,
+        per_page,
+        searchColumnName,
+        searchColumnAddress,
+        searchColumnCity,
+        searchColumnCountry,
+        searchColumnZipCode,
+        searchColumnTelephoneNumber,
+        order_by,
+        callback
+    ) => {
+        const params = {
+            page,
+            per_page,
+            searchColumnName,
+            searchColumnAddress,
+            searchColumnCity,
+            searchColumnCountry,
+            searchColumnZipCode,
+            searchColumnTelephoneNumber,
+            order_by
+        };
 
         axios.get('/api/warehouses', { params }).then(res => {
             callback(null, res.data);
@@ -186,6 +207,13 @@
         data() {
             return {
                 warehouses: null,
+                searchColumnName: '',
+                searchColumnAddress: '',
+                searchColumnCity: '',
+                searchColumnCountry: '',
+                searchColumnZipCode: '',
+                searchColumnTelephoneNumber: '',
+                order_by: 'desc',
                 meta: {
                     current_page: null,
                     from: null,
@@ -209,21 +237,54 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getWarehouses(to.query.page, 10, (err, data) => {
-                    next(vm => vm.setData(err, data));
-                });
+                getWarehouses(
+                    to.query.page,
+                    10,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAddress,
+                    to.query.searchColumnCity,
+                    to.query.searchColumnCountry,
+                    to.query.searchColumnZipCode,
+                    to.query.searchColumnTelephoneNumber,
+                    to.query.order_by,
+                    (err, data) => {
+                        next(vm => vm.setData(err, data));
+                    }
+                );
             } else {
-                getWarehouses(to.query.page, to.query.per_page, (err, data) => {
-                    next(vm => vm.setData(err, data));
-                });
+                getWarehouses(
+                    to.query.page,
+                    to.query.per_page,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAddress,
+                    to.query.searchColumnCity,
+                    to.query.searchColumnCountry,
+                    to.query.searchColumnZipCode,
+                    to.query.searchColumnTelephoneNumber,
+                    to.query.order_by,
+                    (err, data) => {
+                        next(vm => vm.setData(err, data));
+                    }
+                );
             }
         },
 
         beforeRouteUpdate (to, from, next) {
-            getWarehouses(to.query.page, this.meta.per_page, (err, data) => {
-                this.setData(err, data);
-                next();
-            });
+            getWarehouses(
+                to.query.page,
+                this.meta.per_page,
+                this.searchColumnName,
+                this.searchColumnAddress,
+                this.searchColumnCity,
+                this.searchColumnCountry,
+                this.searchColumnZipCode,
+                this.searchColumnTelephoneNumber,
+                this.order_by,
+                (err, data) => {
+                    this.setData(err, data);
+                    next();
+                }
+            );
         },
 
         computed: {
@@ -272,7 +333,14 @@
                     name: 'warehouses.index',
                     query: {
                         page: 1,
-                        per_page: this.meta.per_page
+                        per_page: this.meta.per_page,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        order_by: this.order_by
                     },
                 });
             },
@@ -282,7 +350,14 @@
                     name: 'warehouses.index',
                     query: {
                         page,
-                        per_page: this.meta.per_page
+                        per_page: this.meta.per_page,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        order_by: this.order_by
                     },
                 });
             },
@@ -292,7 +367,14 @@
                     name: 'warehouses.index',
                     query: {
                         page: this.meta.last_page,
-                        per_page: this.meta.per_page
+                        per_page: this.meta.per_page,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        order_by: this.order_by
                     },
                 });
             },
@@ -302,7 +384,14 @@
                     name: 'warehouses.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page
+                        per_page: this.meta.per_page,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        order_by: this.order_by
                     },
                 });
             },
@@ -312,7 +401,14 @@
                     name: 'warehouses.index',
                     query: {
                         page: this.prevPage,
-                        per_page: this.meta.per_page
+                        per_page: this.meta.per_page,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        order_by: this.order_by
                     }
                 });
             },
@@ -386,39 +482,42 @@
                     name: 'warehouses.index',
                     query: {
                         page: 1,
-                        per_page: this.meta.per_page
+                        per_page: this.meta.per_page,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        order_by: this.order_by
                     }
                 });
             },search() {
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'corporations.index',
+                    name: 'warehouses.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
                         searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        searchColumnStreet: this.searchColumnStreet,
+                        searchColumnAddress: this.searchColumnAddress,
                         searchColumnCity: this.searchColumnCity,
-                        searchColumnState: this.searchColumnState,
-                        searchColumnZipCode: this.searchColumnZipCode,
                         searchColumnCountry: this.searchColumnCountry,
-                        searchColumnFax: this.searchColumnFax,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchColumnName        = '';
-                this.searchColumnDescription = '';
-                this.searchColumnStreet      = '';
-                this.searchColumnCity        = '';
-                this.searchColumnState       = '';
-                this.searchColumnZipCode     = '';
-                this.searchColumnCountry     = '';
-                this.searchColumnFax         = '';
-                this.order_by                = 'desc';
+                this.searchColumnName            = '';
+                this.searchColumnAddress         = '';
+                this.searchColumnCity            = '';
+                this.searchColumnCountry         = '';
+                this.searchColumnZipCode         = '';
+                this.searchColumnTelephoneNumber = '';
+                this.order_by                    = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');

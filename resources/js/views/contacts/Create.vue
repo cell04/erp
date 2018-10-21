@@ -9,10 +9,7 @@
                     <form ref="createNewContactForm" role="form" method="POST" accept-charset="utf-8" v-on:submit.prevent="createNewContact">
                         <div class="form-group">
                             <label>Contact Type</label>
-                            <select class="form-control" v-model="contact_type_id" v-on:change="selectContactType(contact_type_id)"  required>
-                                <option value="" disabled hidden>-- Select Item Type --</option>
-                                <option v-for="contactType in contactTypesList" v-bind:value="contactType.id">{{ contactType.display_name }}</option>
-                            </select>
+                            <vue-select v-model="contactType" @input="selectContactType()" label="display_name" :options="contactTypes"></vue-select>
                         </div>
 
                         <div class="row">
@@ -66,54 +63,51 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            ifReady: true,
-            contactTypesList: [],
-            contact_type_id:'',
-            person: '',
-            mobile_number: '',
-            email: '',
-            company: '',
-            company_address: '',
-            credit_limit: ''
-        };
-    },
-
-    mounted() {
-        let promise = new Promise((resolve, reject) => {
-                axios.get("/api/contacts-type/get-all-contacts-type/").then(res => {
-                    console.log(res);
-                    this.ifReady = true;
-                    this.contactTypesList = res.data.contact_types;
-                    if (!res.data.response) {
-                        return;
-                    }
-                    resolve();
-                });
-            });
-    },
-
-    methods: {
-        selectContactType(id) {
-                this.contact_type_id = id;
+    export default {
+        data() {
+            return {
+                ifReady: false,
+                contactTypes: [],
+                contactType: null,
+                contact_type_id: '',
+                type:'',
+                person: '',
+                mobile_number: '',
+                email: '',
+                company: '',
+                company_address: '',
+                credit_limit: ''
+            };
         },
 
-        createNewContact() {            
-            this.ifReady = false;
-            axios.post('/api/contacts', this.$data).then((res)=>{
-                if(! res.data.response){
-                    alert("error");
-                }
-                
-                this.$router.push({ name: 'contacts.index' });
+        mounted() {
+            let promise = new Promise((resolve, reject) => {
+                axios.get("/api/contacts-type/get-all-contacts-type").then(res => {
+                    this.contactTypes = res.data.contact_types;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                });
             });
-        }
-    },
 
-    computed: {
-        // Add ES6 methods here that needs caching
+            promise.then(() => {
+                this.ifReady = true;
+            });
+        },
+
+        methods: {
+            selectContactType() {
+                this.contact_type_id = this.contactType.id;
+            },
+            createNewContact() {
+                this.ifReady = false;
+
+                axios.post('/api/contacts', this.$data).then(res => {
+                    this.$router.push({ name: 'contacts.index' });
+                }).catch(err => {
+                    console.log(err);
+                });
+            }
+        }
     }
-}
 </script>

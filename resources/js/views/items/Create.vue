@@ -21,29 +21,32 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>Description</label>
                             <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Type</label>
-                                    <select class="form-control" v-model="item_type_id" v-on:change="selectItemType(item_type_id)"  required>
-                                        <option value="" disabled hidden>-- Select Item Type --</option>
-                                        <option v-for="itemType in itemTypesList" v-bind:value="itemType.id">{{ itemType.name }}</option>
-                                    </select>
+                                    <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Item Classification</label>
-                                    <select class="form-control" v-model="item_classification_id" v-on:change="selectItemClass(item_classification_id)"  required>
-                                        <option value="" disabled hidden>-- Select Item Classification --</option>
-                                        <option v-for="itemClass in itemClassList" v-bind:value="itemClass.id">{{ itemClass.name }}</option>
-                                    </select>
+                                    <vue-select v-model="itemClassId" @input="selectItemClass()" label="name" :options="itemClassList"></vue-select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Unit of Measurement</label>
+                                    <vue-select v-model="itemUnitId" @input="selectItemUnit()" label="name" :options="itemUnitList"></vue-select>
                                 </div>
                             </div>
                         </div>
@@ -82,13 +85,18 @@
                         conversion_id: ""
                     }]
                 },
+                itemTypeId: null,
+                itemClassId: null,
+                itemUnitId: null,
                 item_type_id: '',
                 item_classification_id: '',
                 name: '',
                 description: '',
                 stock_keeping_unit: '',
+                default_unit_of_measurement_id: '',
                 itemTypesList: [],
                 itemClassList: [],
+                itemUnitList: [],
 
                 accountsList: [],
                 itemClassificationsList: [],
@@ -122,16 +130,36 @@
                     resolve();
                 });
             });
+
+            let promiseUnit = new Promise((resolve, reject) => {
+                axios.get("/api/unit-of-measurements/get-all-unit-of-measurements/").then(res => {
+                    // console.log('getUnit: ' + JSON.stringify(res.data));
+                    this.ifReady = true;
+                    this.itemUnitList = res.data.unit_of_measurements;
+                    if (!res.data.response) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
         },
 
         methods: {
-            selectItemType(id) {
-                this.item_type_id = id;
+            selectItemUnit() {
+                this.default_unit_of_measurement_id = this.itemUnitId.id;
+                console.log('GetItemUnitId: ' + this.default_unit_of_measurement_id);
             },
-            selectItemClass(id) {
-                this.item_classification_id = id;
+
+            selectItemType() {
+                this.item_type_id = this.itemTypeId.id;
+                console.log('GetItemTypeId: ' + this.item_type_id);
             },
-           
+
+            selectItemClass() {
+                this.item_classification_id = this.itemClassId.id;
+                console.log('GetItemClassId: ' + this.item_classification_id);
+            },
+
             createNewItem() {
                 this.ifReady = false;
 
@@ -142,7 +170,7 @@
                     console.log(err);
                 });
             }
-            
+
         }
     };
 </script>

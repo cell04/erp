@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\WarehouseResource;
 use App\Repositories\WarehouseRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class WarehousesController extends Controller
@@ -33,7 +33,11 @@ class WarehousesController extends Controller
      */
     public function index()
     {
-        if (! $data = WarehouseResource::collection($this->warehouse->paginate())) {
+        $data = WarehouseResource::collection(
+            $this->warehouse->paginateWithFilters(request(), request()->per_page, request()->order_by)
+        );
+
+        if (! $data) {
             return response()->json([
                 'message' => 'Failed to retrieve resource'
             ], 400);
