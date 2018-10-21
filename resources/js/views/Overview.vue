@@ -255,52 +255,80 @@
         'rgba(54, 162, 235, 0.6)',
         'rgba(54, 162, 235, 0.6)',
     ];
+
+    const generateChart = ( chartType, chartElement , chartLabel, chartData ) => {
+        return new Chart(
+            chartElement,
+            createBasicConfig(
+                chartType,
+                chartLabel,
+                [
+                    {
+                        label: 'Sales',
+                        data: chartData,
+                        backgroundColor: bkdColors,
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        lineTension: 0,
+                    },
+                ],
+                {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                }
+            )
+        );
+    }
     export default {
+        data() {
+            return {
+                ifReady: false,
+                chart: '',
+                salesReportChart: '',
+                todaysPurchaseOrderChart:'',
+                todaysReceivedOrderChart:'',
+                todaysProfitChart:'',
+                salesComparisonChart:'',
+                purchaseComparisonChart:''
+            };
+        },
         mounted () {
             if (this.$store.state.corporation_id == null || undefined ) {
                 this.$router.push({ name: 'corporations.select' })
             }
 
-            // Chart 1
-            var chart1 = new Chart(
-                document.getElementById('chart1'),
-                createBasicConfig(
-                    'bar',
-                    days2,
-                    [
-                        {
-                            label: 'Sales',
-                            data: traffic2,
-                            backgroundColor: bkdColors,
-                            borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            ],
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            lineTension: 0,
-                        },
-                    ],
-                    {
-                        scales: {
-                            yAxes: [
-                            {
-                                ticks: {
-                                beginAtZero: true,
-                                },
-                            },
-                            ],
-                        },
-                    }
-                )
-            );
+            let promise = new Promise((resolve, reject) => {
+                axios.get('/api/statistics/test-payload').then(res => {
+                    const response = res.data.payload
+                    const labels = response.map( data => data.date)
+                    const data = response.map( data => data.data)
+                    this.salesReportChart = generateChart('bar', 'chart1', labels, data)
+
+                    resolve();
+                });
+            });
+
+            promise.then(() => {
+                this.ifReady = true;
+            });
 
             // Chart 2
             var chart2 = new Chart(
@@ -564,16 +592,16 @@
             var chart6 = new Chart(
             document.getElementById('chart6'),
             createBasicConfig('bar', chartLabel6, chartData6, {
-                scales: {
-                yAxes: [
-                    {
-                    ticks: {
-                        beginAtZero: true,
+                    scales: {
+                    yAxes: [
+                            {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                            },
+                        ],
                     },
-                    },
-                ],
-                },
-            })
+                })
             );
         }
      }
