@@ -63,7 +63,7 @@
             <div class="collapse" id="stock_requests">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'warehouses.index' }">View Stock Requests</router-link>
+                        <router-link class="nav-link" :to="{ name: 'stock-requests.index' }">View Stock Requests</router-link>
                     </li>
                 </ul>
             </div>

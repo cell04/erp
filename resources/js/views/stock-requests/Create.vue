@@ -24,13 +24,13 @@
                                 <label>Select where to get stocks: </label>
                                 <div>
                                     <input type="radio" v-model="selected_radio_button" value="warehouse"> Warehouse
-                                    <vue-select class="mb-2" v-model="warehouseData" @input="selectWarehouse()" 
+                                    <vue-select class="mb-2" v-model="warehouseData" @input="selectWarehouse(warehouseData.id)" 
                                     label="name" :options="warehouses" v-show="selected_radio_button === 'warehouse'">
                                     </vue-select>
                                 </div>
                                 <div>
                                     <input type="radio" v-model="selected_radio_button" value="branch"> Branch
-                                    <vue-select class="mb-2" v-model="branchData" @input="selectBranch()" 
+                                    <vue-select class="mb-2" v-model="branchData" @input="selectBranch(branchData.id)" 
                                     label="name" :options="branches" v-show="selected_radio_button === 'branch'">
                                     </vue-select>
                                 </div>
@@ -59,12 +59,12 @@
                                     <td>{{ item.sku }}</td>
                                     <td>
                                         <!-- <vue-select v-model="itemData" @input="selectItem()" label="name" :options="stock_request_items"></vue-select> -->
-                                        <select class="form-control" v-model="item.item_id" required v-on:change="onSelectItem(item.item_id, key)">
+                                        <select class="form-control" v-model="item.item_id" v-on:change="onSelectItem(item.item_id, key)">
                                             <option value="" disabled hidden>Select Item</option>
                                             <option :key="item.id" v-for="item in itemsList" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                    <td><input class="form-control" v-model.number="item.quantity" required></td>
+                                    <td><input class="form-control" v-model.number="item.quantity"> </td>
                                     <td>{{ item.unit_of_measurement_name }}</td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm" @click="deleteRow">Remove</button>
@@ -101,6 +101,8 @@
                 selected_radio_button: "",
                 stock_requestable_from_id : null,
                 stock_requestable_from_type: null,
+                stock_requestable_to_id: null,
+                stock_requestable_to_type: null,
                 selectedWarehouse: "",
                 selectedBranch: "",
                 warehouses: [],
@@ -146,7 +148,7 @@
 
             let promiseBranch = new Promise((resolve, reject) => {
                 axios.get("/api/branches/get-all-branches/").then(res => {
-                    console.log('Warehouses: ' + JSON.stringify(res.data));
+                    // console.log('Branches: ' + JSON.stringify(res.data));
                     this.branches = res.data.branches;
                     if (!res.data) {
                         return;
@@ -157,7 +159,7 @@
 
             let promiseItem = new Promise((resolve, reject) => {
                 axios.get("/api/items/get-all-items/").then(res => {
-                    // console.log('Items: ' + JSON.stringify(res.data));
+                    console.log('Items: ' + JSON.stringify(res.data));
                     this.itemsList = res.data.items;
                     if (!res.data) {
                         return;
@@ -169,15 +171,19 @@
             this.addRow();
         },
         methods: {
-            selectWarehouse(){
-                this.warehouse_id = this.warehouseData.id;
+            selectWarehouse(id){
+                this.warehouse_id = id;
+                this.stock_requestable_to_id = id,
+                this.stock_requestable_to_type = 'warehouse',
                 this.branch_id = null;
                 this.branchData = undefined;
                 console.log('warehouse_id: ' + this.warehouse_id);
             },
 
-            selectBranch(){
-                this.branch_id = this.branchData.id;
+            selectBranch(id){
+                this.branch_id = id;
+                this.stock_requestable_to_id = id,
+                this.stock_requestable_to_type = 'branch',
                 this.warehouse_id = null;
                 this.warehouseData = undefined;
                 console.log('branch_id: ' + this.branch_id);
@@ -189,13 +195,14 @@
             },
 
             onSelectItem(id, index) {
+                console.log(id, index);
                 const Index = index
                 const selectedItem = this.itemsList.find(y => y.id === id);
                 console.log(selectedItem)
-                this.items[Index].sku = selectedItem.SKU,
-                this.items[Index].item_id = selectedItem.id,
-                this.items[Index].unit_of_measurement_id = selectedItem.purchase_unit_id,
-                this.items[Index].unit_of_measurement_name = selectedItem.purchase_uom.name
+                this.stock_request_items[Index].sku = selectedItem.stock_keeping_unit,
+                this.stock_request_items[Index].item_id = selectedItem.id,
+                this.stock_request_items[Index].unit_of_measurement_id = selectedItem.default_unit_of_measurement_id,
+                this.stock_request_items[Index].unit_of_measurement_name = selectedItem.default_unit_of_measurement.name
             },
             addRow() {
                 this.stock_request_items.push({
@@ -219,8 +226,10 @@
                     })
                 });
                 const formData = {
-                    warehouse_id: this.$data.sub_department_id,
-                    amount: this.total,
+                    stock_requestable_from_id: this.stock_requestable_from_id,
+                    stock_requestable_from_type: this.stock_requestable_from_type,
+                    stock_requestable_to_id: this.stock_requestable_to_id,
+                    stock_requestable_to_type: this.stock_requestable_to_type,
                     stock_request_items: newItems
                 }
 

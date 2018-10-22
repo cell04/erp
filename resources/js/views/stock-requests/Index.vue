@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Purchase Orders / View Purchase Orders
+               {{componentVal}}s / View {{componentVal}}s
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Purchase Orders - Total Purchase Orders {{ this.meta.total }}
+                                List of {{componentVal}}s - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -20,32 +20,19 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Purchase Order #</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Reference #</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Abbreviation</th>
+                            <th scope="col">Options</th>
                         </tr>
                     </thead>
-                    <tbody v-if="orders">
-                        <tr :key="order.id" v-for="order in orders">
-                            <td>{{ order.order_date }}</td>
-                            <td>{{ order.purchase_order_number }}</td>
-                            <td>{{ order.status }}</td>
-                            <td>{{ order.reference_number }}</td>
-                            <td>{{ order.amount }}</td>
+                    <tbody v-if="stock_requests">
+                        <tr v-for="{ id, name, abbreviation } in stock_requests">
+                            <td>{{ id }}</td>
+                            <td>{{ name }}</td>
+                            <td>{{ abbreviation }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: order.id }}">
-                                    View
-                                </router-link>
-
-                                <router-link v-if="order.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { po_id: order.id }}">
-                                    <button class="btn btn-success">Receive PO</button>
-                                </router-link>
-
-                                <button v-if="order.status === 'Issued'" @click="closePO(order.id, order.purchase_order_number)" class="btn btn-danger">Close PO</button>
-
+                                <router-link class="text-info" :to="{ name: 'unit-of-measurements.view', params: { id: id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -65,7 +52,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -86,7 +73,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -101,7 +88,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Orders</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search {{componentVal}}</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -121,36 +108,22 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Search For Orders</h5>
+                            <h5 class="modal-title">Search {{componentVal}}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Date</label>
-                                <input type="text" class="form-control" v-model="searchDate" autocomplete="off" minlength="2" maxlength="255" required>
+                                <label>Name</label>
+                                <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
                             <div class="form-group">
-                                <label>Purchase Order #</label>
-                                <textarea class="form-control" v-model="searchPurchaseOrderNumber" maxlength="1000" required></textarea>
+                                <label>Abbreviation</label>
+                                <input type="text" class="form-control" v-model="searchColumnAbbreviation" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
-                            <div class="form-group">
-                                <label>Status</label>
-                                <input type="text" class="form-control" v-model="searchStatus" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Reference #</label>
-                                <input type="text" class="form-control" v-model="searchReferenceNumber" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Total</label>
-                                <input type="text" class="form-control" v-model="searchTotal" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
 
                             <div class="form-group">
                                 <label>Order By</label>
@@ -161,8 +134,8 @@
                             </div>
                         </div>
                         <div class="modal-footer clearfix">
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
-                            <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
+                            <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -174,30 +147,26 @@
 </template>
 
 <script>
-    const getPurchaseOrders = (
+    const getStockRequests = (
         page,
         per_page,
-        searchDate,
-        searchPurchaseOrderNumber,
-        searchStatus,
-        searchReferenceNumber,
-        searchTotal,
+        searchColumnName,
+        searchColumnAbbreviation,
         order_by,
         callback
         ) => {
         const params = {
             page,
             per_page,
-            searchDate,
-            searchPurchaseOrderNumber,
-            searchStatus,
-            searchReferenceNumber,
-            searchTotal,
+            searchColumnName,
+            searchColumnAbbreviation,
             order_by,
         };
 
-        axios.get('/api/purchase-orders', { params }).then(res => {
-            console.log(res.data);
+        axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
+
+        axios.get('/api/stock-requests', { params }).then(res => {
+            console.log(res);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -213,12 +182,10 @@
     export default {
         data() {
             return {
-                orders: null,
-                searchDate: '',
-                searchPurchaseOrderNumber: '',
-                searchStatus: '',
-                searchReferenceNumber: '',
-                searchTotal: '',
+                componentVal: 'Stock Request',
+                stock_requests: null,
+                searchColumnName: '',
+                searchColumnAbbreviation: '',
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -243,28 +210,22 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getPurchaseOrders(
+                getStockRequests(
                     to.query.page,
                     10,
-                    to.query.searchDate,
-                    to.query.searchPurchaseOrderNumber,
-                    to.query.searchStatus,
-                    to.query.searchReferenceNumber,
-                    to.query.searchTotal,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAbbreviation,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
                     );
             } else {
-                getPurchaseOrders(
+                getStockRequests(
                     to.query.page,
                     to.query.per_page,
-                    to.query.searchDate,
-                    to.query.searchPurchaseOrderNumber,
-                    to.query.searchStatus,
-                    to.query.searchReferenceNumber,
-                    to.query.searchTotal,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAbbreviation,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
@@ -274,14 +235,11 @@
         },
 
         beforeRouteUpdate (to, from, next) {
-            getPurchaseOrders(
+            getStockRequests(
                 to.query.page,
                 this.meta.per_page,
-                this.searchDate,
-                this.searchPurchaseOrderNumber,
-                this.searchStatus,
-                this.searchReferenceNumber,
-                this.searchTotal,
+                this.searchColumnName,
+                this.searchColumnAbbreviation,
                 this.order_by,
                 (err, data) => {
                     this.setData(err, data);
@@ -317,33 +275,15 @@
         },
 
         methods: {
-            closePO(id, po_number) {
-                const formData = {
-                    purchase_order_id: id
-                };
-                if (confirm(`Are you sure you want to close ${po_number}`)) {
-                    axios.post("/api/purchase-orders/close", formData).then(res => {
-                        console.log(JSON.stringify(res.data));
-                        alert(`Success! ${po_number} is now closed`);
-                        location.reload();
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! Can't close purchase order`);
-                    });
-                }
-            },
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'stock-requests.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAbbreviation: this.searchColumnAbbreviation,
                         order_by: this.order_by
                     },
                 });
@@ -351,15 +291,12 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'stock-requests.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAbbreviation: this.searchColumnAbbreviation,
                         order_by: this.order_by
                     },
                 });
@@ -367,15 +304,12 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'stock-requests.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAbbreviation: this.searchColumnAbbreviation,
                         order_by: this.order_by
                     },
                 });
@@ -383,14 +317,11 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'stock-requests.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page,searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        per_page: this.meta.per_page,searchColumnName: this.searchColumnName,
+                        searchColumnAbbreviation: this.searchColumnAbbreviation,
                         order_by: this.order_by
                     },
                 });
@@ -398,26 +329,23 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'stock-requests.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAbbreviation: this.searchColumnAbbreviation,
                         order_by: this.order_by
                     }
                 });
             },
-            setData(err, { data: orders, links, meta }) {
+            setData(err, { data: stock_requests, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.orders = orders;
+                    this.stock_requests = stock_requests;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -478,15 +406,12 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'stock-requests.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAbbreviation: this.searchColumnAbbreviation,
                         order_by: this.order_by
                     }
                 });
@@ -495,26 +420,20 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'stock-requests.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAbbreviation: this.searchColumnAbbreviation,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchDate                   = '';
-                this.searchPurchaseOrderNumber    = '';
-                this.searchStatus                 = '';
-                this.searchReferenceNumber        = '';
-                this.searchTotal                  = '';
-                this.order_by                     = 'desc';
+                this.searchColumnName        = '';
+                this.searchColumnAbbreviation = '';
+                this.order_by                = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');
