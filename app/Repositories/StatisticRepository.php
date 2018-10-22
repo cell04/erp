@@ -78,7 +78,7 @@ class StatisticRepository
 
         return ($this->modelNames[$this->settings['Model']])::all(); 
 
-        return $this->settings;
+        //return $this->settings;
     }
 
     public function testPayload()
