@@ -32,18 +32,19 @@ class StatisticRepository
 {
     // All functions here
 
-    private $modelNames = [
+    private $modelNames = (object)[
         'Item' => 'App\Item'
     ];
 
-    protected $settings = [
+
+    protected $settings = (object)[
         'GraphType' => null,
         'Options'   => [],
         'Model'     => null
     ];
 
 
-    protected $graphDataSettings = [
+    protected $graphDataSettings = (object)[
         'Bar'  => [],
         'Line' => ['labels' => 
                             [
@@ -75,7 +76,7 @@ class StatisticRepository
 
     public function generateData($settings)
     {
-       $this->Settings([
+       $this->Settings((object)[
            'GraphType' => 'Line',
            'Options'   => ['GroupBy', 'Whole'],
            'Model'     => 'Item'
