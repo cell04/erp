@@ -98,7 +98,9 @@ class StatisticRepository
 
         //return $this->graphDataSettings[$this->settings['GraphType']];
 
-        return ($this->modelNames[$this->settings['Model']])::all(); 
+        return ($this->modelNames[$this->settings['Model']])::all()->with( [
+            'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
+        ])->get(); 
 
         //return $this->settings;
     }
