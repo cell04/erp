@@ -109,11 +109,17 @@ class StockRequestRepository extends Repository
     {
         //find stock request
         $stockRequest = $this->stockRequest->findOrFail($id);
-
         // check if status is equal to 0 = pending
         if ($stockRequest->status == 0) {
-            //insert Stock Requestable from and to type
-            $this->insertStockRequestable($request);
+            if (count($request->status)) {
+                //insert Stock Request Approve By
+                $request->request->add(['approve_by' => auth('api')->user()->id]);
+
+            } else {
+                //insert Stock Requestable from and to type
+                $this->insertStockRequestable($request);
+            }
+            
             //update stock request
             $stockRequest->fill($request->all());
             $stockRequest->save();
