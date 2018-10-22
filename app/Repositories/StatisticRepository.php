@@ -2,31 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Branch;
-use App\Contact;
-use App\ContactType;
-use App\Conversion;
-use App\Corporation;
-use App\Invoice;
-use App\InvoiceItem;
-use App\Item;
-use App\ItemClassification;
-use App\ItemPricelit;
-use App\ItemType;
-use App\Permission;
-use App\PurchaseOrder;
-use App\PurchaseOrderItem;
-use App\ReceiveOrder;
-use App\ReceiveOrderItem;
-use App\Role;
-use App\Stock;
-use App\UnitOfMeasurement;
-use App\User;
-use App\UserRole;
-use App\UserRolePermission;
-use App\Warehouse;
-
-
+use Carbon\Carbon;
+use DB;
 
 class StatisticRepository
 {
@@ -36,8 +13,15 @@ class StatisticRepository
         'Item' => 'App\Item'
     ];
 
+    private $filters = [
+        1 => 'day',
+        2 => 'week',
+        3 => 'month',
+        4 => 'year'
+    ];
 
-    protected $settings = [
+
+    private $settings = [
         'GraphType' => null,
         'Options'   => [],
         'Model'     => null
@@ -46,13 +30,16 @@ class StatisticRepository
 
     protected $graphDataSettings = [
         'Bar'  => ['labels' => [],
-                    'data'  => []
+                    'data'  => [],
+                    'filter' => null
                   ],
         'Line' => ['labels' => [],
-                    'data'  => []
+                    'data'  => [],
+                    'filter' => null
                   ],
         'Pie'  => ['labels' => [],
-                    'data'  => []
+                    'data'  => [],
+                    'filter' => null
                   ]
     ];
 
@@ -66,9 +53,19 @@ class StatisticRepository
         return;
     }
 
-    public function generateData($settings)
+    private function SetSettings($settings)
     {
-       $this->Settings((object)[
+        $this->settings['GraphType'] = $settings->graphType;
+        $this->settings['Options']   = $settings->options;
+        $this->settings['Model']     = $settings->model;
+        return;
+    }
+
+    public function generateData($request)
+    {
+        //$this->SetSettings($request);
+
+        $this->Settings((object)[
            'GraphType' => 'Line',
            'Options'   => ['GroupBy', 'Whole'],
            'Model'     => 'Item'
@@ -76,14 +73,41 @@ class StatisticRepository
 
         //return $this->graphDataSettings[$this->settings['GraphType']];
 
-        return ($this->modelNames[$this->settings['Model']])::all(); 
+        return ($this->modelNames[$this->settings['Model']])::all()->with( [
+            'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
+        ])->get(); 
+
 
         //return $this->settings;
     }
 
+    public function getModelData($settings, $filters)
+    {
+        if (!$settings) {
+            return false;
+        }
+
+        
+
+        if (is_array($filters)) {
+            if (!$filters) {
+                return;
+            }
+        }
+    }
+
+
+    public function GetFilterValue(&$filter)
+    {
+        switch ($this->filters[$filter]) {
+            case 'day':
+                return Carbon::now();
+        }
+    }
+
     public function testPayload()
     {
-        return 
+        return
             [
                 ['date' => '01/02/2018', 'data' => 10],
                 ['date' => '01/02/2018', 'data' => 15],

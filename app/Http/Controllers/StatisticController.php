@@ -23,7 +23,14 @@ class StatisticController extends Controller
         $this->statistic = $statistic;
     }
 
-    public function returnSettings()
+    public function generateData($request)
+    {
+        return response()->json([
+            'data' => $this->statistic->generateData($request)
+        ], 200);
+    }
+
+    public function returnSettings($request)
     {
         return response()->json([
             'settings' => $this->statistic->generateData(null)

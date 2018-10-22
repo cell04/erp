@@ -11,17 +11,17 @@
                         <div class="row">
 
                             <div class="col-md-6 form-group" v-if="stock_requestable_from_type === 'warehouse'">
-                                <label>Requested from (Warehouse) </label>
+                                <label>Warehouse </label>
                                 <input type="text" class="form-control" v-model="selectedWarehouse.name" readonly>
                             </div>
 
                             <div class="col-md-6 form-group" v-if="stock_requestable_from_type === 'branch'">
-                                <label>Requested From (Branch) </label>
+                                <label>Branch </label>
                                 <input type="text" class="form-control" v-model="selectedBranch.name" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
-                                <label>Requested to (where to get stocks): </label>
+                                <label>Select where to get stocks: </label>
                                 <div>
                                     <input type="radio" v-model="selected_radio_button" value="warehouse"> Warehouse
                                     <vue-select class="mb-2" v-model="warehouseData" @input="selectWarehouse(warehouseData.id)" 
