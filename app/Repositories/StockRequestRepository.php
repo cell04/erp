@@ -42,24 +42,26 @@ class StockRequestRepository extends Repository
 
     public function store($request)
     {
-        if ($request->stock_requestable_from_type == 'Warehouse') {
-            $branch = this->branch->find($request->stock_requestable_from_id);
-            $stockRequest = $branch->stockRequestFrom()->create($request->all());
-            $stockRequest->stockRequestItems($request->stock_request->items);
+        if (mb_strtolower($request->stock_requestable_to_type) == 'warehouse') {
+            $stockRequestableToType = get_class($this->warehouse);
         }
 
-        if ($request->stock_requestable_from_type == 'Branch') {
-            $branch = this->branch->find($request->stock_requestable_from_id);
-            $stockRequest = $branch->stockRequestFrom()->create($request->all());
-            $stockRequest->stockRequestItems($request->stock_request->items);
+        if (mb_strtolower($request->stock_requestable_to_type) == 'branch') {
+            $stockRequestableToType = get_class($this->branch);
         }
 
-        // if ($request->stock_requestable_to_type == 'Warehouse') {
+        $request->request->add(['stock_requestable_to_type' => $stockRequestableToType]);
 
-        // }
+        if (mb_strtolower($request->stock_requestable_from_type) == 'warehouse') {
+            $branch = this->branch->find($request->stock_requestable_from_id);
+            $stockRequest = $branch->stockRequestFrom()->create($request->all());
+        }
 
-        // if ($request->stock_requestable_to_type == 'Branch') {
-            
-        // }
+        if (mb_strtolower($request->stock_requestable_from_type) == 'branch') {
+            $branch = this->branch->find($request->stock_requestable_from_id);
+            $stockRequest = $branch->stockRequestFrom()->create($request->all());
+        }
+
+        $stockRequest->stockRequestItems($request->stock_request->items);
     }
 }
