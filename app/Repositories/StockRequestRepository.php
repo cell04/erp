@@ -42,15 +42,7 @@ class StockRequestRepository extends Repository
 
     public function store($request)
     {
-        if (mb_strtolower($request->stock_requestable_to_type) == 'warehouse') {
-            $stockRequestableToType = get_class($this->warehouse);
-        }
-
-        if (mb_strtolower($request->stock_requestable_to_type) == 'branch') {
-            $stockRequestableToType = get_class($this->branch);
-        }
-
-        $request->request->add(['stock_requestable_to_type' => $stockRequestableToType]);
+        $request->request->add(['stock_requestable_to_type' => "App\$request->stock_requestable_from_type"]);
 
         if (mb_strtolower($request->stock_requestable_from_type) == 'warehouse') {
             $branch = this->branch->find($request->stock_requestable_from_id);
@@ -62,6 +54,6 @@ class StockRequestRepository extends Repository
             $stockRequest = $branch->stockRequestFrom()->create($request->all());
         }
 
-        $stockRequest->stockRequestItems($request->stock_request->items);
+        $stockRequest->stockRequestItems($request->stock_request_items);
     }
 }
