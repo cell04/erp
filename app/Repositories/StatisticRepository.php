@@ -26,8 +26,6 @@ use App\UserRole;
 use App\UserRolePermission;
 use App\Warehouse;
 
-
-
 class StatisticRepository
 {
     // All functions here
@@ -68,7 +66,7 @@ class StatisticRepository
 
     public function generateData($settings)
     {
-       $this->Settings((object)[
+        $this->Settings((object)[
            'GraphType' => 'Line',
            'Options'   => ['GroupBy', 'Whole'],
            'Model'     => 'Item'
@@ -76,14 +74,14 @@ class StatisticRepository
 
         //return $this->graphDataSettings[$this->settings['GraphType']];
 
-        return ($this->modelNames[$this->settings['Model']])::all(); 
+        return ($this->modelNames[$this->settings['Model']])::all();
 
         //return $this->settings;
     }
 
     public function testPayload()
     {
-        return 
+        return
             [
                 ['date' => '01/02/2018', 'data' => 10],
                 ['date' => '01/02/2018', 'data' => 15],

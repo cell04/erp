@@ -54,19 +54,6 @@
                     </li>
                 </ul>
             </div>
-            
-            <li class="nav-item">
-                <a class="nav-link" href="#stock_requests" data-toggle="collapse" aria-expanded="false" aria-controls="stock_requests">
-                    Stock Requests <i class="float-right fas fa-caret-down"></i>
-                </a>
-            </li>
-            <div class="collapse" id="stock_requests">
-                <ul class="nav ml-3 flex-column nav-sub-menu">
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'warehouses.index' }">View Stock Requests</router-link>
-                    </li>
-                </ul>
-            </div>
 
             <li class="nav-item">
                 <a class="nav-link" href="#contact-types" data-toggle="collapse" aria-expanded="false" aria-controls="contact-types">
@@ -188,7 +175,7 @@
             <div class="collapse" id="purchase-orders">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'purchase-orders.create' }">Add Purchase Order</router-link>
+                        <router-link class="nav-link" :to="{ name: 'purchase-orders.create' }">Create New Purchase Order</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'purchase-orders.index' }">View Purchase Orders</router-link>
@@ -198,16 +185,16 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="#receive-orders" data-toggle="collapse" aria-expanded="false" aria-controls="receive-orders">
-                    Received Orders <i class="float-right fas fa-caret-down"></i>
+                    Receive Orders <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
             <div class="collapse" id="receive-orders">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'purchase-orders.create' }">Add Received Order</router-link>
+                        <router-link class="nav-link" :to="{ name: 'receive-orders.create' }">Create New Receive Order</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'receive-orders.index' }">View Received Orders</router-link>
+                        <router-link class="nav-link" :to="{ name: 'receive-orders.index' }">View Receive Orders</router-link>
                     </li>
                 </ul>
             </div>
@@ -220,10 +207,71 @@
             <div class="collapse" id="invoices">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoices.create' }">Add New Invoice</router-link>
+                        <router-link class="nav-link" :to="{ name: 'invoices.create' }">Create New Invoice</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'invoices.index' }">View Invoices</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#stocks" data-toggle="collapse" aria-expanded="false" aria-controls="stocks">
+                    Stocks <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="stocks">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stocks.index' }">View Stocks</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#stock-requests" data-toggle="collapse" aria-expanded="false" aria-controls="stock-requests">
+                    Stock Requests <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="stock-requests">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-requests.create' }">Create New Stock Request</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-requests.index' }">View Stock Requests</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#stock-transfers" data-toggle="collapse" aria-expanded="false" aria-controls="stock-transfers">
+                    Stock Transfers <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="stock-transfers">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-transfers.create' }">Create New Stock Transfer</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-transfers.index' }">View Stock Transfers</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#stock-receives" data-toggle="collapse" aria-expanded="false" aria-controls="stock-receives">
+                    Stock Receives <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="stock-receives">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-receives.create' }">Create New Stock Receive</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-receives.index' }">View Stock Receives</router-link>
                     </li>
                 </ul>
             </div>
@@ -262,7 +310,3 @@
         </ul>
     </div>
 </template>
-
-<script>
-export default {};
-</script>
