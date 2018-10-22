@@ -189,6 +189,16 @@ Route::group(['middleware' => 'auth:api'], function () {
         ]
     ]);
 
+    //Stock Requests
+    Route::match(['put', 'patch'], 'stock-requests/{stock-request}/restore', 'StockRequestsController@restore');
+    Route::delete('stock-requests/{stock-request}/force-delete', 'StockRequestsController@forceDestroy');
+    Route::get('stock-requests/get-all-stock-requests', 'StockRequestsController@getAllStockRequests');
+    Route::resource('stock-requests', 'StockRequestsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
     // Users
     Route::match(['put', 'patch'], 'users/{user}/restore', 'UsersController@restore');
     Route::delete('users/{user}/force-delete', 'UsersController@forceDestroy');
