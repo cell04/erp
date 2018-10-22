@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                {{componentVal}} / View {{componentVal}}
+                {{componentVal}}s / View {{componentVal}}
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -10,40 +10,29 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Date</label>
-                                    <input type="text" class="form-control" v-model="order.order_date" id="name" readonly>
+                                    <label>Requested From</label>
+                                    <input type="text" class="form-control" v-model="stock_request.stock_requestable_from.name" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Purchase Order #</label>
-                                    <input type="text" class="form-control" v-model="order.purchase_order_number" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <input type="text" class="form-control" v-model="order.status" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Reference #</label>
-                                    <input type="text" class="form-control" v-model="order.reference_number" id="name" readonly>
+                                    <label>Requested To</label>
+                                    <input type="text" class="form-control" v-model="stock_request.stock_requestable_to.name" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Contact</label>
-                                    <input type="text" class="form-control" v-model="order.contact.company" id="name" readonly>
+                                    <label>Status</label>
+                                    <input type="text" class="form-control" v-model="stock_request.status === 0 ? 'pending' 
+                                        : stock_request.status === 1 ? 'approved' : 'cancelled'" id="name" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Warehouse</label>
-                                    <input type="text" class="form-control" v-model="order.sub_department.name" id="name" readonly>
+                                    <label>Created By</label>
+                                    <input type="text" class="form-control" v-model="stock_request.user.name" id="name" readonly>
                                 </div>
                             </div>
                         </div>
@@ -54,44 +43,27 @@
                             <tr>
                                 <th scope="col">SKU</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Description</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">UOM</th>
-                                <th scope="col">Unit Price</th>
-                                <th scope="col">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr :key="item.id" v-for="item in purchase_items">
-                                <td>{{ item.item.SKU }}</td>
+                            <tr :key="item.id" v-for="item in stock_request_items">
+                                <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
-                                <td>{{ item.unit.name }}</td>
-                                <td>{{ item.unit_price }}</td>
-                                <td>{{ item.amount }}</td>
+                                <td>{{ item.item.default_unit_of_measurement.name }}</td>
                             </tr>
-                            <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{order.amount}}</td>
-                                    <td></td>
-                                </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewPurchaseOrders">Back</button>
-
-                    <router-link v-if="order.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { po_id: order.id }}">
-                        <button class="btn btn-success btn-sm">Receive PO</button>
-                    </router-link>
+                    <br />
+                    <br />
+                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewStockRequests">Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editStockRequest">Edit {{componentVal}}</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteStockRequestModal">Delete {{componentVal}}</button>
                     
-                    <button class="btn btn-danger btn-sm" v-if="order.status === 'Issued'" @click="closePO(order.id, order.purchase_order_number)">Close PO</button>
+                    <button class="btn btn-success btn-sm" v-if="stock_request.status !== 'Issued'" @click.prevent.default="openApproveStockRequestModal">Approve {{componentVal}}</button>
+                    <button class="btn btn-danger btn-sm" v-if="stock_request.status !== 'Issued'" @click.prevent.default="openCancelStockRequestModal">Cancel {{componentVal}}</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -100,6 +72,71 @@
                 </div>
             </div>
         </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteStockRequestModal" tabindex="-1" role="dialog" aria-labelledby="deleteStockRequestTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this {{componentVal}}?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this {{componentVal}}? <br><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteStockRequest">Confirm Delete</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approve Modal -->
+        <div class="modal fade" id="approveStockRequestModal" tabindex="-1" role="dialog" aria-labelledby="approveStockRequestTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to approve this {{componentVal}}?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to approve this {{componentVal}}? <br><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="approveStockRequest">Confirm Approve</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancel Modal -->
+        <div class="modal fade" id="cancelStockRequestModal" tabindex="-1" role="dialog" aria-labelledby="cancelStockRequestTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to cancel this {{componentVal}}?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to cancel this {{componentVal}}? <br><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="cancelStockRequest">Confirm Cancel</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <br>
     </div>
 </template>
@@ -108,43 +145,25 @@
 export default {
   data() {
     return {
-      componentVal: "Purchase Orders",
+      componentVal: "Stock Request",
       ifReady: false,
-      order: [],
-      purchase_items: []
+      stock_request: '',
+      stock_request_items: []
     };
   },
 
   mounted() {
-    this.getPurchaseOrder();
+    this.getStockRequest();
   },
 
   methods: {
-    closePO(id, po_number) {
-        const formData = {
-            purchase_order_id: id
-        };
-        if (confirm(`Are you sure you want to close ${po_number}`)) {
-            axios
-                .post("/api/purchase-orders/close", formData)
-                .then(res => {
-                console.log(JSON.stringify(res.data));
-                alert(`Success! ${po_number} is now closed`);
-                location.reload();
-                })
-                .catch(err => {
-                console.log(err);
-                alert(`Error! Can't close purchase order`);
-                });
-        }
-    },
-    getPurchaseOrder() {
+    getStockRequest() {
       new Promise((resolve, reject) => {
-        axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
+        axios.get("/api/stock-requests/" + this.$route.params.id).then(res => {
           console.log(res);
           this.ifReady = true;
-          this.order = res.data.purchase_order;
-          this.purchase_items = res.data.purchase_order.purchase_items
+          this.stock_request = res.data.stockRequest;
+          this.stock_request_items = res.data.stockRequest.stock_request_items;
           if (!res.data.response) {
             return;
           }
@@ -152,15 +171,68 @@ export default {
         });
       });
     },
-    viewPurchaseOrders() {
-      this.$router.push({
-        name: "purchase-orders.index"
-      });
-    }
-  },
+    viewStockRequests() {
+        this.$router.push({
+        name: "stock-requests.index"
+        });
+    },
+    editStockRequest() {
+        this.$router.push({
+            name: 'stock-requests.edit',
+            params: { id: this.stock_request.id }
+        });
+    },
+    openDeleteStockRequestModal() {
+        $('#deleteStockRequestModal').modal('show');
+    },
+    deleteStockRequest() {
+        $('#deleteStockRequestModal').modal('hide');
 
-  computed: {
-    // Add ES6 methods here that needs caching
+        axios.delete('/api/stock-requests/' + this.$route.params.id).then(res => {
+            this.$router.push({ name: 'stock-requests.index' });
+        }).catch(err => {
+            alert("Error!");
+            console.log(err);
+        });
+    },
+    openApproveStockRequestModal() {
+        $('#approveStockRequestModal').modal('show');
+    },
+    approveStockRequest() {
+        const formData = {
+            status: 1
+        };
+        console.log(formData);
+        $('#approveStockRequestModal').modal('hide');
+
+        axios.patch("/api/stock-requests/" + this.$route.params.id, formData).then(res => {
+            console.log(JSON.stringify(res.data));
+            location.reload();
+        })
+        .catch(err => {
+            console.log(err);
+            alert(`Error! Can't can't approve stock request`);
+        });
+    },
+    openCancelStockRequestModal() {
+        $('#cancelStockRequestModal').modal('show');
+    },
+    cancelStockRequest() {
+        const formData = {
+            status: 2
+        };
+        console.log(formData);
+        $('#cancelStockRequestModal').modal('hide');
+
+        axios.patch("/api/stock-requests/" + this.$route.params.id, formData).then(res => {
+            console.log(JSON.stringify(res.data));
+            location.reload();
+        })
+        .catch(err => {
+            console.log(err);
+            alert(`Error! Can't can't cancel stock request`);
+        });
+    }
   }
 };
 </script>

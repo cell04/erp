@@ -22,9 +22,7 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Requested from</th>
-                            <th scope="col">Warehouse/Branch</th>
                             <th scope="col">Requested to</th>
-                            <th scope="col">Warehouse/Branch</th>
                             <th scope="col">Status</th>
                             <th scope="col">Created By</th>
                             <th scope="col">Approved By</th>
@@ -32,15 +30,14 @@
                         </tr>
                     </thead>
                     <tbody v-if="stock_requests">
-                        <tr v-for="{ id, name, abbreviation } in stock_requests">
+                        <tr v-for="{ id, stock_requestable_from, 
+                            stock_requestable_to, status, user, approved_by } in stock_requests">
                             <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
+                            <td>{{ stock_requestable_from.name }}</td>
+                            <td>{{ stock_requestable_to.name }}</td>
+                            <td>{{ status === 0 ? 'pending' : status === 1 ? 'approved' : 'cancelled' }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ approved_by }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'stock-requests.view', params: { id: id }}">View</router-link>
                             </td>
