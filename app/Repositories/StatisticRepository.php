@@ -25,6 +25,8 @@ use App\User;
 use App\UserRole;
 use App\UserRolePermission;
 use App\Warehouse;
+use Carbon\Carbon;
+use DB;
 
 
 
@@ -34,6 +36,13 @@ class StatisticRepository
 
     private $modelNames = [
         'Item' => 'App\Item'
+    ];
+
+    private $filters = [
+        1 => 'day',
+        2 => 'week',
+        3 => 'month',
+        4 => 'year'
     ];
 
 
@@ -46,13 +55,16 @@ class StatisticRepository
 
     protected $graphDataSettings = [
         'Bar'  => ['labels' => [],
-                    'data'  => []
+                    'data'  => [],
+                    'filter' => null
                   ],
         'Line' => ['labels' => [],
-                    'data'  => []
+                    'data'  => [],
+                    'filter' => null
                   ],
         'Pie'  => ['labels' => [],
-                    'data'  => []
+                    'data'  => [],
+                    'filter' => null
                   ]
     ];
 
@@ -66,8 +78,18 @@ class StatisticRepository
         return;
     }
 
-    public function generateData($settings)
+    private function SetSettings($settings)
     {
+        $this->settings['GraphType'] = $settings->graphType;
+        $this->settings['Options']   = $settings->options;
+        $this->settings['Model']     = $settings->model;
+        return;
+    }
+
+    public function generateData($request)
+    {
+       //$this->SetSettings($request);
+
        $this->Settings((object)[
            'GraphType' => 'Line',
            'Options'   => ['GroupBy', 'Whole'],
@@ -79,6 +101,28 @@ class StatisticRepository
         return ($this->modelNames[$this->settings['Model']])::all(); 
 
         //return $this->settings;
+    }
+
+    public function getModelData($settings, $filters)
+    {
+        if(!$settings)
+            return false;
+
+        
+
+        if(is_array($filters))
+        if(!$filters)
+            return;
+    }
+
+
+    public function GetFilterValue(&$filter)
+    {
+        switch($this->filters[$filter])
+        {
+            case 'day' :
+                return Carbon::now();
+        }         
     }
 
     public function testPayload()
