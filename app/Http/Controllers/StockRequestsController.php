@@ -110,7 +110,7 @@ class StockRequestsController extends Controller
         $validator = Validator::make($request->all(), [
 
         ]);
-
+        return $this->stockRequest->update($request, $id);
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
