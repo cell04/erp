@@ -125,6 +125,7 @@ const SettingsUnitsView = () => import('./views/settings/units/View.vue');
 const StockRequestsIndex = () => import('./views/stock-requests/Index');
 const StockRequestsCreate = () => import('./views/stock-requests/Create');
 const StockRequestsView = () => import('./views/stock-requests/View');
+const StockRequestsEdit = () => import('./views/stock-requests/Edit');
 
 /**
  * Stock Receives
@@ -257,6 +258,7 @@ const router = new Router({
         { path: '/stock-requests', name: 'stock-requests.index', component: StockRequestsIndex },
         { path: '/stock-requests/:id/create', name: 'stock-requests.create', component: StockRequestsCreate },
         { path: '/stock-requests/:id', name: 'stock-requests.view', component: StockRequestsView },
+        { path: '/stock-requests/:id/edit', name: 'stock-requests.edit', component: StockRequestsEdit },
 
         // Stock Receives
         { path: '/stock-receives', name: 'stock-receives.index', component: StockReceivesIndex },
