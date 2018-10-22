@@ -171,11 +171,15 @@
         methods: {
             selectWarehouse(){
                 this.warehouse_id = this.warehouseData.id;
+                this.branch_id = null;
+                this.branchData = undefined;
                 console.log('warehouse_id: ' + this.warehouse_id);
             },
 
             selectBranch(){
                 this.branch_id = this.branchData.id;
+                this.warehouse_id = null;
+                this.warehouseData = undefined;
                 console.log('branch_id: ' + this.branch_id);
             },
 
