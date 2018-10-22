@@ -56,11 +56,11 @@
             </div>
             
             <li class="nav-item">
-                <a class="nav-link" href="#stock_requests" data-toggle="collapse" aria-expanded="false" aria-controls="stock_requests">
+                <a class="nav-link" href="#stock-requests" data-toggle="collapse" aria-expanded="false" aria-controls="stock-requests">
                     Stock Requests <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
-            <div class="collapse" id="stock_requests">
+            <div class="collapse" id="stock-requests">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'stock-requests.index' }">View Stock Requests</router-link>

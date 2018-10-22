@@ -21,9 +21,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Requested from</th>
+                            <th scope="col">Requested From</th>
                             <th scope="col">Warehouse/Branch</th>
-                            <th scope="col">Requested to</th>
+                            <th scope="col">Requested To</th>
                             <th scope="col">Warehouse/Branch</th>
                             <th scope="col">Status</th>
                             <th scope="col">Created By</th>

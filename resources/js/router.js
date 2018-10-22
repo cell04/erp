@@ -127,6 +127,20 @@ const StockRequestsCreate = () => import('./views/stock-requests/Create');
 const StockRequestsView = () => import('./views/stock-requests/View');
 
 /**
+ * Stock Receives
+ */
+const StockReceivesIndex = () => import('./views/stock-receives/Index');
+const StockReceivesCreate = () => import('./views/stock-receives/Create');
+const StockReceivesView = () => import('./views/stock-receives/View');
+
+/**
+ * Stock Transfers
+ */
+const StockTransfersIndex = () => import('./views/stock-transfers/Index');
+const StockTransfersCreate = () => import('./views/stock-transfers/Create');
+const StockTransfersView = () => import('./views/stock-transfers/View');
+
+/**
  * Receive Orders
  *
  */
@@ -243,6 +257,16 @@ const router = new Router({
         { path: '/stock-requests', name: 'stock-requests.index', component: StockRequestsIndex },
         { path: '/stock-requests/:id/create', name: 'stock-requests.create', component: StockRequestsCreate },
         { path: '/stock-requests/:id', name: 'stock-requests.view', component: StockRequestsView },
+
+        // Stock Receives
+        { path: '/stock-receives', name: 'stock-receives.index', component: StockReceivesIndex },
+        { path: '/stock-receives/:id/create', name: 'stock-receives.create', component: StockReceivesCreate },
+        { path: '/stock-receives/:id', name: 'stock-receives.view', component: StockReceivesView },
+
+        // Stock Transfers
+        { path: '/stock-transfers', name: 'stock-transfers.index', component: StockTransfersIndex },
+        { path: '/stock-transfers/:id/create', name: 'stock-transfers.create', component: StockTransfersCreate },
+        { path: '/stock-transfers/:id', name: 'stock-transfers.view', component: StockTransfersView },
 
         // Unit of Measurements
         { path: '/unit-of-measurements', name: 'unit-of-measurements.index', component: UnitOfMeasurementsIndex },
