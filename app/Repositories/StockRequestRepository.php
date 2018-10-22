@@ -42,18 +42,35 @@ class StockRequestRepository extends Repository
 
     public function store($request)
     {
-        $request->request->add(['stock_requestable_to_type' => "App\$request->stock_requestable_from_type"]);
+        if (mb_strtolower($request->stock_requestable_to_type) == 'warehouse') {
+            $stockRequestableToType = get_class($this->warehouse);
+        }
+
+        if (mb_strtolower($request->stock_requestable_to_type) == 'branch') {
+            $stockRequestableToType = get_class($this->branch);
+        }
+
+        $request->request->add(['stock_requestable_to_type' => $stockRequestableToType]);
 
         if (mb_strtolower($request->stock_requestable_from_type) == 'warehouse') {
-            $branch = this->branch->find($request->stock_requestable_from_id);
-            $stockRequest = $branch->stockRequestFrom()->create($request->all());
+            $warehouse = $this->warehouse->find($request->stock_requestable_from_id);
+            $stockRequest = $warehouse->stockRequestFrom()->create($request->all());
         }
 
         if (mb_strtolower($request->stock_requestable_from_type) == 'branch') {
-            $branch = this->branch->find($request->stock_requestable_from_id);
+            $branch = $this->branch->find($request->stock_requestable_from_id);
             $stockRequest = $branch->stockRequestFrom()->create($request->all());
         }
 
-        $stockRequest->stockRequestItems($request->stock_request_items);
+        $stockRequest->stockRequestItems()->createMany($request->stock_request_items);
+
+        return  $stockRequest;
+    }
+
+    public function findOrFail($id)
+    {
+        return  $this->stockRequest->with(['stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user', 'stockRequestItems' => function ($query) {
+                    $query->with('item', 'unitOfMeasurement');
+                }])->findOrFail($id);
     }
 }

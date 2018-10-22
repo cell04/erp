@@ -54,6 +54,8 @@ class StockRequestsController extends Controller
      */
     public function store(Request $request)
     {
+        return $this->stockRequest->store($request);
+
         $validator = Validator::make($request->all(), [
 
         ]);
