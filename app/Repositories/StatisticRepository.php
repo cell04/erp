@@ -36,30 +36,47 @@ class StatisticRepository
         'Item' => 'App\Item'
     ];
 
+
     protected $settings = [
         'GraphType' => null,
         'Options'   => [],
         'Model'     => null
     ];
 
+
+    protected $graphDataSettings = [
+        'Bar'  => ['labels' => [],
+                    'data'  => []
+                  ],
+        'Line' => ['labels' => [],
+                    'data'  => []
+                  ],
+        'Pie'  => ['labels' => [],
+                    'data'  => []
+                  ]
+    ];
+
     private function Settings($settings)
     {
         //do settings logic here, map settings to settings
-        $this->settings->{'GraphType'} = $settings->{'GraphType'};
-        $this->settings->{'Options'}   = $settings->{'Options'};
-        $this->settings->{'Model'}     = $settings->{'Model'};
+        $this->settings['GraphType'] = $settings->{'GraphType'};
+        $this->settings['Options']   = $settings->{'Options'};
+        $this->settings['Model']     = $settings->{'Model'};
+
+        return;
     }
 
     public function generateData($settings)
     {
-       $this->Settings([
+       $this->Settings((object)[
            'GraphType' => 'Line',
            'Options'   => ['GroupBy', 'Whole'],
            'Model'     => 'Item'
        ]);
 
+        //return $this->graphDataSettings[$this->settings['GraphType']];
 
-        return ($this->modelNames[$this->settings->{'Model'}])::all(); 
+        return ($this->modelNames[$this->settings['Model']])::all(); 
 
         return $this->settings;
     }
