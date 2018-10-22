@@ -1,6 +1,6 @@
 <template>
-    <div class="sticky-top">
-        <ul class="nav flex-column background py-1 mt-3 sidebar-nav">
+    <div class="sticky-top py-1 mt-3 background sidenav-container">
+        <ul class="nav flex-column sidebar-nav">
             <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'overview' }">
                     Dashboard
@@ -51,19 +51,6 @@
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'branches.index' }">View Branches</router-link>
-                    </li>
-                </ul>
-            </div>
-            
-            <li class="nav-item">
-                <a class="nav-link" href="#stock-requests" data-toggle="collapse" aria-expanded="false" aria-controls="stock-requests">
-                    Stock Requests <i class="float-right fas fa-caret-down"></i>
-                </a>
-            </li>
-            <div class="collapse" id="stock-requests">
-                <ul class="nav ml-3 flex-column nav-sub-menu">
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'stock-requests.index' }">View Stock Requests</router-link>
                     </li>
                 </ul>
             </div>
