@@ -73,7 +73,7 @@ class StatisticRepository
 
         //return $this->graphDataSettings[$this->settings['GraphType']];
 
-        return ($this->modelNames[$this->settings['Model']])::all()->with( [
+        return ($this->modelNames[$this->settings['Model']])->all()->with([
             'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
         ])->get(); 
 
@@ -96,6 +96,10 @@ class StatisticRepository
         }
     }
 
+    public function calculateMovement($data)
+    {
+
+    }
 
     public function GetFilterValue(&$filter)
     {
