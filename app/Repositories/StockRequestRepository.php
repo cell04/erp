@@ -42,29 +42,60 @@ class StockRequestRepository extends Repository
 
     public function store($request)
     {
+        //insert Stock Requestable from and to type
+        $this->insertStockRequestable($request);
+        // store stock request 
+        $stockRequest = $this->stockRequest->create($request->all());
+        //store stock request items
+        $stockRequest->stockRequestItems()->createMany($request->stock_request_items);
+
+        return  $stockRequest;
+    }
+
+    public function insertStockRequestable($request)
+    {
+        //check if the stock requestable to type is warehouse
         if (mb_strtolower($request->stock_requestable_to_type) == 'warehouse') {
             $stockRequestableToType = get_class($this->warehouse);
         }
 
+        //check if the stock requestable to type is branch
         if (mb_strtolower($request->stock_requestable_to_type) == 'branch') {
             $stockRequestableToType = get_class($this->branch);
         }
 
-        $request->request->add(['stock_requestable_to_type' => $stockRequestableToType]);
-
+        //check if the stock requestable from type is warehouse
         if (mb_strtolower($request->stock_requestable_from_type) == 'warehouse') {
-            $warehouse = $this->warehouse->find($request->stock_requestable_from_id);
-            $stockRequest = $warehouse->stockRequestFrom()->create($request->all());
+            $stockRequestableFromType = get_class($this->warehouse);
         }
 
+        //check if the stock requestable from type is branch
         if (mb_strtolower($request->stock_requestable_from_type) == 'branch') {
-            $branch = $this->branch->find($request->stock_requestable_from_id);
-            $stockRequest = $branch->stockRequestFrom()->create($request->all());
+            $stockRequestableFromType = get_class($this->branch);
         }
+        
+        return $request->request->add(['stock_requestable_to_type' => $stockRequestableToType, 'stock_requestable_from_type' => $stockRequestableFromType]);
+    }
 
-        $stockRequest->stockRequestItems()->createMany($request->stock_request_items);
+    public function all()
+    {
+        return $this->stockRequest->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')
+            ->get();
+    }
 
-        return  $stockRequest;
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')
+            ->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
     }
 
     public function findOrFail($id)
@@ -76,17 +107,35 @@ class StockRequestRepository extends Repository
 
     public function update($request, $id)
     {
-        $stockItem = [];
+        //find stock request
         $stockRequest = $this->stockRequest->findOrFail($id);
-        $stockRequest->fill($request->all());
-        $stockRequest->save();
 
-        if ($request->has('stock_request_items')) {
-            foreach ($stockRequest->stockRequestItems as $stockRequestItem) {
-                $stockItem = $stockRequestItem;
+        // check if status is equal to 0 = pending
+        if ($stockRequest->status == 0) {
+            //insert Stock Requestable from and to type
+            $this->insertStockRequestable($request);
+            //update stock request
+            $stockRequest->fill($request->all());
+            $stockRequest->save();
+
+            // check if stock request items is exist
+            if ($request->has('stock_request_items')) {
+                $i = 0; 
+                foreach ($request->stock_request_items as $stockRequestItem) {
+                    //update the stock request items
+                    $stockRequestItemId[$i++] = $stockRequestItem['id'];
+                    $stockRequestFindItem = $stockRequest->stockRequestItems()->findOrFail($stockRequestItem['id']);
+                    $stockRequestFindItem->fill($stockRequestItem);
+                    $stockRequestFindItem->save();
+                }
+
+                //soft delete the stock request items where not in the stock request items array
+                $stockRequest->stockRequestItems()->whereNotIn('id', $stockRequestItemId)->delete();
             }
+
+            return $stockRequest;
         }
 
-        return $stockItem;
+        return null;
     }
 }
