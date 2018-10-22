@@ -42,12 +42,35 @@ class StatisticRepository
         'Model'     => null
     ];
 
+
+    protected $graphDataSettings = [
+        'Bar'  => [],
+        'Line' => ['labels' => 
+                            [
+                                'Label1', 
+                                'Label2', 
+                                'Label3',
+                                'Label4'
+                            ],
+                    'data'  =>
+                            [
+                                10,
+                                20,
+                                30,
+                                40
+                            ]
+                  ],
+        'Pie'  => []
+    ];
+
     private function Settings($settings)
     {
         //do settings logic here, map settings to settings
         $this->settings->{'GraphType'} = $settings->{'GraphType'};
         $this->settings->{'Options'}   = $settings->{'Options'};
         $this->settings->{'Model'}     = $settings->{'Model'};
+
+        return;
     }
 
     public function generateData($settings)
@@ -58,6 +81,7 @@ class StatisticRepository
            'Model'     => 'Item'
        ]);
 
+        return $this->graphDataSettings->{$this->settings->{'GraphType'}};
 
         return ($this->modelNames[$this->settings->{'Model'}])::all(); 
 
