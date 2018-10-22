@@ -200,5 +200,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //Stats
     Route::get('statistics/test-payload', 'DashboardController@testPayload');
+    Route::get('statistics/settings', 'StatisticController@returnSettings');
 
 });
