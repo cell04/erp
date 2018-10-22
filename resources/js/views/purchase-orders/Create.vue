@@ -24,22 +24,6 @@
                                 <vue-select v-model="warehouseData" @input="selectWarehouse()" label="name" :options="warehouses"></vue-select>
                             </div>
 
-                            <!-- <div class="col-md-6 form-group">
-                                <label>Contact</label>
-                                <select class="form-control" v-model="contact_id" required>
-                                    <option value="" disabled hidden>Select Contact</option>
-                                    <option :key="contact.id" v-for="contact in contacts" v-bind:value="contact.id">{{ contact.person }}</option>
-                                </select>
-                            </div> -->
-
-                            <!-- <div class="col-md-6 form-group">
-                                <label>Warehouse</label>
-                                <select class="form-control" v-model="warehouse_id" required>
-                                    <option value="" disabled hidden>Select Warehouse</option>
-                                    <option :key="department.id" v-for="department in warehouses" v-bind:value="department.id">{{ department.name }}</option>
-                                </select>
-                            </div> -->
-
                             <div class="col-md-6 form-group">
                                 <label>Reference #</label>
                                 <input type="text" class="form-control" v-model="reference_number" required>

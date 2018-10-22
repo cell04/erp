@@ -20,19 +20,29 @@
 
                             <div class="col-md-6 form-group">
                                 <label>Contact</label>
+                                <vue-select v-model="contactData" @input="selectContact()" label="person" :options="contacts"></vue-select>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>Warehouse</label>
+                                <vue-select v-model="warehouseData" @input="selectWarehouse()" label="name" :options="warehouses"></vue-select>
+                            </div>
+
+                            <!-- <div class="col-md-6 form-group">
+                                <label>Contact</label>
                                 <select class="form-control" v-model="contact_id" required>
                                     <option value="" disabled hidden>Select Contact</option>
                                     <option v-for="contact in contacts" v-bind:value="contact.id">{{ contact.person }}</option>
                                 </select>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label>Warehouse</label>
                                 <select class="form-control" v-model="sub_department_id" required>
                                     <option value="" disabled hidden>Select Warehouse</option>
                                     <option v-for="department in sub_departments" v-bind:value="department.id">{{ department.name }}</option>
                                 </select>
-                            </div>
+                            </div> -->
 
                             <div class="col-md-6 form-group">
                                 <label>Payment Term</label>
@@ -118,6 +128,8 @@
         data() {
             return {
                 ifReady: true,
+                contactData: null,
+                warehouseData: null,
                 receivedOrders: [],
                 receivedOrder: null,
                 received_order_id: "",
@@ -129,6 +141,7 @@
                 order_date: "",
                 sub_department_id: "",
                 items: [],
+                warehouses: [],
                 amount: "",
                 paymentTerm: [],
                 paymentTerm_id:"",
@@ -159,11 +172,9 @@
             });
 
             new Promise((resolve, reject) => {
-                axios.get("/api/sub-departments/retrieve-all-sub-departments/").then(res2 => {
-                    this.sub_departments = res2.data.sub_departments;
-                    if (!res2.data.response) {
-                        return;
-                    }
+                axios.get("/api/warehouses/get-all-warehouses").then(res => {
+                    this.warehouses = res.data.warehouses;
+                    if (! res.data.response) { return; }
                     resolve();
                 });
             });
@@ -195,6 +206,16 @@
         },
 
         methods: {
+            selectContact(){
+                this.contact_id = this.contactData.id;
+                console.log('contact_id: ' + this.contact_id);
+            },
+
+            selectWarehouse(){
+                this.warehouse_id = this.warehouseData.id;
+                console.log('warehouse_id: ' + this.warehouse_id);
+            },
+
             selectReceivedOrder() {
                 this.received_order_id = this.receivedOrder.id;
                 axios.get("/api/receive-orders/" + this.receivedOrder.id).then(res => {
