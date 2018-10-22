@@ -35,6 +35,15 @@
                                     <input type="text" class="form-control" v-model="stock_request.user.name" id="name" readonly>
                                 </div>
                             </div>
+                            <div class="col-md-6" v-if="stock_request.status !== 0">
+                                <div class="form-group">
+                                    <label>
+                                        {{stock_request.status === 0 ? 'Pending' 
+                                        : stock_request.status === 1 ? 'Approved' : 'Cancelled'}} By
+                                    </label>
+                                    <input type="text" class="form-control" :value="stock_request.approve_by ? stock_request.approve_by.name : null" id="name" readonly>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                     <br />
@@ -62,8 +71,8 @@
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editStockRequest">Edit {{componentVal}}</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteStockRequestModal">Delete {{componentVal}}</button>
                     
-                    <button class="btn btn-success btn-sm" v-if="stock_request.status !== 'Issued'" @click.prevent.default="openApproveStockRequestModal">Approve {{componentVal}}</button>
-                    <button class="btn btn-danger btn-sm" v-if="stock_request.status !== 'Issued'" @click.prevent.default="openCancelStockRequestModal">Cancel {{componentVal}}</button>
+                    <button class="btn btn-success btn-sm" v-if="stock_request.status === 0" @click.prevent.default="openApproveStockRequestModal">Approve {{componentVal}}</button>
+                    <button class="btn btn-danger btn-sm" v-if="stock_request.status === 0" @click.prevent.default="openCancelStockRequestModal">Cancel {{componentVal}}</button>
                 </div>
                 <div v-else>
                     <div class="progress">
