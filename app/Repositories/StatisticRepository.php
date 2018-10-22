@@ -21,7 +21,7 @@ class StatisticRepository
     ];
 
 
-    protected $settings = [
+    private $settings = [
         'GraphType' => null,
         'Options'   => [],
         'Model'     => null
