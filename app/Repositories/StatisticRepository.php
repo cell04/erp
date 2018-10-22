@@ -32,19 +32,19 @@ class StatisticRepository
 {
     // All functions here
 
-    private $modelNames = (object)[
+    private $modelNames = [
         'Item' => 'App\Item'
     ];
 
 
-    protected $settings = (object)[
+    protected $settings = [
         'GraphType' => null,
         'Options'   => [],
         'Model'     => null
     ];
 
 
-    protected $graphDataSettings = (object)[
+    protected $graphDataSettings = [
         'Bar'  => [],
         'Line' => ['labels' => 
                             [
@@ -67,9 +67,9 @@ class StatisticRepository
     private function Settings($settings)
     {
         //do settings logic here, map settings to settings
-        $this->settings->{'GraphType'} = $settings->{'GraphType'};
-        $this->settings->{'Options'}   = $settings->{'Options'};
-        $this->settings->{'Model'}     = $settings->{'Model'};
+        $this->settings['GraphType'] = $settings->{'GraphType'};
+        $this->settings['Options']   = $settings->{'Options'};
+        $this->settings['Model']     = $settings->{'Model'};
 
         return;
     }
@@ -82,9 +82,9 @@ class StatisticRepository
            'Model'     => 'Item'
        ]);
 
-        return $this->graphDataSettings->{$this->settings->{'GraphType'}};
+        return $this->graphDataSettings[$this->settings['GraphType']];
 
-        return ($this->modelNames[$this->settings->{'Model'}])::all(); 
+        return ($this->modelNames[$this->settings['Model']])::all(); 
 
         return $this->settings;
     }
