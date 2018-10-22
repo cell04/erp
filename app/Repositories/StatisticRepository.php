@@ -28,8 +28,6 @@ use App\Warehouse;
 use Carbon\Carbon;
 use DB;
 
-
-
 class StatisticRepository
 {
     // All functions here
@@ -88,9 +86,9 @@ class StatisticRepository
 
     public function generateData($request)
     {
-       //$this->SetSettings($request);
+        //$this->SetSettings($request);
 
-       $this->Settings((object)[
+        $this->Settings((object)[
            'GraphType' => 'Line',
            'Options'   => ['GroupBy', 'Whole'],
            'Model'     => 'Item'
@@ -102,34 +100,37 @@ class StatisticRepository
             'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
         ])->get(); 
 
+
         //return $this->settings;
     }
 
     public function getModelData($settings, $filters)
     {
-        if(!$settings)
+        if (!$settings) {
             return false;
+        }
 
         
 
-        if(is_array($filters))
-        if(!$filters)
-            return;
+        if (is_array($filters)) {
+            if (!$filters) {
+                return;
+            }
+        }
     }
 
 
     public function GetFilterValue(&$filter)
     {
-        switch($this->filters[$filter])
-        {
-            case 'day' :
+        switch ($this->filters[$filter]) {
+            case 'day':
                 return Carbon::now();
-        }         
+        }
     }
 
     public function testPayload()
     {
-        return 
+        return
             [
                 ['date' => '01/02/2018', 'data' => 10],
                 ['date' => '01/02/2018', 'data' => 15],
