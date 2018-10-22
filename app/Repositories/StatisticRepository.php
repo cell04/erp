@@ -45,23 +45,15 @@ class StatisticRepository
 
 
     protected $graphDataSettings = [
-        'Bar'  => [],
-        'Line' => ['labels' => 
-                            [
-                                'Label1', 
-                                'Label2', 
-                                'Label3',
-                                'Label4'
-                            ],
-                    'data'  =>
-                            [
-                                10,
-                                20,
-                                30,
-                                40
-                            ]
+        'Bar'  => ['labels' => [],
+                    'data'  => []
                   ],
-        'Pie'  => []
+        'Line' => ['labels' => [],
+                    'data'  => []
+                  ],
+        'Pie'  => ['labels' => [],
+                    'data'  => []
+                  ]
     ];
 
     private function Settings($settings)
@@ -82,7 +74,7 @@ class StatisticRepository
            'Model'     => 'Item'
        ]);
 
-        return $this->graphDataSettings[$this->settings['GraphType']];
+        //return $this->graphDataSettings[$this->settings['GraphType']];
 
         return ($this->modelNames[$this->settings['Model']])::all(); 
 
