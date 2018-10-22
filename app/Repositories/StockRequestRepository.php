@@ -73,4 +73,20 @@ class StockRequestRepository extends Repository
                     $query->with('item', 'unitOfMeasurement');
                 }])->findOrFail($id);
     }
+
+    public function update($request, $id)
+    {
+        $stockItem = [];
+        $stockRequest = $this->stockRequest->findOrFail($id);
+        $stockRequest->fill($request->all());
+        $stockRequest->save();
+
+        if ($request->has('stock_request_items')) {
+            foreach ($stockRequest->stockRequestItems as $stockRequestItem) {
+                $stockItem = $stockRequestItem;
+            }
+        }
+
+        return $stockItem;
+    }
 }
