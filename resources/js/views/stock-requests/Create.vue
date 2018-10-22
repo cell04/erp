@@ -16,18 +16,12 @@
 
                             <div class="col-md-6 form-group">
                                 <label>Contact</label>
-                                <select class="form-control" v-model="contact_id" required>
-                                    <option value="" disabled hidden>Select Contact</option>
-                                    <option :key="contact.id" v-for="contact in contacts" v-bind:value="contact.id">{{ contact.person }}</option>
-                                </select>
+                                <vue-select v-model="contactData" @input="selectContact()" label="person" :options="contacts"></vue-select>
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label>Warehouse</label>
-                                <select class="form-control" v-model="sub_department_id" required>
-                                    <option value="" disabled hidden>Select Warehouse</option>
-                                    <option :key="department.id" v-for="department in warehouses" v-bind:value="department.id">{{ department.name }}</option>
-                                </select>
+                                <vue-select v-model="warehouseData" @input="selectWarehouse()" label="name" :options="warehouses"></vue-select>
                             </div>
 
                             <div class="col-md-6 form-group">
@@ -58,6 +52,7 @@
                                 <tr :key="item.id" v-for="(item, key) in items">
                                     <td>{{ item.sku }}</td>
                                     <td>
+                                        <!-- <vue-select v-model="itemData" @input="selectItem()" label="name" :options="itemsList"></vue-select> -->
                                         <select class="form-control" v-model="item.item_id" required v-on:change="onSelectItem(item.item_id, key)">
                                             <option value="" disabled hidden>Select Item</option>
                                             <option :key="item.id" v-for="item in itemsList" v-bind:value="item.id">{{ item.name }}</option>
@@ -106,19 +101,25 @@
         data() {
             return {
                 componentVal: "Stock Request",
+                contactData: null,
+                warehouseData: null,
+                itemData: null,
                 warehouseId : null,
                 branchId: null,
                 type: null,
                 ifReady: true,
-                contacts: "",
-                warehouses: "",
+                contacts: [],
+                warehouses: [],
                 itemsList: "",
                 reference_number: "",
                 contact_id: "",
                 order_date: "",
                 sub_department_id: "",
                 items: [],
-                amount: ""
+                amount: "",
+                contact_id: '',
+                warehouse_id: '',
+                item_id: ''
             };
         },
 
@@ -127,9 +128,10 @@
             this.branchId = this.$route.params.id;
             this.type = this.$route.query.type;
 
-            let promise = new Promise((resolve, reject) => {
-                axios.get("/api/warehouses/"+ this.warehouseId).then(res => {
-                    console.log(res);
+            let promiseContact = new Promise((resolve, reject) => {
+                axios.get("/api/contacts/get-all-contacts/").then(res => {
+                    this.contacts = res.data.contacts;
+                    // console.log('Contacts: ' + JSON.stringify(res.data));
                     if (!res.data) {
                         return;
                     }
@@ -137,10 +139,22 @@
                 });
             });
 
-            let promise2 = new Promise((resolve, reject) => {
-                axios.get("/api/branches/"+ this.branchId).then(res2 => {
-                    console.log(res2);
-                    if (!res2.data) {
+            let promiseWarehouse = new Promise((resolve, reject) => {
+                axios.get("/api/warehouses/get-all-warehouses/").then(res => {
+                    // console.log('Warehouses: ' + JSON.stringify(res.data));
+                    this.warehouses = res.data.warehouses;
+                    if (!res.data) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
+
+            let promiseItem = new Promise((resolve, reject) => {
+                axios.get("/api/items/get-all-items/").then(res => {
+                    // console.log('Items: ' + JSON.stringify(res.data));
+                    this.itemsList = res.data.items;
+                    if (!res.data) {
                         return;
                     }
                     resolve();
@@ -164,6 +178,21 @@
         },
 
         methods: {
+            selectContact(){
+                this.contact_id = this.contactData.id;
+                console.log('contact_id: ' + this.contact_id);
+            },
+
+            selectWarehouse(){
+                this.warehouse_id = this.warehouseData.id;
+                console.log('warehouse_id: ' + this.warehouse_id);
+            },
+
+            selectItem(){
+                this.item_id = this.itemData.id;
+                console.log('item_id: ' + this.item_id);
+            },
+
             onSelectItem(id, index) {
                 const Index = index
                 const selectedItem = this.itemsList.find(y => y.id === id);

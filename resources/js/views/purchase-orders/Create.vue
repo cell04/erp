@@ -16,19 +16,29 @@
 
                             <div class="col-md-6 form-group">
                                 <label>Contact</label>
-                                <select class="form-control" v-model="contact_id" required>
-                                    <option value="" disabled hidden>Select Contact</option>
-                                    <option :key="contact.id" v-for="contact in contacts" v-bind:value="contact.id">{{ contact.person }}</option>
-                                </select>
+                                <vue-select v-model="contactData" @input="selectContact()" label="person" :options="contacts"></vue-select>
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label>Warehouse</label>
-                                <select class="form-control" v-model="sub_department_id" required>
+                                <vue-select v-model="warehouseData" @input="selectWarehouse()" label="name" :options="warehouses"></vue-select>
+                            </div>
+
+                            <!-- <div class="col-md-6 form-group">
+                                <label>Contact</label>
+                                <select class="form-control" v-model="contact_id" required>
+                                    <option value="" disabled hidden>Select Contact</option>
+                                    <option :key="contact.id" v-for="contact in contacts" v-bind:value="contact.id">{{ contact.person }}</option>
+                                </select>
+                            </div> -->
+
+                            <!-- <div class="col-md-6 form-group">
+                                <label>Warehouse</label>
+                                <select class="form-control" v-model="warehouse_id" required>
                                     <option value="" disabled hidden>Select Warehouse</option>
                                     <option :key="department.id" v-for="department in warehouses" v-bind:value="department.id">{{ department.name }}</option>
                                 </select>
-                            </div>
+                            </div> -->
 
                             <div class="col-md-6 form-group">
                                 <label>Reference #</label>
@@ -106,9 +116,11 @@
         data() {
             return {
                 ifReady: true,
-                contacts: "",
-                warehouses: "",
-                itemsList: "",
+                contactData: null,
+                warehouseData: null,
+                contacts: [],
+                warehouses: [],
+                itemsList: [],
                 reference_number: "",
                 contact_id: "",
                 order_date: "",
@@ -164,6 +176,16 @@
         },
 
         methods: {
+            selectContact(){
+                this.contact_id = this.contactData.id;
+                console.log('contact_id: ' + this.contact_id);
+            },
+
+            selectWarehouse(){
+                this.warehouse_id = this.warehouseData.id;
+                console.log('warehouse_id: ' + this.warehouse_id);
+            },
+
             onSelectItem(id, index) {
                 const Index = index
                 const selectedItem = this.itemsList.find(y => y.id === id);
@@ -201,7 +223,7 @@
                     reference_number: this.$data.reference_number,
                     contact_id: this.$data.contact_id,
                     order_date: this.$data.order_date,
-                    warehouse_id: this.$data.sub_department_id,
+                    warehouse_id: this.$data.warehouse_id,
                     amount: this.total,
                     items: newItems
                 }
