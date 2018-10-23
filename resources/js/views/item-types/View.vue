@@ -2,28 +2,28 @@
     <div>
         <div class="card">
             <div class="card-header">
-                {{componentVal}} / View {{componentVal}}
+                Item Types / View Item Type
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
                     <fieldset>
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="itemTypes.name" id="name" readonly>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" v-model="itemType.name" id="name" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="name">Display Name</label>
+                                <input type="text" class="form-control" v-model="itemType.display_name" id="name" readonly>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="name">Display Name</label>
-                            <input type="text" class="form-control" v-model="itemTypes.display_name" id="name" readonly>
-                        </div>
-
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" v-model="itemTypes.description" id="description" readonly></textarea>
+                            <textarea class="form-control" v-model="itemType.description" id="description" readonly></textarea>
                         </div>
                     </fieldset>
-                    <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="viewItemTypes">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType">Edit {{componentVal}}</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewItemTypes">Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType">Edit Item Type</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemType">Delete Item Type</button>
                 </div>
                 <div v-else>
@@ -45,7 +45,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete <b><u>{{ itemTypes.name }}</u></b>?
+                        Are you sure you want to delete <b><u>{{ itemType.name }}</u></b>?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteItemType">Confirm Delete</button>
@@ -54,69 +54,57 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            componentVal: 'Item Type',
-            ifReady: false,
-            accountType: '',
-            itemTypes: [],
-            classificationType: {},
-            classifications: []
-        };
-    },
+    export default {
+        data() {
+            return {
+                ifReady: false,
+                itemType: ""
+            };
+        },
 
-    mounted() {
-       this.getItemTypes()
-    },
-
-    methods: {
-
-        getItemTypes() {
-            new Promise((resolve, reject) => {
-                axios.get('/api/item-types/' + this.$route.params.id).then((res) => {
-                    // console.log('Item Typs:' + JSON.stringify(res.data));
-                    this.ifReady= true;
-                    this.itemTypes = res.data.itemType;
-                    // this.classifications = res.data.item_type.classifications
-                    if (! res.data.response) {
-                        return;
-                    }
+        mounted() {
+            let promise = new Promise((resolve, reject) => {
+                axios.get('/api/item-types/' + this.$route.params.id).then(res => {
+                    this.itemType = res.data.itemType;
                     resolve();
+                }).catch(err => {
+                    console.log(err);
                 });
             });
-        },
-        viewItemTypes() {
-            this.$router.push({
-                name: 'item-types.index'
-            });
-        },
-        editItemType() {
-            this.$router.push({
-                name: 'item-types.edit',
-                params: { id: this.itemTypes.id }
-            });
-        },
-        openDeleteItemType() {
-            $('#deleteItemTypeModal').modal('show');
-        },
-        deleteItemType() {
-            axios.delete('/api/item-types/' + this.$route.params.id).then(res => {
-                this.$router.push({ name: 'item-types.index' });
-                $('#deleteItemTypeModal').modal('hide');
-            }).catch(err => {
-                console.log(err);
-            });
-        }
-    },
 
-    computed: {
-        // Add ES6 methods here that needs caching
+            promise.then(() => {
+                this.ifReady = true;
+            });
+        },
+
+        methods: {
+            viewItemTypes() {
+                this.$router.push({
+                    name: 'item-types.index'
+                });
+            },
+            editItemType() {
+                this.$router.push({
+                    name: 'item-types.edit',
+                    params: { id: this.itemType.id }
+                });
+            },
+            openDeleteItemType() {
+                $('#deleteItemTypeModal').modal('show');
+            },
+            deleteItemType() {
+                axios.delete('/api/item-types/' + this.$route.params.id).then(res => {
+                    this.$router.push({ name: 'item-types.index' });
+                    $('#deleteItemTypeModal').modal('hide');
+                }).catch(err => {
+                    console.log(err);
+                });
+            }
+        }
     }
-}
 </script>

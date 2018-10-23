@@ -55,7 +55,7 @@ class ItemsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            
+
         ]);
 
         if ($validator->fails()) {
