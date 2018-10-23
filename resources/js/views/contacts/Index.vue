@@ -34,7 +34,7 @@
                             <td>{{ person }}</td>
                             <td>{{ email }}</td>
                             <td>{{ mobile_number }}</td>
-                            <td>{{ contact_type ? contact_type.name : 'test' }}</td>
+                            <td>{{ contact_type.display_name }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'contacts.view', params: { id: id }}">View</router-link>
                             </td>

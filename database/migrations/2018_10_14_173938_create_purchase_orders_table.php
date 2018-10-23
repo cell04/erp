@@ -35,11 +35,10 @@ class CreatePurchaseOrdersTable extends Migration
                 ->references('id')
                 ->on('contacts')
                 ->onDelete('cascade');
-            $table->string('number');
             $table->string('reference_number');
-            $table->smallInteger('status')->default(1);
-            $table->decimal('amount', 10, 2);
-            $table->timestamp('order_date');
+            $table->smallInteger('status')->default(0);
+            $table->decimal('amount', 20, 2);
+            $table->timestamp('date');
             $table->timestamps();
             $table->softDeletes();
         });

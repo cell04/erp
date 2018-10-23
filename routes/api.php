@@ -97,7 +97,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Item Pricelists
     Route::match(['put', 'patch'], 'item-pricelists/{itemPricelist}/restore', 'ItemPricelistsController@restore');
     Route::delete('item-pricelists/{itemPricelist}/force-delete', 'ItemPricelistsController@forceDestroy');
-    Route::delete('item-pricelists/{itemPricelist}/get-all-item-pricelists-using-id', 'ItemPricelistsController@getAllItemPricelistsUsingId');
+    Route::get('item-pricelists/get-item-pricelists/{item}', 'ItemPricelistsController@getItemPricelists');
     Route::resource('item-pricelists', 'ItemPricelistsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -211,5 +211,4 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Stats
     Route::get('statistics/test-payload', 'DashboardController@testPayload');
     Route::get('statistics/settings', 'StatisticController@returnSettings');
-
 });

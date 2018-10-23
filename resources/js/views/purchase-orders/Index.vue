@@ -21,31 +21,21 @@
                     <thead>
                         <tr>
                             <th scope="col">Date</th>
-                            <th scope="col">Purchase Order #</th>
+                            <th scope="col">Reference Number</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Reference #</th>
-                            <th scope="col">Total</th>
+                            <th scope="col">Amount</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="orders">
-                        <tr :key="order.id" v-for="order in orders">
-                            <td>{{ order.order_date }}</td>
-                            <td>{{ order.purchase_order_number }}</td>
-                            <td>{{ order.status }}</td>
-                            <td>{{ order.reference_number }}</td>
-                            <td>{{ order.amount }}</td>
+                    <tbody v-if="purchaseOrders">
+                        <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
+                            <td>{{ purchaseOrder.date }}</td>
+                            <td>{{ purchaseOrder.reference_number }}</td>
+                            <td>{{ purchaseOrder.status }}</td>
+                            <td>{{ purchaseOrder.amount }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: order.id }}">
-                                    View
-                                </router-link>
-
-                                <router-link v-if="order.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { po_id: order.id }}">
-                                    <button class="btn btn-success">Receive PO</button>
-                                </router-link>
-
-                                <button v-if="order.status === 'Issued'" @click="closePO(order.id, order.purchase_order_number)" class="btn btn-danger">Close PO</button>
-
+                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
+                                <router-link class="text-success" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { purchase_order_id: purchaseOrder.id }}">Receive Purchase Order</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -101,7 +91,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Orders</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Purchase Orders</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -197,7 +187,6 @@
         };
 
         axios.get('/api/purchase-orders', { params }).then(res => {
-            console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -213,7 +202,7 @@
     export default {
         data() {
             return {
-                orders: null,
+                purchaseOrders: [],
                 searchDate: '',
                 searchPurchaseOrderNumber: '',
                 searchStatus: '',
@@ -255,7 +244,7 @@
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             } else {
                 getPurchaseOrders(
                     to.query.page,
@@ -269,7 +258,7 @@
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             }
         },
 
@@ -287,7 +276,7 @@
                     this.setData(err, data);
                     next();
                 }
-                );
+            );
         },
 
         computed: {
@@ -411,13 +400,22 @@
                     }
                 });
             },
-            setData(err, { data: orders, links, meta }) {
+            setData(err, { data: purchaseOrders, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.orders = orders;
+                    let purchaseOrderStatus = {
+                        0: "Issued",
+                        1: "Closed",
+                    };
+
+                    purchaseOrders.map(purchaseOrder => {
+                        purchaseOrder.status = purchaseOrderStatus[purchaseOrder.status];
+                    });
+
+                    this.purchaseOrders = purchaseOrders;
                     this.links = links;
                     this.meta = meta;
                 }

@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\DB;
 class PurchaseOrderRepository extends Repository
 {
     /**
+     * Purchse order status.
+     *
+     * @var array
+     */
+    protected $status = [
+        0 => 'Issued',
+        1 => 'Closed'
+    ];
+
+    /**
      * Create new instance of purchase order repository.
      *
      * @param PurchaseOrder $purchaseOrder PurchaseOrder repository.
@@ -28,7 +38,7 @@ class PurchaseOrderRepository extends Repository
     {
         return DB::transaction(function () use ($request) {
             $purchaseOrder = $this->purchaseOrder->create($request->all());
-            $purchaseOrder->purchaseOrderItem->createMany($request->purchase_order_items);
+            $purchaseOrder->purchaseOrderItem()->createMany($request->purchase_order_items);
             return $purchaseOrder;
         });
     }

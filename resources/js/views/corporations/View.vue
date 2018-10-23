@@ -115,7 +115,6 @@
     export default {
         data() {
             return {
-                componentVal: 'Corporation',
                 ifReady: false,
                 corporation: ''
             };
@@ -124,7 +123,6 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/corporations/' + this.$route.params.id).then(res => {
-                    console.log(res)
                     this.corporation = res.data.corporation;
                     resolve();
                 });
@@ -154,7 +152,6 @@
                 $('#deleteCorporationModal').modal('hide');
 
                 axios.delete('/api/corporations/' + this.$route.params.id).then(res => {
-                    if (! res.data.response) { return; }
                     this.$router.push({ name: 'corporations.index' });
                 }).catch(err => {
                     console.log(err);

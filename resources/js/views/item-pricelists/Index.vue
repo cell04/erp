@@ -103,234 +103,234 @@
         </div>
     </div>
 </template>
+
 <script>
-const getItem = (page, per_page, callback) => {
-    const params = { page, per_page };
+    const getItemPricelists = (page, per_page, callback) => {
+        const params = { page, per_page };
 
-    axios.get('/api/item-pricelists', { params }).then(res => {
-         new Promise((resolve, reject) => {
-            callback(null, res.data);
-        });
-        console.log('getAllItemPricelist: ' + JSON.stringify(res.data));
-    }).catch(error => {
-        if (error.response.status == 401) {
-            location.reload();
-        }
-
-        if (error.response.status == 500) {
-            alert('Kindly report this issue to the devs.');
-        }
-    });
-};
-
-export default {
-    data() {
-        return {
-            items: null,
-            meta: {
-                current_page: null,
-                from: null,
-                last_page: null,
-                path: null,
-                per_page: 10,
-                to: null,
-                total: null
-            },
-            links: {
-                first: null,
-                last: null,
-                next: null,
-                prev: null,
-            },
-            error: null,
-            showProgress: false,
-            pageNumbers: []
-        };
-    },
-
-    beforeRouteEnter (to, from, next) {
-        if (to.query.per_page == null) {
-            getItem(to.query.page, 10, (err, data) => {
-                next(vm => vm.setData(err, data));
+        axios.get('/api/item-pricelists', { params }).then(res => {
+            new Promise((resolve, reject) => {
+                callback(null, res.data);
             });
-        } else {
-            getItem(to.query.page, to.query.per_page, (err, data) => {
-                next(vm => vm.setData(err, data));
-            });
-        }
-    },
+        }).catch(error => {
+            if (error.response.status == 401) {
+                location.reload();
+            }
 
-    beforeRouteUpdate (to, from, next) {
-        getItem(to.query.page, this.meta.per_page, (err, data) => {
-            this.setData(err, data);
-            next();
+            if (error.response.status == 500) {
+                alert('Kindly report this issue to the devs.');
+            }
         });
-    },
-    
-    computed: {
-        nextPage() {
-            return this.meta.current_page + 1;
+    };
+
+    export default {
+        data() {
+            return {
+                items: null,
+                meta: {
+                    current_page: null,
+                    from: null,
+                    last_page: null,
+                    path: null,
+                    per_page: 10,
+                    to: null,
+                    total: null
+                },
+                links: {
+                    first: null,
+                    last: null,
+                    next: null,
+                    prev: null,
+                },
+                error: null,
+                showProgress: false,
+                pageNumbers: []
+            };
         },
-        prevPage() {
-            return this.meta.current_page - 1;
+
+        beforeRouteEnter (to, from, next) {
+            if (to.query.per_page == null) {
+                getItemPricelists(to.query.page, 10, (err, data) => {
+                    next(vm => vm.setData(err, data));
+                });
+            } else {
+                getItemPricelists(to.query.page, to.query.per_page, (err, data) => {
+                    next(vm => vm.setData(err, data));
+                });
+            }
         },
-        paginatonCount() {
-            if (! this.meta) {
+
+        beforeRouteUpdate (to, from, next) {
+            getItemPricelists(to.query.page, this.meta.per_page, (err, data) => {
+                this.setData(err, data);
+                next();
+            });
+        },
+
+        computed: {
+            nextPage() {
+                return this.meta.current_page + 1;
+            },
+            prevPage() {
+                return this.meta.current_page - 1;
+            },
+            paginatonCount() {
+                if (! this.meta) {
+                    return;
+                }
+
+                const { current_page, last_page } = this.meta;
+
+                return `${current_page} of ${last_page}`;
+            },
+            pageCount() {
+                if (this.meta.last_page > 10) {
+                    return false;
+                }
+
+                return true;
+            },
+            isPrevDisabled() {
+                if (this.links.prev == null) {
+                    return 'disabled';
+                }
+
+                return;
+            },
+            isNextDisabled() {
+                if (this.links.next == null) {
+                    return 'disabled';
+                }
+
                 return;
             }
+        },
 
-            const { current_page, last_page } = this.meta;
+        methods: {
+            goToFirstPage() {
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'item-pricelists.index',
+                    query: {
+                        page: 1,
+                        per_page: this.meta.per_page
+                    },
+                });
+            },
+            goToPage(page = null) {
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'item-pricelists.index',
+                    query: {
+                        page,
+                        per_page: this.meta.per_page
+                    },
+                });
+            },
+            goToLastPage() {
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'item-pricelists.index',
+                    query: {
+                        page: this.meta.last_page,
+                        per_page: this.meta.per_page
+                    },
+                });
+            },
+            goToNextPage() {
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'item-pricelists.index',
+                    query: {
+                        page: this.nextPage,
+                        per_page: this.meta.per_page
+                    },
+                });
+            },
+            goToPreviousPage() {
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'item-pricelists.index',
+                    query: {
+                        page: this.prevPage,
+                        per_page: this.meta.per_page
+                    }
+                });
+            },
+            setData(err, { data: items, links, meta }) {
+                this.pageNumbers = [];
 
-            return `${current_page} of ${last_page}`;
-        },
-        pageCount() {
-            if (this.meta.last_page > 10) {
-                return false;
-            }
-
-            return true;
-        },
-        isPrevDisabled() {
-            if (this.links.prev == null) {
-                return 'disabled';
-            }
-
-            return;
-        },
-        isNextDisabled() {
-            if (this.links.next == null) {
-                return 'disabled';
-            }
-
-            return;
-        }
-    },
-
-    methods: {
-        goToFirstPage() {
-            this.showProgress = true;
-            this.$router.push({
-                name: 'item-pricelists.index',
-                query: {
-                    page: 1,
-                    per_page: this.meta.per_page
-                },
-            });
-        },
-        goToPage(page = null) {
-            this.showProgress = true;
-            this.$router.push({
-                name: 'item-pricelists.index',
-                query: {
-                    page,
-                    per_page: this.meta.per_page
-                },
-            });
-        },
-        goToLastPage() {
-            this.showProgress = true;
-            this.$router.push({
-                name: 'item-pricelists.index',
-                query: {
-                    page: this.meta.last_page,
-                    per_page: this.meta.per_page
-                },
-            });
-        },
-        goToNextPage() {
-            this.showProgress = true;
-            this.$router.push({
-                name: 'item-pricelists.index',
-                query: {
-                    page: this.nextPage,
-                    per_page: this.meta.per_page
-                },
-            });
-        },
-        goToPreviousPage() {
-            this.showProgress = true;
-            this.$router.push({
-                name: 'item-pricelists.index',
-                query: {
-                    page: this.prevPage,
-                    per_page: this.meta.per_page
+                if (err) {
+                    this.error = err.toString();
+                } else {
+                    this.items = items;
+                    this.links = links;
+                    this.meta = meta;
                 }
-            });
-        },
-        setData(err, { data: items, links, meta }) {
-            this.pageNumbers = [];
 
-            if (err) {
-                this.error = err.toString();
-            } else {
-                this.items = items;
-                this.links = links;
-                this.meta = meta;
-            }
-
-            this.showProgress = false;
-            this.populatePages();
-        },
-        populatePages() {
-            if (this.pageCount) {
-                for (let i = 1; i <= this.meta.last_page; i++) {
-                    this.pageNumbers.push(i);
+                this.showProgress = false;
+                this.populatePages();
+            },
+            populatePages() {
+                if (this.pageCount) {
+                    for (let i = 1; i <= this.meta.last_page; i++) {
+                        this.pageNumbers.push(i);
+                    }
+                } else if (this.meta.current_page <= 6) {
+                    let page = 1;
+                    this.pageNumbers.push(page);
+                    this.pageNumbers.push(page + 1);
+                    this.pageNumbers.push(page + 2);
+                    this.pageNumbers.push(page + 3);
+                    this.pageNumbers.push(page + 4);
+                    this.pageNumbers.push(page + 5);
+                    this.pageNumbers.push(page + 6);
+                    this.pageNumbers.push('...');
+                    this.pageNumbers.push(this.meta.last_page - 1);
+                    this.pageNumbers.push(this.meta.last_page);
+                } else if ((this.meta.current_page + 6) >= this.meta.last_page) {
+                    this.pageNumbers.push(1);
+                    this.pageNumbers.push(2);
+                    this.pageNumbers.push('...');
+                    this.pageNumbers.push(this.meta.last_page - 7);
+                    this.pageNumbers.push(this.meta.last_page - 6);
+                    this.pageNumbers.push(this.meta.last_page - 5);
+                    this.pageNumbers.push(this.meta.last_page - 4);
+                    this.pageNumbers.push(this.meta.last_page - 3);
+                    this.pageNumbers.push(this.meta.last_page - 2);
+                    this.pageNumbers.push(this.meta.last_page - 1);
+                    this.pageNumbers.push(this.meta.last_page);
+                } else {
+                    this.pageNumbers.push(1);
+                    this.pageNumbers.push(2);
+                    this.pageNumbers.push('...');
+                    this.pageNumbers.push(this.meta.current_page - 2);
+                    this.pageNumbers.push(this.meta.current_page - 1);
+                    this.pageNumbers.push(this.meta.current_page);
+                    this.pageNumbers.push(this.meta.current_page + 1);
+                    this.pageNumbers.push(this.meta.current_page + 2);
+                    this.pageNumbers.push('...');
+                    this.pageNumbers.push(this.meta.last_page - 1);
+                    this.pageNumbers.push(this.meta.last_page);
                 }
-            } else if (this.meta.current_page <= 6) {
-                let page = 1;
-                this.pageNumbers.push(page);
-                this.pageNumbers.push(page + 1);
-                this.pageNumbers.push(page + 2);
-                this.pageNumbers.push(page + 3);
-                this.pageNumbers.push(page + 4);
-                this.pageNumbers.push(page + 5);
-                this.pageNumbers.push(page + 6);
-                this.pageNumbers.push('...');
-                this.pageNumbers.push(this.meta.last_page - 1);
-                this.pageNumbers.push(this.meta.last_page);
-            } else if ((this.meta.current_page + 6) >= this.meta.last_page) {
-                this.pageNumbers.push(1);
-                this.pageNumbers.push(2);
-                this.pageNumbers.push('...');
-                this.pageNumbers.push(this.meta.last_page - 7);
-                this.pageNumbers.push(this.meta.last_page - 6);
-                this.pageNumbers.push(this.meta.last_page - 5);
-                this.pageNumbers.push(this.meta.last_page - 4);
-                this.pageNumbers.push(this.meta.last_page - 3);
-                this.pageNumbers.push(this.meta.last_page - 2);
-                this.pageNumbers.push(this.meta.last_page - 1);
-                this.pageNumbers.push(this.meta.last_page);
-            } else {
-                this.pageNumbers.push(1);
-                this.pageNumbers.push(2);
-                this.pageNumbers.push('...');
-                this.pageNumbers.push(this.meta.current_page - 2);
-                this.pageNumbers.push(this.meta.current_page - 1);
-                this.pageNumbers.push(this.meta.current_page);
-                this.pageNumbers.push(this.meta.current_page + 1);
-                this.pageNumbers.push(this.meta.current_page + 2);
-                this.pageNumbers.push('...');
-                this.pageNumbers.push(this.meta.last_page - 1);
-                this.pageNumbers.push(this.meta.last_page);
-            }
-        },
-        isPageActive(page) {
-            if (page == this.$route.query.page || (page == 1 && this.$route.query.page == null)) {
-                return 'active';
-            }
-
-            return;
-        },
-        changePerPage() {
-            this.showProgress = true;
-            this.$router.push({
-                name: 'item-pricelists.index',
-                query: {
-                    page: 1,
-                    per_page: this.meta.per_page
+            },
+            isPageActive(page) {
+                if (page == this.$route.query.page || (page == 1 && this.$route.query.page == null)) {
+                    return 'active';
                 }
-            });
+
+                return;
+            },
+            changePerPage() {
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'item-pricelists.index',
+                    query: {
+                        page: 1,
+                        per_page: this.meta.per_page
+                    }
+                });
+            }
         }
     }
-}
 </script>
