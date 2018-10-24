@@ -30,8 +30,27 @@ class ReceiveOrderRepository extends Repository
 
     public function findOrFail($id)
     {
-        return $this->receiveOrder->with(['contact', 'user', 'purchaseOrder', 'corporation', 'receiveOrderItems' => function ($query) {
+        return $this->receiveOrder->with([
+            'contact', 
+            'user', 
+            'purchaseOrder', 
+            'corporation', 
+            'receiveOrderItems' => function ($query) {
                 $query->with('item', 'unitOfMeasurement', 'itemPricelist');
-            }])->findOrFail($id);
+            }
+        ])->findOrFail($id);
+    }
+
+    public function update($request, $id)
+    {
+        return DB::transaction(function () use ($request, $id) { 
+            $receiveOrder = $this->receiveOrder->findOrFail($id);
+            $receiveOrder->fill($request->all());
+            $receiveOrder->save();
+            $receiveOrder->purchaseOrderItems()->delete();
+            $receiveOrder->purchaseOrderItems()->createMany($request->receive_order_items);
+
+            return $receiveOrder;
+        });
     }
 }
