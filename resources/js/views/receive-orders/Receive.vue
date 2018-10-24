@@ -7,11 +7,6 @@
             <div v-if="ifReady">
                 <form v-on:submit.prevent="createNewReceiveOrder">
                     <div class="row">
-                        <!-- <div class="col-md-12 form-group">
-                            <label>Purchase Order</label>
-                            <vue-select v-model="purchaseOrderId" @input="selectPo()" label="reference_number" :options="purchaseOrder"></vue-select>
-                        </div> -->
-
                         <div class="col-md-12 form-group">
                             <label>Purchase Order</label>
                             <input type="text" class="form-control" v-model="purchaseOrderId" readonly>
@@ -185,24 +180,21 @@
                 });
             });
 
-            let getPo = '';
-            // let getPo = new Promise((resolve, reject) => {
-            //     axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
-            //         // this.purchaseOrder = res.data.purchase_orders;
-            //         console.log('PO: ' + JSON.stringify(res.data));
-            //         resolve();
-            //     }).catch(err => {
-            //         console.log(err);
-            //         reject();
-            //     });
-            // });
+            let getPo = new Promise((resolve, reject) => {
+                axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
+                    this.purchaseOrderId = res.data.purchaseOrders.reference_number;
+                    this.purchase_order_id = res.data.purchaseOrders.id;
+                    // console.log('PO: ' + JSON.stringify(res.data.purchaseOrders));
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
 
             Promise.all([getAllContacts, getAllWarehouses, getAllItems, getAllPo, getPo]).then(() => {
                 this.ifReady = true;
             });
-
-            this.purchaseOrderId = this.$route.params.id;
-            this.purchase_order_id = this.purchaseOrderId;
             console.log('Params: ' + this.$route.params.id);
         },
 
@@ -223,12 +215,11 @@
             selectContact() {
                 this.contact_id = this.contact.id;
             },
+
             selectWarehouse() {
                 this.warehouse_id = this.warehouse.id;
             },
-            // selectPo() {
-            //     this.purchase_order_id = this.purchaseOrderId.id;
-            // },
+
             selectItem(index) {
                 this.receive_order_items[index].item_id = this.receive_order_items[index].item.id;
                 this.receive_order_items[index].unitOfMeasurement = this.receive_order_items[index].item.default_unit_of_measurement.name;
