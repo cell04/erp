@@ -26,7 +26,7 @@ class CreateBranchesTable extends Migration
             $table->integer('zip_code');
             $table->string('country');
             $table->string('telephone_number')->nullable();
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
