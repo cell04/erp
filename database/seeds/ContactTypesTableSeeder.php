@@ -15,21 +15,21 @@ class ContactTypesTableSeeder extends Seeder
         DB::table('contact_types')->insert([
             'corporation_id' => 1,
             'name'           => 'customer',
-            'display_name'   => 'Customer'
+            'display_name'   => 'Customer',
             'description'    => 'Customer description'
         ]);
 
         DB::table('contact_types')->insert([
             'corporation_id' => 1,
             'name'           => 'supplier',
-            'display_name'   => 'Supplier'
+            'display_name'   => 'Supplier',
             'description'    => 'Supplier description'
         ]);
 
         DB::table('contact_types')->insert([
             'corporation_id' => 1,
             'name'           => 'employee',
-            'display_name'   => 'Supplier'
+            'display_name'   => 'Supplier',
             'description'    => 'Supplier description'
         ]);
     }
