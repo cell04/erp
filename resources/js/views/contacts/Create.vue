@@ -13,19 +13,19 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="person">Person Full Name</label>
+                                <label for="person">Full Name</label>
                                 <input type="text" class="form-control" v-model="person">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="mobile_number">Person Mobile No.</label>
+                                <label for="mobile_number">Mobile No.</label>
                                 <input type="number" class="form-control" v-model="mobile_number" id="mobile_number">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="email">Person Email</label>
+                                <label for="email">Email</label>
                                 <input type="email" class="form-control" v-model="email" id="email">
                             </div>
                         </div>

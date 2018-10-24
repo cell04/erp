@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Item Pricelists / Create New Item Pricelist
+            Item Price Lists / Create New Item Price List
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -15,7 +15,7 @@
                         <input type="number" class="form-control" v-model="price" autocomplete="off" minlength="2" maxlength="255" step=".01" placeholder="0.00" required>
                     </div>
 
-                    <button type="submit" class="btn btn-success btn-sm">Create New Item Pricelist</button>
+                    <button type="submit" class="btn btn-success btn-sm">Create New Item Price List</button>
                 </form>
             </div>
 

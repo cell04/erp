@@ -153,16 +153,16 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="#itemPricelist" data-toggle="collapse" aria-expanded="false" aria-controls="itemPricelist">
-                    Item Pricelists <i class="float-right fas fa-caret-down"></i>
+                    Item Price Lists <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
             <div class="collapse" id="itemPricelist">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'item-pricelists.create' }">Create New Item Pricelist</router-link>
+                        <router-link class="nav-link" :to="{ name: 'item-pricelists.create' }">Create New Item Price List</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'item-pricelists.index' }">View Item Pricelists</router-link>
+                        <router-link class="nav-link" :to="{ name: 'item-pricelists.index' }">View Item Price Lists</router-link>
                     </li>
                 </ul>
             </div>
