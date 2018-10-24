@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UnitOfMeasurementsTableSeeder::class);
         $this->call(ItemsTableSeeder::class);
         $this->call(ItemPricelistsTableSeeder::class);
+        $this->call(StocksTableSeeder::class);
     }
 }
