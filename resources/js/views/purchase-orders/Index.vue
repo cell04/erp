@@ -35,7 +35,8 @@
                             <td>{{ purchaseOrder.amount }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
-                                <router-link class="text-success" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { purchase_order_id: purchaseOrder.id }}">Receive Purchase Order</router-link>
+                                <router-link class="text-success"  :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
+                                <!-- v-if="purchaseOrder.status === 'Issued'" -->
                             </td>
                         </tr>
                     </tbody>
