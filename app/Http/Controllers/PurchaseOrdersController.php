@@ -183,4 +183,33 @@ class PurchaseOrdersController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllPurchaseOrder()
+    {
+        if (cache()->has('purchase-orders')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'purchase_orders' => cache('purchase-orders', 5)
+            ], 200);
+        }
+
+        if (! $purchaseOrder = $this->purchaseOrders->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'purchase_orders' => $purchaseOrder
+        ], 200);
+    }
 }

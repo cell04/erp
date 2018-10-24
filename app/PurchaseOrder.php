@@ -102,11 +102,11 @@ class PurchaseOrder extends Model
     }
 
     /**
-     * The purchase order belongs to a warehouse.
+     * The purchase order has many purchase order items.
      *
      * @return object
      */
-    public function purchaseOrderItem()
+    public function purchaseOrderItems()
     {
         return $this->hasMany(PurchaseOrderItem::class);
     }

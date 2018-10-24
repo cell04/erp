@@ -136,6 +136,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Purchase Orders
     Route::match(['put', 'patch'], 'purchase-orders/{purchaseOrder}/restore', 'PurchaseOrdersController@restore');
     Route::delete('purchase-orders/{purchaseOrder}/force-delete', 'PurchaseOrdersController@forceDestroy');
+    Route::get('purchase-orders/get-all-purchase-orders', 'PurchaseOrdersController@getAllPurchaseOrder');
     Route::resource('purchase-orders', 'PurchaseOrdersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
