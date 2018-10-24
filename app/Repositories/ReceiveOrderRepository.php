@@ -19,10 +19,10 @@ class ReceiveOrderRepository extends Repository
     }
 
     public function store($request)
-    {   
+    {
         return DB::transaction(function () use ($request) {
             $receiveOrder = $this->receiveOrder->create($request->all());
-            $receiveOrder->receiveOrderItems->createMany($request->receive_order_items);
+            $receiveOrder->receiveOrderItems()->createMany($request->receive_order_items);
 
             return $receiveOrder;
         });
@@ -31,10 +31,10 @@ class ReceiveOrderRepository extends Repository
     public function findOrFail($id)
     {
         return $this->receiveOrder->with([
-            'contact', 
-            'user', 
-            'purchaseOrder', 
-            'corporation', 
+            'contact',
+            'user',
+            'purchaseOrder',
+            'corporation',
             'receiveOrderItems' => function ($query) {
                 $query->with('item', 'unitOfMeasurement', 'itemPricelist');
             }
@@ -43,7 +43,7 @@ class ReceiveOrderRepository extends Repository
 
     public function update($request, $id)
     {
-        return DB::transaction(function () use ($request, $id) { 
+        return DB::transaction(function () use ($request, $id) {
             $receiveOrder = $this->receiveOrder->findOrFail($id);
             $receiveOrder->fill($request->all());
             $receiveOrder->save();
