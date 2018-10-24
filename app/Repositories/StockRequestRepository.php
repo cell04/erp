@@ -103,14 +103,20 @@ class StockRequestRepository extends Repository
 
     public function findOrFail($id)
     {
-        return  $this->stockRequest->with(['stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user', 'stockRequestItems' => function ($query) {
-                    $query->with('item', 'unitOfMeasurement');
-                }])->findOrFail($id);
+        return  $this->stockRequest->with([
+            'stockRequestableFrom', 
+            'stockRequestableTo', 
+            'approveBy', 
+            'user', 
+            'stockRequestItems' => function ($query) {
+                $query->with('item', 'unitOfMeasurement');
+            }
+        ])->findOrFail($id);
     }
 
     public function update($request, $id)
     {
-        return DB::transaction(function () use ($request) { 
+        return DB::transaction(function () use ($request, $id) { 
             //find stock request
             $stockRequest = $this->stockRequest->findOrFail($id);
             // check if status is equal to 0 = pending

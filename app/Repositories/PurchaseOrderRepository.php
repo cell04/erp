@@ -38,7 +38,7 @@ class PurchaseOrderRepository extends Repository
     {
         return DB::transaction(function () use ($request) {
             $purchaseOrder = $this->purchaseOrder->create($request->all());
-            $purchaseOrder->purchaseOrderItem()->createMany($request->purchase_order_items);
+            $purchaseOrder->purchaseOrderItems()->createMany($request->purchase_order_items);
             return $purchaseOrder;
         });
     }
@@ -60,5 +60,18 @@ class PurchaseOrderRepository extends Repository
                 $query->with('item', 'unitOfMeasurement', 'itemPricelist');
             }
         ])->findOrFail($id);
+    }
+
+    public function update($request, $id)
+    {
+        return DB::transaction(function () use ($request, $id) { 
+            $purchaseOrder = $this->purchaseOrder->findOrFail($id);
+            $purchaseOrder->fill($request->all());
+            $purchaseOrder->save();
+            $purchaseOrder->purchaseOrderItems()->delete();
+            $purchaseOrder->purchaseOrderItems()->createMany($request->purchase_order_items);
+
+            return $purchaseOrder;
+        });
     }
 }
