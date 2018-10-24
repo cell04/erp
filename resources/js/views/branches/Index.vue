@@ -92,23 +92,6 @@
                     </ul>
                 </nav>
             </div>
-
-            <div class="float-right">
-                <form class="form-inline">
-                    <label class="sr-only" for="Number of Items">Number of Items</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Items per page</div>
-                        </div>
-                        <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
             <div class="float-right">
                 <form class="form-inline">
                     <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Branches</button>

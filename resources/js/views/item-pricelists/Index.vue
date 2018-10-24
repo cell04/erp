@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Item Pricelists / View Item Pricelist
+                Item Price Lists / View Item Price List
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Warehouses - Total Items {{ this.meta.total }}
+                                List of Item Prices - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
