@@ -46,6 +46,8 @@
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Unit of Measurement</th>
                                 <th scope="col">Price</th>
+                                <th scope="col">Tracking #</th>
+                                <th scope="col">Expiration</th>
                                 <th scope="col">Sub Total</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -65,6 +67,8 @@
                                 <td>
                                     <vue-select v-model="receive_order_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="receive_order_item.itemPricelists"></vue-select>
                                 </td>
+                                <td><input type="text" class="form-control" v-model.number="receive_order_item.tracking_number" required></td>
+                                <td><input type="date" class="form-control" v-model.number="receive_order_item.expiration_date"></td>
                                 <td>{{ receive_order_item.subTotal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
@@ -126,6 +130,8 @@
                         itemPricelists: [],
                         itemPricelist: 0,
                         item_pricelist_id: '',
+                        tracking_number: '',
+                        expiration_date: '',
                         subTotal: 0
                     }
                 ],
@@ -136,6 +142,7 @@
 
         mounted() {
             this.date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
+            this.expiration_date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
 
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
@@ -252,6 +259,8 @@
                     itemPricelists: [],
                     itemPricelist: '',
                     item_pricelist_id: '',
+                    tracking_number: '',
+                    expiration_date: '',
                     subTotal: 0
                 });
 
@@ -271,7 +280,9 @@
                         item_id: receive_order_item.item_id,
                         quantity: receive_order_item.quantity,
                         unit_of_measurement_id: receive_order_item.unit_of_measurement_id,
-                        item_pricelist_id: receive_order_item.item_pricelist_id
+                        item_pricelist_id: receive_order_item.item_pricelist_id,
+                        tracking_number: receive_order_item.tracking_number,
+                        expiration_date: ''
                     });
                 });
 
@@ -281,8 +292,6 @@
                     receive_date: this.$data.date,
                     receive_order_items: receiveOrderItems,
                     purchase_order_id: this.purchase_order_id,
-                    tracking_number: '1222221',
-                    number: '3',
                     user_id: 1
                 };
 
