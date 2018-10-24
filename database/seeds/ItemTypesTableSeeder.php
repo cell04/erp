@@ -15,8 +15,15 @@ class ItemTypesTableSeeder extends Seeder
         DB::table('item_types')->insert([
             'corporation_id' => 1,
             'name'           => 'food',
-            'display_name'   => 'Food'
+            'display_name'   => 'Food',
             'description'    => 'Food description'
+        ]);
+
+        DB::table('item_types')->insert([
+            'corporation_id' => 1,
+            'name'           => 'drink',
+            'display_name'   => 'Drink',
+            'description'    => 'Drink description'
         ]);
     }
 }

@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(Model::class, function (Faker $faker) {
+$factory->define(App\Contact::class, function (Faker $faker) {
     return [
         'corporation_id'  => 1,
         'contact_type_id' => rand(1, 3),
