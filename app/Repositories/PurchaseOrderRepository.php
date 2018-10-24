@@ -56,7 +56,7 @@ class PurchaseOrderRepository extends Repository
             'user',
             'receiveOrders',
             'warehouse',
-            'purchaseOrderItem' => function ($query) {
+            'purchaseOrderItems' => function ($query) {
                 $query->with('item', 'unitOfMeasurement', 'itemPricelist');
             }
         ])->findOrFail($id);
@@ -64,7 +64,7 @@ class PurchaseOrderRepository extends Repository
 
     public function update($request, $id)
     {
-        return DB::transaction(function () use ($request, $id) { 
+        return DB::transaction(function () use ($request, $id) {
             $purchaseOrder = $this->purchaseOrder->findOrFail($id);
             $purchaseOrder->fill($request->all());
             $purchaseOrder->save();
