@@ -46,6 +46,8 @@ class ReceiveOrder extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            $model->user_id = auth('api')->user()->id;
         });
     }
 
