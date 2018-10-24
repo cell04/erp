@@ -23,8 +23,8 @@ class Warehouse extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'name', 'address', 'city', 'zip_code',
-        'country', 'telephone_number', 'status'
+        'corporation_id', 'name', 'address', 'city',
+        'zip_code', 'country', 'telephone_number', 'status'
     ];
 
     /**

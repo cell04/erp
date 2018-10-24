@@ -23,8 +23,8 @@ class PurchaseOrder extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'user_id', 'reference_number', 'warehouse_id',
-        'contact_id', 'date', 'amount', 'status'
+        'corporation_id', 'user_id', 'reference_number',
+        'warehouse_id', 'contact_id', 'amount', 'status'
     ];
 
     /**

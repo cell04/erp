@@ -23,8 +23,8 @@ class ReceiveOrder extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'purchase_order_id', 'contact_id', 'user_id',
-        'number', 'reference_number', 'receive_date', 'status'
+        'corporation_id', 'purchase_order_id', 'contact_id',
+        'user_id', 'reference_number', 'status'
     ];
 
     /**
