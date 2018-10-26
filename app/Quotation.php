@@ -6,16 +6,16 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class StockRequestItem extends Model
+class Quotation extends Model
 {
     use SoftDeletes, Filtering;
 
     /**
-     * Stock Request Items table.
+     * Quotations table.
      *
      * @var string
      */
-    protected $table = 'stock_request_items';
+    protected $table = 'quotations';
 
     /**
      * The attributes that are mass assignable.
@@ -23,8 +23,8 @@ class StockRequestItem extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'stock_request_id',
-        'item_id', 'quantity', 'unit_of_measurement_id'
+        'corporation_id', 'user_id', 'contact_id', 
+        'amount', 'status', 'approved_by'
     ];
 
     /**
@@ -33,15 +33,6 @@ class StockRequestItem extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-
-    /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = [
-        'item', 'unitOfMeasurement'
-    ];
 
     /**
      * Run functions on boot.
@@ -55,11 +46,13 @@ class StockRequestItem extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            $model->user_id = auth('api')->user()->id;
         });
     }
 
-    /**
-     * The stock request item belongs to a corporation.
+     /**
+     * The quotations belongs to a corporation.
      *
      * @return object
      */
@@ -69,32 +62,42 @@ class StockRequestItem extends Model
     }
 
     /**
-     * The stock request item belongs to a stock request
+     * The quotations belongs to a contact.
      *
      * @return object
      */
-    public function stockRequest()
+    public function contact()
     {
-        return $this->belongsTo(StockRequest::class);
+        return $this->belongsTo(Contact::class);
     }
 
     /**
-     * The stock request item belongs to an item.
+     * The quotations belongs to a user.
      *
      * @return object
      */
-    public function item()
+    public function user()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
-     * The stock request item belongs to a unit of measurement.
+     * The quotations belongs to a user.
      *
      * @return object
      */
-    public function unitOfMeasurement()
+    public function approvedBy()
     {
-        return $this->belongsTo(UnitOfMeasurement::class);
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * The quotations has many quotation items.
+     *
+     * @return object
+     */
+    public function quotationItems()
+    {
+        return $this->hasMany(Quotation::class);
     }
 }

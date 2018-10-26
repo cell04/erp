@@ -24,7 +24,7 @@ class StockRequest extends Model
      */
     protected $fillable = [
         'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type', 'user_id',
-        'stock_requestable_to_id', 'stock_requestable_to_type', 'status', 'approve_by'
+        'stock_requestable_to_id', 'stock_requestable_to_type', 'number', 'status', 'approve_by'
     ];
 
     /**

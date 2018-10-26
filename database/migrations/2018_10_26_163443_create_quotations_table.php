@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStockRequestsTable extends Migration
+class CreateQuotationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateStockRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stock_requests', function (Blueprint $table) {
+        Schema::create('quotations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
             $table->foreign('corporation_id')
@@ -25,17 +25,18 @@ class CreateStockRequestsTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
-            $table->integer('stock_requestable_from_id')->unsigned();
-            $table->string('stock_requestable_from_type');
-            $table->integer('stock_requestable_to_id')->unsigned();
-            $table->string('stock_requestable_to_type');
-            $table->string('number');
-            $table->smallInteger('status')->default(0);
-            $table->integer('approve_by')->unsigned()->nullable();
-            $table->foreign('approve_by')
+            $table->integer('approved_by')->unsigned();
+            $table->foreign('approved_by')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
+            $table->integer('contact_id')->unsigned();
+            $table->foreign('contact_id')
+                ->references('id')
+                ->on('contacts')
+                ->onDelete('cascade');
+            $table->smallInteger('status')->default(0);
+            $table->decimal('amount', 20, 2);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -48,6 +49,6 @@ class CreateStockRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stock_requests');
+        Schema::dropIfExists('quotations');
     }
 }
