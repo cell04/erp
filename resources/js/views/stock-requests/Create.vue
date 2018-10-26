@@ -117,9 +117,9 @@
         },
 
         mounted() {
-            this.stock_requestable_from_id = this.$route.params.id;
-            this.stock_requestable_from_id = this.$route.params.id;
-            this.stock_requestable_from_type = this.$route.query.type;
+            // this.stock_requestable_from_id = this.$route.params.id;
+            // this.stock_requestable_from_id = this.$route.params.id;
+            // this.stock_requestable_from_type = this.$route.query.type;
 
             // let promiseSelectedWarehouse= new Promise((resolve, reject) => {
             //     axios.get('/api/warehouses/' + this.$route.params.id).then(res => {
