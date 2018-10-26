@@ -10,30 +10,40 @@
 
                         <div class="row">
 
-                            <div class="col-md-6 form-group" v-if="stock_requestable_from_type === 'warehouse'">
-                                <label>Requested from (Warehouse) </label>
-                                <input type="text" class="form-control" v-model="selectedWarehouse.name" readonly>
+                            <div class="col-md-6 form-group">
+                                <label>Number</label>
+                                <input type="text" class="form-control" v-model="number" required>
                             </div>
+                            <div class="col-md-6 form-group"></div>
 
-                            <div class="col-md-6 form-group" v-if="stock_requestable_from_type === 'branch'">
-                                <label>Requested From (Branch) </label>
-                                <input type="text" class="form-control" v-model="selectedBranch.name" readonly>
+                            <div class="col-md-6 form-group">
+                                <label>From</label>
+                                <br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" v-model="from_selected_radio_button" value="warehouse" v-on:click="clearFrom">
+                                    <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" v-model="from_selected_radio_button" value="branch" v-on:click="clearFrom">
+                                    <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
+                                </div>
+                                <vue-select class="mb-2" v-model="warehouseDataFrom" @input="selectWarehouseFrom(warehouseDataFrom.id)" label="name" :options="warehousesFrom" v-show="from_selected_radio_button === 'warehouse'"></vue-select>
+                                <vue-select class="mb-2" v-model="branchDataFrom" @input="selectBranchFrom(branchDataFrom.id)" label="name" :options="branchesFrom" v-show="from_selected_radio_button === 'branch'"></vue-select>
                             </div>
 
                             <div class="col-md-6 form-group">
-                                <label>Requested to (where to get stocks): </label>
-                                <div>
-                                    <input type="radio" v-model="selected_radio_button" value="warehouse"> Warehouse
-                                    <vue-select class="mb-2" v-model="warehouseData" @input="selectWarehouse(warehouseData.id)" 
-                                    label="name" :options="warehouses" v-show="selected_radio_button === 'warehouse'">
-                                    </vue-select>
+                                <label>To</label>
+                                <br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" v-model="to_selected_radio_button" value="warehouse" v-on:click="clearTo">
+                                    <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
                                 </div>
-                                <div>
-                                    <input type="radio" v-model="selected_radio_button" value="branch"> Branch
-                                    <vue-select class="mb-2" v-model="branchData" @input="selectBranch(branchData.id)" 
-                                    label="name" :options="branches" v-show="selected_radio_button === 'branch'">
-                                    </vue-select>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" v-model="to_selected_radio_button" value="branch" v-on:click="clearTo">
+                                    <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
                                 </div>
+                                <vue-select class="mb-2" v-model="warehouseDataTo" @input="selectWarehouseTo(warehouseDataTo.id)" label="name" :options="warehousesTo" v-show="to_selected_radio_button === 'warehouse'"></vue-select>
+                                <vue-select class="mb-2" v-model="branchDataTo" @input="selectBranchTo(branchDataTo.id)" label="name" :options="branchesTo" v-show="to_selected_radio_button === 'branch'"></vue-select>
                             </div>
 
                         </div>
@@ -95,8 +105,12 @@
             return {
                 componentVal: "Stock Request",
                 ifReady: true,
-                warehouseData: null,
-                branchData: null,
+                from_selected_radio_button: "",
+                to_selected_radio_button: "",
+                warehouseDataTo: null,
+                branchDataTo: null,
+                warehouseDataFrom: null,
+                branchDataFrom: null,
                 itemData: null,
                 selected_radio_button: "",
                 stock_requestable_from_id : null,
@@ -105,40 +119,27 @@
                 stock_requestable_to_type: null,
                 selectedWarehouse: "",
                 selectedBranch: "",
-                warehouses: [],
-                branches: [],
                 itemsList: [],
                 stock_request_items: [],
                 sub_department_id: "",
-                warehouse_id: '',
-                branch_id: '',
-                item_id: ''
+                item_id: '',
+                warehousesTo: [],
+                branchesTo: [],
+                warehousesFrom: [],
+                branchesFrom: [],
+                warehouse_idTo: '',
+                branch_idTo: '',
+                warehouse_idFrom: '',
+                branch_idFrom: '',
+                number: '',
             };
         },
 
         mounted() {
-            // this.stock_requestable_from_id = this.$route.params.id;
-            // this.stock_requestable_from_id = this.$route.params.id;
-            // this.stock_requestable_from_type = this.$route.query.type;
-
-            // let promiseSelectedWarehouse= new Promise((resolve, reject) => {
-            //     axios.get('/api/warehouses/' + this.$route.params.id).then(res => {
-            //         this.selectedWarehouse = res.data.warehouse;
-            //         resolve();
-            //     });
-            // });
-
-            // let promiseSelectedBranch = new Promise((resolve, reject) => {
-            //     axios.get('/api/branches/' + this.$route.params.id).then(res => {
-            //         this.selectedBranch = res.data.branch;
-            //         resolve();
-            //     });
-            // });
-
-            let promiseWarehouse = new Promise((resolve, reject) => {
+            let promiseWarehouseFrom = new Promise((resolve, reject) => {
                 axios.get("/api/warehouses/get-all-warehouses/").then(res => {
                     // console.log('Warehouses: ' + JSON.stringify(res.data));
-                    this.warehouses = res.data.warehouses;
+                    this.warehousesFrom = res.data.warehouses;
                     if (!res.data) {
                         return;
                     }
@@ -146,10 +147,32 @@
                 });
             });
 
-            let promiseBranch = new Promise((resolve, reject) => {
+            let promiseBranchFrom = new Promise((resolve, reject) => {
                 axios.get("/api/branches/get-all-branches/").then(res => {
                     // console.log('Branches: ' + JSON.stringify(res.data));
-                    this.branches = res.data.branches;
+                    this.branchesFrom = res.data.branches;
+                    if (!res.data) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
+
+            let promiseWarehouseTo = new Promise((resolve, reject) => {
+                axios.get("/api/warehouses/get-all-warehouses/").then(res => {
+                    // console.log('Warehouses: ' + JSON.stringify(res.data));
+                    this.warehousesTo = res.data.warehouses;
+                    if (!res.data) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
+
+            let promiseBranchTo = new Promise((resolve, reject) => {
+                axios.get("/api/branches/get-all-branches/").then(res => {
+                    // console.log('Branches: ' + JSON.stringify(res.data));
+                    this.branchesTo = res.data.branches;
                     if (!res.data) {
                         return;
                     }
@@ -171,22 +194,48 @@
             this.addRow();
         },
         methods: {
-            selectWarehouse(id){
-                this.warehouse_id = id;
-                this.stock_requestable_to_id = id,
-                this.stock_requestable_to_type = 'warehouse',
-                this.branch_id = null;
-                this.branchData = undefined;
-                console.log('warehouse_id: ' + this.warehouse_id);
+            clearFrom() {
+                this.warehouseDataFrom = [];
+                this.branchDataFrom = [];
+                console.log('ClearFrom');
             },
 
-            selectBranch(id){
-                this.branch_id = id;
+            clearTo() {
+                this.warehouseDataTo = [];
+                this.branchDataTo = [];
+                console.log('ClearTo');
+            },
+            
+            // TO
+            selectWarehouseTo(id){
+                this.warehouse_idTo = id;
+                this.stock_requestable_to_id = id,
+                this.stock_requestable_to_type = 'warehouse',
+                this.branch_idTo = '';
+                console.log('Towarehouse_idTo: ' + this.warehouse_idTo + '|' + 'Tobranch_idTo: ' + this.branch_idTo);
+            },
+            selectBranchTo(id){
+                this.branch_idTo = id;
                 this.stock_requestable_to_id = id,
                 this.stock_requestable_to_type = 'branch',
-                this.warehouse_id = null;
-                this.warehouseData = undefined;
-                console.log('branch_id: ' + this.branch_id);
+                this.warehouse_idTo = '';
+                console.log('Tobranch_idTo: ' + this.branch_idTo + '|' + 'Towarehouse_idTo: ' + this.warehouse_idTo);
+            },
+
+            // FROM
+            selectWarehouseFrom(id){
+                this.warehouse_idFrom = id;
+                this.stock_requestable_from_id = id,
+                this.stock_requestable_from_type = 'warehouse',
+                this.branch_idFrom = '';
+                console.log('Fromwarehouse_idFrom: ' + this.warehouse_idFrom + '|' + 'Frombranch_idFrom: ' + this.branch_idFrom);
+            },
+            selectBranchFrom(id){
+                this.branch_idFrom = id;
+                this.stock_requestable_from_id = id,
+                this.stock_requestable_from_type = 'branch',
+                this.warehouse_idFrom = '';
+                console.log('Frombranch_idFrom: ' + this.branch_idFrom + '|' + 'Fromwarehouse_idFrom: ' + this.warehouse_idFrom);
             },
 
             selectItem(){
@@ -226,6 +275,7 @@
                     })
                 });
                 const formData = {
+                    number: this.number,
                     stock_requestable_from_id: this.stock_requestable_from_id,
                     stock_requestable_from_type: this.stock_requestable_from_type,
                     stock_requestable_to_id: this.stock_requestable_to_id,
