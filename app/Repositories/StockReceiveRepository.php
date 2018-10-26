@@ -49,7 +49,7 @@ class StockReceiveRepository extends Repository
             // store stock request 
             $stockReceive = $this->stockReceive->create($request->all());
             //store stock request items
-            $stockReceive->stockReceivetItems()->createMany($request->stock_receive_items);
+            $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
 
             return  $stockReceive;
         });

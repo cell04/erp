@@ -49,7 +49,7 @@ class StockTransferRepository extends Repository
             // store stock request 
             $stockTransfer = $this->stockTransfer->create($request->all());
             //store stock request items
-            $stockTransfer->stockRequestItems()->createMany($request->stock_transfer_items);
+            $stockTransfer->stockTransferItems()->createMany($request->stock_transfer_items);
 
             return  $stockTransfer;
         });
