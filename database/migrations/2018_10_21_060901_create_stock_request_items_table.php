@@ -30,7 +30,7 @@ class CreateStockRequestItemsTable extends Migration
                 ->references('id')
                 ->on('items')
                 ->onDelete('cascade');
-            $table->integer('quantity');
+            $table->integer('quantity')->unsigned();
             $table->integer('unit_of_measurement_id')->unsigned();
             $table->foreign('unit_of_measurement_id')
                 ->references('id')
