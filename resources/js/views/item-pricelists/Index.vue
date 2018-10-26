@@ -26,11 +26,11 @@
                         </tr>
                     </thead>
                     <tbody v-if="items">
-                        <tr v-for="{ id, item, price } in items">
-                            <td>{{ item.name }}</td>
-                            <td>{{ price }}</td>
+                        <tr v-for="item in items">
+                            <td>{{ item.item_id }}</td>
+                            <td>{{ item.price }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: item.id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>

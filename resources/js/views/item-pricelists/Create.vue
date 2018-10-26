@@ -43,6 +43,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/items/get-all-items/").then(res => {
+                    // console.log('items: ' + JSON.stringify(res.data));
                     this.items = res.data.items;
                     resolve();
                 }).catch(err => {
@@ -59,6 +60,7 @@
         methods: {
             selectItem() {
                 this.item_id = this.item.id;
+                console.log('item_id: ' + this.item_id);
             },
             createNewItemPricelist() {
                 this.ifReady = false;

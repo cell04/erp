@@ -155,6 +155,7 @@ Route::group(['middleware' => 'api'], function () {
     // Receive Orders
     Route::match(['put', 'patch'], 'receive-orders/{receiveOrder}/restore', 'ReceiveOrdersController@restore');
     Route::delete('receive-orders/{receiveOrder}/force-delete', 'ReceiveOrdersController@forceDestroy');
+    Route::get('receive-orders/get-all-receive-orders', 'ReceiveOrdersController@getAllReceiveOrder');
     Route::resource('receive-orders', 'ReceiveOrdersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
