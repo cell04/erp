@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <label>Stock Request Number</label>
-                            <vue-select class="mb-2" v-model="warehouseData" @input="selectWarehouse(warehouseData.id)" label="name" :options="warehouses"></vue-select>
+                            <vue-select v-model="stockRequest" @input="selectStockRequest()" label="number" :options="stockRequests"></vue-select>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>From</label>
@@ -22,8 +22,8 @@
                                 <input type="radio" v-model="from_selected_radio_button" value="branch">
                                 <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
                             </div>
-                            <vue-select class="mb-2" v-model="warehouseData" @input="selectWarehouse(warehouseData.id)" label="name" :options="warehouses" v-show="selected_radio_button === 'warehouse'"></vue-select>
-                            <vue-select class="mb-2" v-model="branchData" @input="selectBranch(branchData.id)" label="name" :options="branches" v-show="selected_radio_button === 'branch'"></vue-select>
+                            <vue-select v-model="fromWarehouse" @input="selectFromWarehouse()" label="name" :options="warehouses" v-show="from_selected_radio_button === 'warehouse'"></vue-select>
+                            <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -37,8 +37,8 @@
                                 <input type="radio" v-model="to_selected_radio_button" value="branch">
                                 <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
                             </div>
-                            <vue-select class="mb-2" v-model="warehouseData" @input="selectWarehouse(warehouseData.id)" label="name" :options="warehouses" v-show="to_selected_radio_button === 'warehouse'"></vue-select>
-                            <vue-select class="mb-2" v-model="branchData" @input="selectBranch(branchData.id)" label="name" :options="branches" v-show="to_selected_radio_button === 'branch'"></vue-select>
+                            <vue-select v-model="toWarehouse" @input="selectToWarehouse()" label="name" :options="warehouses" v-show="to_selected_radio_button === 'warehouse'"></vue-select>
+                            <vue-select v-model="toBranch" @input="selectToBranch()" label="name" :options="branches" v-show="to_selected_radio_button === 'branch'"></vue-select>
                         </div>
                     </div>
 
@@ -53,30 +53,29 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
+                                <th scope="col">Stock Keeping Unit</th>
+                                <th scope="col">Item</th>
                                 <th scope="col">Quantity</th>
-                                <th scope="col">UOM</th>
+                                <th scope="col">Unit Of Measurement</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr :key="item.id" v-for="(item, key) in stock_request_items">
-                                <td>{{ item.sku }}</td>
+                            <tr v-for="(stock_transfer_item, index) in stock_transfer_items">
+                                <td>{{ stock_transfer_item.stock_keeping_unit }}</td>
                                 <td>
-                                    <select class="form-control" v-model="item.item_id" v-on:change="onSelectItem(item.item_id, key)">
-                                        <option value="" disabled hidden>Select Item</option>
-                                        <option :key="item.id" v-for="item in itemsList" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
+                                    <vue-select v-model="stock_transfer_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
                                 </td>
-                                <td><input class="form-control" v-model.number="item.quantity"> </td>
-                                <td>{{ item.unit_of_measurement_name }}</td>
+                                <td><input class="form-control" v-model.number="stock_transfer_item.quantity"> </td>
+                                <td>
+                                    {{ stock_transfer_item.unitOfMeasurement }}
+                                </td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow">Remove</button>
                                 </td>
                             </tr>
                         </tbody>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addRow">Add Row</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
                     </table>
 
                     <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Transfer</button>
@@ -96,147 +95,156 @@
     export default {
         data() {
             return {
-                ifReady: true,
+                ifReady: false,
+                isTableReady: false,
                 warehouses: [],
+                fromWarehouse: null,
+                toWarehouse: null,
                 branches: [],
+                fromBranch: null,
+                toBranch: null,
                 items: [],
                 from_selected_radio_button: "",
                 to_selected_radio_button: "",
+                stockRequests: [],
+                stockRequest: null,
+                stock_request_id: null,
                 number: null,
-                stock_requestable_from_id : null,
-                stock_requestable_from_type: null,
-                stock_requestable_to_id: null,
-                stock_requestable_to_type: null,
-                stock_request_items: [
-                    {
-                        item: '',
-                        item_id: '',
-                        quantity: 0,
-                        unitOfMeasurements: [],
-                        unitOfMeasurement: '',
-                        unit_of_measurement_id: ''
-                    }
-                ]
+                stock_transferable_from_id : null,
+                stock_transferable_from_type: null,
+                stock_transferable_to_id: null,
+                stock_transferable_to_type: null,
+                stock_transfer_items: []
             };
         },
 
         mounted() {
-            let promiseSelectedWarehouse= new Promise((resolve, reject) => {
-                axios.get('/api/warehouses/' + this.$route.params.id).then(res => {
-                    this.selectedWarehouse = res.data.warehouse;
+            let promiseStockRequests = new Promise((resolve, reject) => {
+                axios.get("/api/stock-requests/get-all-stock-requests").then(res => {
+                    this.stockRequests = res.data.stock_requests;
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            let promiseSelectedBranch = new Promise((resolve, reject) => {
-                axios.get('/api/branches/' + this.$route.params.id).then(res => {
-                    this.selectedBranch = res.data.branch;
-                    resolve();
-                });
-            });
-
-            let promiseWarehouse = new Promise((resolve, reject) => {
-                axios.get("/api/warehouses/get-all-warehouses/").then(res => {
-                    this.warehouses = res.data.warehouses;
-                    if (!res.data) {
-                        return;
-                    }
-                    resolve();
-                });
-            });
-
-            let promiseBranch = new Promise((resolve, reject) => {
+            let promiseBranches = new Promise((resolve, reject) => {
                 axios.get("/api/branches/get-all-branches/").then(res => {
                     this.branches = res.data.branches;
-                    if (!res.data) {
-                        return;
-                    }
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            let promiseItem = new Promise((resolve, reject) => {
-                axios.get("/api/items/get-all-items/").then(res => {
-                    console.log('Items: ' + JSON.stringify(res.data));
-                    this.itemsList = res.data.items;
-                    if (!res.data) {
-                        return;
-                    }
+            let promiseWarehouses = new Promise((resolve, reject) => {
+                axios.get("/api/warehouses/get-all-warehouses/").then(res => {
+                    this.warehouses = res.data.warehouses;
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            this.addRow();
+            Promise.all([promiseBranches, promiseWarehouses]).then(() => {
+                this.ifReady = true;
+
+                this.addItem();
+            });
         },
 
         methods: {
-            selectWarehouse(id){
-                this.warehouse_id = id;
-                this.stock_requestable_to_id = id,
-                this.stock_requestable_to_type = 'warehouse',
-                this.branch_id = null;
-                this.branchData = undefined;
-                console.log('warehouse_id: ' + this.warehouse_id);
+            selectStockRequest() {
+                this.stock_request_id = this.stockRequest.id;
+
+                let promiseStockRequest = new Promise((resolve, reject) => {
+                    axios.get("/api/stock-requests/" + this.stockRequest.id).then(res => {
+                        this.items = res.data.stockRequest.stock_request_items;
+
+                        this.items.map(item => {
+                            item.name = item.item.name;
+                        });
+
+                        if (this.items.length > 0) {
+                            this.isTableReady = true;
+                            resolve();
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                        reject();
+                    });
+                });
             },
-            selectBranch(id){
-                this.branch_id = id;
-                this.stock_requestable_to_id = id,
-                this.stock_requestable_to_type = 'branch',
-                this.warehouse_id = null;
-                this.warehouseData = undefined;
-                console.log('branch_id: ' + this.branch_id);
+            selectFromBranch() {
+                this.stock_transferable_from_id = this.fromBranch.id;
+                this.stock_transferable_from_type = "App\\Branch";
             },
-            selectItem(){
-                this.item_id = this.itemData.id;
-                console.log('item_id: ' + this.item_id);
+            selectFromWarehouse() {
+                this.stock_transferable_from_id = this.fromWarehouse.id;
+                this.stock_transferable_from_type = "App\\Warehouse";
             },
-            onSelectItem(id, index) {
-                console.log(id, index);
-                const Index = index
-                const selectedItem = this.itemsList.find(y => y.id === id);
-                console.log(selectedItem)
-                this.stock_request_items[Index].sku = selectedItem.stock_keeping_unit,
-                this.stock_request_items[Index].item_id = selectedItem.id,
-                this.stock_request_items[Index].unit_of_measurement_id = selectedItem.default_unit_of_measurement_id,
-                this.stock_request_items[Index].unit_of_measurement_name = selectedItem.default_unit_of_measurement.name
+            selectToBranch() {
+                this.stock_transferable_to_id = this.toBranch.id;
+                this.stock_transferable_to_type =" App\\Branch";
             },
-            addRow() {
-                this.stock_request_items.push({
-                    sku: '',
+            selectToWarehouse() {
+                this.stock_transferable_to_id = this.toWarehouse.id;
+                this.stock_transferable_to_type = "App\\Warehouse";
+            },
+            selectItem(index) {
+                if (this.stock_transfer_items[index].item instanceof Object) {
+                    this.stock_transfer_items[index].stock_keeping_unit     = this.stock_transfer_items[index].item.item.stock_keeping_unit;
+                    this.stock_transfer_items[index].item_id                = this.stock_transfer_items[index].item.id;
+                    this.stock_transfer_items[index].quantity               = this.stock_transfer_items[index].item.quantity;
+                    this.stock_transfer_items[index].unitOfMeasurement      = this.stock_transfer_items[index].item.unit_of_measurement.name;
+                    this.stock_transfer_items[index].unit_of_measurement_id = this.stock_transfer_items[index].item.unit_of_measurement_id;
+                }
+            },
+            addItem() {
+                this.stock_transfer_items.push({
+                    stock_keeping_unit: '',
+                    item: '',
                     item_id: '',
                     quantity: '',
-                    unit_of_measurement_id: '',
-                    unit_of_measurement_name: ''
-                })
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: ''
+                });
             },
             deleteRow(index) {
-                this.stock_request_items.splice(index,1)
+                this.stock_transfer_items.splice(index,1)
             },
             createNewStockRequest() {
-                const newItems = [];
-                this.$data.stock_request_items.forEach(element => {
-                    newItems.push({
-                        item_id: element.item_id,
-                        quantity: element.quantity,
-                        unit_of_measurement_id: element.unit_of_measurement_id,
-                    })
+                this.ifReady = false;
+
+                let stockTransferItems = [];
+
+                this.stock_transfer_items.forEach(stock_transfer_item => {
+                    stockTransferItems.push({
+                        item_id: stock_transfer_item.item_id,
+                        quantity: stock_transfer_item.quantity,
+                        unit_of_measurement_id: stock_transfer_item.unit_of_measurement_id
+                    });
                 });
+
                 const formData = {
-                    stock_requestable_from_id: this.stock_requestable_from_id,
-                    stock_requestable_from_type: this.stock_requestable_from_type,
-                    stock_requestable_to_id: this.stock_requestable_to_id,
-                    stock_requestable_to_type: this.stock_requestable_to_type,
-                    stock_request_items: newItems
-                }
+                    stock_request_id: this.stock_request_id,
+                    stock_transferable_from_id: this.stock_transferable_from_id,
+                    stock_transferable_from_type: this.stock_transferable_from_type,
+                    stock_transferable_to_id: this.stock_transferable_to_id,
+                    stock_transferable_to_type: this.stock_transferable_to_type,
+                    stock_transfer_items: stockTransferItems
+                };
 
-                console.log(formData);
-
-                axios.post("/api/stock-requests", formData).then(res => {
-                    console.log(JSON.stringify(res.data));
-                    this.$router.push({ name: "stock-requests.index" });
+                axios.post("/api/stock-transfers", formData).then(res => {
+                    this.$router.push({ name: "stock-transfers.index" });
                 }).catch(err => {
                     console.log(err);
-                    alert(`Error! Can't create stock request`);
+                    alert(`Error! Can't create stock transfer`);
+                    this.ifReady = true;
                 });
             }
         }
