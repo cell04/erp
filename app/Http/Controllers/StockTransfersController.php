@@ -183,4 +183,33 @@ class StockTransfersController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllStockTransfers()
+    {
+        if (cache()->has('stock_transfers')) {
+            return response()->json([
+                'response'          => true,
+                'message'           => 'Resources successfully retrieve.',
+                'stock_transfers'    => cache('stock_transfers', 5)
+            ], 200);
+        }
+
+        if (! $stock_transfers = $this->stockTransfer->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'          => true,
+            'message'           => 'Resources successfully retrieve.',
+            'stock_transfers'   => $stock_transfers
+        ], 200);
+    }
 }

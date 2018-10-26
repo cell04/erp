@@ -35,6 +35,22 @@ class StockReceive extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Run functions on boot.
+     *
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (request()->headers->get('CORPORATION-ID')) {
+                $model->corporation_id = request()->headers->get('CORPORATION-ID');
+                $model->user_id = auth('api')->user()->id;
+            }
+        });
+    }
+    
+    /**
      * The stock receive belongs to a corporation
      *
      * @return object
@@ -42,6 +58,16 @@ class StockReceive extends Model
     public function corporation()
     {
         return $this->belongsTo(Corporation::class);
+    }
+
+    /**
+     * The stock receive belongs to a user
+     *
+     * @return object
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -78,5 +104,10 @@ class StockReceive extends Model
     public function stockReceiveItems()
     {
         return $this->hasMany(StockReceiveItem::class);
+    }
+
+    public function stocks()
+    {
+        return $this->morphMany(Stock::class, 'stockable');
     }
 }

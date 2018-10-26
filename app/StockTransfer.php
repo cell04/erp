@@ -46,6 +46,7 @@ class StockTransfer extends Model
         static::creating(function ($model) {
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
+                $model->user_id = auth('api')->user()->id;
             }
         });
     }

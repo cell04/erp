@@ -35,6 +35,16 @@ class StockRequest extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'stockRequestableFrom', 'stockRequestableTo',
+        'approveBy', 'user', 'stockRequestItems'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */
