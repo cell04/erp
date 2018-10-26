@@ -105,4 +105,9 @@ class StockReceive extends Model
     {
         return $this->hasMany(StockReceiveItem::class);
     }
+
+    public function stocks()
+    {
+        return $this->morphMany(Stock::class, 'stockable');
+    }
 }
