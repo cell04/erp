@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Branch;
 use App\Warehouse;
 use App\StockRequest;
-use Illuminate\Support\Facades\DB;
+
 
 class StockRequestRepository extends Repository
 {
@@ -92,12 +92,12 @@ class StockRequestRepository extends Repository
         $orderBy = 'desc',
         $removePage = true
     ) {
-        return $this->model->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')
+        return $this->stockRequest->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')
             ->filter($request)
             ->orderBy('created_at', $orderBy)
             ->paginate($length)
             ->withPath(
-                $this->model->createPaginationUrl($request, $removePage)
+                $this->stockRequest->createPaginationUrl($request, $removePage)
             );
     }
 
@@ -110,7 +110,7 @@ class StockRequestRepository extends Repository
 
     public function update($request, $id)
     {
-        return DB::transaction(function () use ($request) { 
+        return DB::transaction(function () use ($request, $id) { 
             //find stock request
             $stockRequest = $this->stockRequest->findOrFail($id);
             // check if status is equal to 0 = pending

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\StockTransferItem;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -90,8 +91,8 @@ class StockTransfer extends Model
      *
      * @return array object
      */
-    public function stockRequestItems()
+    public function stockTransferItems()
     {
-        return $this->hasMany(StockRequestItem::class);
+        return $this->hasMany(StockTransferItem::class);
     }
 }
