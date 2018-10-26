@@ -44,11 +44,11 @@ class StockRequestRepository extends Repository
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
-            //insert Stock Requestable from and to type
+            // insert Stock Requestable from and to type
             $this->insertStockRequestable($request);
-            // store stock request 
+            // store stock request
             $stockRequest = $this->stockRequest->create($request->all());
-            //store stock request items
+            // store stock request items
             $stockRequest->stockRequestItems()->createMany($request->stock_request_items);
 
             return  $stockRequest;
@@ -76,14 +76,16 @@ class StockRequestRepository extends Repository
         if (mb_strtolower($request->stock_requestable_from_type) == 'branch') {
             $stockRequestableFromType = get_class($this->branch);
         }
-        
-        return $request->request->add(['stock_requestable_to_type' => $stockRequestableToType, 'stock_requestable_from_type' => $stockRequestableFromType]);
+
+        return $request->request->add([
+            'stock_requestable_to_type' => $stockRequestableToType,
+            'stock_requestable_from_type' => $stockRequestableFromType
+        ]);
     }
 
     public function all()
     {
-        return $this->stockRequest->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')
-            ->get();
+        return $this->stockRequest->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')->get();
     }
 
     public function paginateWithFilters(
@@ -104,10 +106,10 @@ class StockRequestRepository extends Repository
     public function findOrFail($id)
     {
         return  $this->stockRequest->with([
-            'stockRequestableFrom', 
-            'stockRequestableTo', 
-            'approveBy', 
-            'user', 
+            'stockRequestableFrom',
+            'stockRequestableTo',
+            'approveBy',
+            'user',
             'stockRequestItems' => function ($query) {
                 $query->with('item', 'unitOfMeasurement');
             }
@@ -116,7 +118,7 @@ class StockRequestRepository extends Repository
 
     public function update($request, $id)
     {
-        return DB::transaction(function () use ($request, $id) { 
+        return DB::transaction(function () use ($request, $id) {
             //find stock request
             $stockRequest = $this->stockRequest->findOrFail($id);
             // check if status is equal to 0 = pending
@@ -124,12 +126,11 @@ class StockRequestRepository extends Repository
                 if (count($request->status)) {
                     //insert Stock Request Approve By
                     $request->request->add(['approve_by' => auth('api')->user()->id]);
-
                 } else {
                     //insert Stock Requestable from and to type
                     $this->insertStockRequestable($request);
                 }
-                
+
                 //update stock request
                 $stockRequest->fill($request->all());
                 $stockRequest->save();
