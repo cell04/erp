@@ -71,11 +71,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4"></td>
+                                <td colspan="5"></td>
                                 <td>
                                     <b>Total</b>
                                 </td>
                                 <td>{{ isNaN(amount)  ? '0.00': amount }}</td>
+                                <td></td>
                                 <td></td>
                             </tr>
                         </tbody>

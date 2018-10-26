@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Bills / View Bills
+                Invoices / View Invoice
                 <!-- <router-link :to="{ name: 'bills.create'}">
                     <button class="btn btn-primary float-right">Add New Bill</button>
                 </router-link> -->
@@ -12,7 +12,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Bills - Total Bills {{ this.meta.total }}
+                                List of Invoices - Total Invoices {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -24,22 +24,22 @@
                     <thead>
                         <tr>
                             <th scope="col">Date</th>
-                            <th scope="col">No.</th>
                             <th scope="col">Status</th>
                             <th scope="col">Reference</th>
-                            <th scope="col">Grand Total</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Amount Paid</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="bills">
-                        <tr v-for="bill in bills">
-                            <td>{{bill.due_date}}</td>
-                            <td>{{bill.id}}</td>
-                            <td>{{bill.status}}</td>
-                            <td>{{bill.reference_number}}</td>
-                            <td>{{bill.amount_paid}}</td>
+                    <tbody v-if="invoices">
+                        <tr v-for="invoice in invoices">
+                            <td>{{invoice.due_date}}</td>
+                            <td>{{invoice.status}}</td>
+                            <td>{{invoice.reference_number}}</td>
+                            <td>{{invoice.amount}}</td>
+                            <td>{{invoice.amount_paid}}</td>
                             <td>
-                                <router-link :to="{ name: 'bills.view', params: { id: bill.id }}">
+                                <router-link :to="{ name: 'invoices.view', params: { id: invoice.id }}">
                                     <button class="btn btn-primary">View</button>
                                 </router-link>
                             </td>
@@ -178,8 +178,8 @@
             order_by,
         };
 
-        axios.get('/api/bills', { params }).then(res => {
-            console.log(res);
+        axios.get('/api/invoices', { params }).then(res => {
+            console.log('Invoices: ' + JSON.stringify(res.data));
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -195,7 +195,7 @@
     export default {
         data() {
             return {
-                bills: null,
+                invoices: null,
                 searchColumnSKU: '',
                 searchColumnName: '',
                 searchColumnDescription: '',
@@ -294,7 +294,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -308,7 +308,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
@@ -322,7 +322,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
@@ -336,7 +336,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page,
@@ -350,7 +350,7 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
@@ -361,13 +361,13 @@
                     }
                 });
             },
-            setData(err, { data: bills, links, meta }) {
+            setData(err, { data: invoices, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.bills = bills;
+                    this.invoices = invoices;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -428,7 +428,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -443,7 +443,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
