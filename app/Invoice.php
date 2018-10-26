@@ -41,7 +41,7 @@ class Invoice extends Model
      * @var array
      */
     protected $with = [
-        'receiveOrders', 'invoiceItems'
+        'receiveOrders', 'invoiceItems', 'contact'
     ];
 
     /**

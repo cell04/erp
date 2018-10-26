@@ -177,7 +177,7 @@
         };
 
         axios.get('/api/invoices', { params }).then(res => {
-            console.log('Invoices: ' + JSON.stringify(res.data));
+            // console.log('Invoices: ' + JSON.stringify(res.data));
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
