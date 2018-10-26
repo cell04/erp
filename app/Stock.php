@@ -24,7 +24,7 @@ class Stock extends Model
      */
     protected $fillable = [
         'corporation_id', 'stockable_id', 'stockable_type',
-        'quantity', 'unit_of_measurement_id'
+        'item_id', 'quantity', 'unit_of_measurement_id'
     ];
 
     /**
@@ -33,6 +33,13 @@ class Stock extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = ['stockable'];
 
     /**
      * Run functions on boot.

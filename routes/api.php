@@ -5,7 +5,7 @@ Route::post('/auth/login', 'AuthController@login');
 Route::post('/auth/logout', 'AuthController@logout');
 Route::get('/auth/user', 'AuthController@user');
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'api'], function () {
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
     Route::delete('audit-trails/{auditTrail}/force-delete', 'AuditTrailsController@forceDestroy');
@@ -136,6 +136,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Purchase Orders
     Route::match(['put', 'patch'], 'purchase-orders/{purchaseOrder}/restore', 'PurchaseOrdersController@restore');
     Route::delete('purchase-orders/{purchaseOrder}/force-delete', 'PurchaseOrdersController@forceDestroy');
+    Route::get('purchase-orders/get-all-purchase-orders', 'PurchaseOrdersController@getAllPurchaseOrder');
     Route::resource('purchase-orders', 'PurchaseOrdersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -154,6 +155,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Receive Orders
     Route::match(['put', 'patch'], 'receive-orders/{receiveOrder}/restore', 'ReceiveOrdersController@restore');
     Route::delete('receive-orders/{receiveOrder}/force-delete', 'ReceiveOrdersController@forceDestroy');
+    Route::get('receive-orders/get-all-receive-orders', 'ReceiveOrdersController@getAllReceiveOrder');
     Route::resource('receive-orders', 'ReceiveOrdersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'

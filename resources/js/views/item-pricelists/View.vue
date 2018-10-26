@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Pricelists / View Item Pricelist
+                Item Price Lists / View Item Price List
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

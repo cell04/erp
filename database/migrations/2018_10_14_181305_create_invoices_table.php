@@ -35,13 +35,11 @@ class CreateInvoicesTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
-            $table->string('number');
-            $table->string('reference_number');
-            $table->timestamp('date_issued');
+            $table->string('reference_number')->unique();
             $table->date('due_date');
             $table->decimal('amount', 20, 2);
             $table->decimal('amount_paid', 20, 2)->default(0);
-            $table->smallInteger('status')->default(1);
+            $table->smallInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

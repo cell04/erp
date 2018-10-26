@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Item Pricelists / View Item Pricelist
+                Item Price Lists / View Item Price List
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Warehouses - Total Items {{ this.meta.total }}
+                                List of Item Prices - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -26,11 +26,11 @@
                         </tr>
                     </thead>
                     <tbody v-if="items">
-                        <tr v-for="{ id, item, price } in items">
-                            <td>{{ item.name }}</td>
-                            <td>{{ price }}</td>
+                        <tr v-for="item in items">
+                            <td>{{ item.item_id }}</td>
+                            <td>{{ item.price }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: item.id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -109,6 +109,7 @@
         const params = { page, per_page };
 
         axios.get('/api/item-pricelists', { params }).then(res => {
+            console.log(res.data);
             new Promise((resolve, reject) => {
                 callback(null, res.data);
             });

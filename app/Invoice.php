@@ -24,8 +24,8 @@ class Invoice extends Model
      */
     protected $fillable = [
         'corporation_id', 'receive_order_id', 'contact_id',
-        'user_id', 'number', 'reference_number', 'date_issued',
-        'due_date', 'amount', 'amount_paid', 'status'
+        'user_id', 'reference_number', 'due_date',
+        'amount', 'amount_paid', 'status'
     ];
 
     /**
@@ -47,6 +47,8 @@ class Invoice extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            $model->user_id = auth('api')->user()->id;
         });
     }
 

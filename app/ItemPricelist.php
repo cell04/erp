@@ -34,6 +34,15 @@ class ItemPricelist extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */
