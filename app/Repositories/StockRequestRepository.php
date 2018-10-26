@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Branch;
-use App\Warehouse;
 use App\StockRequest;
+use App\Warehouse;
+use Illuminate\Support\Facades\DB;
 
 
 class StockRequestRepository extends Repository
