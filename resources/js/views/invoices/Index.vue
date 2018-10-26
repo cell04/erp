@@ -39,9 +39,7 @@
                             <td>{{invoice.amount}}</td>
                             <td>{{invoice.amount_paid}}</td>
                             <td>
-                                <router-link :to="{ name: 'invoices.view', params: { id: invoice.id }}">
-                                    <button class="btn btn-primary">View</button>
-                                </router-link>
+                                <router-link class="text-info" :to="{ name: 'invoices.view', params: { id: invoice.id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
