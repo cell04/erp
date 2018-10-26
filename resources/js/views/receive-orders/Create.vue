@@ -7,11 +7,14 @@
             <div v-if="ifReady">
                 <form v-on:submit.prevent="createNewReceiveOrder">
                     <div class="row">
-                        <div class="col-md-12 form-group">
+                        <div class="col-md-6 form-group">
                             <label>Purchase Order</label>
                             <vue-select v-model="purchaseOrderId" @input="selectPo()" label="reference_number" :options="purchaseOrder"></vue-select>
                         </div>
-
+                        <div class="col-md-6 form-group">
+                            <label>Contact</label>
+                            <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
+                        </div>
                         <div class="col-md-6 form-group">
                             <label>Reference #</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
@@ -19,10 +22,6 @@
                         <div class="col-md-6 form-group">
                             <label>Warehouse</label>
                             <vue-select v-model="warehouse" @input="selectWarehouse()" label="name" :options="warehouses"></vue-select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Contact</label>
-                            <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
                         </div>
                     </div>
 
@@ -173,7 +172,6 @@
             let getAllPo = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/get-all-purchase-orders/").then(res => {
                     this.purchaseOrder = res.data.purchase_orders;
-                    // console.log('PO: ' + JSON.stringify(res.data.purchase_orders));
                     resolve();
                 }).catch(err => {
                     console.log(err);

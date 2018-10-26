@@ -7,9 +7,14 @@
             <div v-if="ifReady">
                 <form v-on:submit.prevent="createNewInvoice">
                     <div class="row">
-                        <div class="col-md-12 form-group">
+                        <div class="col-md-6 form-group">
                             <label>Receive Order</label>
                             <vue-select v-model="receiveOrderId" @input="selectRo()" label="reference_number" :options="receiveOrder"></vue-select>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>Due Date</label>
+                            <input type="date" class="form-control" v-model="due_date">
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -31,13 +36,6 @@
                             <label>Amount Paid</label>
                             <input type="number" class="form-control" v-model="amount_paid">
                         </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Due Date</label>
-                            <input type="date" class="form-control" v-model="due_date">
-                        </div>
-
-                        
                     </div>
 
                     <br>
@@ -285,11 +283,11 @@
                     amount_paid: this.$data.amount_paid
                 };
 
+                console.log(formData);
+
                 axios.post("/api/invoices", formData).then(res => {
-                    console.log(res.data);
                     this.$router.push({ name: "invoices.index" });
                 }).catch(err => {
-                    console.log(err);
                     alert(`Error! Can't create invoice`);
                     this.ifReady = true;
                 });
