@@ -15,7 +15,7 @@
 
                             <div class="col-md-6 form-group">
                                 <label>Contact</label>
-                                <input type="text" class="form-control" v-model="invoices.contact_id" readonly>
+                                <input type="text" class="form-control" v-model="contacts.person" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
@@ -45,7 +45,6 @@
                     <table class="table table-hover table-sm">
                         <thead>
                             <tr>
-                                <th scope="col">SKU</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Received Qty</th>
@@ -55,18 +54,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr :key="item.id" v-for="(item, index) in received_items">
-                                <td>{{ item.item.stock_keeping_unit }}</td>
+                            <tr :key="item.id" v-for="(item, index) in invoiceItems">
                                 <td>{{ item.item.name }}</td>
                                 <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ subtotalRow[index] }}</td>
-                            </tr> -->
+                            </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -98,7 +94,9 @@ export default {
   data() {
     return {
       ifReady: false,
-      invoices: []
+      invoices: [],
+      contacts: [],
+      invoiceItems: []
     };
   },
 
@@ -110,9 +108,11 @@ export default {
     getItem() {
       new Promise((resolve, reject) => {
         axios.get("/api/invoices/" + this.$route.params.id).then(res => {
-          console.log('Invoices: ' + JSON.stringify(res.data));
+        //   console.log('Invoices: ' + JSON.stringify(res.data));
           this.ifReady = true;
           this.invoices = res.data.invoice;
+          this.contacts = res.data.invoice.contact;
+          this.invoiceItems = res.data.invoice.invoice_items;
           if (!res.data.response) {
             return;
           }
@@ -129,14 +129,14 @@ export default {
 
   computed: {
     subtotalRow() {
-        // return this.received_items.map((item) => {
-        // return Number(item.quantity * item.item_pricelist.price)
-        // });
+        return this.invoiceItems.map((item) => {
+        return Number(item.quantity * item.item_pricelist.price)
+        });
     },
     total() {
-        // return this.received_items.reduce((total, item) => {
-        // return total + item.quantity * item.item_pricelist.price;
-        // }, 0);
+        return this.invoiceItems.reduce((total, item) => {
+        return total + item.quantity * item.item_pricelist.price;
+        }, 0);
     }
   }
 

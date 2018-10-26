@@ -121,19 +121,19 @@
             this.stock_requestable_from_id = this.$route.params.id;
             this.stock_requestable_from_type = this.$route.query.type;
 
-            let promiseSelectedWarehouse= new Promise((resolve, reject) => {
-                axios.get('/api/warehouses/' + this.$route.params.id).then(res => {
-                    this.selectedWarehouse = res.data.warehouse;
-                    resolve();
-                });
-            });
+            // let promiseSelectedWarehouse= new Promise((resolve, reject) => {
+            //     axios.get('/api/warehouses/' + this.$route.params.id).then(res => {
+            //         this.selectedWarehouse = res.data.warehouse;
+            //         resolve();
+            //     });
+            // });
 
-            let promiseSelectedBranch = new Promise((resolve, reject) => {
-                axios.get('/api/branches/' + this.$route.params.id).then(res => {
-                    this.selectedBranch = res.data.branch;
-                    resolve();
-                });
-            });
+            // let promiseSelectedBranch = new Promise((resolve, reject) => {
+            //     axios.get('/api/branches/' + this.$route.params.id).then(res => {
+            //         this.selectedBranch = res.data.branch;
+            //         resolve();
+            //     });
+            // });
 
             let promiseWarehouse = new Promise((resolve, reject) => {
                 axios.get("/api/warehouses/get-all-warehouses/").then(res => {
@@ -159,7 +159,7 @@
 
             let promiseItem = new Promise((resolve, reject) => {
                 axios.get("/api/items/get-all-items/").then(res => {
-                    console.log('Items: ' + JSON.stringify(res.data));
+                    // console.log('Items: ' + JSON.stringify(res.data));
                     this.itemsList = res.data.items;
                     if (!res.data) {
                         return;
