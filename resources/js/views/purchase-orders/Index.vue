@@ -29,14 +29,13 @@
                     </thead>
                     <tbody v-if="purchaseOrders">
                         <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
-                            <td>{{ purchaseOrder.date }}</td>
+                            <td>{{ purchaseOrder.create_at }}</td>
                             <td>{{ purchaseOrder.reference_number }}</td>
                             <td>{{ purchaseOrder.status }}</td>
                             <td>{{ purchaseOrder.amount }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
                                 <router-link class="text-success"  :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
-                                <!-- v-if="purchaseOrder.status === 'Issued'" -->
                             </td>
                         </tr>
                     </tbody>

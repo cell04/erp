@@ -84,7 +84,7 @@ class PurchaseOrdersController extends Controller
      */
     public function show($id)
     {
-        if (! $purchaseOrders = $this->purchaseOrders->findOrFail($id)) {
+        if (! $purchaseOrder = $this->purchaseOrders->findOrFail($id)) {
             return response()->json([
                 'message' => 'Resource does not exist'
             ], 400);
@@ -92,7 +92,7 @@ class PurchaseOrdersController extends Controller
 
         return response()->json([
             'message' => 'Resource successfully retrieve',
-            'purchaseOrders' => $purchaseOrders
+            'purchaseOrder' => $purchaseOrder
         ], 200);
     }
 
