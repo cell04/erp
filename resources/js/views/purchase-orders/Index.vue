@@ -29,7 +29,7 @@
                     </thead>
                     <tbody v-if="purchaseOrders">
                         <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
-                            <td>{{ purchaseOrder.date }}</td>
+                            <td>{{ purchaseOrder.create_at }}</td>
                             <td>{{ purchaseOrder.reference_number }}</td>
                             <td>{{ purchaseOrder.status }}</td>
                             <td>{{ purchaseOrder.amount }}</td>

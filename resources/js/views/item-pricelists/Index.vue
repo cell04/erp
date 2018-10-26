@@ -109,6 +109,7 @@
         const params = { page, per_page };
 
         axios.get('/api/item-pricelists', { params }).then(res => {
+            console.log(res.data);
             new Promise((resolve, reject) => {
                 callback(null, res.data);
             });
