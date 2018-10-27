@@ -23,7 +23,7 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewContactTypes">Back</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewContactTypes">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editContactType">Edit Contact Type</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteContactTypeModal">Delete Contact Type</button>
                 </div>

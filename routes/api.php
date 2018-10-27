@@ -192,9 +192,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     ]);
 
     // Stock Requests
-    Route::match(['put', 'patch'], 'stock-requests/{stock-request}/restore', 'StockRequestsController@restore');
-    Route::delete('stock-requests/{stock-request}/force-delete', 'StockRequestsController@forceDestroy');
+    Route::match(['put', 'patch'], 'stock-requests/{stockRequest}/restore', 'StockRequestsController@restore');
+    Route::delete('stock-requests/{stockRequest}/force-delete', 'StockRequestsController@forceDestroy');
     Route::get('stock-requests/get-all-stock-requests', 'StockRequestsController@getAllStockRequests');
+    Route::post('stock-requests/{stockRequest}/approve', 'StockRequestsController@approve');
+    Route::post('stock-requests/{stockRequest}/cancel', 'StockRequestsController@cancel');
     Route::resource('stock-requests', 'StockRequestsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -202,9 +204,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     ]);
 
     // Stock Transfers
-    Route::match(['put', 'patch'], 'stock-transfers/{stock-transfer}/restore', 'StockTransfersController@restore');
-    Route::delete('stock-transfers/{stock-transfer}/force-delete', 'StockTransfersController@forceDestroy');
+    Route::match(['put', 'patch'], 'stock-transfers/{stockTransfer}/restore', 'StockTransfersController@restore');
+    Route::delete('stock-transfers/{stockTransfer}/force-delete', 'StockTransfersController@forceDestroy');
     Route::get('stock-transfers/get-all-stock-transfers', 'StockTransfersController@getAllStockTransfers');
+    Route::post('stock-transfers/{stockTransfer}/transferred', 'StockTransfersController@transferred');
     Route::resource('stock-transfers', 'StockTransfersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'

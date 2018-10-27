@@ -16,33 +16,12 @@
                             <input type="text" class="form-control" v-model="number" autocomplete="off" maxlength="255" required>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>From</label>
-                            <br>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" v-model="from_selected_radio_button" value="warehouse">
-                                <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" v-model="from_selected_radio_button" value="branch">
-                                <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
-                            </div>
-                            <vue-select v-model="fromWarehouse" @input="selectFromWarehouse()" label="name" :options="warehouses" v-show="from_selected_radio_button === 'warehouse'"></vue-select>
-                            <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
+                            <label>Transfer From</label>
+                            <input type="text" class="form-control" v-model="from" autocomplete="off" maxlength="255" required disabled>
                         </div>
-
                         <div class="col-md-6 form-group">
-                            <label>To</label>
-                            <br>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" v-model="to_selected_radio_button" value="warehouse">
-                                <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" v-model="to_selected_radio_button" value="branch">
-                                <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
-                            </div>
-                            <vue-select v-model="toWarehouse" @input="selectToWarehouse()" label="name" :options="warehouses" v-show="to_selected_radio_button === 'warehouse'"></vue-select>
-                            <vue-select v-model="toBranch" @input="selectToBranch()" label="name" :options="branches" v-show="to_selected_radio_button === 'branch'"></vue-select>
+                            <label>Transfer To</label>
+                            <input type="text" class="form-control" v-model="to" autocomplete="off" maxlength="255" required disabled>
                         </div>
                     </div>
 
@@ -101,14 +80,10 @@
             return {
                 ifReady: false,
                 warehouses: [],
-                fromWarehouse: null,
-                toWarehouse: null,
                 branches: [],
-                fromBranch: null,
-                toBranch: null,
+                from: null,
+                to: null,
                 items: [],
-                from_selected_radio_button: "",
-                to_selected_radio_button: "",
                 stockRequests: [],
                 stockRequest: null,
                 stock_request_id: null,
@@ -162,6 +137,15 @@
             selectStockRequest() {
                 this.stock_request_id = this.stockRequest.id;
 
+                this.stock_transferable_from_id = this.stockRequest.stock_requestable_from_id;
+                this.stock_transferable_from_type = this.stockRequest.stock_requestable_from_type;
+
+                this.stock_transferable_to_id = this.stockRequest.stock_requestable_to_id;
+                this.stock_transferable_to_type = this.stockRequest.stock_requestable_to_type;
+
+                this.from = this.stockRequest.stock_requestable_from.name;
+                this.to = this.stockRequest.stock_requestable_to.name;
+
                 let promiseStockRequest = new Promise((resolve, reject) => {
                     axios.get("/api/stock-requests/" + this.stockRequest.id).then(res => {
                         this.items = res.data.stockRequest.stock_request_items;
@@ -179,22 +163,6 @@
                         reject();
                     });
                 });
-            },
-            selectFromBranch() {
-                this.stock_transferable_from_id = this.fromBranch.id;
-                this.stock_transferable_from_type = "App\\Branch";
-            },
-            selectFromWarehouse() {
-                this.stock_transferable_from_id = this.fromWarehouse.id;
-                this.stock_transferable_from_type = "App\\Warehouse";
-            },
-            selectToBranch() {
-                this.stock_transferable_to_id = this.toBranch.id;
-                this.stock_transferable_to_type =" App\\Branch";
-            },
-            selectToWarehouse() {
-                this.stock_transferable_to_id = this.toWarehouse.id;
-                this.stock_transferable_to_type = "App\\Warehouse";
             },
             selectItem(index) {
                 if (this.stock_transfer_items[index].item instanceof Object) {

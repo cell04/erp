@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               {{componentVal}}s / View {{componentVal}}s
+               Stock Requests / View Stock Requests
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of {{componentVal}}s - Total Items {{ this.meta.total }}
+                                List of Stock Requestss - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -21,21 +21,22 @@
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Requested from</th>
-                            <th scope="col">Requested to</th>
+                            <th scope="col">Stock Request Number</th>
+                            <th scope="col">Stock Request from</th>
+                            <th scope="col">Stock Request to</th>
                             <th scope="col">Status</th>
                             <th scope="col">Created By</th>
                             <th scope="col">Approved/Cancelled By</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
-                    <tbody v-if="stock_requests">
-                        <tr v-for="{ id, stock_requestable_from, 
-                            stock_requestable_to, status, user, approve_by } in stock_requests">
+                    <tbody v-if="stockRequests">
+                        <tr v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, user, approve_by } in stockRequests">
                             <td>{{ id }}</td>
+                            <td>{{ number }}</td>
                             <td>{{ stock_requestable_from.name }}</td>
                             <td>{{ stock_requestable_to.name }}</td>
-                            <td>{{ status === 0 ? 'pending' : status === 1 ? 'approved' : 'cancelled' }}</td>
+                            <td>{{ status }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ approve_by ? approve_by.name : null }}</td>
                             <td>
@@ -95,7 +96,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search {{componentVal}}</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Requests</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -115,7 +116,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Search {{componentVal}}</h5>
+                            <h5 class="modal-title">Search Stock Requests</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -188,10 +189,7 @@
             order_by,
         };
 
-        axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
-
         axios.get('/api/stock-requests', { params }).then(res => {
-            console.log(res);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -207,8 +205,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Stock Request',
-                stock_requests: null,
+                stockRequests: [],
                 searchRequestedFrom: '',
                 searchRequestedFromTo: '',
                 searchStatus: '',
@@ -392,13 +389,23 @@
                     }
                 });
             },
-            setData(err, { data: stock_requests, links, meta }) {
+            setData(err, { data: stockRequests, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.stock_requests = stock_requests;
+                    let status = {
+                        0: 'Pending',
+                        1: 'Approved',
+                        2: 'Cancelled'
+                    };
+
+                    stockRequests.map(stockRequest => {
+                        stockRequest.status = status[stockRequest.status];
+                    });
+
+                    this.stockRequests = stockRequests;
                     this.links = links;
                     this.meta = meta;
                 }

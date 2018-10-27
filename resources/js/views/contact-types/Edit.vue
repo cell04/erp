@@ -22,7 +22,7 @@
                             <textarea class="form-control" v-model="description" rows="3" maxlength="500" required></textarea>
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewContactType">Back</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewContactType">Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContactType">Update Contact Type</button>
                     </form>
                 </div>
@@ -40,7 +40,7 @@
     export default {
         data() {
             return {
-                ifReady: true,
+                ifReady: false,
                 id: '',
                 name: '',
                 display_name: '',

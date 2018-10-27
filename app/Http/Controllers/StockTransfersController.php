@@ -212,4 +212,25 @@ class StockTransfersController extends Controller
             'stock_transfers'   => $stock_transfers
         ], 200);
     }
+
+    /**
+     * Change stock transfer status to transfer using specified id.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function transferred($id)
+    {
+        if (! $this->stockTransfer->transferred($id)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Failed to updated resource.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resource successfully updated.'
+        ], 200);
+    }
 }

@@ -27,7 +27,7 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent.default="viewItemClassification">Back</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItemClassification">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification">Edit Item Class</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal">Delete Item Class</button>
                 </div>
@@ -74,22 +74,22 @@
         },
 
         mounted() {
-            let promise = new Promise((resolve, reject) => {
-                axios.get('/api/item-classifications/' + this.$route.params.id).then(res => {
-                    const getItemTypeId = res.data.itemClassification.item_type_id;
-                    // Query Item Type
-                    let promise = new Promise((resolve, reject) => {
-                        axios.get('/api/item-types/' + getItemTypeId).then(res2 => {
-                            this.itemClass = res.data.itemClassification;
-                            this.itemTypeId = res2.data.itemType;
-                        });
+            axios.get('/api/item-classifications/' + this.$route.params.id).then(res => {
+                let promiseItemType = new Promise((resolve, reject) => {
+                    axios.get("/api/item-types/" + res.data.itemClassification.item_type_id).then(res2 => {
+                        this.itemClass = res.data.itemClassification;
+                        this.itemTypeId = res2.data.itemType;
+                        resolve();
+                    }).catch(err => {
+                        alert('Error');
+                        console.log(err);
+                        reject();
                     });
-                    resolve();
                 });
-            });
 
-            promise.then(() => {
-                this.ifReady = true;
+                promiseItemType.then(() => {
+                    this.ifReady = true;
+                });
             });
         },
 

@@ -166,7 +166,6 @@
         axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
 
         axios.get('/api/unit-of-measurements', { params }).then(res => {
-            console.log(res);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
