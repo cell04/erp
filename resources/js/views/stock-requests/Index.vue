@@ -21,8 +21,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Requested from</th>
-                            <th scope="col">Requested to</th>
+                            <th scope="col">Stock Request Number</th>
+                            <th scope="col">Stock Request from</th>
+                            <th scope="col">Stock Request to</th>
                             <th scope="col">Status</th>
                             <th scope="col">Created By</th>
                             <th scope="col">Approved/Cancelled By</th>
@@ -30,8 +31,9 @@
                         </tr>
                     </thead>
                     <tbody v-if="stockRequests">
-                        <tr v-for="{ id, stock_requestable_from, stock_requestable_to, status, user, approve_by } in stockRequests">
+                        <tr v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, user, approve_by } in stockRequests">
                             <td>{{ id }}</td>
+                            <td>{{ number }}</td>
                             <td>{{ stock_requestable_from.name }}</td>
                             <td>{{ stock_requestable_to.name }}</td>
                             <td>{{ status }}</td>

@@ -21,7 +21,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col">Transfer Number</th>
+                        <th scope="col">Stock Transfer Number</th>
                         <th scope="col">Transfer From</th>
                         <th scope="col">Transfer To</th>
                         <th scope="col">Status</th>

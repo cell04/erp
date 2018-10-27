@@ -81,12 +81,18 @@
                     </table>
                     <br />
                     <br />
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewStockRequests">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editStockRequest">Edit Stock Request</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteStockRequestModal">Delete Stock Request</button>
 
-                    <button class="btn btn-success btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openApproveStockRequestModal">Approve Stock Request</button>
-                    <button class="btn btn-danger btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openCancelStockRequestModal">Cancel Stock Request</button>
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewStockRequests">Back</button>
+                            <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editStockRequest">Edit Stock Request</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteStockRequestModal">Delete Stock Request</button>
+                        </div>
+                        <div class="float-right">
+                            <button class="btn btn-success btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openApproveStockRequestModal">Approve Stock Request</button>
+                            <button class="btn btn-danger btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openCancelStockRequestModal">Cancel Stock Request</button>
+                        </div>
+                    </div>
                 </div>
                 <div v-else>
                     <div class="progress">
