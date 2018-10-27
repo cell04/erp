@@ -24,7 +24,7 @@ class InvoiceItem extends Model
      */
     protected $fillable = [
         'invoice_id', 'item_id', 'unit_of_measurement_id',
-        'quantity', 'pricelist_id'
+        'quantity', 'item_pricelist_id'
     ];
 
     /**
@@ -33,6 +33,15 @@ class InvoiceItem extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item', 'unitOfMeasurement', 'itemPricelist'
+    ];
 
     /**
      * The invoice item belongs to an invoice.

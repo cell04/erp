@@ -84,7 +84,7 @@ class PurchaseOrdersController extends Controller
      */
     public function show($id)
     {
-        if (! $purchaseOrders = $this->purchaseOrders->findOrFail($id)) {
+        if (! $purchaseOrder = $this->purchaseOrders->findOrFail($id)) {
             return response()->json([
                 'message' => 'Resource does not exist'
             ], 400);
@@ -92,7 +92,7 @@ class PurchaseOrdersController extends Controller
 
         return response()->json([
             'message' => 'Resource successfully retrieve',
-            'purchaseOrders' => $purchaseOrders
+            'purchaseOrder' => $purchaseOrder
         ], 200);
     }
 
@@ -181,6 +181,35 @@ class PurchaseOrdersController extends Controller
 
         return response()->json([
             'message' => 'Resource successfully deleted permanently'
+        ], 200);
+    }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllPurchaseOrder()
+    {
+        if (cache()->has('purchase-orders')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'purchase_orders' => cache('purchase-orders', 5)
+            ], 200);
+        }
+
+        if (! $purchaseOrder = $this->purchaseOrders->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'purchase_orders' => $purchaseOrder
         ], 200);
     }
 }

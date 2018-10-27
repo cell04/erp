@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\StockTransferItem;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,6 +46,7 @@ class StockTransfer extends Model
         static::creating(function ($model) {
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
+                $model->user_id = auth('api')->user()->id;
             }
         });
     }
@@ -90,8 +92,8 @@ class StockTransfer extends Model
      *
      * @return array object
      */
-    public function stockRequestItems()
+    public function stockTransferItems()
     {
-        return $this->hasMany(StockRequestItem::class);
+        return $this->hasMany(StockTransferItem::class);
     }
 }

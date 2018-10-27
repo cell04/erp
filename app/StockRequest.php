@@ -24,7 +24,7 @@ class StockRequest extends Model
      */
     protected $fillable = [
         'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type', 'user_id',
-        'stock_requestable_to_id', 'stock_requestable_to_type', 'status', 'approve_by'
+        'stock_requestable_to_id', 'stock_requestable_to_type', 'number', 'status', 'approve_by'
     ];
 
     /**
@@ -33,6 +33,16 @@ class StockRequest extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'stockRequestableFrom', 'stockRequestableTo',
+        'approveBy', 'user', 'stockRequestItems'
+    ];
 
     /**
      * Run functions on boot.
@@ -45,6 +55,7 @@ class StockRequest extends Model
         static::creating(function ($model) {
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
+                $model->user_id = auth('api')->user()->id;
             }
         });
     }

@@ -7,22 +7,20 @@
             <div class="card-body">
                 <div v-if="ifReady">
                     <form v-on:submit.prevent="createNewItemClass">
-                        
                         <div class="form-group">
                             <label>Item Type</label>
-                            <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
+                            <vue-select v-model="itemType" @input="selectItemType()" label="name" :options="itemTypes"></vue-select>
                         </div>
-
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dname">Display Name</label>
+                                <input type="text" class="form-control" v-model="display_name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="dname">Display Name</label>
-                            <input type="text" class="form-control" v-model="display_name" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-
                         <div class="form-group">
                             <label for="desc">Description</label>
                             <textarea class="form-control" v-model="description" required></textarea>
@@ -46,46 +44,40 @@
     export default {
         data() {
             return {
-                itemTypesList: [],
-                ifReady: true,
-                itemTypeId: null,
+                ifReady: false,
+                itemTypes: [],
+                itemType: null,
                 item_type_id: '',
                 name: '',
                 display_name: '',
                 description: '',
-                status: 1
             };
         },
 
         mounted() {
-            // Load All Item Type List
-            new Promise((resolve, reject) => {
-               axios.get("/api/item-types/get-all-item-types/").then(res => {
-                this.itemTypesList = res.data.item_types;
-                // console.log('getItemType: ' + JSON.stringify(res.data));
-                    if (!res.data.response) {
-                        return;
-                    }
+            let promise = new Promise((resolve, reject) => {
+                axios.get("/api/item-types/get-all-item-types/").then(res => {
+                    this.itemTypes = res.data.item_types;
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
+            promise.then(() => {
+                this.ifReady = true;
+            });
         },
 
         methods: {
             selectItemType() {
-                this.item_type_id = this.itemTypeId.id;
-                console.log('GetItemTypeId: ' + this.item_type_id);
+                this.item_type_id = this.itemType.id;
             },
-
-            // selectItemType(id) {
-            //     this.item_type_id = id;
-            // },
-
             createNewItemClass() {
                 this.ifReady = false;
 
-                axios.post('/api/item-classifications', this.$data).then(res => {
+                axios.post("/api/item-classifications", this.$data).then(res => {
                     this.$router.push({ name: 'item-classifications.index' });
                 }).catch(err => {
                     this.ifReady = true;

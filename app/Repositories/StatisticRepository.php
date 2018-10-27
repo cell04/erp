@@ -2,29 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Branch;
-use App\Contact;
-use App\ContactType;
-use App\Conversion;
-use App\Corporation;
-use App\Invoice;
-use App\InvoiceItem;
-use App\Item;
-use App\ItemClassification;
-use App\ItemPricelit;
-use App\ItemType;
-use App\Permission;
-use App\PurchaseOrder;
-use App\PurchaseOrderItem;
-use App\ReceiveOrder;
-use App\ReceiveOrderItem;
-use App\Role;
-use App\Stock;
-use App\UnitOfMeasurement;
-use App\User;
-use App\UserRole;
-use App\UserRolePermission;
-use App\Warehouse;
 use Carbon\Carbon;
 use DB;
 
@@ -44,7 +21,7 @@ class StatisticRepository
     ];
 
 
-    protected $settings = [
+    private $settings = [
         'GraphType' => null,
         'Options'   => [],
         'Model'     => null
@@ -96,7 +73,10 @@ class StatisticRepository
 
         //return $this->graphDataSettings[$this->settings['GraphType']];
 
-        return ($this->modelNames[$this->settings['Model']])::all();
+        return ($this->modelNames[$this->settings['Model']])->all()->with([
+            'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
+        ])->get(); 
+
 
         //return $this->settings;
     }
@@ -116,6 +96,10 @@ class StatisticRepository
         }
     }
 
+    public function calculateMovement($data)
+    {
+
+    }
 
     public function GetFilterValue(&$filter)
     {

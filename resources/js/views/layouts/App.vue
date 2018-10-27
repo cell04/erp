@@ -25,10 +25,6 @@
         },
 
         beforeCreate() {
-            //
-        },
-
-        created() {
             Broadcast.$on('ChangeCorporation', (event) => {
                 axios.defaults.headers.common['CORPORATION-ID'] = event.corporation.id;
             });
@@ -38,6 +34,10 @@
                     localStorage.setItem('corporations', JSON.stringify(res.data.corporations));
                 });
             });
+        },
+
+        created() {
+            //
         }
     }
 </script>

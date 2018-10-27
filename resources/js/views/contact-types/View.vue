@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="description">Desciption</label>
+                            <label for="description">Description</label>
                             <textarea class="form-control" v-model="description" rows="3" maxlength="500" required></textarea>
                         </div>
                     </fieldset>

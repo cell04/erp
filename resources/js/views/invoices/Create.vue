@@ -1,114 +1,107 @@
 <template>
-    <div>
-        <div class="card">
-            <div class="card-header">
-                Bills / Create New Bill
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <form v-on:submit.prevent="createNewPurchaseOrder">
-                        <div class="row">
-                            <div class="col-md-12 form-group">
-                                <label>Received Orders</label>
-                                <vue-select v-model="receivedOrder" @input="selectReceivedOrder()" label="reference_number" :options="receivedOrders" required></vue-select>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Date</label>
-                                <input type="date" class="form-control" v-model="order_date" required>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Contact</label>
-                                <select class="form-control" v-model="contact_id" required>
-                                    <option value="" disabled hidden>Select Contact</option>
-                                    <option v-for="contact in contacts" v-bind:value="contact.id">{{ contact.person }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Warehouse</label>
-                                <select class="form-control" v-model="sub_department_id" required>
-                                    <option value="" disabled hidden>Select Warehouse</option>
-                                    <option v-for="department in sub_departments" v-bind:value="department.id">{{ department.name }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Payment Term</label>
-                                <select class="form-control" v-model="paymentTerm_id" required>
-                                    <option value="" disabled hidden>Select Payment Term</option>
-                                    <option v-for="payment in paymentTerm" v-bind:value="payment.id">{{ payment.name }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Reference #</label>
-                                <input type="text" class="form-control" v-model="reference_number" required>
-                            </div>
+    <div class="card">
+        <div class="card-header">
+            Invoices / Create New Invoice
+        </div>
+        <div class="card-body">
+            <div v-if="ifReady">
+                <form v-on:submit.prevent="createNewInvoice">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Receive Order</label>
+                            <vue-select v-model="receiveOrderId" @input="selectRo()" label="reference_number" :options="receiveOrder"></vue-select>
                         </div>
-                        <br />
-                        <table class="table table-hover table-sm">
-                            <caption>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                    </div>
-                                </div>
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">SKU</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">UOM</th>
-                                    <th scope="col">Unit Price</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item) in items">
-                                    <td>{{ item.item.sku }}</td>
-                                    <td>
-                                        <select class="form-control" v-model="item.item.item_id" required v-on:change="onSelectItem(item.item.item_id, key)">
-                                            <option value="" disabled hidden>Select Item</option>
-                                            <option v-for="item in itemsList" v-bind:value="item.item.id">{{ item.item.name }}</option>
-                                        </select>
-                                    </td>
-                                    <td><input class="form-control" v-model.number="item.item.quantity" required></td>
-                                    <td>{{ item.item.unit_name }}</td>
-                                    <td><input class="form-control" v-model.number="item.item.unit_price"></td>
-                                    <td>{{subtotalRow[key]}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteRow">Remove</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                            <button type="button" class="btn btn-primary btn-sm" @click="addRow">Add Row</button>
-                        </table>
 
-                        <button type="submit" class="btn btn-success btn-sm">Create New Bill</button>
-                    </form>
-                </div>
+                        <div class="col-md-6 form-group">
+                            <label>Due Date</label>
+                            <input type="date" class="form-control" v-model="due_date">
+                        </div>
 
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        <div class="col-md-6 form-group">
+                            <label>Contact</label>
+                            <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>Reference #</label>
+                            <input type="text" class="form-control" v-model="reference_number" required>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>Amount</label>
+                            <input type="number" class="form-control" v-model="amount">
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>Amount Paid</label>
+                            <input type="number" class="form-control" v-model="amount_paid">
+                        </div>
                     </div>
-                </div>
 
+                    <br>
+
+                    <table class="table table-hover table-sm">
+                        <caption>
+                            <div class="row">
+                                <div class="col-md-3">
+                                </div>
+                            </div>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">SKU</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Unit of Measurement</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Sub Total</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(invoice_item, index) in invoice_items" :key="index">
+                                <td>{{ invoice_item.item.stock_keeping_unit }}</td>
+                                <td>
+                                    <vue-select v-model="invoice_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                </td>
+                                <td>
+                                    <input class="form-control" v-model.number="invoice_item.quantity" required>
+                                </td>
+                                <td>
+                                    {{ invoice_item.unitOfMeasurement }}
+                                </td>
+                                <td>
+                                    <vue-select v-model="invoice_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="invoice_item.itemPricelists"></vue-select>
+                                </td>
+                                <td>{{ isNaN(invoice_item.subTotal) ? '0.00' : invoice_item.subTotal }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td>{{ isNaN(amounts)  ? '0.00': amounts }}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pt-3">
+                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Invoice</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button>
+                    </div>
+                </form>
             </div>
+
+            <div v-else>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -117,143 +110,186 @@
     export default {
         data() {
             return {
-                ifReady: true,
-                receivedOrders: [],
-                receivedOrder: null,
-                received_order_id: "",
-                contacts: "",
-                sub_departments: "",
-                itemsList: "",
-                reference_number: "",
+                ifReady: false,
+                receiveOrder: [],
+                receiveOrderId: null,
+                contacts: [],
+                contact: null,
                 contact_id: "",
-                order_date: "",
-                sub_department_id: "",
-                items: [],
+                due_date: "",
                 amount: "",
-                paymentTerm: [],
-                paymentTerm_id:"",
-                receivedOrderItems: []
+                amount_paid: "",
+                items: [],
+                reference_number: "",
+                receive_order_id: "",
+                invoice_items: [
+                    {
+                        item: '',
+                        item_id: '',
+                        quantity: 0,
+                        unitOfMeasurements: [],
+                        unitOfMeasurement: '',
+                        unit_of_measurement_id: '',
+                        itemPricelists: [],
+                        itemPricelist: 0,
+                        item_pricelist_id: '',
+                        subTotal: 0
+                    }
+                ],
+                amounts: "",
+                isDisabled: true
             };
         },
 
         mounted() {
-            new Promise((resolve, reject) => {
-                axios.get("/api/receive-orders/retrieve-all-receive-orders").then(res => {
-                    console.log(res.data.receive_orders);
-                    this.receivedOrders = res.data.receive_orders;
-                    if (!res.data.response) {
-                        return;
-                    }
-                    resolve();
-                });
-            });
+            // this.invoice_items.expiration_date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
+            // console.log('EXP Date: ' + this.this.date);
 
-            new Promise((resolve, reject) => {
-                axios.get("/api/contacts/retrieve-all-contacts").then(res => {
+            let getAllContacts = new Promise((resolve, reject) => {
+                axios.get("/api/contacts/get-all-contacts/").then(res => {
                     this.contacts = res.data.contacts;
-                    if (!res.data.response) {
-                        return;
-                    }
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            new Promise((resolve, reject) => {
-                axios.get("/api/sub-departments/retrieve-all-sub-departments/").then(res2 => {
-                    this.sub_departments = res2.data.sub_departments;
-                    if (!res2.data.response) {
-                        return;
-                    }
+            let getAllItems = new Promise((resolve, reject) => {
+                axios.get("/api/items/get-all-items/").then(res => {
+                    this.items = res.data.items;
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            new Promise((resolve, reject) => {
-                axios.get("/api/payment-terms/retrieve-all-payment-terms").then(res4 => {
-                    this.paymentTerm = res4.data.payment_terms;
-                    if (!res4.data.response) {
-                        return;
-                    }
+            let getAllRo = new Promise((resolve, reject) => {
+                axios.get("/api/receive-orders/get-all-receive-orders/").then(res => {
+                    this.receiveOrder = res.data.receive_orders;
+                    // console.log('RO: ' + JSON.stringify(res.data));
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            this.addRow();
+            Promise.all([getAllContacts, getAllItems, getAllRo]).then(() => {
+                this.ifReady = true;
+            });
         },
 
         computed: {
-            subtotalRow() {
-                return this.items.map((item) => {
-                    return Number(item.quantity * item.unit_price)
+            subTotalRow() {
+                return this.invoice_items.map((invoice_item) => {
+                    return (invoice_item.quantity * invoice_item.unit_price);
                 });
             },
             total() {
-                return this.items.reduce((total, item) => {
-                    return total + item.quantity * item.unit_price;
+                return this.invoice_items.reduce((total, invoice_item) => {
+                    return total + (invoice_item.quantity * invoice_item.unit_price);
                 }, 0);
             }
         },
 
         methods: {
-            selectReceivedOrder() {
-                this.received_order_id = this.receivedOrder.id;
-                axios.get("/api/receive-orders/" + this.receivedOrder.id).then(res => {
-                    this.items = res.data.purchase_order.receive_items;
-                    if (! res.data.response) { return; }
-                    resolve();
+            selectContact() {
+                this.contact_id = this.contact.id;
+            },
+
+            selectRo() {
+                this.receive_order_id = this.receiveOrderId.id;
+                console.log('RO: ' + this.receiveOrderId.id);
+            },
+
+            selectItem(index) {
+                this.invoice_items[index].item_id = this.invoice_items[index].item.id;
+                this.invoice_items[index].unitOfMeasurement = this.invoice_items[index].item.default_unit_of_measurement.name;
+                this.invoice_items[index].unit_of_measurement_id = this.invoice_items[index].item.default_unit_of_measurement.id;
+
+                let promise = new Promise((resolve, reject) => {
+                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.invoice_items[index].item_id).then(res => {
+                        this.invoice_items[index].itemPricelists = res.data.item_pricelists;
+                        resolve();
+                    }).catch(err => {
+                        console.log(err);
+                        reject();
+                    });
                 });
             },
-            onSelectItem(id, index) {
-                const Index = index
-                const selectedItem = this.itemsList.find(y => y.id === id);
-                this.items[Index].sku = selectedItem.SKU,
-                this.items[Index].item_id = selectedItem.id,
-                this.items[Index].unit_id = selectedItem.purchase_unit_id,
-                this.items[Index].unit_name = selectedItem.purchase_uom.name,
-                this.items[Index].unit_price = selectedItem.purchase_price
+            selectItemPricelist(index) {
+                this.invoice_items[index].item_pricelist_id = this.invoice_items[index].itemPricelist.id;
+                this.invoice_items[index].subTotal = (parseFloat(this.invoice_items[index].quantity) * parseFloat(this.invoice_items[index].itemPricelist.price));
+                this.updateTotalAmount();
             },
-            addRow() {
-                this.items.push({
-                    sku: '',
+            updateTotalAmount() {
+                let total = 0;
+
+                this.invoice_items.forEach(invoice_item => {
+                    total += invoice_item.subTotal;
+                });
+
+                this.amounts = total;
+
+                if (this.amounts > 0) {
+                    this.isDisabled = false;
+                } else {
+                    this.isDisabled = true;
+                }
+            },
+            addNewItem() {
+                this.invoice_items.push({
+                    item: '',
                     item_id: '',
                     quantity: '',
-                    unit_id: '',
-                    unit_name: '',
-                    unit_price: ''
-                })
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: '',
+                    item_pricelist_id: '',
+                    subTotal: 0
+                });
+
+                this.updateTotalAmount();
             },
             deleteRow(index) {
-                this.items.splice(index,1)
+                this.invoice_items.splice(index, 1);
+                this.updateTotalAmount();
             },
-            createNewPurchaseOrder() {
-                const newItems = [];
+            createNewInvoice() {
+                this.ifReady = false;
 
-                this.$data.items.forEach(element => {
-                    newItems.push({
-                        item_id: element.item_id,
-                        quantity: element.quantity,
-                        unit_id: element.unit_id,
-                        unit_price: element.unit_price,
-                        receive_order_id: this.$data.received_order_id
+                let invoiceItems = [];
+
+                this.$data.invoice_items.forEach(invoice_item => {
+                    invoiceItems.push({
+                        item_id: invoice_item.item_id,
+                        quantity: invoice_item.quantity,
+                        unit_of_measurement_id: invoice_item.unit_of_measurement_id,
+                        item_pricelist_id: invoice_item.item_pricelist_id
                     });
                 });
 
-                const formData = {
-                    reference_number: this.$data.reference_number,
+                let formData = {
+                    invoice_items: invoiceItems,
+                    receive_order_id: this.receive_order_id,
                     contact_id: this.$data.contact_id,
-                    order_date: this.$data.order_date,
-                    sub_department_id: this.$data.sub_department_id,
-                    payment_term_id: this.$data.paymentTerm_id,
-                    amount: this.total,
-                    items: newItems,
-                    receive_order_id: this.$data.received_order_id
-                }
+                    reference_number: this.$data.reference_number,
+                    due_date: this.$data.due_date,
+                    amount: this.$data.amount,
+                    amount_paid: this.$data.amount_paid
+                };
 
-                axios.post("/api/bills", formData).then(res => {
-                    this.$router.push({ name: "bills.index" });
+                console.log(formData);
+
+                axios.post("/api/invoices", formData).then(res => {
+                    this.$router.push({ name: "invoices.index" });
                 }).catch(err => {
-                    console.log(err);
-                    alert(`Error! Can't create Bill`);
+                    alert(`Error! Can't create invoice`);
+                    this.ifReady = true;
                 });
             }
         }

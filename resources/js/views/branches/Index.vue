@@ -39,7 +39,7 @@
                             <td>{{ telephone_number }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'branches.view', params: { id: id }}">View</router-link><br />
-                                <router-link class="text-info" :to="{ name: 'stock-requests.create', params: { id: id },  query: { type: 'branch' }}">Create Stock Request</router-link>
+                                <router-link class="text-info" :to="{ name: 'stock-requests.create', params: { id: id },  query: { type: 'branch' }}">Create New Stock Request</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -91,23 +91,6 @@
                         </li>
                     </ul>
                 </nav>
-            </div>
-
-            <div class="float-right">
-                <form class="form-inline">
-                    <label class="sr-only" for="Number of Items">Number of Items</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Items per page</div>
-                        </div>
-                        <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select>
-                    </div>
-                </form>
             </div>
             <div class="float-right">
                 <form class="form-inline">

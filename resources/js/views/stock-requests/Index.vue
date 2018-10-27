@@ -22,25 +22,22 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Requested from</th>
-                            <th scope="col">Warehouse/Branch</th>
                             <th scope="col">Requested to</th>
-                            <th scope="col">Warehouse/Branch</th>
                             <th scope="col">Status</th>
                             <th scope="col">Created By</th>
-                            <th scope="col">Approved By</th>
+                            <th scope="col">Approved/Cancelled By</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
                     <tbody v-if="stock_requests">
-                        <tr v-for="{ id, name, abbreviation } in stock_requests">
+                        <tr v-for="{ id, stock_requestable_from, 
+                            stock_requestable_to, status, user, approve_by } in stock_requests">
                             <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
+                            <td>{{ stock_requestable_from.name }}</td>
+                            <td>{{ stock_requestable_to.name }}</td>
+                            <td>{{ status === 0 ? 'pending' : status === 1 ? 'approved' : 'cancelled' }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ approve_by ? approve_by.name : null }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'stock-requests.view', params: { id: id }}">View</router-link>
                             </td>
@@ -125,13 +122,28 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+                                <label>Requested From</label>
+                                <input type="text" class="form-control" v-model="searchRequestedFrom" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
                             <div class="form-group">
-                                <label>Abbreviation</label>
-                                <input type="text" class="form-control" v-model="searchColumnAbbreviation" autocomplete="off" minlength="2" maxlength="255" required>
+                                <label>Requested To</label>
+                                <input type="text" class="form-control" v-model="searchRequestedFromTo" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                             <div class="form-group">
+                                <label>Status</label>
+                                <input type="text" class="form-control" v-model="searchStatus" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                             <div class="form-group">
+                                <label>Created By</label>
+                                <input type="text" class="form-control" v-model="searchCreatedBy" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                             <div class="form-group">
+                                <label>Approved By</label>
+                                <input type="text" class="form-control" v-model="searchApprovedBy" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
 
@@ -160,16 +172,19 @@
     const getStockRequests = (
         page,
         per_page,
-        searchColumnName,
-        searchColumnAbbreviation,
+        searchRequestedFrom,
+        searchRequestedFromTo,
+        searchStatus,
+        searchCreatedBy,
+        searchApprovedBy,
         order_by,
         callback
         ) => {
         const params = {
             page,
             per_page,
-            searchColumnName,
-            searchColumnAbbreviation,
+            searchRequestedFrom,
+            searchRequestedFromTo,
             order_by,
         };
 
@@ -194,8 +209,11 @@
             return {
                 componentVal: 'Stock Request',
                 stock_requests: null,
-                searchColumnName: '',
-                searchColumnAbbreviation: '',
+                searchRequestedFrom: '',
+                searchRequestedFromTo: '',
+                searchStatus: '',
+                searchCreatedBy: '',
+                searchApprovedBy: '',
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -223,8 +241,11 @@
                 getStockRequests(
                     to.query.page,
                     10,
-                    to.query.searchColumnName,
-                    to.query.searchColumnAbbreviation,
+                    to.query.searchRequestedFrom,
+                    to.query.searchRequestedFromTo,
+                    to.query.searchStatus,
+                    to.query.searchCreatedBy,
+                    to.query.searchApprovedBy,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
@@ -234,8 +255,11 @@
                 getStockRequests(
                     to.query.page,
                     to.query.per_page,
-                    to.query.searchColumnName,
-                    to.query.searchColumnAbbreviation,
+                    to.query.searchRequestedFrom,
+                    to.query.searchRequestedFromTo,
+                    to.query.searchStatus,
+                    to.query.searchCreatedBy,
+                    to.query.searchApprovedBy,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
@@ -248,8 +272,11 @@
             getStockRequests(
                 to.query.page,
                 this.meta.per_page,
-                this.searchColumnName,
-                this.searchColumnAbbreviation,
+                this.searchRequestedFrom,
+                this.searchRequestedFromTo,
+                this.searchStatus,
+                this.searchCreatedBy,
+                this.searchApprovedBy,
                 this.order_by,
                 (err, data) => {
                     this.setData(err, data);
@@ -292,8 +319,11 @@
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchRequestedFrom: this.searchRequestedFrom,
+                        searchRequestedFromTo: this.searchRequestedFromTo,
+                        searchStatus: this.searchStatus,
+                        searchCreatedBy: this.searchCreatedBy,
+                        searchApprovedBy: this.searchApprovedBy,
                         order_by: this.order_by
                     },
                 });
@@ -305,8 +335,11 @@
                     query: {
                         page,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchRequestedFrom: this.searchRequestedFrom,
+                        searchRequestedFromTo: this.searchRequestedFromTo,
+                        searchStatus: this.searchStatus,
+                        searchCreatedBy: this.searchCreatedBy,
+                        searchApprovedBy: this.searchApprovedBy,
                         order_by: this.order_by
                     },
                 });
@@ -318,8 +351,11 @@
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchRequestedFrom: this.searchRequestedFrom,
+                        searchRequestedFromTo: this.searchRequestedFromTo,
+                        searchStatus: this.searchStatus,
+                        searchCreatedBy: this.searchCreatedBy,
+                        searchApprovedBy: this.searchApprovedBy,
                         order_by: this.order_by
                     },
                 });
@@ -330,8 +366,12 @@
                     name: 'stock-requests.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page,searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        per_page: this.meta.per_page,
+                        searchRequestedFrom: this.searchRequestedFrom,
+                        searchRequestedFromTo: this.searchRequestedFromTo,
+                        searchStatus: this.searchStatus,
+                        searchCreatedBy: this.searchCreatedBy,
+                        searchApprovedBy: this.searchApprovedBy,
                         order_by: this.order_by
                     },
                 });
@@ -343,8 +383,11 @@
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchRequestedFrom: this.searchRequestedFrom,
+                        searchRequestedFromTo: this.searchRequestedFromTo,
+                        searchStatus: this.searchStatus,
+                        searchCreatedBy: this.searchCreatedBy,
+                        searchApprovedBy: this.searchApprovedBy,
                         order_by: this.order_by
                     }
                 });
@@ -420,8 +463,11 @@
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchRequestedFrom: this.searchRequestedFrom,
+                        searchRequestedFromTo: this.searchRequestedFromTo,
+                        searchStatus: this.searchStatus,
+                        searchCreatedBy: this.searchCreatedBy,
+                        searchApprovedBy: this.searchApprovedBy,
                         order_by: this.order_by
                     }
                 });
@@ -434,16 +480,22 @@
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchRequestedFrom: this.searchRequestedFrom,
+                        searchRequestedFromTo: this.searchRequestedFromTo,
+                        searchStatus: this.searchStatus,
+                        searchCreatedBy: this.searchCreatedBy,
+                        searchApprovedBy: this.searchApprovedBy,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchColumnName        = '';
-                this.searchColumnAbbreviation = '';
-                this.order_by                = 'desc';
+                this.searchRequestedFrom        = '';
+                this.searchRequestedFromTo      = '';
+                this.searchStatus               = '';
+                this.searchCreatedBy            = '';
+                this.searchApprovedBy           = '';
+                this.order_by                   = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');

@@ -29,6 +29,7 @@ class CreateStockRequestsTable extends Migration
             $table->string('stock_requestable_from_type');
             $table->integer('stock_requestable_to_id')->unsigned();
             $table->string('stock_requestable_to_type');
+            $table->string('number');
             $table->smallInteger('status')->default(0);
             $table->integer('approve_by')->unsigned()->nullable();
             $table->foreign('approve_by')

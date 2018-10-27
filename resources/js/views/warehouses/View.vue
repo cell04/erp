@@ -38,6 +38,7 @@
                     <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewWarehouses">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editWarehouse">Edit Warehouse</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteWarehouseModal">Delete Warehouse</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="createNewStockRequest">Create New Stock Request</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -103,6 +104,13 @@
                 this.$router.push({
                     name: 'warehouses.edit',
                     params: { id: this.warehouse.id }
+                });
+            },
+            createNewStockRequest() {
+                this.$router.push({
+                    name: 'stock-requests.create',
+                    params: { id: this.warehouse.id },
+                    query: { type: 'warehouse'}
                 });
             },
             openDeleteWarehouseModal() {

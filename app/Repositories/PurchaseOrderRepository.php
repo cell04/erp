@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\DB;
 class PurchaseOrderRepository extends Repository
 {
     /**
+     * Purchse order status.
+     *
+     * @var array
+     */
+    protected $status = [
+        0 => 'Issued',
+        1 => 'Closed'
+    ];
+
+    /**
      * Create new instance of purchase order repository.
      *
      * @param PurchaseOrder $purchaseOrder PurchaseOrder repository.
@@ -28,7 +38,7 @@ class PurchaseOrderRepository extends Repository
     {
         return DB::transaction(function () use ($request) {
             $purchaseOrder = $this->purchaseOrder->create($request->all());
-            $purchaseOrder->purchaseOrderItem->createMany($request->purchase_order_items);
+            $purchaseOrder->purchaseOrderItems()->createMany($request->purchase_order_items);
             return $purchaseOrder;
         });
     }
@@ -46,9 +56,22 @@ class PurchaseOrderRepository extends Repository
             'user',
             'receiveOrders',
             'warehouse',
-            'purchaseOrderItem' => function ($query) {
+            'purchaseOrderItems' => function ($query) {
                 $query->with('item', 'unitOfMeasurement', 'itemPricelist');
             }
         ])->findOrFail($id);
+    }
+
+    public function update($request, $id)
+    {
+        return DB::transaction(function () use ($request, $id) {
+            $purchaseOrder = $this->purchaseOrder->findOrFail($id);
+            $purchaseOrder->fill($request->all());
+            $purchaseOrder->save();
+            $purchaseOrder->purchaseOrderItems()->delete();
+            $purchaseOrder->purchaseOrderItems()->createMany($request->purchase_order_items);
+
+            return $purchaseOrder;
+        });
     }
 }

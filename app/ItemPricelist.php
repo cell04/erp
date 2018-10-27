@@ -34,6 +34,15 @@ class ItemPricelist extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */
@@ -47,15 +56,6 @@ class ItemPricelist extends Model
             }
         });
     }
-
-    /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = [
-        'item'
-    ];
 
     /**
      * The item pricelist belongs to a corporation.

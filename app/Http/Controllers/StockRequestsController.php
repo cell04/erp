@@ -110,7 +110,7 @@ class StockRequestsController extends Controller
         $validator = Validator::make($request->all(), [
 
         ]);
-
+        return $this->stockRequest->update($request, $id);
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
@@ -195,9 +195,9 @@ class StockRequestsController extends Controller
     {
         if (cache()->has('stock_requests')) {
             return response()->json([
-                'response'          => true,
-                'message'           => 'Resources successfully retrieve.',
-                'stock_requests'    => cache('stock_requests', 5)
+                'response'       => true,
+                'message'        => 'Resources successfully retrieve.',
+                'stock_requests' => cache('stock_requests', 5)
             ], 200);
         }
 
@@ -209,9 +209,9 @@ class StockRequestsController extends Controller
         }
 
         return response()->json([
-            'response'          => true,
-            'message'           => 'Resources successfully retrieve.',
-            'stock_requests'    => $stock_requests
+            'response'       => true,
+            'message'        => 'Resources successfully retrieve.',
+            'stock_requests' => $stock_requests
         ], 200);
     }
 }
