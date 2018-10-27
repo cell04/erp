@@ -63,30 +63,30 @@
                             <tr :key="index" v-for="(stock_request_item, index) in stock_request_items">
                                 <td>{{ stock_request_item.item.stock_keeping_unit }}</td>
                                 <td>
-                                   <vue-select v-model="stock_request_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                                </td>
-                                <td><input class="form-control" v-model.number="stock_request_item.quantity"> </td>
-                                <td>{{ stock_request_item.unitOfMeasurement }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="removeItem">Remove</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
-                    </table>
+                                 <vue-select v-model="stock_request_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                             </td>
+                             <td><input class="form-control" v-model.number="stock_request_item.quantity"> </td>
+                             <td>{{ stock_request_item.unitOfMeasurement }}</td>
+                             <td>
+                                <button type="button" class="btn btn-danger btn-sm" @click="removeItem">Remove</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
+                </table>
 
-                    <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Request</button>
-                </form>
-            </div>
-
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                </div>
-            </div>
-
+                <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Request</button>
+            </form>
         </div>
+
+        <div v-else>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+            </div>
+        </div>
+
     </div>
+</div>
 </template>
 
 <script>
@@ -166,9 +166,11 @@
                 this.stock_requestable_to_type = "App\\Warehouse";
             },
             selectItem(index) {
-                this.stock_request_items[index].item_id = this.stock_request_items[index].item.id;
-                this.stock_request_items[index].unitOfMeasurement = this.stock_request_items[index].item.default_unit_of_measurement.name;
-                this.stock_request_items[index].unit_of_measurement_id = this.stock_request_items[index].item.default_unit_of_measurement.id;
+                if (this.stock_request_items[index].item instanceof Object) {
+                    this.stock_request_items[index].item_id = this.stock_request_items[index].item.id;
+                    this.stock_request_items[index].unitOfMeasurement = this.stock_request_items[index].item.default_unit_of_measurement.name;
+                    this.stock_request_items[index].unit_of_measurement_id = this.stock_request_items[index].item.default_unit_of_measurement.id;
+                }
             },
             addItem() {
                 this.stock_request_items.push({

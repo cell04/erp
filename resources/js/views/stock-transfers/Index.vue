@@ -21,6 +21,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
+                        <th scope="col">Transfer Number</th>
                         <th scope="col">Transfer From</th>
                         <th scope="col">Transfer To</th>
                         <th scope="col">Status</th>
@@ -31,6 +32,7 @@
                 <tbody v-if="stockTransfers">
                     <tr v-for="stockTransfer in stockTransfers">
                         <td>{{ stockTransfer.id }}</td>
+                        <td>{{ stockTransfer.number }}</td>
                         <td>{{ stockTransfer.stock_transferable_from.name }}</td>
                         <td>{{ stockTransfer.stock_transferable_to.name }}</td>
                         <td>{{ stockTransfer.status }}</td>

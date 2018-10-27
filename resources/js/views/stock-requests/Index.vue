@@ -29,13 +29,12 @@
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
-                    <tbody v-if="stock_requests">
-                        <tr v-for="{ id, stock_requestable_from, 
-                            stock_requestable_to, status, user, approve_by } in stock_requests">
+                    <tbody v-if="stockRequests">
+                        <tr v-for="{ id, stock_requestable_from, stock_requestable_to, status, user, approve_by } in stockRequests">
                             <td>{{ id }}</td>
                             <td>{{ stock_requestable_from.name }}</td>
                             <td>{{ stock_requestable_to.name }}</td>
-                            <td>{{ status === 0 ? 'pending' : status === 1 ? 'approved' : 'cancelled' }}</td>
+                            <td>{{ status }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ approve_by ? approve_by.name : null }}</td>
                             <td>
@@ -188,10 +187,7 @@
             order_by,
         };
 
-        axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
-
         axios.get('/api/stock-requests', { params }).then(res => {
-            console.log(res);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -207,8 +203,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Stock Request',
-                stock_requests: null,
+                stockRequests: [],
                 searchRequestedFrom: '',
                 searchRequestedFromTo: '',
                 searchStatus: '',
@@ -392,13 +387,23 @@
                     }
                 });
             },
-            setData(err, { data: stock_requests, links, meta }) {
+            setData(err, { data: stockRequests, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.stock_requests = stock_requests;
+                    let status = {
+                        0: 'Pending',
+                        1: 'Approved',
+                        2: 'Cancelled'
+                    };
+
+                    stockRequests.map(stockRequest => {
+                        stockRequest.status = status[stockRequest.status];
+                    });
+
+                    this.stockRequests = stockRequests;
                     this.links = links;
                     this.meta = meta;
                 }

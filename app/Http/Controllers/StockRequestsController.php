@@ -214,4 +214,46 @@ class StockRequestsController extends Controller
             'stock_requests' => $stock_requests
         ], 200);
     }
+
+    /**
+     * Approve stock request status to approved using specified id.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function approve($id)
+    {
+        if (! $this->stockRequest->approve($id)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Failed to updated resource.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resource successfully updated.'
+        ], 200);
+    }
+
+    /**
+     * Approve stock request status to cancelled using specified id.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel($id)
+    {
+        if (! $this->stockRequest->cancel($id)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Failed to updated resource.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resource successfully updated.'
+        ], 200);
+    }
 }

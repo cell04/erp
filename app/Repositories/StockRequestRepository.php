@@ -116,4 +116,31 @@ class StockRequestRepository extends Repository
             return null;
         });
     }
+
+    /**
+     * Approve stock request status to approved using specified id.
+     *
+     * @param  int $id
+     * @return boolean
+     */
+    public function approve($id)
+    {
+        return $this->stockRequest->where('id', $id)->update([
+            'status' => 1,
+            'approve_by' => auth('api')->user()->id
+        ]);
+    }
+
+    /**
+     * Approve stock request status to cancelled using specified id.
+     *
+     * @param  int $id
+     * @return boolean
+     */
+    public function cancel($id)
+    {
+        return $this->stockRequest->where('id', $id)->update([
+            'status' => 2
+        ]);
+    }
 }
