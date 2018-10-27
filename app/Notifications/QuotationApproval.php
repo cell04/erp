@@ -43,7 +43,7 @@ class QuotationApproval extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->subject('Newly Created Hot Deal')
+        return (new MailMessage)->subject('Quotation Approval')
         ->markdown('mail.quotation.approval', array('content' => $this->quotation));
     }
 
