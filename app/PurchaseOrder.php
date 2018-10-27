@@ -23,8 +23,8 @@ class PurchaseOrder extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'user_id', 'warehouse_id', 'contact_id',
-        'number', 'reference_number', 'status', 'amount', 'order_date'
+        'corporation_id', 'user_id', 'reference_number',
+        'warehouse_id', 'contact_id', 'amount', 'status'
     ];
 
     /**
@@ -46,6 +46,8 @@ class PurchaseOrder extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            $model->user_id = auth('api')->user()->id;
         });
     }
 
@@ -100,11 +102,11 @@ class PurchaseOrder extends Model
     }
 
     /**
-     * The purchase order belongs to a warehouse.
+     * The purchase order has many purchase order items.
      *
      * @return object
      */
-    public function purchaseOrderItem()
+    public function purchaseOrderItems()
     {
         return $this->hasMany(PurchaseOrderItem::class);
     }

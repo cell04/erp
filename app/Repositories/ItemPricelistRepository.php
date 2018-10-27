@@ -16,4 +16,14 @@ class ItemPricelistRepository extends Repository
         parent::__construct($itemPricelist);
         $this->itemPricelist = $itemPricelist;
     }
+
+    /**
+     * Retrieve all resources using specified id.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getItemPricelists($id)
+    {
+        return $this->itemPricelist->where('item_id', $id)->get();
+    }
 }

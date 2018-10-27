@@ -36,7 +36,7 @@ class CreatePurchaseOrderItemsTable extends Migration
                 ->references('id')
                 ->on('item_pricelists')
                 ->onDelete('cascade');
-            $table->smallInteger('status')->default(1);
+            $table->smallInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

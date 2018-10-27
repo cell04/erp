@@ -11,7 +11,6 @@
                             <label>Contact Type</label>
                             <input type="text" class="form-control" v-model="contact_type"required></input>
                         </div>
-
                         <div class="form-group">
                             <label for="person">Full Name</label>
                             <input type="text" class="form-control" v-model="person" id="person" required></input>
@@ -38,11 +37,13 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <label for="company_address">Company Address</label>
                             <input type="text" class="form-control" v-model="company_address" id="company_address">
+                        </div>
+                        <div class="form-group">
+                            <label>Credit Limit</label>
+                            <input type="number" class="form-control" v-model="credit_limit" min="0" max="99999999" required>
                         </div>
                     </fieldset>
 
@@ -100,7 +101,8 @@
                 mobile_number: '',
                 email: '',
                 company: '',
-                company_address: ''
+                company_address: '',
+                credit_limit: 0
             };
         },
 
@@ -117,6 +119,7 @@
                     this.email           = res.data.contact.email;
                     this.company         = res.data.contact.company;
                     this.company_address = res.data.contact.company_address;
+                    this.credit_limit    = res.data.contact.credit_limit;
 
                     resolve();
                 });

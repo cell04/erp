@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Pricelists / Edit Item Pricelist
+                Item Price List / Edit Item Price List
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -56,7 +56,7 @@
                             this.id = res.data.itemPricelist.id;
                             this.price = res.data.itemPricelist.price;
                             this.item_id = res.data.itemPricelist.item_id;
-                            
+
                             this.itemList = res2.data.item;
                             console.log('Item:' + JSON.stringify(res2.data));
                         });

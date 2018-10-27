@@ -14,7 +14,7 @@
 
                         <div class="form-group">
                             <label>Abbreviation</label>
-                            <input type="text" class="form-control" v-model="abbreviation" autocomplete="off" minlength="2" maxlength="255" required>
+                            <input type="text" class="form-control" v-model="abbreviation" autocomplete="off" minlength="1" maxlength="255" required>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-sm">Create New Unit of Measurement</button>

@@ -34,7 +34,7 @@
                             <td>{{ person }}</td>
                             <td>{{ email }}</td>
                             <td>{{ mobile_number }}</td>
-                            <td>{{ contact_type.name }}</td>
+                            <td>{{ contact_type.display_name }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'contacts.view', params: { id: id }}">View</router-link>
                             </td>
@@ -92,8 +92,8 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <label class="sr-only" for="Number of Items">Number of Items</label>
-                    <div class="input-group mb-2">
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Contacts</button>
+                    <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
                         </div>
@@ -107,25 +107,118 @@
                 </form>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchContacts" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Search Contacts</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Person Name</label>
+                            <input type="text" class="form-control" v-model="searchColumnPerson" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Email Address</label>
+                            <input type="email" class="form-control" v-model="searchColumnEmail" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Mobile Number</label>
+                            <input type="text" class="form-control" v-model="searchColumnMobileNumber" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Type</label>
+                            <textarea class="form-control" v-model="searchColumnType" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="city">Company Name</label>
+                                <input type="text" class="form-control" v-model="searchColumnCompanyName" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="country">Company Address</label>
+                                <input type="text" class="form-control" v-model="searchColumnCompanyAddress" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Credit Limit</label>
+                            <input type="number" class="form-control" v-model="searchColumnCreditLimit" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Order By</label>
+                            <select class="form-control" v-model="order_by">
+                                <option value="desc">Newest</option>
+                                <option value="asc">Oldest</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
-const getContacts = (page, per_page, callback) => {
-    const params = { page, per_page };
+    const getContacts = (
+        page,
+        per_page,
+        searchColumnPerson,
+        searchColumnEmail,
+        searchColumnMobileNumber,
+        searchColumnType,
+        searchColumnCompanyName,
+        searchColumnCompanyAddress,
+        searchColumnCreditLimit,
+        order_by,
+        callback
+    ) => {
+        const params = {
+            page,
+            per_page,
+            searchColumnPerson,
+            searchColumnEmail,
+            searchColumnMobileNumber,
+            searchColumnType,
+            searchColumnCompanyName,
+            searchColumnCompanyAddress,
+            searchColumnCreditLimit,
+            order_by
+        };
 
-    axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
+        axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
 
-    axios.get('/api/contacts', { params }).then(res => {
-        callback(null, res.data);
-    }).catch(error => {
-        callback(error, error.res.data);
-    });
-};
+        axios.get('/api/contacts', { params }).then(res => {
+            callback(null, res.data);
+        }).catch(error => {
+            if (error.response.status == 401) {
+                location.reload();
+            }
 
+            if (error.response.status == 500) {
+                alert('Kindly report this issue to the devs.');
+            }
+        });
+    };
 export default {
     data() {
         return {
             componentVal: 'Contact',
+            searchColumnPerson:'',
+            searchColumnEmail:'',
+            searchColumnMobileNumber:'',
+            searchColumnType:'',
+            searchColumnCompanyName:'',
+            searchColumnCompanyAddress:'',
+            searchColumnCreditLimit:'',
+            order_by:'desc',
             contacts: null,
             meta: {
                 current_page: null,
@@ -149,22 +242,58 @@ export default {
     },
 
     beforeRouteEnter (to, from, next) {
-        if (to.query.per_page == null) {
-            getContacts(to.query.page, 10, (err, data) => {
-                next(vm => vm.setData(err, data));
-            });
-        } else {
-            getContacts(to.query.page, to.query.per_page, (err, data) => {
-                next(vm => vm.setData(err, data));
-            });
-        }
-    },
+            if (to.query.per_page == null) {
+                getContacts(
+                    to.query.page,
+                    10,
+                    to.query.searchColumnPerson,
+                    to.query.searchColumnEmail,
+                    to.query.searchColumnMobileNumber,
+                    to.query.searchColumnType,
+                    to.query.searchColumnCompanyName,
+                    to.query.searchColumnCompanyAddress,
+                    to.query.searchColumnCreditLimit,
+                    to.query.order_by,
+                    (err, data) => {
+                        next(vm => vm.setData(err, data));
+                    }
+                );
+            } else {
+                getContacts(
+                    to.query.page,
+                    to.query.per_page,
+                    to.query.searchColumnPerson,
+                    to.query.searchColumnEmail,
+                    to.query.searchColumnMobileNumber,
+                    to.query.searchColumnType,
+                    to.query.searchColumnCompanyName,
+                    to.query.searchColumnCompanyAddress,
+                    to.query.searchColumnCreditLimit,
+                    to.query.order_by,
+                    (err, data) => {
+                        next(vm => vm.setData(err, data));
+                    }
+                );
+            }
+        },
 
     beforeRouteUpdate (to, from, next) {
-        getContacts(to.query.page, this.meta.per_page, (err, data) => {
-            this.setData(err, data);
-            next();
-        });
+        getContacts(
+                to.query.page,
+                this.meta.per_page,
+                this.searchColumnPerson,
+                this.searchColumnEmail,
+                this.searchColumnMobileNumber,
+                this.searchColumnType,
+                this.searchColumnCompanyName,
+                this.searchColumnCompanyAddress,
+                this.searchColumnCreditLimit,
+                this.order_by,
+                (err, data) => {
+                    this.setData(err, data);
+                    next();
+                }
+            );
     },
 
     computed: {
@@ -330,7 +459,39 @@ export default {
                     per_page: this.meta.per_page
                 }
             });
-        }
+        },
+        search() {
+                $('#searchModal').modal('hide');
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'contacts.index',
+                    query: {
+                        page: 1,
+                        per_page: this.meta.per_page,
+                        searchColumnPerson: this.searchColumnPerson,
+                        searchColumnEmail: this.searchColumnEmail,
+                        searchColumnMobileNumber: this.searchColumnMobileNumber,
+                        searchColumnType: this.searchColumnType,
+                        searchColumnCompanyName: this.searchColumnCompanyName,
+                        searchColumnCompanyAddress: this.searchColumnCompanyAddress,
+                        searchColumnCreditLimit: this.searchColumnCreditLimit,
+                        order_by: this.order_by
+                    }
+                });
+            },
+            clear() {
+                this.searchColumnPerson = '',
+                this.searchColumnEmail = '',
+                this.searchColumnMobileNumber = '',
+                this.searchColumnType = '',
+                this.searchColumnCompanyName = '',
+                this.searchColumnCompanyAddress = '',
+                this.searchColumnCreditLimit = '',
+                this.order_by = 'desc';
+            },
+            openSearchModal() {
+                $('#searchModal').modal('show');
+            }
     }
 }
 </script>

@@ -120,11 +120,34 @@ const SettingsUnitsEdit = () => import('./views/settings/units/Edit.vue');
 const SettingsUnitsView = () => import('./views/settings/units/View.vue');
 
 /**
+ * Stock Requests
+ */
+const StockRequestsIndex = () => import('./views/stock-requests/Index');
+const StockRequestsCreate = () => import('./views/stock-requests/Create');
+const StockRequestsView = () => import('./views/stock-requests/View');
+const StockRequestsEdit = () => import('./views/stock-requests/Edit');
+
+/**
+ * Stock Receives
+ */
+const StockReceivesIndex = () => import('./views/stock-receives/Index');
+const StockReceivesCreate = () => import('./views/stock-receives/Create');
+const StockReceivesView = () => import('./views/stock-receives/View');
+
+/**
+ * Stock Transfers
+ */
+const StockTransfersIndex = () => import('./views/stock-transfers/Index');
+const StockTransfersCreate = () => import('./views/stock-transfers/Create');
+const StockTransfersView = () => import('./views/stock-transfers/View');
+
+/**
  * Receive Orders
  *
  */
 const ReceiveOrdersIndex = () => import('./views/receive-orders/Index');
 const ReceiveOrdersCreate = () => import('./views/receive-orders/Create');
+const ReceiveOrdersReceive = () => import('./views/receive-orders/Receive.vue');
 const ReceiveOrdersView = () => import('./views/receive-orders/View');
 
 /**
@@ -226,11 +249,28 @@ const router = new Router({
 
         // Receive Orders
         { path: '/received-orders', name: 'receive-orders.index', component: ReceiveOrdersIndex },
-        { path: '/purchase-orders/:po_id/receive/create', name: 'receive-orders.create', component: ReceiveOrdersCreate },
+        { path: '/received-orders/:id', name: 'receive-orders.receive', component: ReceiveOrdersReceive },
+        { path: '/received-orders/create', name: 'receive-orders.create', component: ReceiveOrdersCreate },
         { path: '/received-orders/:id', name: 'receive-orders.view', component: ReceiveOrdersView },
 
         // Settings
         { path: '/settings', name: 'settings.index', component: SettingsIndex },
+
+        // Stock Requests
+        { path: '/stock-requests', name: 'stock-requests.index', component: StockRequestsIndex },
+        { path: '/stock-requests/create', name: 'stock-requests.create', component: StockRequestsCreate },
+        { path: '/stock-requests/:id', name: 'stock-requests.view', component: StockRequestsView },
+        { path: '/stock-requests/:id/edit', name: 'stock-requests.edit', component: StockRequestsEdit },
+
+        // Stock Receives
+        { path: '/stock-receives', name: 'stock-receives.index', component: StockReceivesIndex },
+        { path: '/stock-receives/create', name: 'stock-receives.create', component: StockReceivesCreate },
+        { path: '/stock-receives/:id', name: 'stock-receives.view', component: StockReceivesView },
+
+        // Stock Transfers
+        { path: '/stock-transfers', name: 'stock-transfers.index', component: StockTransfersIndex },
+        { path: '/stock-transfers/create', name: 'stock-transfers.create', component: StockTransfersCreate },
+        { path: '/stock-transfers/:id', name: 'stock-transfers.view', component: StockTransfersView },
 
         // Unit of Measurements
         { path: '/unit-of-measurements', name: 'unit-of-measurements.index', component: UnitOfMeasurementsIndex },

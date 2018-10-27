@@ -35,6 +35,15 @@ class Item extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */
@@ -48,15 +57,6 @@ class Item extends Model
             }
         });
     }
-
-    /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = [
-        'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
-    ];
 
     /**
      * The item belongs to a corporation.

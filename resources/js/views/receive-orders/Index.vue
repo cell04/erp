@@ -23,20 +23,14 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Received Date</th>
-                            <th scope="col">Received Order #</th>
-                            <th scope="col">Status</th>
                             <th scope="col">Reference #</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="items">
                         <tr :key="item.id" v-for="item in items">
-                            <td>{{ item.id }}</td>
-                            <td>{{ item.receive_date }}</td>
-                            <td>{{ item.receive_order_number }}</td>
-                            <td>{{ item.status }}</td>
+                            <td>{{ item.created_at }}</td>
                             <td>{{ item.reference_number }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'receive-orders.view', params: { id: item.id }}">

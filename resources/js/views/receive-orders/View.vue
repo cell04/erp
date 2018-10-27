@@ -11,19 +11,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Received Date</label>
-                                    <input type="text" class="form-control" v-model="order.receive_date" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Receive Order #</label>
-                                    <input type="text" class="form-control" v-model="order.receive_order_number" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <input type="text" class="form-control" v-model="order.status" id="name" readonly>
+                                    <input type="text" class="form-control" v-model="order.created_at" id="name" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -37,13 +25,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Contact</label>
-                                    <input type="text" class="form-control" v-model="order.contact.company" id="name" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Warehouse</label>
-                                    <input type="text" class="form-control" v-model="order.sub_department.name" id="name" readonly>
+                                    <input type="text" class="form-control" v-model="contacts.person" id="name" readonly>
                                 </div>
                             </div>
                         </div>
@@ -63,17 +45,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr :key="item.id" v-for="item in received_items">
-                                <td>{{ item.item.SKU }}</td>
+                            <tr :key="item.id" v-for="(item, index) in received_items">
+                                <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
                                 <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
-                                <td>{{ item.unit.name }}</td>
-                                <td>{{ item.unit_price }}</td>
+                                <td>{{ item.unit_of_measurement.name }}</td>
+                                <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ item.tracking_number }}</td>
-                                <td>{{ subtotalRow }}</td>
+                                <td>{{ subtotalRow[index] }}</td>
                             </tr>
                             <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -87,7 +70,8 @@
                                 </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewReceivedOrders">Back</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-info btn-sm" @click.prevent="viewReceivedOrders">Back</button>
 
                     <router-link v-if="order.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { po_id: order.id }}">
                         <button class="btn btn-success btn-sm">Receive PO</button>
@@ -113,7 +97,8 @@ export default {
       componentVal: "Received Orders",
       ifReady: false,
       order: [],
-      received_items: []
+      received_items: [],
+      contacts: []
     };
   },
 
@@ -125,10 +110,11 @@ export default {
     getReceivedOrder() {
       new Promise((resolve, reject) => {
         axios.get("/api/receive-orders/" + this.$route.params.id).then(res => {
-          console.log(res);
+        //   console.log('RO: ' + JSON.stringify(res.data));
           this.ifReady = true;
-          this.order = res.data.purchase_order;
-          this.received_items = res.data.purchase_order.receive_items
+          this.order = res.data.receiveOrder;
+          this.contacts = res.data.receiveOrder.contact;
+          this.received_items = res.data.receiveOrder.receive_order_items;
           if (!res.data.response) {
             return;
           }
@@ -146,12 +132,12 @@ export default {
   computed: {
     subtotalRow() {
         return this.received_items.map((item) => {
-        return Number(item.quantity * item.unit_price)
+        return Number(item.quantity * item.item_pricelist.price)
         });
     },
     total() {
         return this.received_items.reduce((total, item) => {
-        return total + item.quantity * item.unit_price;
+        return total + item.quantity * item.item_pricelist.price;
         }, 0);
     }
 }

@@ -35,10 +35,8 @@ class CreateReceiveOrdersTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
-            $table->string('number');
-            $table->string('reference_number');
-            $table->timestamp('receive_date');
-            $table->smallInteger('status')->default(1);
+            $table->string('reference_number')->unique();
+            $table->smallInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

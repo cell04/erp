@@ -23,8 +23,8 @@ class ReceiveOrder extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'purchase_order_id', 'contact_id', 'user_id',
-        'number', 'reference_number', 'receive_date', 'status'
+        'corporation_id', 'purchase_order_id', 'contact_id',
+        'user_id', 'reference_number', 'status'
     ];
 
     /**
@@ -46,6 +46,8 @@ class ReceiveOrder extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            $model->user_id = auth('api')->user()->id;
         });
     }
 
@@ -87,5 +89,15 @@ class ReceiveOrder extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The receive order has many receive order items.
+     *
+     * @return object
+     */
+    public function receiveOrderItems()
+    {
+        return $this->hasMany(ReceiveOrderItem::class);
     }
 }

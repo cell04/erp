@@ -16,11 +16,4 @@ class ItemRepository extends Repository
         parent::__construct($item);
         $this->item = $item;
     }
-
-    // public function store($request)
-    // {
-    //     $item = $this->item->create($request->all());
-
-    //     return $this
-    // }
 }

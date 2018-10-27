@@ -183,4 +183,33 @@ class ReceiveOrdersController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllReceiveOrder()
+    {
+        if (cache()->has('receive-orders')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'receive_orders' => cache('receive-orders', 5)
+            ], 200);
+        }
+
+        if (! $receiveOrders = $this->receiveOrder->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'receive_orders' => $receiveOrders
+        ], 200);
+    }
 }

@@ -38,7 +38,8 @@
                             <td>{{ zip_code }}</td>
                             <td>{{ telephone_number }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'branches.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'branches.view', params: { id: id }}">View</router-link><br />
+                                <router-link class="text-info" :to="{ name: 'stock-requests.create', params: { id: id },  query: { type: 'branch' }}">Create New Stock Request</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -91,11 +92,10 @@
                     </ul>
                 </nav>
             </div>
-
             <div class="float-right">
                 <form class="form-inline">
-                    <label class="sr-only" for="Number of Items">Number of Items</label>
-                    <div class="input-group mb-2">
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Branches</button>
+                    <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
                         </div>
@@ -109,29 +109,115 @@
                 </form>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchBranches" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Search Branches</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea class="form-control" v-model="searchColumnAddress" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" v-model="searchColumnCity" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="country">Country</label>
+                                <input type="text" class="form-control" v-model="searchColumnCountry" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="zip_code">Zip Code</label>
+                                <input type="text" class="form-control" v-model="searchColumnZipCode" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="telephone_number">Telephone Number</label>
+                                <input type="text" class="form-control" v-model="searchColumnTelephoneNumber" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Order By</label>
+                            <select class="form-control" v-model="order_by">
+                                <option value="desc">Newest</option>
+                                <option value="asc">Oldest</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
-const getBranches = (page, per_page, callback) => {
-    const params = { page, per_page };
 
-    axios.get('/api/branches', { params }).then(res => {
-        callback(null, res.data);
-    }).catch(error => {
-        if (error.response.status == 401) {
-            location.reload();
-        }
+const getBranches = (
+        page,
+        per_page,
+        searchColumnName,
+        searchColumnAddress,
+        searchColumnCity,
+        searchColumnCountry,
+        searchColumnZipCode,
+        searchColumnTelephoneNumber,
+        order_by,
+        callback
+    ) => {
+        const params = {
+            page,
+            per_page,
+            searchColumnName,
+            searchColumnAddress,
+            searchColumnCity,
+            searchColumnCountry,
+            searchColumnZipCode,
+            searchColumnTelephoneNumber,
+            order_by
+        };
 
-        if (error.response.status == 500) {
-            alert('Kindly report this issue to the devs.');
-        }
-    });
-};
+        axios.get('/api/branches', { params }).then(res => {
+            console.log(res)
+            callback(null, res.data);
+        }).catch(error => {
+            console.error(error)
+            if (error.response.status == 401) {
+                location.reload();
+            }
+
+            if (error.response.status == 500) {
+                alert('Kindly report this issue to the devs.');
+            }
+        });
+    };
 
 export default {
     data() {
         return {
             branches: null,
+            searchColumnName: '',
+            searchColumnAddress: '',
+            searchColumnCity: '',
+            searchColumnCountry: '',
+            searchColumnZipCode: '',
+            searchColumnTelephoneNumber: '',
+            order_by: 'desc',
             meta: {
                 current_page: null,
                 from: null,
@@ -154,16 +240,38 @@ export default {
     },
 
     beforeRouteEnter (to, from, next) {
-        if (to.query.per_page == null) {
-            getBranches(to.query.page, 10, (err, data) => {
-                next(vm => vm.setData(err, data));
-            });
-        } else {
-            getBranches(to.query.page, to.query.per_page, (err, data) => {
-                next(vm => vm.setData(err, data));
-            });
-        }
-    },
+            if (to.query.per_page == null) {
+                getBranches(
+                    to.query.page,
+                    10,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAddress,
+                    to.query.searchColumnCity,
+                    to.query.searchColumnCountry,
+                    to.query.searchColumnZipCode,
+                    to.query.searchColumnTelephoneNumber,
+                    to.query.order_by,
+                    (err, data) => {
+                        next(vm => vm.setData(err, data));
+                    }
+                );
+            } else {
+                getWBranches(
+                    to.query.page,
+                    to.query.per_page,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAddress,
+                    to.query.searchColumnCity,
+                    to.query.searchColumnCountry,
+                    to.query.searchColumnZipCode,
+                    to.query.searchColumnTelephoneNumber,
+                    to.query.order_by,
+                    (err, data) => {
+                        next(vm => vm.setData(err, data));
+                    }
+                );
+            }
+        },
 
     beforeRouteUpdate (to, from, next) {
         getBranches(to.query.page, this.meta.per_page, (err, data) => {
@@ -171,7 +279,7 @@ export default {
             next();
         });
     },
-    
+
     computed: {
         nextPage() {
             return this.meta.current_page + 1;
@@ -335,7 +443,36 @@ export default {
                     per_page: this.meta.per_page
                 }
             });
-        }
+        },search() {
+                $('#searchModal').modal('hide');
+                this.showProgress = true;
+                this.$router.push({
+                    name: 'warehouses.index',
+                    query: {
+                        page: 1,
+                        per_page: this.meta.per_page,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
+                        order_by: this.order_by
+                    }
+                });
+            },
+            clear() {
+                this.searchColumnName            = '';
+                this.searchColumnAddress         = '';
+                this.searchColumnCity            = '';
+                this.searchColumnCountry         = '';
+                this.searchColumnZipCode         = '';
+                this.searchColumnTelephoneNumber = '';
+                this.order_by                    = 'desc';
+            },
+            openSearchModal() {
+                $('#searchModal').modal('show');
+            }
     }
 }
 </script>

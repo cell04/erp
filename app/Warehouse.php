@@ -23,8 +23,8 @@ class Warehouse extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'name', 'address', 'city', 'zip_code',
-        'country', 'telephone_number', 'status'
+        'corporation_id', 'name', 'address', 'city',
+        'zip_code', 'country', 'telephone_number', 'status'
     ];
 
     /**
@@ -67,5 +67,15 @@ class Warehouse extends Model
     public function stocks()
     {
         return $this->morphMany(Stock::class, 'stockable');
+    }
+
+    public function stockRequestFrom()
+    {
+        return $this->morphMany(StockRequest::class, 'stock_requestable_from');
+    }
+
+    public function stockRequestTo()
+    {
+        return $this->morphMany(StockRequest::class, 'stock_requestable_to');
     }
 }
