@@ -2,162 +2,156 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               {{componentVal}}s / View {{componentVal}}s
-            </div>
-            <div class="card-body">
-                <table class="table table-hover table-sm">
-                    <caption>
-                        <div class="row">
-                            <div class="col-md-9">
-                                List of {{componentVal}}s - Total Items {{ this.meta.total }}
-                            </div>
-                            <div class="col-md-3">
-                                <div class="progress" height="30px;" v-if="showProgress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                </div>
+             Stock Transfers / View Stock Transfers
+         </div>
+         <div class="card-body">
+            <table class="table table-hover table-sm">
+                <caption>
+                    <div class="row">
+                        <div class="col-md-9">
+                            List of Stock Tranfers - Total Items {{ this.meta.total }}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress" height="30px;" v-if="showProgress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                             </div>
                         </div>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Requested From</th>
-                            <th scope="col">Warehouse/Branch</th>
-                            <th scope="col">Requested To</th>
-                            <th scope="col">Warehouse/Branch</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Created By</th>
-                            <th scope="col">Approved By</th>
-                            <th scope="col">Options</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="stock_requests">
-                        <tr v-for="{ id, name, abbreviation } in stock_requests">
-                            <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>
-                                <router-link class="text-info" :to="{ name: 'stock-requests.view', params: { id: id }}">View</router-link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    </div>
+                </caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Transfer From</th>
+                        <th scope="col">Transfer To</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Created By</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody v-if="stockTransfers">
+                    <tr v-for="stockTransfer in stockTransfers">
+                        <td>{{ stockTransfer.id }}</td>
+                        <td>{{ stockTransfer.stock_transferable_from.name }}</td>
+                        <td>{{ stockTransfer.stock_transferable_to.name }}</td>
+                        <td>{{ stockTransfer.status }}</td>
+                        <td>{{ stockTransfer.user.name }}</td>
+                        <td>
+                            <router-link class="text-info" :to="{ name: 'stock-transfers.view', params: { id: stockTransfer.id }}">View</router-link>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="clearfix">
+        <div v-if="pageCount">
+            <nav class="float-left">
+                <ul class="pagination">
+                    <li class="page-item" v-bind:class="isPrevDisabled">
+                        <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                    </li>
+                    <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                    </li>
+                    <li class="page-item" v-bind:class="isNextDisabled">
+                        <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                    </li>
+                    <li class="page-item" v-bind:class="isNextDisabled">
+                        <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div v-else>
+            <nav class="float-left">
+                <ul class="pagination">
+                    <li class="page-item" v-bind:class="isPrevDisabled">
+                        <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                    </li>
+                    <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                    </li>
+                    <li class="page-item" v-bind:class="isNextDisabled">
+                        <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                    </li>
+                    <li class="page-item" v-bind:class="isNextDisabled">
+                        <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
-        <br>
-
-        <div class="clearfix">
-            <div v-if="pageCount">
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div v-else>
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="float-right">
-                <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search {{componentVal}}</button>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Items per page</div>
-                        </div>
-                        <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select>
+        <div class="float-right">
+            <form class="form-inline">
+                <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Transfers</button>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Items per page</div>
                     </div>
-                </form>
-            </div>
+                    <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                    </select>
+                </div>
+            </form>
+        </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Search {{componentVal}}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+        <!-- Modal -->
+        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Search Stock Transfers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
 
-                            <div class="form-group">
-                                <label>Abbreviation</label>
-                                <input type="text" class="form-control" v-model="searchColumnAbbreviation" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label>Order By</label>
-                                <select class="form-control" v-model="order_by">
-                                    <option value="desc">Newest</option>
-                                    <option value="asc">Oldest</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label>Abbreviation</label>
+                            <input type="text" class="form-control" v-model="searchColumnAbbreviation" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
-                        <div class="modal-footer clearfix">
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
-                            <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+
+
+                        <div class="form-group">
+                            <label>Order By</label>
+                            <select class="form-control" v-model="order_by">
+                                <option value="desc">Newest</option>
+                                <option value="asc">Oldest</option>
+                            </select>
                         </div>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
 </template>
 
 <script>
-    const getStockRequests = (
+    const getStockTransfers = (
         page,
         per_page,
         searchColumnName,
@@ -173,10 +167,8 @@
             order_by,
         };
 
-        axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
-
-        axios.get('/api/stock-requests', { params }).then(res => {
-            console.log(res);
+        axios.get('/api/stock-transfers', { params }).then(res => {
+            console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -192,8 +184,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Stock Request',
-                stock_requests: null,
+                stockTransfers: null,
                 searchColumnName: '',
                 searchColumnAbbreviation: '',
                 order_by: 'desc',
@@ -220,7 +211,7 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getStockRequests(
+                getStockTransfers(
                     to.query.page,
                     10,
                     to.query.searchColumnName,
@@ -231,7 +222,7 @@
                     }
                     );
             } else {
-                getStockRequests(
+                getStockTransfers(
                     to.query.page,
                     to.query.per_page,
                     to.query.searchColumnName,
@@ -245,7 +236,7 @@
         },
 
         beforeRouteUpdate (to, from, next) {
-            getStockRequests(
+            getStockTransfers(
                 to.query.page,
                 this.meta.per_page,
                 this.searchColumnName,
@@ -288,7 +279,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-transfers.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -301,7 +292,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-transfers.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
@@ -314,7 +305,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-transfers.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
@@ -327,7 +318,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-transfers.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page,searchColumnName: this.searchColumnName,
@@ -339,7 +330,7 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-transfers.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
@@ -349,13 +340,22 @@
                     }
                 });
             },
-            setData(err, { data: stock_requests, links, meta }) {
+            setData(err, { data: stockTransfers, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.stock_requests = stock_requests;
+                    let status = {
+                        0: 'Transferring',
+                        1: 'Transferred'
+                    };
+
+                    stockTransfers.map(stockTransfer => {
+                        stockTransfer.status = status[stockTransfer.status];
+                    });
+
+                    this.stockTransfers = stockTransfers;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -416,7 +416,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-transfers.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -430,7 +430,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-transfers.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,

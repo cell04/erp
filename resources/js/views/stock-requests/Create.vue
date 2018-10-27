@@ -266,6 +266,7 @@
                 this.stock_request_items.splice(index,1)
             },
             createNewStockRequest() {
+                this.ifReady = false;
                 const newItems = [];
                 this.$data.stock_request_items.forEach(element => {
                     newItems.push({
@@ -291,6 +292,7 @@
                 }).catch(err => {
                     console.log(err);
                     alert(`Error! Can't create stock request`);
+                    this.ifReady = true;
                 });
             }
         }
