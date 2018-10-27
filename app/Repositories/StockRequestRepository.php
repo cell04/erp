@@ -50,9 +50,14 @@ class StockRequestRepository extends Repository
         });
     }
 
+    /**
+     * Get all resources in the storage.
+     *
+     * @return array json object
+     */
     public function all()
     {
-        return $this->stockRequest->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')->get();
+        return $this->stockRequest->where('status', 1)->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')->get();
     }
 
     public function paginateWithFilters(
