@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    <button type="button" class="btn btn-outline-info btn-sm" @click.prevent="viewItems">Back</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewItems">Back</button>
                     <button type="button" class="btn btn-info btn-sm" @click.prevent="editItems">Edit Item</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent="openDeleteItemModal">Delete Item</button>
                 </div>

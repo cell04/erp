@@ -29,8 +29,8 @@ class ContactTypesTableSeeder extends Seeder
         DB::table('contact_types')->insert([
             'corporation_id' => 1,
             'name'           => 'employee',
-            'display_name'   => 'Supplier',
-            'description'    => 'Supplier description'
+            'display_name'   => 'Employee',
+            'description'    => 'Employee description'
         ]);
     }
 }

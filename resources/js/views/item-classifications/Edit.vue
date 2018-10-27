@@ -28,7 +28,7 @@
                             <input type="text" class="form-control" v-model="description" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
 
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemClassification">Back</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItemClassification">Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItemClassification">Update Item Class</button>
                     </form>
                 </div>

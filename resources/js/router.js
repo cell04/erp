@@ -87,10 +87,10 @@ const ItemClassificationsEdit = () => import('./views/item-classifications/Edit'
  * Item Pricelist
  *
  */
-const ItemPricelistsIndex = () => import('./views/item-pricelists/Index');
-const ItemPricelistsCreate = () => import('./views/item-pricelists/Create');
-const ItemPricelistsView = () => import('./views/item-pricelists/View');
-const ItemPricelistsEdit = () => import('./views/item-pricelists/Edit');
+const ItemPricelistsIndex = () => import('./views/item-price-lists/Index');
+const ItemPricelistsCreate = () => import('./views/item-price-lists/Create');
+const ItemPricelistsView = () => import('./views/item-price-lists/View');
+const ItemPricelistsEdit = () => import('./views/item-price-lists/Edit');
 
 /**
  * Item Types

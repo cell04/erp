@@ -20,19 +20,19 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Date</th>
                             <th scope="col">Reference Number</th>
                             <th scope="col">Status</th>
                             <th scope="col">Amount</th>
+                            <th scope="col">Date Created</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="purchaseOrders">
                         <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
-                            <td>{{ purchaseOrder.create_at }}</td>
                             <td>{{ purchaseOrder.reference_number }}</td>
                             <td>{{ purchaseOrder.status }}</td>
                             <td>{{ purchaseOrder.amount }}</td>
+                            <td>{{ purchaseOrder.created_at }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
                                 <router-link class="text-success" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
