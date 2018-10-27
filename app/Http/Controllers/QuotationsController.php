@@ -116,6 +116,8 @@ class QuotationsController extends Controller
             ], 400);
         }
 
+        return $this->quotation->update($request, $id);
+
         if (! $this->quotation->update($request, $id)) {
             return response()->json([
                 'message' => 'Failed to update resource'

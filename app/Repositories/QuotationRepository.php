@@ -4,15 +4,21 @@ namespace App\Repositories;
 
 use App\Contracts\RepositoryInterface;
 use App\Quotation;
+use App\Contact;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\QuotationApproval;
 
 class QuotationRepository extends Repository
 {
-    public function __construct(Quotation $quotation)
+    private $contact;
+
+    public function __construct(Quotation $quotation, Contact $contact)
     {
         parent::__construct($quotation);
         $this->quotation = $quotation;
+        $this->contact = $contact;
     } 
 
     public function store($request)
@@ -56,7 +62,7 @@ class QuotationRepository extends Repository
             // check if status is equal to 0 = pending
             if ($quotation->status == 0) {
                 if ($request->status) {
-                    $request->request->add(['approved_by' => auth('api')->user()->id]);  
+                    $request->request->add(['approved_by' => auth('api')->user()->id]); 
                 }       
                 //update stock request
                 $quotation->fill($request->all());
@@ -68,6 +74,13 @@ class QuotationRepository extends Repository
                     $quotation->quotationItems()->delete();
                     //create new stock request items
                     $quotation->quotationItems()->createMany($request->quotation_items);
+                }
+
+                //check if quotation is approved
+                if ($quotation->status == 1 && ! empty($quotation->approved_by)) {
+                    //send email notification to quotation contact
+                    $contact = $this->contact->find($quotation->contact_id);
+                    $contact->notify(new QuotationApproval($quotation));
                 }
 
                 return $quotation;

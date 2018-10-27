@@ -3,12 +3,13 @@
 namespace App;
 
 use App\Traits\Filtering;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contact extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, Notifiable;
 
     /**
      * Contacts table.
