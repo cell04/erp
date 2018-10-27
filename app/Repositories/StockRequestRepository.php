@@ -7,7 +7,6 @@ use App\StockRequest;
 use App\Warehouse;
 use Illuminate\Support\Facades\DB;
 
-
 class StockRequestRepository extends Repository
 {
     /**
@@ -45,43 +44,10 @@ class StockRequestRepository extends Repository
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
-            // insert Stock Requestable from and to type
-            $this->insertStockRequestable($request);
-            // store stock request
             $stockRequest = $this->stockRequest->create($request->all());
-            // store stock request items
             $stockRequest->stockRequestItems()->createMany($request->stock_request_items);
-
-            return  $stockRequest;
+            return $stockRequest;
         });
-    }
-
-    public function insertStockRequestable($request)
-    {
-        //check if the stock requestable to type is warehouse
-        if (mb_strtolower($request->stock_requestable_to_type) == 'warehouse') {
-            $stockRequestableToType = get_class($this->warehouse);
-        }
-
-        //check if the stock requestable to type is branch
-        if (mb_strtolower($request->stock_requestable_to_type) == 'branch') {
-            $stockRequestableToType = get_class($this->branch);
-        }
-
-        //check if the stock requestable from type is warehouse
-        if (mb_strtolower($request->stock_requestable_from_type) == 'warehouse') {
-            $stockRequestableFromType = get_class($this->warehouse);
-        }
-
-        //check if the stock requestable from type is branch
-        if (mb_strtolower($request->stock_requestable_from_type) == 'branch') {
-            $stockRequestableFromType = get_class($this->branch);
-        }
-
-        return $request->request->add([
-            'stock_requestable_to_type' => $stockRequestableToType,
-            'stock_requestable_from_type' => $stockRequestableFromType
-        ]);
     }
 
     public function all()

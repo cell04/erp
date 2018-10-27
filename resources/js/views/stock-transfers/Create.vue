@@ -7,9 +7,13 @@
             <div v-if="ifReady">
                 <form v-on:submit.prevent="createNewStockRequest">
                     <div class="row">
-                        <div class="col-md-12 form-group">
+                        <div class="col-md-6 form-group">
                             <label>Stock Request Number</label>
                             <vue-select v-model="stockRequest" @input="selectStockRequest()" label="number" :options="stockRequests"></vue-select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Stock Transfer Number</label>
+                            <input type="text" class="form-control" v-model="number" autocomplete="off" maxlength="255" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>From</label>
@@ -96,7 +100,6 @@
         data() {
             return {
                 ifReady: false,
-                isTableReady: false,
                 warehouses: [],
                 fromWarehouse: null,
                 toWarehouse: null,
@@ -151,7 +154,6 @@
 
             Promise.all([promiseBranches, promiseWarehouses]).then(() => {
                 this.ifReady = true;
-
                 this.addItem();
             });
         },
@@ -236,6 +238,7 @@
                     stock_transferable_from_type: this.stock_transferable_from_type,
                     stock_transferable_to_id: this.stock_transferable_to_id,
                     stock_transferable_to_type: this.stock_transferable_to_type,
+                    number: this.number,
                     stock_transfer_items: stockTransferItems
                 };
 

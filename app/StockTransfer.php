@@ -25,7 +25,7 @@ class StockTransfer extends Model
      */
     protected $fillable = [
         'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
-        'stock_transferable_to_id', 'stock_transferable_to_type', 'status'
+        'stock_transferable_to_id', 'stock_transferable_to_type', 'number', 'status'
     ];
 
     /**

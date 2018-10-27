@@ -23,8 +23,8 @@ class StockReceive extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'stock_transfer_id', 'stock_receivable_from_id',
-        'stock_receivable_from_type', 'stock_receivable_to_id', 'stock_receivable_to_type'
+        'corporation_id', 'stock_transfer_id', 'stock_receivable_from_id', 'stock_receivable_from_type',
+        'stock_receivable_to_id', 'stock_receivable_to_type', 'number'
     ];
 
     /**

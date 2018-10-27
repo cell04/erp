@@ -8,7 +8,7 @@
                 <fieldset disabled>
                     <div class="form-group">
                         <label for="name">Stock Tranfer Number</label>
-                        <input type="text" class="form-control" v-model="stockTransfer">
+                        <input type="text" class="form-control" v-model="stockTransfer.number">
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -17,47 +17,30 @@
                         </div>
                         <div class="col-md-6">
                             <label for="name">Transfer To</label>
-                            <input type="text" class="form-control" v-model="stockTransfer.stock_transferable_to.namer">
+                            <input type="text" class="form-control" v-model="stockTransfer.stock_transferable_to.name">
                         </div>
                     </div>
                 </fieldset>
                 <br />
-                <!-- <table class="table table-hover table-sm">
+                <table class="table table-hover table-sm">
                     <thead>
                         <tr>
                             <th scope="col">Stock Keeping Unit</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Description</th>
                             <th scope="col">Quantity</th>
-                            <th scope="col">UOM</th>
-                            <th scope="col">Unit Price</th>
-                            <th scope="col">Amount</th>
+                            <th scope="col">Unit Of Measurement</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr :key="item.id" v-for="item in purchase_items">
-                            <td>{{ item.item.SKU }}</td>
-                            <td>{{ item.item.name }}</td>
-                            <td>{{ item.item.description }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>{{ item.unit.name }}</td>
-                            <td>{{ item.unit_price }}</td>
-                            <td>{{ item.amount }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <b>Total</b>
-                            </td>
-                            <td>{{order.amount}}</td>
-                            <td></td>
+                        <tr v-for="stockTransferItem in stockTransferItems">
+                            <td>{{ stockTransferItem.item.stock_keeping_unit }}</td>
+                            <td>{{ stockTransferItem.item.name }}</td>
+                            <td>{{ stockTransferItem.quantity }}</td>
+                            <td>{{ stockTransferItem.unit_of_measurement.name }}</td>
                         </tr>
                     </tbody>
-                </table> -->
+                </table>
+                <br><br>
                 <button type="button" class="btn btn-info btn-sm" @click.prevent="viewStockTransfers">Back</button>
             </div>
             <div v-else>
@@ -74,7 +57,8 @@
         data() {
             return {
                 ifReady: false,
-                stockTransfer: []
+                stockTransfer: null,
+                stockTransferItems: []
             };
         },
 
@@ -82,6 +66,7 @@
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/stock-transfers/" + this.$route.params.id).then(res => {
                     this.stockTransfer = res.data.stockTransfer;
+                    this.stockTransferItems = this.stockTransfer.stock_transfer_items;
                     resolve();
                 }).catch(err => {
                     console.log(err);
