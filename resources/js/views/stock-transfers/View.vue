@@ -5,6 +5,18 @@
         </div>
         <div class="card-body">
             <div v-if="ifReady">
+                <div v-if="stockTransfer.status === 0">
+                    <h5>
+                        Stock Transfer Details
+                        <span class="badge badge-secondary badge-info">Transferring</span>
+                    </h5>
+                </div>
+                <div v-else-if="stockTransfer.status === 1">
+                    <h5>
+                        Stock Transfer Details
+                        <span class="badge badge-secondary badge-success">Transferred</span>
+                    </h5>
+                </div>
                 <fieldset disabled>
                     <div class="form-group">
                         <label for="name">Stock Tranfer Number</label>
@@ -21,7 +33,13 @@
                         </div>
                     </div>
                 </fieldset>
-                <br />
+
+                <br>
+                <h5>
+                    Stock Transfer Items
+                </h5>
+                <br>
+
                 <table class="table table-hover table-sm">
                     <thead>
                         <tr>
@@ -42,10 +60,32 @@
                 </table>
                 <br><br>
                 <button type="button" class="btn btn-info btn-sm" @click.prevent="viewStockTransfers">Back</button>
+                <button class="btn btn-success btn-sm" v-if="stockTransfer.status === 0" @click.prevent.default="openApproveStockTransferModal">Stock Transferred</button>
             </div>
             <div v-else>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transferred Modal -->
+        <div class="modal fade" id="approveStockTransferModal" tabindex="-1" role="dialog" aria-labelledby="approveStockTransferTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to approve this Stock Transfer?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to approve this Stock Tranfer? <br><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="approveStockTransfer">Confirm Transfer</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,6 +122,23 @@
         methods: {
             viewStockTransfers() {
                 this.$router.push({ name: "stock-transfers.index" }); 
+            },
+            openApproveStockTransferModal() {
+                $('#approveStockTransferModal').modal('show');
+            },
+            approveStockTransfer() {
+                this.ifReady = false;
+                $('#approveStockTransferModal').modal('hide');
+
+                axios.post("/api/stock-transfers/" + this.stockTransfer.id + "/transferred").then(res => {
+                    console.log(res.data);
+                    this.stockTransfer.status = 1;
+                    this.ifReady = true;
+                }).catch(err => {
+                    console.log(err);
+                    alert(`Error! Can't can't cancel stock request`);
+                    this.ifReady = true;
+                });
             }
         }
     };

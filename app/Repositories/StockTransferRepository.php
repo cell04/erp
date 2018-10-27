@@ -78,31 +78,6 @@ class StockTransferRepository extends Repository
         }])->findOrFail($id);
     }
 
-    /*public function insertStockTransferable($request)
-    {
-        //check if the stock Transferable to type is warehouse
-        if (mb_strtolower($request->stock_transferable_to_type) == 'warehouse') {
-            $stockTransferableToType = get_class($this->warehouse);
-        }
-
-        //check if the stock transferable to type is branch
-        if (mb_strtolower($request->stock_transferable_to_type) == 'branch') {
-            $stockTransferableToType = get_class($this->branch);
-        }
-
-        //check if the stock transferable from type is warehouse
-        if (mb_strtolower($request->stock_transferable_from_type) == 'warehouse') {
-            $stockTransferableFromType = get_class($this->warehouse);
-        }
-
-        //check if the stock transferable from type is branch
-        if (mb_strtolower($request->stock_transferable_from_type) == 'branch') {
-            $stockTransferableFromType = get_class($this->branch);
-        }
-
-        return $request->request->add(['stock_transferable_to_type' => $stockTransferableToType, 'stock_transferable_from_type' => $stockTransferableFromType]);
-    }*/
-
     public function update($request, $id)
     {
         return DB::transaction(function () use ($request, $id) {
@@ -120,5 +95,18 @@ class StockTransferRepository extends Repository
 
             return $stockTransfer;
         });
+    }
+
+    /**
+     * Change stock transfer status to transfer using specified id.
+     *
+     * @param  int $id
+     * @return boolean
+     */
+    public function transferred($id)
+    {
+        return $this->stockTransfer->where('id', $id)->update([
+            'status' => 1
+        ]);
     }
 }
