@@ -7,7 +7,11 @@
             <div v-if="ifReady">
                 <form v-on:submit.prevent="createNewStockRequest">
                     <div class="row">
-                        <div class="col-md-12 form-group">
+                        <div class="col-md-6 form-group">
+                            <label>Stock Transfer</label>
+                            <vue-select v-model="stockTransfersData" @input="selectStockTransfers()" label="number" :options="stockTransfers"></vue-select>
+                        </div>
+                        <div class="col-md-6 form-group">
                             <label>Stock Receive Number</label>
                             <input type="text" class="form-control" v-model="number" required>
                         </div>
@@ -60,13 +64,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr :key="index" v-for="(stock_request_item, index) in stock_request_items">
-                                <td>{{ stock_request_item.item.stock_keeping_unit }}</td>
+                            <tr :key="index" v-for="(stock_receive_item, index) in stock_receive_items">
+                                <td>{{ stock_receive_item.item.stock_keeping_unit }}</td>
                                 <td>
-                                 <vue-select v-model="stock_request_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                 <vue-select v-model="stock_receive_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
                              </td>
-                             <td><input class="form-control" v-model.number="stock_request_item.quantity"> </td>
-                             <td>{{ stock_request_item.unitOfMeasurement }}</td>
+                             <td><input class="form-control" v-model.number="stock_receive_item.quantity"> </td>
+                             <td>{{ stock_receive_item.unitOfMeasurement }}</td>
                              <td>
                                 <button type="button" class="btn btn-danger btn-sm" @click="removeItem">Remove</button>
                             </td>
@@ -75,7 +79,7 @@
                     <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
                 </table>
 
-                <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Request</button>
+                <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Receive</button>
             </form>
         </div>
 
@@ -96,6 +100,8 @@
                 ifReady: false,
                 from_selected_radio_button: "",
                 to_selected_radio_button: "",
+                stockTransfersData: null,
+                stockTransfers: [],
                 warehouses: [],
                 fromWarehouse: null,
                 toWarehouse: null,
@@ -108,7 +114,8 @@
                 stock_receivable_from_type: null,
                 stock_receivable_to_id: null,
                 stock_receivable_to_type: null,
-                stock_request_items: []
+                stock_receive_items: [],
+                stock_transfer_id: ""
             };
         },
 
@@ -133,6 +140,17 @@
                 });
             });
 
+            let promiseStockTransfer = new Promise((resolve, reject) => {
+                axios.get("/api/stock-transfers/get-all-stock-transfers/").then(res => {
+                    console.log('Stock Transfer: ' + JSON.stringify(res.data.stock_transfers));
+                    this.stockTransfers = res.data.stock_transfers;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
             let promiseItems = new Promise((resolve, reject) => {
                 axios.get("/api/items/get-all-items/").then(res => {
                     this.items = res.data.items;
@@ -143,12 +161,17 @@
                 });
             });
 
-            Promise.all([promiseBranches, promiseWarehouses, promiseItems]).then(() => {
+            Promise.all([promiseBranches, promiseWarehouses, promiseStockTransfer, promiseItems]).then(() => {
                 this.ifReady = true;
                 this.addItem();
             });
         },
         methods: {
+            selectStockTransfers() {
+                this.stock_transfer_id = this.stockTransfersData.id;
+                console.log('SR: ' + this.stock_transfer_id);
+            },
+
             selectFromBranch() {
                 this.stock_receivable_from_id = this.fromBranch.id;
                 this.stock_receivable_from_type = "App\\Branch";
@@ -166,14 +189,14 @@
                 this.stock_receivable_to_type = "App\\Warehouse";
             },
             selectItem(index) {
-                if (this.stock_request_items[index].item instanceof Object) {
-                    this.stock_request_items[index].item_id = this.stock_request_items[index].item.id;
-                    this.stock_request_items[index].unitOfMeasurement = this.stock_request_items[index].item.default_unit_of_measurement.name;
-                    this.stock_request_items[index].unit_of_measurement_id = this.stock_request_items[index].item.default_unit_of_measurement.id;
+                if (this.stock_receive_items[index].item instanceof Object) {
+                    this.stock_receive_items[index].item_id = this.stock_receive_items[index].item.id;
+                    this.stock_receive_items[index].unitOfMeasurement = this.stock_receive_items[index].item.default_unit_of_measurement.name;
+                    this.stock_receive_items[index].unit_of_measurement_id = this.stock_receive_items[index].item.default_unit_of_measurement.id;
                 }
             },
             addItem() {
-                this.stock_request_items.push({
+                this.stock_receive_items.push({
                     stock_keeping_unit: '',
                     item: '',
                     item_id: '',
@@ -184,15 +207,15 @@
                 });
             },
             removeItem(index) {
-                this.stock_request_items.splice(index,1)
+                this.stock_receive_items.splice(index,1)
             },
             createNewStockRequest() {
                 this.ifReady = false;
 
-                const stockRequestItem = [];
+                const stockReceiveItem = [];
 
-                this.stock_request_items.forEach(stock_request_item => {
-                    stockRequestItem.push({
+                this.stock_receive_items.forEach(stock_request_item => {
+                    stockReceiveItem.push({
                         item_id: stock_request_item.item_id,
                         quantity: stock_request_item.quantity,
                         unit_of_measurement_id: stock_request_item.unit_of_measurement_id,
@@ -205,7 +228,8 @@
                     stock_receivable_from_type: this.stock_receivable_from_type,
                     stock_receivable_to_id: this.stock_receivable_to_id,
                     stock_receivable_to_type: this.stock_receivable_to_type,
-                    stock_request_items: stockRequestItem
+                    stock_receive_items: stockReceiveItem,
+                    stock_transfer_id: this.stock_transfer_id
                 }
 
                 axios.post("/api/stock-receives", formData).then(res => {

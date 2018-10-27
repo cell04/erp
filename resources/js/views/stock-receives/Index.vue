@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               {{componentVal}}s / View {{componentVal}}s
+               Stock Recieves
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of {{componentVal}}s - Total Items {{ this.meta.total }}
+                                List of Stock Recieves - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -20,29 +20,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Requested From</th>
-                            <th scope="col">Warehouse/Branch</th>
-                            <th scope="col">Requested To</th>
-                            <th scope="col">Warehouse/Branch</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Stock Receive Number</th>
+                            <th scope="col">Stock Receive From</th>
+                            <th scope="col">Stock Receive To</th>
                             <th scope="col">Created By</th>
-                            <th scope="col">Approved By</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
-                    <tbody v-if="stock_requests">
-                        <tr v-for="{ id, name, abbreviation } in stock_requests">
-                            <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ id }}</td>
-                            <td>{{ name }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
-                            <td>{{ abbreviation }}</td>
+                    <tbody v-if="stockReceive">
+                        <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user } in stockReceive">
+                            
+                            <td>{{ number }}</td>
+                            <td>{{ stock_receivable_from.name }}</td>
+                            <td>{{ stock_receivable_to.name }}</td>
+                            <td>{{ user.name }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'stock-requests.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'stock-receives.view', params: { id: id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -98,7 +91,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search {{componentVal}}</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Receive</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -118,22 +111,26 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Search {{componentVal}}</h5>
+                            <h5 class="modal-title">Search Stock Receive</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+                                <label>Received From</label>
+                                <input type="text" class="form-control" v-model="searchReceiveFrom" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
                             <div class="form-group">
-                                <label>Abbreviation</label>
-                                <input type="text" class="form-control" v-model="searchColumnAbbreviation" autocomplete="off" minlength="2" maxlength="255" required>
+                                <label>Received To</label>
+                                <input type="text" class="form-control" v-model="searchReceivedTo" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
+                             <div class="form-group">
+                                <label>Created By</label>
+                                <input type="text" class="form-control" v-model="searchCreatedBy" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
 
                             <div class="form-group">
                                 <label>Order By</label>
@@ -160,23 +157,21 @@
     const getStockRequests = (
         page,
         per_page,
-        searchColumnName,
-        searchColumnAbbreviation,
+        searchReceiveFrom,
+        searchReceivedTo,
+        searchCreatedBy,
         order_by,
         callback
         ) => {
         const params = {
             page,
             per_page,
-            searchColumnName,
-            searchColumnAbbreviation,
+            searchReceiveFrom,
+            searchReceivedTo,
             order_by,
         };
 
-        axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
-
-        axios.get('/api/stock-requests', { params }).then(res => {
-            console.log(res);
+        axios.get('/api/stock-receives', { params }).then(res => {
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -192,10 +187,10 @@
     export default {
         data() {
             return {
-                componentVal: 'Stock Request',
-                stock_requests: null,
-                searchColumnName: '',
-                searchColumnAbbreviation: '',
+                stockReceive: [],
+                searchReceiveFrom: '',
+                searchReceivedTo: '',
+                searchCreatedBy: '',
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -223,8 +218,9 @@
                 getStockRequests(
                     to.query.page,
                     10,
-                    to.query.searchColumnName,
-                    to.query.searchColumnAbbreviation,
+                    to.query.searchReceiveFrom,
+                    to.query.searchReceivedTo,
+                    to.query.searchCreatedBy,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
@@ -234,8 +230,9 @@
                 getStockRequests(
                     to.query.page,
                     to.query.per_page,
-                    to.query.searchColumnName,
-                    to.query.searchColumnAbbreviation,
+                    to.query.searchReceiveFrom,
+                    to.query.searchReceivedTo,
+                    to.query.searchCreatedBy,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
@@ -248,8 +245,9 @@
             getStockRequests(
                 to.query.page,
                 this.meta.per_page,
-                this.searchColumnName,
-                this.searchColumnAbbreviation,
+                this.searchReceiveFrom,
+                this.searchReceivedTo,
+                this.searchCreatedBy,
                 this.order_by,
                 (err, data) => {
                     this.setData(err, data);
@@ -288,12 +286,13 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-receives.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchReceiveFrom: this.searchReceiveFrom,
+                        searchReceivedTo: this.searchReceivedTo,
+                        searchCreatedBy: this.searchCreatedBy,
                         order_by: this.order_by
                     },
                 });
@@ -301,12 +300,13 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-receives.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchReceiveFrom: this.searchReceiveFrom,
+                        searchReceivedTo: this.searchReceivedTo,
+                        searchCreatedBy: this.searchCreatedBy,
                         order_by: this.order_by
                     },
                 });
@@ -314,12 +314,13 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-receives.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchReceiveFrom: this.searchReceiveFrom,
+                        searchReceivedTo: this.searchReceivedTo,
+                        searchCreatedBy: this.searchCreatedBy,
                         order_by: this.order_by
                     },
                 });
@@ -327,11 +328,13 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-receives.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page,searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        per_page: this.meta.per_page,
+                        searchReceiveFrom: this.searchReceiveFrom,
+                        searchReceivedTo: this.searchReceivedTo,
+                        searchCreatedBy: this.searchCreatedBy,
                         order_by: this.order_by
                     },
                 });
@@ -339,23 +342,34 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-receives.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchReceiveFrom: this.searchReceiveFrom,
+                        searchReceivedTo: this.searchReceivedTo,
+                        searchCreatedBy: this.searchCreatedBy,
                         order_by: this.order_by
                     }
                 });
             },
-            setData(err, { data: stock_requests, links, meta }) {
+            setData(err, { data: stockReceive, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.stock_requests = stock_requests;
+                    let status = {
+                        0: 'Pending',
+                        1: 'Approved',
+                        2: 'Cancelled'
+                    };
+
+                    stockReceive.map(stockReceive => {
+                        stockReceive.status = status[stockReceive.status];
+                    });
+
+                    this.stockReceive = stockReceive;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -416,12 +430,13 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-receives.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchReceiveFrom: this.searchReceiveFrom,
+                        searchReceivedTo: this.searchReceivedTo,
+                        searchCreatedBy: this.searchCreatedBy,
                         order_by: this.order_by
                     }
                 });
@@ -430,20 +445,22 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-requests.index',
+                    name: 'stock-receives.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnAbbreviation: this.searchColumnAbbreviation,
+                        searchReceiveFrom: this.searchReceiveFrom,
+                        searchReceivedTo: this.searchReceivedTo,
+                        searchCreatedBy: this.searchCreatedBy,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchColumnName        = '';
-                this.searchColumnAbbreviation = '';
-                this.order_by                = 'desc';
+                this.searchReceiveFrom        = '';
+                this.searchReceivedTo      = '';
+                this.searchCreatedBy            = '';
+                this.order_by                   = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');

@@ -182,9 +182,9 @@
 
             let getPo = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
-                    this.purchaseOrderId = res.data.purchaseOrders.reference_number;
-                    this.purchase_order_id = res.data.purchaseOrders.id;
-                    // console.log('PO: ' + JSON.stringify(res.data.purchaseOrders));
+                    this.purchaseOrderId = res.data.purchaseOrder.reference_number;
+                    this.purchase_order_id = res.data.purchaseOrder.id;
+                    // console.log('PO: ' + JSON.stringify(res.data.purchaseOrder));
                     resolve();
                 }).catch(err => {
                     console.log(err);
