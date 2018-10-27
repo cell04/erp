@@ -1,25 +1,20 @@
 <template>
-    <div>
-        <div class="card">
-            <div class="card-header">
-                Contacts / View Contacts
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
+    <div class="card">
+        <div class="card-header">
+            Contacts / View Contacts
+        </div>
+        <div class="card-body">
+            <div v-if="ifReady">
                 <form ref="editContactForm" role="form" method="POST" accept-charset="utf-8" v-on:submit.prevent="editContact">
                     <div class="form-group">
-                        <label for="type">Type</label>
-                        <select v-model="type" class="form-control">
-                            <option v-for="contact in contact_type" :value="contact.value">{{contact.contact_name}}</option>
-                        </select>
+                        <label>Contact Type</label>
+                        <vue-select v-model="contactType" @input="selectContactType()" label="display_name" :options="contactTypes"></vue-select>
                     </div>
 
                     <div class="form-group">
                         <label for="person">Full Name</label>
                         <input type="text" class="form-control" v-model="person" id="person" required></input>
                     </div>
-
-              
 
                     <div class="row">
                         <div class="col-md-4">
@@ -44,104 +39,100 @@
                         </div>
                     </div>
 
-
                     <div class="form-group">
                         <label for="company_address">Company Address</label>
                         <input type="text" class="form-control" v-model="company_address" id="company_address">
                     </div>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewContact">Back</button>
-                    <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent.default="updateContact">Update Contact</button>
+
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewContact">Back</button>
+                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContact">Update Contact</button>
                 </form>
-                </div>
+            </div>
 
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                    </div>
+            <div v-else>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                 </div>
-
-               
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            ifReady: false,
-            id: '',
-            type:'',
-            person: '',
-            mobile_number: '',
-            email: '',
-            company: '',
-            company_address: '',
-            isDisabled: false,
-            contact_type:[
-                {'value':1, 'contact_name': "Supplier"},
-                {'value':2, 'contact_name': "Customer"},
-                {'value':3, 'contact_name': "Employee"},
-                
-            ],
-        };
-    },
+    export default {
+        data() {
+            return {
+                ifReady: false,
+                contactTypes: [],
+                contactType: null,
+                contact_type_id: '',
+                id: '',
+                type:'',
+                person: '',
+                mobile_number: '',
+                email: '',
+                company: '',
+                company_address: ''
+            };
+        },
 
-    mounted() {
-
-        let promise = new Promise((resolve, reject) => {
-            axios.get('/api/contacts/' + this.$route.params.id).then((res) => {
-                if (! res.data.response) {
-                    // Failed, do something
-                    return;
-                }
-
-
-                
-                this.id = res.data.contact.id;
-                this.type = res.data.contact.type;
-                this.person = res.data.contact.person;
-                this.mobile_number = res.data.contact.mobile_number;
-                this.email = res.data.contact.email;
-                this.company = res.data.contact.company;
-                this.company_address = res.data.contact.company_address;
-                resolve();
+        mounted() {
+            let promiseContactTypes = new Promise((resolve, reject) => {
+                axios.get("/api/contacts-type/get-all-contacts-type").then(res => {
+                    this.contactTypes = res.data.contact_types;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                });
             });
-        });
-        promise.then(() => {
-            this.ifReady = true;
-        });
-    },
 
-    methods: {
+            let promiseContacts = new Promise((resolve, reject) => {
+                axios.get('/api/contacts/' + this.$route.params.id).then(res => {
+                    console.log(res.data.contact.contact_type);
+                    this.id = res.data.contact.id;
+                    this.contactType = res.data.contact.contact_type;
+                    this.contact_type_id = res.data.contact.contact_type.id;
+                    this.person = res.data.contact.person;
+                    this.mobile_number = res.data.contact.mobile_number;
+                    this.email = res.data.contact.email;
+                    this.company = res.data.contact.company;
+                    this.company_address = res.data.contact.company_address;
+                    console.log(this.contactType);
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                });
+            });
 
-        viewContact() {
-            this.$router.push({
-                name: 'contacts.view',
-                params: { id: this.$route.params.id }
+            Promise.all([promiseContactTypes, promiseContacts]).then(() => {
+                this.ifReady = true;
             });
         },
-        updateContact() {
-            this.isDisabled = true;
-            this.isReady= false;
-            axios.patch('/api/contacts/' + this.$route.params.id, this.$data).then((res)=>{
-                if(! res.data.response){
-                    alert("error")
-                }
+
+        methods: {
+            viewContact() {
                 this.$router.push({
                     name: 'contacts.view',
                     params: { id: this.$route.params.id }
-                })
-                
-                return;
-            });
-        }
-    },
+                });
+            },
+            selectContactType() {
+                this.contact_type_id = this.contactType.id;
+            },
+            updateContact() {
+                this.ifReady = false;
 
-    computed: {
-        // Add ES6 methods here that needs caching
+                axios.patch('/api/contacts/' + this.$route.params.id, this.$data).then(res => {
+                    this.$router.push({
+                        name: 'contacts.view',
+                        params: { id: this.$route.params.id }
+                    });
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
+                    alert('Error');
+                });
+            }
+        }
     }
-}
 </script>

@@ -34,7 +34,7 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewBranch">Back</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewBranch">Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateBranch">Update Branch</button>
                     </form>
                 </div>

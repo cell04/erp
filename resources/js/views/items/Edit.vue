@@ -45,7 +45,7 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItems">Back</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItems">Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItem">Update Item</button>
                     </form>
                 </div>

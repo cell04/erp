@@ -63,7 +63,7 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewCorporation">Back</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewCorporation">Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateCorporation">Update Corporation</button>
                     </form>
                 </div>

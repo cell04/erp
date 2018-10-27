@@ -34,7 +34,7 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewWarehouse">Back</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewWarehouse">Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateWarehouse">Update Warehouse</button>
                     </form>
                 </div>
