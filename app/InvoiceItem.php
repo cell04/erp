@@ -35,6 +35,15 @@ class InvoiceItem extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item', 'unitOfMeasurement', 'itemPricelist'
+    ];
+
+    /**
      * The invoice item belongs to an invoice.
      *
      * @return object

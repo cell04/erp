@@ -35,6 +35,15 @@ class StockRequestItem extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item', 'unitOfMeasurement'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */
