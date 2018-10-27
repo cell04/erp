@@ -29,8 +29,8 @@ class QuotationRepository extends Repository
 
     public function all()
     {
-        return $this->quotation->with('contact', 'corporation', 'approveBy', 'user')
-        )->get();
+        return $this->quotation->with('contact', 'corporation', 'approvedBy', 'user')
+        ->get();
     }
 
     public function paginateWithFilters(
@@ -39,7 +39,7 @@ class QuotationRepository extends Repository
         $orderBy = 'desc',
         $removePage = true
     ) {
-        return $this->quotation->with('contact', 'corporation', 'approveBy', 'user')
+        return $this->quotation->with('contact', 'corporation', 'approvedBy', 'user')
             ->filter($request)
             ->orderBy('created_at', $orderBy)
             ->paginate($length)
@@ -55,7 +55,9 @@ class QuotationRepository extends Repository
             $quotation = $this->quotation->findOrFail($id);
             // check if status is equal to 0 = pending
             if ($quotation->status == 0) {
-                $request->request->add(['approve_by' => auth('api')->user()->id]);         
+                if ($request->status) {
+                    $request->request->add(['approved_by' => auth('api')->user()->id]);  
+                }       
                 //update stock request
                 $quotation->fill($request->all());
                 $quotation->save();
@@ -73,5 +75,18 @@ class QuotationRepository extends Repository
 
             return null;
         });
+    }
+
+    public function findOrFail($id)
+    {
+        return  $this->quotation->with([
+            'contact',
+            'corporation',
+            'approvedBy',
+            'user',
+            'quotationItems' => function ($query) {
+                $query->with('item', 'unitOfMeasurement', 'itemPricelist');
+            }
+        ])->findOrFail($id);
     }
 }

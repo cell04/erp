@@ -25,7 +25,7 @@ class CreateQuotationsTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
-            $table->integer('approved_by')->unsigned();
+            $table->integer('approved_by')->unsigned()->nullable();
             $table->foreign('approved_by')
                 ->references('id')
                 ->on('users')

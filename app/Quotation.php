@@ -98,6 +98,6 @@ class Quotation extends Model
      */
     public function quotationItems()
     {
-        return $this->hasMany(Quotation::class);
+        return $this->hasMany(QuotationItem::class);
     }
 }

@@ -214,10 +214,20 @@ Route::group(['middleware' => 'api'], function () {
     // Stock Receives
     Route::match(['put', 'patch'], 'stock-receives/{stock-receive}/restore', 'StockReceivesController@restore');
     Route::delete('stock-receives/{stock-receive}/force-delete', 'StockReceivesController@forceDestroy');
-    Route::get('stock-receives/get-all-stock-receives', 'StockReceivesController@getAllStockTransfers');
+    Route::get('stock-receives/get-all-stock-receives', 'StockReceivesController@getAllStockReceives');
     Route::resource('stock-receives', 'StockReceivesController', [
         'only' => [
             'index', 'store', 'show', 'destroy'
+        ]
+    ]);
+
+    // Quotations
+    Route::match(['put', 'patch'], 'quotations/{quotation}/restore', 'QuotationsController@restore');
+    Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
+    Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
+    Route::resource('quotations', 'QuotationsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
         ]
     ]);
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\QuotationResource;
 use App\Repositories\QuotationRepository;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class QuotationsController extends Controller
@@ -188,7 +189,7 @@ class QuotationsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllPurchaseOrder()
+    public function getAllQuotations()
     {
         if (cache()->has('quotations')) {
             return response()->json([
