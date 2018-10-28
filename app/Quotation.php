@@ -23,8 +23,8 @@ class Quotation extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'user_id', 'contact_id', 
-        'amount', 'status', 'approved_by'
+        'corporation_id', 'user_id', 'contact_id', 'quotable_id',
+        'quotable_type', 'amount', 'status', 'approved_by'
     ];
 
     /**
@@ -99,5 +99,10 @@ class Quotation extends Model
     public function quotationItems()
     {
         return $this->hasMany(QuotationItem::class);
+    }
+
+    public function quotable()
+    {
+        return $this->morphTo();
     }
 }
