@@ -63,6 +63,7 @@ const ConversionsEdit = () => import('./views/conversions/Edit');
  */
 const InvoicesIndex = () => import('./views/invoices/Index');
 const InvoicesCreate = () => import('./views/invoices/Create');
+const InvoicesReceive = () => import('./views/invoices/Receive.vue');
 const InvoicesView = () => import('./views/invoices/View');
 
 /**
@@ -87,10 +88,10 @@ const ItemClassificationsEdit = () => import('./views/item-classifications/Edit'
  * Item Pricelist
  *
  */
-const ItemPricelistsIndex = () => import('./views/item-pricelists/Index');
-const ItemPricelistsCreate = () => import('./views/item-pricelists/Create');
-const ItemPricelistsView = () => import('./views/item-pricelists/View');
-const ItemPricelistsEdit = () => import('./views/item-pricelists/Edit');
+const ItemPricelistsIndex = () => import('./views/item-price-lists/Index');
+const ItemPricelistsCreate = () => import('./views/item-price-lists/Create');
+const ItemPricelistsView = () => import('./views/item-price-lists/View');
+const ItemPricelistsEdit = () => import('./views/item-price-lists/Edit');
 
 /**
  * Item Types
@@ -142,12 +143,24 @@ const StockTransfersCreate = () => import('./views/stock-transfers/Create');
 const StockTransfersView = () => import('./views/stock-transfers/View');
 
 /**
+ * Stocks
+ */
+const StocksIndex = () => import('./views/stocks/Index');
+const StocksView = () => import('./views/stocks/View');
+
+/**
+ * Quotation
+ */
+const QuotationIndex = () => import('./views/quotations/Index');
+const QuotationCreate = () => import('./views/quotations/Create');
+const QuotationView = () => import('./views/quotations/View');
+
+/**
  * Receive Orders
  *
  */
 const ReceiveOrdersIndex = () => import('./views/receive-orders/Index');
 const ReceiveOrdersCreate = () => import('./views/receive-orders/Create');
-const ReceiveOrdersReceive = () => import('./views/receive-orders/Receive.vue');
 const ReceiveOrdersView = () => import('./views/receive-orders/View');
 
 /**
@@ -216,6 +229,7 @@ const router = new Router({
         // Invoices
         { path: '/invoices', name: 'invoices.index', component: InvoicesIndex },
         { path: '/invoices/create', name: 'invoices.create', component: InvoicesCreate },
+        { path: '/invoices/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
         // Items
@@ -249,7 +263,6 @@ const router = new Router({
 
         // Receive Orders
         { path: '/received-orders', name: 'receive-orders.index', component: ReceiveOrdersIndex },
-        { path: '/received-orders/:id', name: 'receive-orders.receive', component: ReceiveOrdersReceive },
         { path: '/received-orders/create', name: 'receive-orders.create', component: ReceiveOrdersCreate },
         { path: '/received-orders/:id', name: 'receive-orders.view', component: ReceiveOrdersView },
 
@@ -271,6 +284,15 @@ const router = new Router({
         { path: '/stock-transfers', name: 'stock-transfers.index', component: StockTransfersIndex },
         { path: '/stock-transfers/create', name: 'stock-transfers.create', component: StockTransfersCreate },
         { path: '/stock-transfers/:id', name: 'stock-transfers.view', component: StockTransfersView },
+
+        // Stocks
+        { path: '/stocks', name: 'stocks.index', component: StocksIndex },
+        { path: '/stocks/:id', name: 'stocks.view', component: StocksView },
+
+        // Quotations
+        { path: '/quotations', name: 'quotations.index', component: QuotationIndex },
+        { path: '/quotations/create', name: 'quotations.create', component: QuotationCreate },
+        { path: '/quotations/:id', name: 'quotations.view', component: QuotationView },
 
         // Unit of Measurements
         { path: '/unit-of-measurements', name: 'unit-of-measurements.index', component: UnitOfMeasurementsIndex },

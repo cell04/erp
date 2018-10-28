@@ -5,7 +5,7 @@ Route::post('/auth/login', 'AuthController@login');
 Route::post('/auth/logout', 'AuthController@logout');
 Route::get('/auth/user', 'AuthController@user');
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'api'], function () {
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
     Route::delete('audit-trails/{auditTrail}/force-delete', 'AuditTrailsController@forceDestroy');
@@ -78,6 +78,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::match(['put', 'patch'], 'invoices/{invoice}/restore', 'InvoicesController@restore');
     Route::delete('invoices/{invoice}/force-delete', 'InvoicesController@forceDestroy');
     Route::resource('invoices', 'InvoicesController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Invoice Payments
+    Route::match(['put', 'patch'], 'invoice-payments/{invoicePayment}/restore', 'InvoicePaymentsController@restore');
+    Route::delete('invoice-payments/{invoicePayment}/force-delete', 'InvoicePaymentsController@forceDestroy');
+    Route::resource('invoice-payments', 'InvoicePaymentsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]
@@ -228,6 +237,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::match(['put', 'patch'], 'quotations/{quotation}/restore', 'QuotationsController@restore');
     Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
     Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
+    Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
     Route::resource('quotations', 'QuotationsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'

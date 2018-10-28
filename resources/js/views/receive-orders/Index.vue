@@ -37,8 +37,8 @@
                                     View
                                 </router-link>
                                 |
-                                <router-link class="text-info" :to="{ name: 'bills.create'}">
-                                    Create Bill
+                                <router-link class="text-info" :to="{ name: 'invoices.receive', params: { id: item.id }}">
+                                    Create Invoice
                                 </router-link>
                             </td>
                         </tr>

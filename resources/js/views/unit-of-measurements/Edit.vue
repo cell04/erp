@@ -17,7 +17,7 @@
                             <input type="text" class="form-control" v-model="unit_of_measurements.abbreviation" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewUnitOfMeasurement">Back</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewUnitOfMeasurement">Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateUnitOfMeasurement">Update Unit of Measurement</button>
                     </form>
                 </div>

@@ -4,25 +4,25 @@
             Purchase Orders / View Purchase Order
         </div>
         <div class="card-body">
-            <div v-if="purchaseOrder.status == 0">
-                <h5>
-                    Purchase Order
-                    <span class="badge badge-secondary badge-info">Issued</span>
-                </h5>
-            </div>
-            <div v-else-if="purchaseOrder.status == 1">
-                <h5>
-                    Purchase Order
-                    <span class="badge badge-secondary badge-success">Payed</span>
-                </h5>
-            </div>
-            <div v-else>
-                <h5>
-                    Purchase Order
-                    <span class="badge badge-secondary badge-danger">Cancelled</span>
-                </h5>
-            </div>
             <div v-if="ifReady">
+                <div v-if="purchaseOrder.status === 0">
+                    <h5>
+                        Purchase Order
+                        <span class="badge badge-secondary badge-info">Issued</span>
+                    </h5>
+                </div>
+                <div v-else-if="purchaseOrder.status === 1">
+                    <h5>
+                        Purchase Order
+                        <span class="badge badge-secondary badge-success">Payed</span>
+                    </h5>
+                </div>
+                <div v-else>
+                    <h5>
+                        Purchase Order
+                        <span class="badge badge-secondary badge-danger">Cancelled</span>
+                    </h5>
+                </div>
                 <fieldset>
                     <div class="row">
                         <div class="col-md-6">
@@ -90,12 +90,11 @@
                         </tr>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-info btn-sm" @click.prevent="viewPurchaseOrders">Back</button>
 
+                <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewPurchaseOrders">Back</button>
                 <router-link v-if="purchaseOrder.status == 0" :to="{ name: 'receive-orders.create', params: { po_id: purchaseOrder.id }}">
                     <button class="btn btn-success btn-sm">Receive Purchase Order</button>
                 </router-link>
-
                 <button class="btn btn-danger btn-sm" v-if="purchaseOrder.status == 0" @click="closePurchaseOrder(purchaseOrder.id, purchaseOrder.purchase_order_number)">Close Purchase Order</button>
             </div>
             <div v-else>
@@ -120,6 +119,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
+                    console.log(res.data.purchaseOrder);
                     this.purchaseOrder = res.data.purchaseOrder;
 
                     this.purchaseOrder.purchase_order_items.map(purchase_order_item => {

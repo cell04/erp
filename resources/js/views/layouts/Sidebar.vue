@@ -293,6 +293,22 @@
             </div>
 
             <li class="nav-item">
+                <a class="nav-link" href="#qoutations" data-toggle="collapse" aria-expanded="false" aria-controls="qoutations">
+                    Quotations <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="qoutations">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'quotations.create' }">Create New Qoutation</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'quotations.index' }">View Qoutations</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
                 <a class="nav-link" href="#users" data-toggle="collapse" aria-expanded="false" aria-controls="users">
                     Users <i class="float-right fas fa-caret-down"></i>
                 </a>

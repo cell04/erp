@@ -47,7 +47,7 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewContact">Back</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewContact">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editContact">Edit {{componentVal}}</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteContactModal">Delete {{componentVal}}</button>
                 </div>

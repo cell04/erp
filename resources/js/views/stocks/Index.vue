@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               Stock Recieves
+                Stocks
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Stock Recieves - Total Items {{ this.meta.total }}
+                                List of Stocks - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -20,22 +20,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Stock Receive Number</th>
-                            <th scope="col">Stock Receive From</th>
-                            <th scope="col">Stock Receive To</th>
-                            <th scope="col">Created By</th>
+                            <th scope="col">Stock From</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">UOM</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
-                    <tbody v-if="stockReceive">
-                        <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user } in stockReceive">
-                            
-                            <td>{{ number }}</td>
-                            <td>{{ stock_receivable_from.name }}</td>
-                            <td>{{ stock_receivable_to.name }}</td>
-                            <td>{{ user.name }}</td>
+                    <tbody v-if="stocks">
+                        <tr v-for="{ id, stockable_id, stockable, item, quantity, unit_of_measurement } in stocks">
+                            <td>{{ stockable.name }}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ quantity }}</td>
+                            <td>{{ unit_of_measurement.name }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'stock-receives.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'stocks.view', params: { id: id }}">View</router-link> |
+                                <router-link class="text-success" :to="{ name: '', params: { id: id }}">Convert</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -91,7 +91,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Receive</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Warehouses</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -105,73 +105,91 @@
                     </div>
                 </form>
             </div>
+        </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Search Stock Receive</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+        <!-- Modal -->
+        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchWarehouses" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Search Warehouses</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label>Received From</label>
-                                <input type="text" class="form-control" v-model="searchReceiveFrom" autocomplete="off" minlength="2" maxlength="255" required>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea class="form-control" v-model="searchColumnAddress" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" v-model="searchColumnCity" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-
-                            <div class="form-group">
-                                <label>Received To</label>
-                                <input type="text" class="form-control" v-model="searchReceivedTo" autocomplete="off" minlength="2" maxlength="255" required>
+                            <div class="col-md-3 form-group">
+                                <label for="country">Country</label>
+                                <input type="text" class="form-control" v-model="searchColumnCountry" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-
-                             <div class="form-group">
-                                <label>Created By</label>
-                                <input type="text" class="form-control" v-model="searchCreatedBy" autocomplete="off" minlength="2" maxlength="255" required>
+                            <div class="col-md-3 form-group">
+                                <label for="zip_code">Zip Code</label>
+                                <input type="text" class="form-control" v-model="searchColumnZipCode" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-
-                            <div class="form-group">
-                                <label>Order By</label>
-                                <select class="form-control" v-model="order_by">
-                                    <option value="desc">Newest</option>
-                                    <option value="asc">Oldest</option>
-                                </select>
+                            <div class="col-md-3 form-group">
+                                <label for="telephone_number">Telephone Number</label>
+                                <input type="text" class="form-control" v-model="searchColumnTelephoneNumber" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
                         </div>
-                        <div class="modal-footer clearfix">
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
-                            <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+
+                        <div class="form-group">
+                            <label>Order By</label>
+                            <select class="form-control" v-model="order_by">
+                                <option value="desc">Newest</option>
+                                <option value="asc">Oldest</option>
+                            </select>
                         </div>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
 
 <script>
-    const getStockRequests = (
+    const getWarehouses = (
         page,
         per_page,
-        searchReceiveFrom,
-        searchReceivedTo,
-        searchCreatedBy,
+        searchColumnName,
+        searchColumnAddress,
+        searchColumnCity,
+        searchColumnCountry,
+        searchColumnZipCode,
+        searchColumnTelephoneNumber,
         order_by,
         callback
-        ) => {
+    ) => {
         const params = {
             page,
             per_page,
-            searchReceiveFrom,
-            searchReceivedTo,
-            order_by,
+            searchColumnName,
+            searchColumnAddress,
+            searchColumnCity,
+            searchColumnCountry,
+            searchColumnZipCode,
+            searchColumnTelephoneNumber,
+            order_by
         };
 
-        axios.get('/api/stock-receives', { params }).then(res => {
+        axios.get('/api/stocks', { params }).then(res => {
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -187,10 +205,13 @@
     export default {
         data() {
             return {
-                stockReceive: [],
-                searchReceiveFrom: '',
-                searchReceivedTo: '',
-                searchCreatedBy: '',
+                warehouses: null,
+                searchColumnName: '',
+                searchColumnAddress: '',
+                searchColumnCity: '',
+                searchColumnCountry: '',
+                searchColumnZipCode: '',
+                searchColumnTelephoneNumber: '',
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -215,45 +236,54 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getStockRequests(
+                getWarehouses(
                     to.query.page,
                     10,
-                    to.query.searchReceiveFrom,
-                    to.query.searchReceivedTo,
-                    to.query.searchCreatedBy,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAddress,
+                    to.query.searchColumnCity,
+                    to.query.searchColumnCountry,
+                    to.query.searchColumnZipCode,
+                    to.query.searchColumnTelephoneNumber,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             } else {
-                getStockRequests(
+                getWarehouses(
                     to.query.page,
                     to.query.per_page,
-                    to.query.searchReceiveFrom,
-                    to.query.searchReceivedTo,
-                    to.query.searchCreatedBy,
+                    to.query.searchColumnName,
+                    to.query.searchColumnAddress,
+                    to.query.searchColumnCity,
+                    to.query.searchColumnCountry,
+                    to.query.searchColumnZipCode,
+                    to.query.searchColumnTelephoneNumber,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             }
         },
 
         beforeRouteUpdate (to, from, next) {
-            getStockRequests(
+            getWarehouses(
                 to.query.page,
                 this.meta.per_page,
-                this.searchReceiveFrom,
-                this.searchReceivedTo,
-                this.searchCreatedBy,
+                this.searchColumnName,
+                this.searchColumnAddress,
+                this.searchColumnCity,
+                this.searchColumnCountry,
+                this.searchColumnZipCode,
+                this.searchColumnTelephoneNumber,
                 this.order_by,
                 (err, data) => {
                     this.setData(err, data);
                     next();
                 }
-                );
+            );
         },
 
         computed: {
@@ -264,20 +294,33 @@
                 return this.meta.current_page - 1;
             },
             paginatonCount() {
-                if (! this.meta) { return; }
+                if (! this.meta) {
+                    return;
+                }
+
                 const { current_page, last_page } = this.meta;
+
                 return `${current_page} of ${last_page}`;
             },
             pageCount() {
-                if (this.meta.last_page > 10) { return false; }
+                if (this.meta.last_page > 10) {
+                    return false;
+                }
+
                 return true;
             },
             isPrevDisabled() {
-                if (this.links.prev == null) { return 'disabled'; }
+                if (this.links.prev == null) {
+                    return 'disabled';
+                }
+
                 return;
             },
             isNextDisabled() {
-                if (this.links.next == null) { return 'disabled'; }
+                if (this.links.next == null) {
+                    return 'disabled';
+                }
+
                 return;
             }
         },
@@ -286,13 +329,16 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'warehouses.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     },
                 });
@@ -300,13 +346,16 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'warehouses.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     },
                 });
@@ -314,13 +363,16 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'warehouses.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     },
                 });
@@ -328,13 +380,16 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'warehouses.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     },
                 });
@@ -342,34 +397,27 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'warehouses.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     }
                 });
             },
-            setData(err, { data: stockReceive, links, meta }) {
+            setData(err, { data: stocks, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    let status = {
-                        0: 'Pending',
-                        1: 'Approved',
-                        2: 'Cancelled'
-                    };
-
-                    stockReceive.map(stockReceive => {
-                        stockReceive.status = status[stockReceive.status];
-                    });
-
-                    this.stockReceive = stockReceive;
+                    this.stocks = stocks;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -430,37 +478,45 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'warehouses.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     }
                 });
-            },
-            search() {
+            },search() {
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'warehouses.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnAddress: this.searchColumnAddress,
+                        searchColumnCity: this.searchColumnCity,
+                        searchColumnCountry: this.searchColumnCountry,
+                        searchColumnZipCode: this.searchColumnZipCode,
+                        searchColumnTelephoneNumber: this.searchColumnTelephoneNumber,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchReceiveFrom        = '';
-                this.searchReceivedTo      = '';
-                this.searchCreatedBy            = '';
-                this.order_by                   = 'desc';
+                this.searchColumnName            = '';
+                this.searchColumnAddress         = '';
+                this.searchColumnCity            = '';
+                this.searchColumnCountry         = '';
+                this.searchColumnZipCode         = '';
+                this.searchColumnTelephoneNumber = '';
+                this.order_by                    = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');

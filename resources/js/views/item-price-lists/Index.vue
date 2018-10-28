@@ -20,17 +20,19 @@
                     </caption>
                     <thead>
                         <tr>
+                            <th scope="col">Id</th>
                             <th scope="col">Item Name</th>
                             <th scope="col">Price</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="items">
-                        <tr v-for="item in items">
-                            <td>{{ item.item_id }}</td>
-                            <td>{{ item.price }}</td>
+                    <tbody v-if="itemPriceLists">
+                        <tr v-for="itemPriceList in itemPriceLists">
+                            <td>{{ itemPriceList.id }}</td>
+                            <td>{{ itemPriceList.item.name }}</td>
+                            <td>{{ itemPriceList.price }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: item.id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: itemPriceList.id }}">View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -127,7 +129,7 @@
     export default {
         data() {
             return {
-                items: null,
+                itemPriceLists: null,
                 meta: {
                     current_page: null,
                     from: null,
@@ -258,13 +260,13 @@
                     }
                 });
             },
-            setData(err, { data: items, links, meta }) {
+            setData(err, { data: itemPriceLists, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.items = items;
+                    this.itemPriceLists = itemPriceLists;
                     this.links = links;
                     this.meta = meta;
                 }

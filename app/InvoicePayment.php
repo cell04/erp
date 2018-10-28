@@ -6,27 +6,26 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Stock extends Model
+class InvoicePayment extends Model
 {
     use SoftDeletes, Filtering;
-
+    
     /**
-     * Stocks table.
+     * Invoice Payments table.
      *
      * @var string
      */
-    protected $table = 'stocks';
-
+    protected $table = 'invoice_payments';
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'stockable_id', 'stockable_type',
-        'item_id', 'quantity', 'unit_of_measurement_id'
+        'corporation_id', 'invoice_id', 'amount'
     ];
-
+    
     /**
      * The attributes that should be mutated to dates.
      *
@@ -39,7 +38,9 @@ class Stock extends Model
      *
      * @var array
      */
-    protected $with = ['stockable', 'item', 'unitOfMeasurement'];
+    protected $with = [
+        'invoice'
+    ];
 
     /**
      * Run functions on boot.
@@ -57,7 +58,7 @@ class Stock extends Model
     }
 
     /**
-     * The stock belongs to a corporation
+     * The invoice payment belongs to a corporation.
      *
      * @return object
      */
@@ -67,30 +68,12 @@ class Stock extends Model
     }
 
     /**
-     * Get all of the owning stockable models.
-     */
-    public function stockable()
-    {
-        return $this->morphTo();
-    }
-
-    /**
-     * The classification belongs to an item type.
+     *  The invoice payment belongs to an invoice.
      *
      * @return object
      */
-    public function item()
+    public function invoice()
     {
-        return $this->belongsTo(Item::class);
-    }
-
-    /**
-     * The purchase order item belongs to a unit of measurement.
-     *
-     * @return object
-     */
-    public function unitOfMeasurement()
-    {
-        return $this->belongsTo(UnitOfMeasurement::class);
+        return $this->belongsTo(Invoice::class);
     }
 }

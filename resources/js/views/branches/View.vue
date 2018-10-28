@@ -35,10 +35,10 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewBranches">Back</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewBranches">Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editBranch">Edit Branch</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteBranchModal">Delete Branch</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="createNewStockRequest">Create New Stock Request</button>
+                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="createNewStockRequest">Create New Stock Request</button>
                 </div>
                 <div v-else>
                     <div class="progress">

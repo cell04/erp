@@ -9,7 +9,7 @@
                     <fieldset disabled>
                         <div class="form-group">
                             <label for="name">Item</label>
-                            <input type="text" class="form-control" v-model="itemId.name" autocomplete="off" minlength="2" maxlength="255" required>
+                            <input type="text" class="form-control" v-model="item.name" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
 
                         <div class="form-group">
@@ -18,9 +18,9 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent.default="viewItemPricelists">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemPricelists">Edit Item Class</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemPricelistsModal">Delete Item Class</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItemPricelists">Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemPricelists">Edit Item Price List</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemPricelistsModal">Delete Item Price List</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -41,7 +41,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this Item <b><u>{{ itemId.name }} - {{ itemPricelist.price }} </u></b>?
+                        Are you sure you want to delete this Item <b><u>{{ item.name }} - {{ itemPricelist.price }} </u></b>?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteItemPricelists">Confirm Delete</button>
@@ -50,7 +50,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -59,24 +58,21 @@
         data() {
             return {
                 ifReady: false,
-                itemId: '',
-                itemPricelist: ''
+                itemPricelist: '',
+                item: ''
             };
         },
 
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/item-pricelists/' + this.$route.params.id).then(res => {
-                    const getItemTypeId = res.data.itemPricelist.item_id;
-                    // console.log('ALL Pricelist: ' + JSON.stringify(getItemTypeId));
-                    // Query Item Type
-                    let promise = new Promise((resolve, reject) => {
-                        axios.get('/api/items/' + getItemTypeId).then(res2 => {
-                            this.itemPricelist = res.data.itemPricelist;
-                            this.itemId = res2.data.item;
-                        });
-                    });
+                    this.itemPricelist = res.data.itemPricelist;
+                    this.item = res.data.itemPricelist.item;
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    alert('Error');
+                    reject();
                 });
             });
 
@@ -87,9 +83,7 @@
 
         methods: {
             viewItemPricelists() {
-                this.$router.push({
-                    name: 'item-pricelists.index'
-                });
+                this.$router.push({ name: 'item-pricelists.index' });
             },
             editItemPricelists() {
                 this.$router.push({
@@ -103,7 +97,6 @@
             deleteItemPricelists() {
                 axios.delete('/api/item-pricelists/' + this.$route.params.id).then(res => {
                     this.$router.push({ name: 'item-pricelists.index' });
-                    $('#deleteItemPricelistsModal').modal('hide');
                 }).catch(err => {
                     console.log(err);
                 });

@@ -35,6 +35,15 @@ class StockReceive extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'stockTransfer'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */

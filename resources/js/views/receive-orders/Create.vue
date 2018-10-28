@@ -9,14 +9,14 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Purchase Order</label>
-                            <vue-select v-model="purchaseOrderId" @input="selectPo()" label="reference_number" :options="purchaseOrder"></vue-select>
+                            <vue-select v-model="purchaseOrder" @input="selectPurchaseOrder()" label="reference_number" :options="purchaseOrders"></vue-select>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Contact</label>
                             <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Reference #</label>
+                            <label>Reference Number</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
                         </div>
                         <div class="col-md-6 form-group">
@@ -103,7 +103,8 @@
         data() {
             return {
                 ifReady: false,
-                purchaseOrder: [],
+                purchaseOrders: [],
+                purchaseOrder: null,
                 purchaseOrderId: null,
                 contacts: [],
                 contact: null,
@@ -115,20 +116,20 @@
                 reference_number: "",
                 purchase_order_id: "",
                 receive_order_items: [
-                    {
-                        item: '',
-                        item_id: '',
-                        quantity: 0,
-                        unitOfMeasurements: [],
-                        unitOfMeasurement: '',
-                        unit_of_measurement_id: '',
-                        itemPricelists: [],
-                        itemPricelist: 0,
-                        item_pricelist_id: '',
-                        tracking_number: '',
-                        expiration_date: '',
-                        subTotal: 0
-                    }
+                {
+                    item: '',
+                    item_id: '',
+                    quantity: 0,
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: 0,
+                    item_pricelist_id: '',
+                    tracking_number: '',
+                    expiration_date: '',
+                    subTotal: 0
+                }
                 ],
                 amount: "",
                 isDisabled: true
@@ -136,9 +137,6 @@
         },
 
         mounted() {
-            // this.receive_order_items.expiration_date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
-            // console.log('EXP Date: ' + this.this.date);
-
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
                     this.contacts = res.data.contacts;
@@ -169,9 +167,9 @@
                 });
             });
 
-            let getAllPo = new Promise((resolve, reject) => {
+            let getAllPurchaseOrders = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/get-all-purchase-orders/").then(res => {
-                    this.purchaseOrder = res.data.purchase_orders;
+                    this.purchaseOrders = res.data.purchase_orders;
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -179,7 +177,7 @@
                 });
             });
 
-            Promise.all([getAllContacts, getAllWarehouses, getAllItems, getAllPo]).then(() => {
+            Promise.all([getAllContacts, getAllWarehouses, getAllItems, getAllPurchaseOrders]).then(() => {
                 this.ifReady = true;
             });
         },
@@ -204,23 +202,26 @@
             selectWarehouse() {
                 this.warehouse_id = this.warehouse.id;
             },
-            selectPo() {
-                this.purchase_order_id = this.purchaseOrderId.id;
+            selectPurchaseOrder() {
+                this.purchase_order_id = this.purchaseOrder.id;
+                this.reference_number = this.purchaseOrder.reference_number;
             },
             selectItem(index) {
-                this.receive_order_items[index].item_id = this.receive_order_items[index].item.id;
-                this.receive_order_items[index].unitOfMeasurement = this.receive_order_items[index].item.default_unit_of_measurement.name;
-                this.receive_order_items[index].unit_of_measurement_id = this.receive_order_items[index].item.default_unit_of_measurement.id;
+                if (this.receive_order_items[index].item instanceof Object) {
+                    this.receive_order_items[index].item_id = this.receive_order_items[index].item.id;
+                    this.receive_order_items[index].unitOfMeasurement = this.receive_order_items[index].item.default_unit_of_measurement.name;
+                    this.receive_order_items[index].unit_of_measurement_id = this.receive_order_items[index].item.default_unit_of_measurement.id;
 
-                let promise = new Promise((resolve, reject) => {
-                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.receive_order_items[index].item_id).then(res => {
-                        this.receive_order_items[index].itemPricelists = res.data.item_pricelists;
-                        resolve();
-                    }).catch(err => {
-                        console.log(err);
-                        reject();
+                    let promise = new Promise((resolve, reject) => {
+                        axios.get("/api/item-pricelists/get-item-pricelists/" + this.receive_order_items[index].item_id).then(res => {
+                            this.receive_order_items[index].itemPricelists = res.data.item_pricelists;
+                            resolve();
+                        }).catch(err => {
+                            console.log(err);
+                            reject();
+                        });
                     });
-                });
+                }
             },
             selectItemPricelist(index) {
                 this.receive_order_items[index].item_pricelist_id = this.receive_order_items[index].itemPricelist.id;

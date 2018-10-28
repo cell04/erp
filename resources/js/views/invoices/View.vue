@@ -10,7 +10,7 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Receive Order</label>
-                                <input type="text" class="form-control" v-model="invoices.receive_order_id" readonly>
+                                <input type="text" class="form-control" v-model="roRefNum.reference_number" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
@@ -96,6 +96,7 @@ export default {
       ifReady: false,
       invoices: [],
       contacts: [],
+      roRefNum: [],
       invoiceItems: []
     };
   },
@@ -108,11 +109,12 @@ export default {
     getItem() {
       new Promise((resolve, reject) => {
         axios.get("/api/invoices/" + this.$route.params.id).then(res => {
-        //   console.log('Invoices: ' + JSON.stringify(res.data));
+          console.log('Invoices: ' + JSON.stringify(res.data.invoice));
           this.ifReady = true;
           this.invoices = res.data.invoice;
           this.contacts = res.data.invoice.contact;
           this.invoiceItems = res.data.invoice.invoice_items;
+          this.roRefNum = res.data.invoice.receive_order;
           if (!res.data.response) {
             return;
           }

@@ -44,16 +44,9 @@ class StockReceiveRepository extends Repository
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
-            //insert Stock receivable from and to type
-            $this->insertStockReceivable($request);
-            // store stock request 
             $stockReceive = $this->stockReceive->create($request->all());
-            //store stock request items
-            $stockReceiveItems = $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
-            //store 
-            $stockReceiveItems = $stockReceive->stocks()->createMany($stockReceiveItems->toArray());
-
-            return  $stockReceive;
+            $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
+            return $stockReceive;
         });
     }
 
@@ -76,7 +69,7 @@ class StockReceiveRepository extends Repository
 
         //check if the stock receivable from type is branch
         if (mb_strtolower($request->stock_receivable_from_type) == 'branch') {
-            $stockReceivbleFromType = get_class($this->branch);
+            $stockReceivableFromType = get_class($this->branch);
         }
         
         return $request->request->add(['stock_receivable_to_type' => $stockReceivableToType, 'stock_receivable_from_type' => $stockReceivableFromType]);
@@ -85,8 +78,8 @@ class StockReceiveRepository extends Repository
     public function findOrFail($id)
     {
         return  $this->stockReceive->with(['stockReceivableFrom', 'stockReceivableTo', 'user', 'stockReceiveItems' => function ($query) {
-                    $query->with('item', 'unitOfMeasurement');
-                }])->findOrFail($id);
+            $query->with('item', 'unitOfMeasurement');
+        }])->findOrFail($id);
     }
 
     public function paginateWithFilters(
@@ -96,11 +89,11 @@ class StockReceiveRepository extends Repository
         $removePage = true
     ) {
         return $this->stockReceive->with('stockReceivableFrom', 'stockReceivableTo', 'user')
-            ->filter($request)
-            ->orderBy('created_at', $orderBy)
-            ->paginate($length)
-            ->withPath(
-                $this->stockReceive->createPaginationUrl($request, $removePage)
-            );
+        ->filter($request)
+        ->orderBy('created_at', $orderBy)
+        ->paginate($length)
+        ->withPath(
+            $this->stockReceive->createPaginationUrl($request, $removePage)
+        );
     }
 }
