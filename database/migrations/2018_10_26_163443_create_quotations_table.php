@@ -20,6 +20,8 @@ class CreateQuotationsTable extends Migration
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
+            $table->integer('quotable_id')->unsigned();
+            $table->string('quotable_type');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')
                 ->references('id')

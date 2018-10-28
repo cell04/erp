@@ -214,4 +214,18 @@ class QuotationsController extends Controller
             'quotations' => $quotations
         ], 200);
     }
+
+    public function contactApproval($id, $status) 
+    {
+        if (! $quotation = $this->quotation->contactApproval($id, $status)) {
+            return response()->json([
+                'message' => 'Resource does not exist'
+            ], 400);
+        }
+
+        return response()->json([
+            'message'   => 'Resource successfully retrieve',
+            'quotation' => $quotation
+        ], 200);
+    }
 }

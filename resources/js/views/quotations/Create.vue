@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Qoutations / Create New Qoutation
+            Quotations / Create New Quotation
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -38,21 +38,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(qoutation_item, index) in qoutation_items" :key="index">
-                                <td>{{ qoutation_item.item.stock_keeping_unit }}</td>
+                            <tr v-for="(quotation_item, index) in quotation_items" :key="index">
+                                <td>{{ quotation_item.item.stock_keeping_unit }}</td>
                                 <td>
-                                    <vue-select v-model="qoutation_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                    <vue-select v-model="quotation_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
                                 </td>
                                 <td>
-                                    <input class="form-control" v-model.number="qoutation_item.quantity" required>
+                                    <input class="form-control" v-model.number="quotation_item.quantity" required>
                                 </td>
                                 <td>
-                                    {{ qoutation_item.unitOfMeasurement }}
+                                    {{ quotation_item.unitOfMeasurement }}
                                 </td>
                                 <td>
-                                    <vue-select v-model="qoutation_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="qoutation_item.itemPricelists"></vue-select>
+                                    <vue-select v-model="quotation_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="quotation_item.itemPricelists"></vue-select>
                                 </td>
-                                <td>{{ qoutation_item.subTotal }}</td>
+                                <td>{{ quotation_item.subTotal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
                                 </td>
@@ -69,7 +69,7 @@
                     </table>
 
                     <div class="pt-3">
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Purchase Order</button>
+                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Quotation</button>
                         <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button>
                     </div>
                 </form>
@@ -95,7 +95,7 @@
                 contact_id: "",
                 items: [],
                 date: "",
-                qoutation_items: [
+                quotation_items: [
                     {
                         item: '',
                         item_id: '',
@@ -144,12 +144,12 @@
 
         computed: {
             subTotalRow() {
-                return this.qoutation_items.map((purchase_order_item) => {
+                return this.quotation_items.map((purchase_order_item) => {
                     return (purchase_order_item.quantity * purchase_order_item.unit_price);
                 });
             },
             total() {
-                return this.qoutation_items.reduce((total, purchase_order_item) => {
+                return this.quotation_items.reduce((total, purchase_order_item) => {
                     return total + (purchase_order_item.quantity * purchase_order_item.unit_price);
                 }, 0);
             }
@@ -161,13 +161,13 @@
             },
 
             selectItem(index) {
-                this.qoutation_items[index].item_id = this.qoutation_items[index].item.id;
-                this.qoutation_items[index].unitOfMeasurement = this.qoutation_items[index].item.default_unit_of_measurement.name;
-                this.qoutation_items[index].unit_of_measurement_id = this.qoutation_items[index].item.default_unit_of_measurement.id;
+                this.quotation_items[index].item_id = this.quotation_items[index].item.id;
+                this.quotation_items[index].unitOfMeasurement = this.quotation_items[index].item.default_unit_of_measurement.name;
+                this.quotation_items[index].unit_of_measurement_id = this.quotation_items[index].item.default_unit_of_measurement.id;
 
                 let promise = new Promise((resolve, reject) => {
-                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.qoutation_items[index].item_id).then(res => {
-                        this.qoutation_items[index].itemPricelists = res.data.item_pricelists;
+                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.quotation_items[index].item_id).then(res => {
+                        this.quotation_items[index].itemPricelists = res.data.item_pricelists;
                         resolve();
                     }).catch(err => {
                         console.log(err);
@@ -176,14 +176,14 @@
                 });
             },
             selectItemPricelist(index) {
-                this.qoutation_items[index].item_pricelist_id = this.qoutation_items[index].itemPricelist.id;
-                this.qoutation_items[index].subTotal = (parseFloat(this.qoutation_items[index].quantity) * parseFloat(this.qoutation_items[index].itemPricelist.price));
+                this.quotation_items[index].item_pricelist_id = this.quotation_items[index].itemPricelist.id;
+                this.quotation_items[index].subTotal = (parseFloat(this.quotation_items[index].quantity) * parseFloat(this.quotation_items[index].itemPricelist.price));
                 this.updateTotalAmount();
             },
             updateTotalAmount() {
                 let total = 0;
 
-                this.qoutation_items.forEach(purchase_order_item => {
+                this.quotation_items.forEach(purchase_order_item => {
                     total += purchase_order_item.subTotal;
                 });
 
@@ -196,7 +196,7 @@
                 }
             },
             addNewItem() {
-                this.qoutation_items.push({
+                this.quotation_items.push({
                     item: '',
                     item_id: '',
                     quantity: '',
@@ -212,7 +212,7 @@
                 this.updateTotalAmount();
             },
             deleteRow(index) {
-                this.qoutation_items.splice(index, 1);
+                this.quotation_items.splice(index, 1);
                 this.updateTotalAmount();
             },
             createNewQuotation() {
@@ -220,7 +220,7 @@
 
                 let quotationItems = [];
 
-                this.$data.qoutation_items.forEach(purchase_order_item => {
+                this.$data.quotation_items.forEach(purchase_order_item => {
                     quotationItems.push({
                         item_id: purchase_order_item.item_id,
                         quantity: purchase_order_item.quantity,
@@ -233,7 +233,7 @@
                     contact_id: this.$data.contact_id,
                     date: this.$data.date,
                     amount: this.amount,
-                    qoutation_items: quotationItems
+                    quotation_items: quotationItems
                 };
 
                 axios.post("/api/quotations", formData).then(res => {

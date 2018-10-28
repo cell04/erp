@@ -151,9 +151,9 @@ const StocksView = () => import('./views/stocks/View');
 /**
  * Quotation
  */
-const QoutationIndex = () => import('./views/qoutations/Index');
-const QuotationCreate = () => import('./views/qoutations/Create');
-const QuotationView = () => import('./views/qoutations/View');
+const QuotationIndex = () => import('./views/quotations/Index');
+const QuotationCreate = () => import('./views/quotations/Create');
+const QuotationView = () => import('./views/quotations/View');
 
 /**
  * Receive Orders
@@ -290,7 +290,7 @@ const router = new Router({
         { path: '/stocks/:id', name: 'stocks.view', component: StocksView },
 
         // Quotations
-        { path: '/quotations', name: 'quotations.index', component: QoutationIndex },
+        { path: '/quotations', name: 'quotations.index', component: QuotationIndex },
         { path: '/quotations/create', name: 'quotations.create', component: QuotationCreate },
         { path: '/quotations/:id', name: 'quotations.view', component: QuotationView },
 

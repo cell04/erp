@@ -237,6 +237,7 @@ Route::group(['middleware' => 'api'], function () {
     Route::match(['put', 'patch'], 'quotations/{quotation}/restore', 'QuotationsController@restore');
     Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
     Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
+    Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
     Route::resource('quotations', 'QuotationsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
