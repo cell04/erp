@@ -63,6 +63,7 @@ const ConversionsEdit = () => import('./views/conversions/Edit');
  */
 const InvoicesIndex = () => import('./views/invoices/Index');
 const InvoicesCreate = () => import('./views/invoices/Create');
+const InvoicesReceive = () => import('./views/invoices/Receive.vue');
 const InvoicesView = () => import('./views/invoices/View');
 
 /**
@@ -216,6 +217,7 @@ const router = new Router({
         // Invoices
         { path: '/invoices', name: 'invoices.index', component: InvoicesIndex },
         { path: '/invoices/create', name: 'invoices.create', component: InvoicesCreate },
+        { path: '/invoices/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
         // Items
