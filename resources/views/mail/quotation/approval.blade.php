@@ -4,20 +4,19 @@ Created By : {{ $content->user->name }}<br>
 Approved By : {{ $content->approvedBy->name }}
 
 @component('mail::table')
-| Item Name    | Quantity      | Price     | Unit     |
-|:------------ |:------------- |:--------  |:-------- |
+|       Item Name                                                                           |              Quantity                 |                   Price                       |                                               Unit                                    |
+|       :------------                                                                       |              :-------------           |                   :--------                   |                                               :--------                               |
 @foreach ($content->quotationItems as $quotationItem)
-| {{ $quotationItem->item->name }}      |    {{ $quotationItem->quantity }}   | {{ $quotationItem->itemPricelist->price }}     | {{ $quotationItem->unitOfMeasurement->name }} |
+| {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->quantity }}     | {{ $quotationItem->itemPricelist->price }}    |                      {{ $quotationItem->unitOfMeasurement->name }}                    |
 @endforeach
+|                                                                                           |              Total Amount             |             {{ $content->amount }}            |                                                                                       |
 @endcomponent
-# Total Amount = {{ $content->amount }}
-@component('mail::button', ['url' => '', 'color' => 'success'])
-Approved
-@endcomponent
-@component('mail::button', ['url' => '', 'color' => 'error'])
-Cancelled
-@endcomponent
-
+@component('mail::button', ['url' => 'http://inventory.test', 'color' => 'success']) 
+    Approved 
+@endcomponent    
+@component('mail::button', ['url' => 'http://inventory.test', 'color' => 'error']) 
+    Cancelled 
+@endcomponent                             
 Thanks,<br>
 {{ config('app.name') }}
 @endcomponent

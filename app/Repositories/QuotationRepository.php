@@ -84,7 +84,7 @@ class QuotationRepository extends Repository
                 }
 
                 return $quotation;
-            }
+            } 
 
             return null;
         });
@@ -101,5 +101,21 @@ class QuotationRepository extends Repository
                 $query->with('item', 'unitOfMeasurement', 'itemPricelist');
             }
         ])->findOrFail($id);
+    }
+
+    public function contactApproval($id, $status)
+    {
+        return DB::transaction(function () use ($id, $status) { 
+            //find quotation
+            $quotation = $this->quotation->findOrFail($id);
+            $quotation->update(['status' => $status]);
+
+            if ($quotation->status == 2) {
+
+                return $quotation;
+            }
+
+            return $quotation;
+        });
     }
 }
