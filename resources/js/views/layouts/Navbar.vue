@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-md navcolor">
         <div class="container-fluid">
             <router-link class="navTextColor" :to="{ name: 'overview' }">
-                <img src="../../assets/tradesoft_logo.png" style="max-width:130px;" alt="Tradesoft Business"/>
+                <img src="../../assets/tradesoft_logo.png" style="max-width:110px;" alt="Tradesoft Business"/>
             </router-link>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,7 +12,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <!-- <li v-if="corporation">
-                        <a class="nav-link navcolor" href="#" v-on:click.stop.prevent="">{{ corporation.name }}</a>
+                        <a class="nav-link" href="#" v-on:click.stop.prevent="">{{ corporation.name }}</a>
                     </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle navTextColor" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -20,6 +20,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link class="dropdown-item" :to="{ name: 'corporations.select' }">Switch Group</router-link>
+                            <router-link class="dropdown-item" :to="{ name: 'users.index' }">Settings</router-link>
                             <a class="dropdown-item" href="#" v-on:click.stop.prevent="logout">Logout</a>
                         </div>
                     </li>
@@ -77,7 +78,7 @@
 <style>
     .navcolor{
        background: rgb(255,255,255);
-        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(0,150,136,1) 99%);
+        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(49, 156, 159,1) 99%);
     }
     .navTextColor{
         color: white;
