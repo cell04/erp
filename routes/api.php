@@ -5,7 +5,7 @@ Route::post('/auth/login', 'AuthController@login');
 Route::post('/auth/logout', 'AuthController@logout');
 Route::get('/auth/user', 'AuthController@user');
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'api'], function () {
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
     Route::delete('audit-trails/{auditTrail}/force-delete', 'AuditTrailsController@forceDestroy');

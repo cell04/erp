@@ -34,6 +34,15 @@ class InvoicePayment extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'invoice'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */
