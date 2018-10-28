@@ -54,7 +54,6 @@ class QuotationsController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
         $validator = Validator::make($request->all(), [
 
         ]);
