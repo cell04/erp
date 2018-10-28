@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Purchase Orders / View Purchase Orders
+                Quotations / View Quotations
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Purchase Orders - Total Purchase Orders {{ this.meta.total }}
+                                List of Quotations - Total Quotations {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -20,22 +20,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Reference Number</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Amount</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Contact Name</th>
                             <th scope="col">Date Created</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="purchaseOrders">
-                        <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
-                            <td>{{ purchaseOrder.reference_number }}</td>
-                            <td>{{ purchaseOrder.status }}</td>
-                            <td>{{ purchaseOrder.amount }}</td>
+                    <tbody v-if="quotations">
+                        <tr :key="index" v-for="(purchaseOrder, index) in quotations">
+                            <td>{{ purchaseOrder.contact.company }}</td>
+                            <td>{{ purchaseOrder.contact.person }}</td>
                             <td>{{ purchaseOrder.created_at }}</td>
+                            <td>{{ purchaseOrder.status }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
-                                <router-link class="text-success" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
+                                <router-link class="text-info" :to="{ name: 'quotations.view', params: { id: purchaseOrder.id }}">View</router-link>
+                    
                             </td>
                         </tr>
                     </tbody>
@@ -91,7 +91,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Purchase Orders</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Quotations</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -186,7 +186,7 @@
             order_by,
         };
 
-        axios.get('/api/purchase-orders', { params }).then(res => {
+        axios.get('/api/quotations', { params }).then(res => {
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -202,7 +202,7 @@
     export default {
         data() {
             return {
-                purchaseOrders: [],
+                quotations: [],
                 searchDate: '',
                 searchPurchaseOrderNumber: '',
                 searchStatus: '',
@@ -400,7 +400,7 @@
                     }
                 });
             },
-            setData(err, { data: purchaseOrders, links, meta }) {
+            setData(err, { data: quotations, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
@@ -411,11 +411,11 @@
                         1: "Closed",
                     };
 
-                    purchaseOrders.map(purchaseOrder => {
+                    quotations.map(purchaseOrder => {
                         purchaseOrder.status = purchaseOrderStatus[purchaseOrder.status];
                     });
 
-                    this.purchaseOrders = purchaseOrders;
+                    this.quotations = quotations;
                     this.links = links;
                     this.meta = meta;
                 }

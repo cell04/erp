@@ -169,7 +169,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="#qoutations" data-toggle="collapse" aria-expanded="false" aria-controls="qoutations">
-                    Qoutations <i class="float-right fas fa-caret-down"></i>
+                    Quotations <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
             <div class="collapse" id="qoutations">
