@@ -2,14 +2,14 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               Stock Recieves
+                Purchase Orders / View Purchase Orders
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Stock Recieves - Total Items {{ this.meta.total }}
+                                List of Purchase Orders - Total Purchase Orders {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -20,22 +20,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Stock Receive Number</th>
-                            <th scope="col">Stock Receive From</th>
-                            <th scope="col">Stock Receive To</th>
-                            <th scope="col">Created By</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Reference Number</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="stockReceive">
-                        <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user } in stockReceive">
-                            
-                            <td>{{ number }}</td>
-                            <td>{{ stock_receivable_from.name }}</td>
-                            <td>{{ stock_receivable_to.name }}</td>
-                            <td>{{ user.name }}</td>
+                    <tbody v-if="purchaseOrders">
+                        <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
+                            <td>{{ purchaseOrder.reference_number }}</td>
+                            <td>{{ purchaseOrder.status }}</td>
+                            <td>{{ purchaseOrder.amount }}</td>
+                            <td>{{ purchaseOrder.created_at }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'stock-receives.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
+                                <router-link class="text-success" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -55,7 +55,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -76,7 +76,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -91,7 +91,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Receive</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Purchase Orders</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -111,25 +111,35 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Search Stock Receive</h5>
+                            <h5 class="modal-title">Search For Orders</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Received From</label>
-                                <input type="text" class="form-control" v-model="searchReceiveFrom" autocomplete="off" minlength="2" maxlength="255" required>
+                                <label>Date</label>
+                                <input type="text" class="form-control" v-model="searchDate" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
                             <div class="form-group">
-                                <label>Received To</label>
-                                <input type="text" class="form-control" v-model="searchReceivedTo" autocomplete="off" minlength="2" maxlength="255" required>
+                                <label>Purchase Order #</label>
+                                <textarea class="form-control" v-model="searchPurchaseOrderNumber" maxlength="1000" required></textarea>
                             </div>
 
-                             <div class="form-group">
-                                <label>Created By</label>
-                                <input type="text" class="form-control" v-model="searchCreatedBy" autocomplete="off" minlength="2" maxlength="255" required>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <input type="text" class="form-control" v-model="searchStatus" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Reference #</label>
+                                <input type="text" class="form-control" v-model="searchReferenceNumber" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Total</label>
+                                <input type="text" class="form-control" v-model="searchTotal" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
                             <div class="form-group">
@@ -141,8 +151,8 @@
                             </div>
                         </div>
                         <div class="modal-footer clearfix">
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
-                            <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
+                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
+                            <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -154,24 +164,29 @@
 </template>
 
 <script>
-    const getStockRequests = (
+    const getPurchaseOrders = (
         page,
         per_page,
-        searchReceiveFrom,
-        searchReceivedTo,
-        searchCreatedBy,
+        searchDate,
+        searchPurchaseOrderNumber,
+        searchStatus,
+        searchReferenceNumber,
+        searchTotal,
         order_by,
         callback
         ) => {
         const params = {
             page,
             per_page,
-            searchReceiveFrom,
-            searchReceivedTo,
+            searchDate,
+            searchPurchaseOrderNumber,
+            searchStatus,
+            searchReferenceNumber,
+            searchTotal,
             order_by,
         };
 
-        axios.get('/api/stock-receives', { params }).then(res => {
+        axios.get('/api/purchase-orders', { params }).then(res => {
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -187,10 +202,12 @@
     export default {
         data() {
             return {
-                stockReceive: [],
-                searchReceiveFrom: '',
-                searchReceivedTo: '',
-                searchCreatedBy: '',
+                purchaseOrders: [],
+                searchDate: '',
+                searchPurchaseOrderNumber: '',
+                searchStatus: '',
+                searchReferenceNumber: '',
+                searchTotal: '',
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -215,45 +232,51 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getStockRequests(
+                getPurchaseOrders(
                     to.query.page,
                     10,
-                    to.query.searchReceiveFrom,
-                    to.query.searchReceivedTo,
-                    to.query.searchCreatedBy,
+                    to.query.searchDate,
+                    to.query.searchPurchaseOrderNumber,
+                    to.query.searchStatus,
+                    to.query.searchReferenceNumber,
+                    to.query.searchTotal,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             } else {
-                getStockRequests(
+                getPurchaseOrders(
                     to.query.page,
                     to.query.per_page,
-                    to.query.searchReceiveFrom,
-                    to.query.searchReceivedTo,
-                    to.query.searchCreatedBy,
+                    to.query.searchDate,
+                    to.query.searchPurchaseOrderNumber,
+                    to.query.searchStatus,
+                    to.query.searchReferenceNumber,
+                    to.query.searchTotal,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             }
         },
 
         beforeRouteUpdate (to, from, next) {
-            getStockRequests(
+            getPurchaseOrders(
                 to.query.page,
                 this.meta.per_page,
-                this.searchReceiveFrom,
-                this.searchReceivedTo,
-                this.searchCreatedBy,
+                this.searchDate,
+                this.searchPurchaseOrderNumber,
+                this.searchStatus,
+                this.searchReferenceNumber,
+                this.searchTotal,
                 this.order_by,
                 (err, data) => {
                     this.setData(err, data);
                     next();
                 }
-                );
+            );
         },
 
         computed: {
@@ -283,16 +306,33 @@
         },
 
         methods: {
+            closePO(id, po_number) {
+                const formData = {
+                    purchase_order_id: id
+                };
+                if (confirm(`Are you sure you want to close ${po_number}`)) {
+                    axios.post("/api/purchase-orders/close", formData).then(res => {
+                        console.log(JSON.stringify(res.data));
+                        alert(`Success! ${po_number} is now closed`);
+                        location.reload();
+                    }).catch(err => {
+                        console.log(err);
+                        alert(`Error! Can't close purchase order`);
+                    });
+                }
+            },
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -300,13 +340,15 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -314,13 +356,15 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -328,13 +372,14 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        per_page: this.meta.per_page,searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     },
                 });
@@ -342,34 +387,35 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     }
                 });
             },
-            setData(err, { data: stockReceive, links, meta }) {
+            setData(err, { data: purchaseOrders, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    let status = {
-                        0: 'Pending',
-                        1: 'Approved',
-                        2: 'Cancelled'
+                    let purchaseOrderStatus = {
+                        0: "Issued",
+                        1: "Closed",
                     };
 
-                    stockReceive.map(stockReceive => {
-                        stockReceive.status = status[stockReceive.status];
+                    purchaseOrders.map(purchaseOrder => {
+                        purchaseOrder.status = purchaseOrderStatus[purchaseOrder.status];
                     });
 
-                    this.stockReceive = stockReceive;
+                    this.purchaseOrders = purchaseOrders;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -430,13 +476,15 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     }
                 });
@@ -445,22 +493,26 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'stock-receives.index',
+                    name: 'purchase-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchReceiveFrom: this.searchReceiveFrom,
-                        searchReceivedTo: this.searchReceivedTo,
-                        searchCreatedBy: this.searchCreatedBy,
+                        searchDate: this.searchDate,
+                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
+                        searchStatus: this.searchStatus,
+                        searchReferenceNumber: this.searchReferenceNumber,
+                        searchTotal: this.searchTotal,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchReceiveFrom        = '';
-                this.searchReceivedTo      = '';
-                this.searchCreatedBy            = '';
-                this.order_by                   = 'desc';
+                this.searchDate                   = '';
+                this.searchPurchaseOrderNumber    = '';
+                this.searchStatus                 = '';
+                this.searchReferenceNumber        = '';
+                this.searchTotal                  = '';
+                this.order_by                     = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');

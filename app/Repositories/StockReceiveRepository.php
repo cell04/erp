@@ -69,7 +69,7 @@ class StockReceiveRepository extends Repository
 
         //check if the stock receivable from type is branch
         if (mb_strtolower($request->stock_receivable_from_type) == 'branch') {
-            $stockReceivbleFromType = get_class($this->branch);
+            $stockReceivableFromType = get_class($this->branch);
         }
         
         return $request->request->add(['stock_receivable_to_type' => $stockReceivableToType, 'stock_receivable_from_type' => $stockReceivableFromType]);

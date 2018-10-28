@@ -1,22 +1,15 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Purchase Orders / Create New Purchase Order
+            Qoutations / Create New Qoutation
         </div>
         <div class="card-body">
             <div v-if="ifReady">
-                <h5>
-                    Purchase Order
-                </h5>
-                <form v-on:submit.prevent="createNewPurchaseOrder">
+                <form v-on:submit.prevent="createNewQuotation">
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label>Reference #</label>
-                            <input type="text" class="form-control" v-model="reference_number" required>
-                        </div>
                         <div class="col-md-6 form-group">
-                            <label>Warehouse</label>
-                            <vue-select v-model="warehouse" @input="selectWarehouse()" label="name" :options="warehouses"></vue-select>
+                            <label>Date</label>
+                            <input type="date" class="form-control" v-model="date" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Contact</label>
@@ -24,10 +17,6 @@
                         </div>
                     </div>
 
-                    <br>
-                    <h5>
-                        Purchase Order Items
-                    </h5>
                     <br>
 
                     <table class="table table-hover table-sm">
@@ -49,21 +38,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(purchase_order_item, index) in purchase_order_items" :key="index">
-                                <td>{{ purchase_order_item.item.stock_keeping_unit }}</td>
+                            <tr v-for="(qoutation_item, index) in qoutation_items" :key="index">
+                                <td>{{ qoutation_item.item.stock_keeping_unit }}</td>
                                 <td>
-                                    <vue-select v-model="purchase_order_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                    <vue-select v-model="qoutation_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
                                 </td>
                                 <td>
-                                    <input class="form-control" v-model.number="purchase_order_item.quantity" required>
+                                    <input class="form-control" v-model.number="qoutation_item.quantity" required>
                                 </td>
                                 <td>
-                                    {{ purchase_order_item.unitOfMeasurement }}
+                                    {{ qoutation_item.unitOfMeasurement }}
                                 </td>
                                 <td>
-                                    <vue-select v-model="purchase_order_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="purchase_order_item.itemPricelists"></vue-select>
+                                    <vue-select v-model="qoutation_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="qoutation_item.itemPricelists"></vue-select>
                                 </td>
-                                <td>{{ purchase_order_item.subTotal }}</td>
+                                <td>{{ qoutation_item.subTotal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
                                 </td>
@@ -104,24 +93,21 @@
                 contacts: [],
                 contact: null,
                 contact_id: "",
-                warehouses: [],
-                warehouse: null,
-                warehouse_id: "",
                 items: [],
-                reference_number: "",
-                purchase_order_items: [
-                {
-                    item: '',
-                    item_id: '',
-                    quantity: 0,
-                    unitOfMeasurements: [],
-                    unitOfMeasurement: '',
-                    unit_of_measurement_id: '',
-                    itemPricelists: [],
-                    itemPricelist: 0,
-                    item_pricelist_id: '',
-                    subTotal: 0
-                }
+                date: "",
+                qoutation_items: [
+                    {
+                        item: '',
+                        item_id: '',
+                        quantity: 0,
+                        unitOfMeasurements: [],
+                        unitOfMeasurement: '',
+                        unit_of_measurement_id: '',
+                        itemPricelists: [],
+                        itemPricelist: 0,
+                        item_pricelist_id: '',
+                        subTotal: 0
+                    }
                 ],
                 amount: "",
                 isDisabled: true
@@ -141,16 +127,6 @@
                 });
             });
 
-            let getAllWarehouses = new Promise((resolve, reject) => {
-                axios.get("/api/warehouses/get-all-warehouses").then(res => {
-                    this.warehouses = res.data.warehouses;
-                    resolve();
-                }).catch(err => {
-                    console.log(err);
-                    reject();
-                });
-            });
-
             let getAllItems = new Promise((resolve, reject) => {
                 axios.get("/api/items/get-all-items/").then(res => {
                     this.items = res.data.items;
@@ -161,19 +137,19 @@
                 });
             });
 
-            Promise.all([getAllContacts, getAllWarehouses, getAllItems]).then(() => {
+            Promise.all([getAllContacts, getAllItems]).then(() => {
                 this.ifReady = true;
             });
         },
 
         computed: {
             subTotalRow() {
-                return this.purchase_order_items.map((purchase_order_item) => {
+                return this.qoutation_items.map((purchase_order_item) => {
                     return (purchase_order_item.quantity * purchase_order_item.unit_price);
                 });
             },
             total() {
-                return this.purchase_order_items.reduce((total, purchase_order_item) => {
+                return this.qoutation_items.reduce((total, purchase_order_item) => {
                     return total + (purchase_order_item.quantity * purchase_order_item.unit_price);
                 }, 0);
             }
@@ -183,37 +159,31 @@
             selectContact() {
                 this.contact_id = this.contact.id;
             },
-            selectWarehouse() {
-                this.warehouse_id = this.warehouse.id;
-            },
-            selectItem(index) {
-                if (this.purchase_order_items[index].item instanceof Object) {
-                    this.purchase_order_items[index].item_id = this.purchase_order_items[index].item.id;
-                    this.purchase_order_items[index].unitOfMeasurement = this.purchase_order_items[index].item.default_unit_of_measurement.name;
-                    this.purchase_order_items[index].unit_of_measurement_id = this.purchase_order_items[index].item.default_unit_of_measurement.id;
 
-                    let promise = new Promise((resolve, reject) => {
-                        axios.get("/api/item-pricelists/get-item-pricelists/" + this.purchase_order_items[index].item_id).then(res => {
-                            this.purchase_order_items[index].itemPricelists = res.data.item_pricelists;
-                            resolve();
-                        }).catch(err => {
-                            console.log(err);
-                            reject();
-                        });
+            selectItem(index) {
+                this.qoutation_items[index].item_id = this.qoutation_items[index].item.id;
+                this.qoutation_items[index].unitOfMeasurement = this.qoutation_items[index].item.default_unit_of_measurement.name;
+                this.qoutation_items[index].unit_of_measurement_id = this.qoutation_items[index].item.default_unit_of_measurement.id;
+
+                let promise = new Promise((resolve, reject) => {
+                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.qoutation_items[index].item_id).then(res => {
+                        this.qoutation_items[index].itemPricelists = res.data.item_pricelists;
+                        resolve();
+                    }).catch(err => {
+                        console.log(err);
+                        reject();
                     });
-                }
+                });
             },
             selectItemPricelist(index) {
-                if (this.purchase_order_items[index].item instanceof Object) {
-                    this.purchase_order_items[index].item_pricelist_id = this.purchase_order_items[index].itemPricelist.id;
-                    this.purchase_order_items[index].subTotal = (parseFloat(this.purchase_order_items[index].quantity) * parseFloat(this.purchase_order_items[index].itemPricelist.price));
-                    this.updateTotalAmount();
-                }
+                this.qoutation_items[index].item_pricelist_id = this.qoutation_items[index].itemPricelist.id;
+                this.qoutation_items[index].subTotal = (parseFloat(this.qoutation_items[index].quantity) * parseFloat(this.qoutation_items[index].itemPricelist.price));
+                this.updateTotalAmount();
             },
             updateTotalAmount() {
                 let total = 0;
 
-                this.purchase_order_items.forEach(purchase_order_item => {
+                this.qoutation_items.forEach(purchase_order_item => {
                     total += purchase_order_item.subTotal;
                 });
 
@@ -226,7 +196,7 @@
                 }
             },
             addNewItem() {
-                this.purchase_order_items.push({
+                this.qoutation_items.push({
                     item: '',
                     item_id: '',
                     quantity: '',
@@ -242,16 +212,16 @@
                 this.updateTotalAmount();
             },
             deleteRow(index) {
-                this.purchase_order_items.splice(index, 1);
+                this.qoutation_items.splice(index, 1);
                 this.updateTotalAmount();
             },
-            createNewPurchaseOrder() {
+            createNewQuotation() {
                 this.ifReady = false;
 
-                let purchaseOrderItems = [];
+                let quotationItems = [];
 
-                this.$data.purchase_order_items.forEach(purchase_order_item => {
-                    purchaseOrderItems.push({
+                this.$data.qoutation_items.forEach(purchase_order_item => {
+                    quotationItems.push({
                         item_id: purchase_order_item.item_id,
                         quantity: purchase_order_item.quantity,
                         unit_of_measurement_id: purchase_order_item.unit_of_measurement_id,
@@ -260,19 +230,18 @@
                 });
 
                 let formData = {
-                    reference_number: this.$data.reference_number,
-                    warehouse_id: this.$data.warehouse_id,
                     contact_id: this.$data.contact_id,
+                    date: this.$data.date,
                     amount: this.amount,
-                    purchase_order_items: purchaseOrderItems
+                    qoutation_items: quotationItems
                 };
 
-                axios.post("/api/purchase-orders", formData).then(res => {
+                axios.post("/api/quotations", formData).then(res => {
                     console.log(res.data);
-                    this.$router.push({ name: "purchase-orders.index" });
+                    this.$router.push({ name: "quotations.index" });
                 }).catch(err => {
                     console.log(err);
-                    alert(`Error! Can't create purchase order`);
+                    alert(`Error! Can't create quotation`);
                     this.ifReady = true;
                 });
             }
