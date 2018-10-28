@@ -39,7 +39,7 @@ class Stock extends Model
      *
      * @var array
      */
-    protected $with = ['stockable'];
+    protected $with = ['stockable', 'item', 'unitOfMeasurement'];
 
     /**
      * Run functions on boot.
@@ -72,5 +72,25 @@ class Stock extends Model
     public function stockable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * The classification belongs to an item type.
+     *
+     * @return object
+     */
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    /**
+     * The purchase order item belongs to a unit of measurement.
+     *
+     * @return object
+     */
+    public function unitOfMeasurement()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class);
     }
 }

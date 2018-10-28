@@ -63,6 +63,7 @@ const ConversionsEdit = () => import('./views/conversions/Edit');
  */
 const InvoicesIndex = () => import('./views/invoices/Index');
 const InvoicesCreate = () => import('./views/invoices/Create');
+const InvoicesReceive = () => import('./views/invoices/Receive.vue');
 const InvoicesView = () => import('./views/invoices/View');
 
 /**
@@ -142,6 +143,12 @@ const StockTransfersCreate = () => import('./views/stock-transfers/Create');
 const StockTransfersView = () => import('./views/stock-transfers/View');
 
 /**
+ * Stocks
+ */
+const StocksIndex = () => import('./views/stocks/Index');
+const StocksView = () => import('./views/stocks/View');
+
+/**
  * Receive Orders
  *
  */
@@ -215,6 +222,7 @@ const router = new Router({
         // Invoices
         { path: '/invoices', name: 'invoices.index', component: InvoicesIndex },
         { path: '/invoices/create', name: 'invoices.create', component: InvoicesCreate },
+        { path: '/invoices/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
         // Items
@@ -269,6 +277,10 @@ const router = new Router({
         { path: '/stock-transfers', name: 'stock-transfers.index', component: StockTransfersIndex },
         { path: '/stock-transfers/create', name: 'stock-transfers.create', component: StockTransfersCreate },
         { path: '/stock-transfers/:id', name: 'stock-transfers.view', component: StockTransfersView },
+
+        // Stocks
+        { path: '/stocks', name: 'stocks.index', component: StocksIndex },
+        { path: '/stocks/:id', name: 'stocks.view', component: StocksView },
 
         // Unit of Measurements
         { path: '/unit-of-measurements', name: 'unit-of-measurements.index', component: UnitOfMeasurementsIndex },

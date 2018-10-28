@@ -41,7 +41,7 @@ class Invoice extends Model
      * @var array
      */
     protected $with = [
-        'receiveOrders', 'invoiceItems', 'contact'
+        'receiveOrder', 'invoiceItems', 'contact'
     ];
 
     /**
@@ -96,7 +96,7 @@ class Invoice extends Model
      *
      * @return object
      */
-    public function receiveOrders()
+    public function receiveOrder()
     {
         return $this->belongsTo(ReceiveOrder::class);
     }
