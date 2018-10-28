@@ -236,9 +236,9 @@
                     qoutation_items: quotationItems
                 };
 
-                axios.post("/api/qoutations", formData).then(res => {
+                axios.post("/api/quotations", formData).then(res => {
                     console.log(res.data);
-                    this.$router.push({ name: "qoutations.index" });
+                    this.$router.push({ name: "quotations.index" });
                 }).catch(err => {
                     console.log(err);
                     alert(`Error! Can't create quotation`);
