@@ -51,11 +51,11 @@ class Quotation extends Model
         });
     }
 
-     /**
-     * The quotations belongs to a corporation.
-     *
-     * @return object
-     */
+    /**
+    * The quotations belongs to a corporation.
+    *
+    * @return object
+    */
     public function corporation()
     {
         return $this->belongsTo(Corporation::class);
