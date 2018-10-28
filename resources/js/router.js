@@ -67,6 +67,14 @@ const InvoicesReceive = () => import('./views/invoices/Receive.vue');
 const InvoicesView = () => import('./views/invoices/View');
 
 /**
+ * Invoices
+ *
+ */
+const InvoicePaymentIndex = () => import('./views/invoice-payment/Index');
+const InvoicePaymentCreate = () => import('./views/invoice-payment/Create');
+const InvoicePaymentView = () => import('./views/invoice-payment/View.vue');
+
+/**
  * Items
  *
  */
@@ -161,6 +169,7 @@ const QuotationView = () => import('./views/quotations/View');
  */
 const ReceiveOrdersIndex = () => import('./views/receive-orders/Index');
 const ReceiveOrdersCreate = () => import('./views/receive-orders/Create');
+const ReceiveOrdersReceive = () => import('./views/receive-orders/Receive.vue');
 const ReceiveOrdersView = () => import('./views/receive-orders/View');
 
 /**
@@ -232,6 +241,11 @@ const router = new Router({
         { path: '/invoices/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
+        // Invoices Payment
+        { path: '/invoice-payment', name: 'invoice-payment.index', component: InvoicePaymentIndex },
+        { path: '/invoice-payment/create', name: 'invoice-payment.create', component: InvoicePaymentCreate },
+        { path: '/invoice-payment/:id', name: 'invoice-payment.view', component: InvoicePaymentView },
+
         // Items
         { path: '/items', name: 'items.index', component: ItemsIndex },
         { path: '/items/create', name: 'items.create', component: ItemsCreate },
@@ -264,6 +278,7 @@ const router = new Router({
         // Receive Orders
         { path: '/received-orders', name: 'receive-orders.index', component: ReceiveOrdersIndex },
         { path: '/received-orders/create', name: 'receive-orders.create', component: ReceiveOrdersCreate },
+        { path: '/received-orders/:id', name: 'receive-orders.receive', component: ReceiveOrdersReceive },
         { path: '/received-orders/:id', name: 'receive-orders.view', component: ReceiveOrdersView },
 
         // Settings

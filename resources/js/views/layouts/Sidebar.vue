@@ -216,6 +216,22 @@
             </div>
 
             <li class="nav-item">
+                <a class="nav-link" href="#invoice-payment" data-toggle="collapse" aria-expanded="false" aria-controls="invoice-payment">
+                    Invoice Payment <i class="float-right fas fa-caret-down"></i>
+                </a>
+            </li>
+            <div class="collapse" id="invoice-payment">
+                <ul class="nav ml-3 flex-column nav-sub-menu">
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'invoice-payment.create' }">Create New Invoice Payment</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'invoice-payment.index' }">View Invoice Payment</router-link>
+                    </li>
+                </ul>
+            </div>
+
+            <li class="nav-item">
                 <a class="nav-link" href="#stocks" data-toggle="collapse" aria-expanded="false" aria-controls="stocks">
                     Stocks <i class="float-right fas fa-caret-down"></i>
                 </a>
