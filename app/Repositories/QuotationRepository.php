@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
@@ -19,19 +19,16 @@ class QuotationRepository extends Repository
         parent::__construct($quotation);
         $this->quotation = $quotation;
         $this->contact = $contact;
-    } 
+    }
 
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
-            // store stock request 
             $quotation = $this->quotation->create($request->all());
-            //store stock request items
             $quotation->quotationItems()->createMany($request->quotation_items);
-
             return  $quotation;
         });
-    } 
+    }
 
     public function all()
     {
@@ -56,14 +53,14 @@ class QuotationRepository extends Repository
 
     public function update($request, $id)
     {
-        return DB::transaction(function () use ($request, $id) { 
+        return DB::transaction(function () use ($request, $id) {
             //find quotation
             $quotation = $this->quotation->findOrFail($id);
             // check if status is equal to 0 = pending
             if ($quotation->status == 0) {
                 if ($request->status) {
-                    $request->request->add(['approved_by' => auth('api')->user()->id]); 
-                }       
+                    $request->request->add(['approved_by' => auth('api')->user()->id]);
+                }
                 //update stock request
                 $quotation->fill($request->all());
                 $quotation->save();

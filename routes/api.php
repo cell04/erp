@@ -83,6 +83,15 @@ Route::group(['middleware' => 'auth:api'], function () {
         ]
     ]);
 
+    // Invoice Payments
+    Route::match(['put', 'patch'], 'invoice-payments/{invoicePayment}/restore', 'InvoicePaymentsController@restore');
+    Route::delete('invoice-payments/{invoicePayment}/force-delete', 'InvoicePaymentsController@forceDestroy');
+    Route::resource('invoice-payments', 'InvoicePaymentsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
     // Item Classifications
     Route::match(['put', 'patch'], 'item-classifications/{itemClassification}/restore', 'ItemClassificationsController@restore');
     Route::delete('item-classifications/{itemClassification}/force-delete', 'ItemClassificationsController@forceDestroy');
