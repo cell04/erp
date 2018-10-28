@@ -4,25 +4,25 @@
             Purchase Orders / View Purchase Order
         </div>
         <div class="card-body">
-            <div v-if="purchaseOrder.status == 0">
-                <h5>
-                    Purchase Order
-                    <span class="badge badge-secondary badge-info">Issued</span>
-                </h5>
-            </div>
-            <div v-else-if="purchaseOrder.status == 1">
-                <h5>
-                    Purchase Order
-                    <span class="badge badge-secondary badge-success">Payed</span>
-                </h5>
-            </div>
-            <div v-else>
-                <h5>
-                    Purchase Order
-                    <span class="badge badge-secondary badge-danger">Cancelled</span>
-                </h5>
-            </div>
             <div v-if="ifReady">
+                <div v-if="purchaseOrder.status === 0">
+                    <h5>
+                        Purchase Order
+                        <span class="badge badge-secondary badge-info">Issued</span>
+                    </h5>
+                </div>
+                <div v-else-if="purchaseOrder.status === 1">
+                    <h5>
+                        Purchase Order
+                        <span class="badge badge-secondary badge-success">Payed</span>
+                    </h5>
+                </div>
+                <div v-else>
+                    <h5>
+                        Purchase Order
+                        <span class="badge badge-secondary badge-danger">Cancelled</span>
+                    </h5>
+                </div>
                 <fieldset>
                     <div class="row">
                         <div class="col-md-6">
@@ -119,6 +119,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
+                    console.log(res.data.purchaseOrder);
                     this.purchaseOrder = res.data.purchaseOrder;
 
                     this.purchaseOrder.purchase_order_items.map(purchase_order_item => {

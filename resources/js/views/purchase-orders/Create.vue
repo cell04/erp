@@ -5,15 +5,14 @@
         </div>
         <div class="card-body">
             <div v-if="ifReady">
+                <h5>
+                    Purchase Order
+                </h5>
                 <form v-on:submit.prevent="createNewPurchaseOrder">
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-12 form-group">
                             <label>Reference #</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" v-model="date" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Warehouse</label>
@@ -25,6 +24,10 @@
                         </div>
                     </div>
 
+                    <br>
+                    <h5>
+                        Purchase Order Items
+                    </h5>
                     <br>
 
                     <table class="table table-hover table-sm">
@@ -106,20 +109,19 @@
                 warehouse_id: "",
                 items: [],
                 reference_number: "",
-                date: "",
                 purchase_order_items: [
-                    {
-                        item: '',
-                        item_id: '',
-                        quantity: 0,
-                        unitOfMeasurements: [],
-                        unitOfMeasurement: '',
-                        unit_of_measurement_id: '',
-                        itemPricelists: [],
-                        itemPricelist: 0,
-                        item_pricelist_id: '',
-                        subTotal: 0
-                    }
+                {
+                    item: '',
+                    item_id: '',
+                    quantity: 0,
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: 0,
+                    item_pricelist_id: '',
+                    subTotal: 0
+                }
                 ],
                 amount: "",
                 isDisabled: true
@@ -185,24 +187,28 @@
                 this.warehouse_id = this.warehouse.id;
             },
             selectItem(index) {
-                this.purchase_order_items[index].item_id = this.purchase_order_items[index].item.id;
-                this.purchase_order_items[index].unitOfMeasurement = this.purchase_order_items[index].item.default_unit_of_measurement.name;
-                this.purchase_order_items[index].unit_of_measurement_id = this.purchase_order_items[index].item.default_unit_of_measurement.id;
+                if (this.purchase_order_items[index].item instanceof Object) {
+                    this.purchase_order_items[index].item_id = this.purchase_order_items[index].item.id;
+                    this.purchase_order_items[index].unitOfMeasurement = this.purchase_order_items[index].item.default_unit_of_measurement.name;
+                    this.purchase_order_items[index].unit_of_measurement_id = this.purchase_order_items[index].item.default_unit_of_measurement.id;
 
-                let promise = new Promise((resolve, reject) => {
-                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.purchase_order_items[index].item_id).then(res => {
-                        this.purchase_order_items[index].itemPricelists = res.data.item_pricelists;
-                        resolve();
-                    }).catch(err => {
-                        console.log(err);
-                        reject();
+                    let promise = new Promise((resolve, reject) => {
+                        axios.get("/api/item-pricelists/get-item-pricelists/" + this.purchase_order_items[index].item_id).then(res => {
+                            this.purchase_order_items[index].itemPricelists = res.data.item_pricelists;
+                            resolve();
+                        }).catch(err => {
+                            console.log(err);
+                            reject();
+                        });
                     });
-                });
+                }
             },
             selectItemPricelist(index) {
-                this.purchase_order_items[index].item_pricelist_id = this.purchase_order_items[index].itemPricelist.id;
-                this.purchase_order_items[index].subTotal = (parseFloat(this.purchase_order_items[index].quantity) * parseFloat(this.purchase_order_items[index].itemPricelist.price));
-                this.updateTotalAmount();
+                if (this.purchase_order_items[index].item instanceof Object) {
+                    this.purchase_order_items[index].item_pricelist_id = this.purchase_order_items[index].itemPricelist.id;
+                    this.purchase_order_items[index].subTotal = (parseFloat(this.purchase_order_items[index].quantity) * parseFloat(this.purchase_order_items[index].itemPricelist.price));
+                    this.updateTotalAmount();
+                }
             },
             updateTotalAmount() {
                 let total = 0;
@@ -257,7 +263,6 @@
                     reference_number: this.$data.reference_number,
                     warehouse_id: this.$data.warehouse_id,
                     contact_id: this.$data.contact_id,
-                    date: this.$data.date,
                     amount: this.amount,
                     purchase_order_items: purchaseOrderItems
                 };

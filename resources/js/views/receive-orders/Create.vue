@@ -116,20 +116,20 @@
                 reference_number: "",
                 purchase_order_id: "",
                 receive_order_items: [
-                    {
-                        item: '',
-                        item_id: '',
-                        quantity: 0,
-                        unitOfMeasurements: [],
-                        unitOfMeasurement: '',
-                        unit_of_measurement_id: '',
-                        itemPricelists: [],
-                        itemPricelist: 0,
-                        item_pricelist_id: '',
-                        tracking_number: '',
-                        expiration_date: '',
-                        subTotal: 0
-                    }
+                {
+                    item: '',
+                    item_id: '',
+                    quantity: 0,
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: 0,
+                    item_pricelist_id: '',
+                    tracking_number: '',
+                    expiration_date: '',
+                    subTotal: 0
+                }
                 ],
                 amount: "",
                 isDisabled: true
@@ -207,19 +207,21 @@
                 this.reference_number = this.purchaseOrder.reference_number;
             },
             selectItem(index) {
-                this.receive_order_items[index].item_id = this.receive_order_items[index].item.id;
-                this.receive_order_items[index].unitOfMeasurement = this.receive_order_items[index].item.default_unit_of_measurement.name;
-                this.receive_order_items[index].unit_of_measurement_id = this.receive_order_items[index].item.default_unit_of_measurement.id;
+                if (this.receive_order_items[index].item instanceof Object) {
+                    this.receive_order_items[index].item_id = this.receive_order_items[index].item.id;
+                    this.receive_order_items[index].unitOfMeasurement = this.receive_order_items[index].item.default_unit_of_measurement.name;
+                    this.receive_order_items[index].unit_of_measurement_id = this.receive_order_items[index].item.default_unit_of_measurement.id;
 
-                let promise = new Promise((resolve, reject) => {
-                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.receive_order_items[index].item_id).then(res => {
-                        this.receive_order_items[index].itemPricelists = res.data.item_pricelists;
-                        resolve();
-                    }).catch(err => {
-                        console.log(err);
-                        reject();
+                    let promise = new Promise((resolve, reject) => {
+                        axios.get("/api/item-pricelists/get-item-pricelists/" + this.receive_order_items[index].item_id).then(res => {
+                            this.receive_order_items[index].itemPricelists = res.data.item_pricelists;
+                            resolve();
+                        }).catch(err => {
+                            console.log(err);
+                            reject();
+                        });
                     });
-                });
+                }
             },
             selectItemPricelist(index) {
                 this.receive_order_items[index].item_pricelist_id = this.receive_order_items[index].itemPricelist.id;
