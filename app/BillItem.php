@@ -1,0 +1,80 @@
+<?php
+
+namespace App;
+
+use App\Traits\Filtering;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class BillItem extends Model
+{
+    use SoftDeletes, Filtering;
+
+    protected $table = 'bill_items';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'bill_id', 'item_id', 'unit_of_measurement_id',
+        'quantity', 'item_pricelist_id'
+    ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item', 'unitOfMeasurement', 'itemPricelist'
+    ];
+
+    /**
+     * The bill item belongs to an bill.
+     *
+     * @return object
+     */
+    public function bill()
+    {
+        return $this->belongsTo(Bill::class);
+    }
+
+    /**
+     * The invoice item belongs to an item.
+     *
+     * @return object
+     */
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    /**
+     * The invoice item belongs to a unit of measurement.
+     *
+     * @return object
+     */
+    public function unitOfMeasurement()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class);
+    }
+
+    /**
+     * The invoice item belongs to an item pricelist
+     *
+     * @return object
+     */
+    public function itemPricelist()
+    {
+        return $this->belongsTo(ItemPricelist::class);
+    }
+}

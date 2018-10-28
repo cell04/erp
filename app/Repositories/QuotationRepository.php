@@ -108,14 +108,16 @@ class QuotationRepository extends Repository
         return DB::transaction(function () use ($id, $status) { 
             //find quotation
             $quotation = $this->quotation->findOrFail($id);
-            $quotation->update(['status' => $status]);
+            if ($quotation->status == 1) {
+                $quotation->update(['status' => $status]);
+                if ($quotation->status == 2) {
+                    return array('quotation' => $quotation, 'message' => 'Quotation Approved');
+                }
 
-            if ($quotation->status == 2) {
-
-                return $quotation;
+                return array('quotation' => $quotation, 'message' => 'Quotation Cancelled');
             }
 
-            return $quotation;
+            return array('quotation' => $quotation, 'message' => 'Quotation is already Managed');
         });
     }
 }

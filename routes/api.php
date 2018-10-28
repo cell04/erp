@@ -4,6 +4,7 @@
 Route::post('/auth/login', 'AuthController@login');
 Route::post('/auth/logout', 'AuthController@logout');
 Route::get('/auth/user', 'AuthController@user');
+Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
 
 Route::group(['middleware' => 'auth:api'], function () {
     // Audit Trails
@@ -228,8 +229,17 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::match(['put', 'patch'], 'quotations/{quotation}/restore', 'QuotationsController@restore');
     Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
     Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
-    Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
     Route::resource('quotations', 'QuotationsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Bills
+    Route::match(['put', 'patch'], 'bills/{bill}/restore', 'BillsController@restore');
+    Route::delete('bills/{bill}/force-delete', 'BillsController@forceDestroy');
+    Route::get('bills/get-all-bills', 'BillsController@getAllBills');
+    Route::resource('bills', 'BillsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]

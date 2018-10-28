@@ -1,29 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Http\Resources\QuotationResource;
-use App\Repositories\QuotationRepository;
+use App\Http\Resources\BillResource;
+use App\Repositories\BillRepository;
 use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Http\Request;
 
-class QuotationsController extends Controller
+class BillsController extends Controller
 {
-    /**
-     * Quotation repository.
-     *
-     * @var App\Repositories\QuotationRepository
-     */
-    protected $quotation;
+    protected $bill;
 
-    /**
-     * Create new instance of quotation controller.
-     *
-     * @param QuotationRepository quotation Quotation repository
-     */
-    public function __construct(QuotationRepository $quotation)
+    public function __construct(BillRepository $bill)
     {
-        $this->quotation = $quotation;
+        $this->bill = $bill;
     }
 
     /**
@@ -33,8 +23,8 @@ class QuotationsController extends Controller
      */
     public function index()
     {
-        $data = QuotationResource::collection(
-            $this->quotation->paginateWithFilters(request(), request()->per_page, request()->order_by)
+        $data = BillResource::collection(
+            $this->bill->paginateWithFilters(request(), request()->per_page, request()->order_by)
         );
 
         if (! $data) {
@@ -65,7 +55,7 @@ class QuotationsController extends Controller
             ], 400);
         }
 
-        if (! $this->quotation->store($request)) {
+        if (! $this->bill->store($request)) {
             return response()->json([
                 'message' => 'Failed to store resource'
             ], 500);
@@ -84,7 +74,7 @@ class QuotationsController extends Controller
      */
     public function show($id)
     {
-        if (! $quotation = $this->quotation->findOrFail($id)) {
+        if (! $bill = $this->bill->findOrFail($id)) {
             return response()->json([
                 'message' => 'Resource does not exist'
             ], 400);
@@ -92,7 +82,7 @@ class QuotationsController extends Controller
 
         return response()->json([
             'message'   => 'Resource successfully retrieve',
-            'quotation' => $quotation
+            'bill' => $bill
         ], 200);
     }
 
@@ -116,7 +106,7 @@ class QuotationsController extends Controller
             ], 400);
         }
 
-        if (! $this->quotation->update($request, $id)) {
+        if (! $this->bill->update($request, $id)) {
             return response()->json([
                 'message' => 'Failed to update resource'
             ], 500);
@@ -135,7 +125,7 @@ class QuotationsController extends Controller
      */
     public function destroy($id)
     {
-        if (! $this->quotation->findOrFail($id)->delete()) {
+        if (! $this->bill->findOrFail($id)->delete()) {
             return response()->json([
                 'message' => 'Failed to delete resource'
             ], 400);
@@ -154,7 +144,7 @@ class QuotationsController extends Controller
      */
     public function restore($id)
     {
-        if (! $this->quotation->restore($id)) {
+        if (! $this->bill->restore($id)) {
             return response()->json([
                 'message' => 'Failed to restore resource'
             ], 400);
@@ -173,7 +163,7 @@ class QuotationsController extends Controller
      */
     public function forceDestroy($id)
     {
-        if (! $this->quotation->forceDestroy($id)) {
+        if (! $this->bill->forceDestroy($id)) {
             return response()->json([
                 'message' => 'Failed to permanently delete resource'
             ], 400);
@@ -189,17 +179,17 @@ class QuotationsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllQuotations()
+    public function getAllBills()
     {
-        if (cache()->has('quotations')) {
+        if (cache()->has('bills')) {
             return response()->json([
                 'response'   => true,
                 'message'    => 'Resources successfully retrieve.',
-                'quotations' => cache('quotations', 5)
+                'bills'      => cache('bills', 5)
             ], 200);
         }
 
-        if (! $quotations = $this->quotation->all()) {
+        if (! $bills = $this->bill->all()) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'
@@ -209,18 +199,7 @@ class QuotationsController extends Controller
         return response()->json([
             'response'   => true,
             'message'    => 'Resources successfully retrieve.',
-            'quotations' => $quotations
+            'bills'      => $bills
         ], 200);
-    }
-
-    public function contactApproval($id, $status) 
-    {
-        if (! $quotation = $this->quotation->contactApproval($id, $status)) {
-            return response()->json([
-                'message' => 'Resource does not exist'
-            ], 400);
-        }
-
-        return view('contact-approvals.home')->with('quotation', (object) $quotation);
     }
 }
