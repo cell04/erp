@@ -15,6 +15,22 @@
                             <label>Contact</label>
                             <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
                         </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>From</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" v-model="from_selected_radio_button" value="warehouse">
+                                <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" v-model="from_selected_radio_button" value="branch">
+                                <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
+                            </div>
+                            <vue-select v-model="fromWarehouse" @input="selectFromWarehouse()" label="name" :options="warehouses" v-show="from_selected_radio_button === 'warehouse'"></vue-select>
+                            <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
+                        </div>
+
                     </div>
 
                     <br>
@@ -90,6 +106,13 @@
         data() {
             return {
                 ifReady: false,
+                from_selected_radio_button: "",
+                fromWarehouse: null,
+                fromBranch: null,
+                warehouses: [],
+                branches: [],
+                stock_receivable_from_id : null,
+                stock_receivable_from_type: null,
                 contacts: [],
                 contact: null,
                 contact_id: "",
@@ -137,7 +160,27 @@
                 });
             });
 
-            Promise.all([getAllContacts, getAllItems]).then(() => {
+            let promiseBranches = new Promise((resolve, reject) => {
+                axios.get("/api/branches/get-all-branches/").then(res => {
+                    this.branches = res.data.branches;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            let promiseWarehouses = new Promise((resolve, reject) => {
+                axios.get("/api/warehouses/get-all-warehouses/").then(res => {
+                    this.warehouses = res.data.warehouses;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            Promise.all([getAllContacts, getAllItems, promiseBranches, promiseWarehouses]).then(() => {
                 this.ifReady = true;
             });
         },
@@ -158,6 +201,17 @@
         methods: {
             selectContact() {
                 this.contact_id = this.contact.id;
+            },
+
+            selectFromBranch() {
+                this.stock_receivable_from_id = this.fromBranch.id;
+                this.stock_receivable_from_type = "App\\Branch";
+                console.log('Branch - From: ' + this.stock_receivable_from_id + ' type: ' +  this.stock_receivable_from_type);
+            },
+            selectFromWarehouse() {
+                this.stock_receivable_from_id = this.fromWarehouse.id;
+                this.stock_receivable_from_type = "App\\Warehouse";
+                console.log('Warehouse - From: ' + this.stock_receivable_from_id + ' type: ' +  this.stock_receivable_from_type);
             },
 
             selectItem(index) {
@@ -231,6 +285,8 @@
 
                 let formData = {
                     contact_id: this.$data.contact_id,
+                    quotable_id: this.stock_receivable_from_id,
+                    quotable_type: this.stock_receivable_from_type,
                     date: this.$data.date,
                     amount: this.amount,
                     quotation_items: quotationItems

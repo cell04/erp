@@ -31,6 +31,12 @@
                                 <input type="text" class="form-control" v-model="quotations.created_at" readonly>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Origin</label>
+                                <input type="text" class="form-control" v-model="quotations.quotable_type" readonly>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
