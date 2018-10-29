@@ -46,6 +46,8 @@ class StockReceiveRepository extends Repository
         return DB::transaction(function () use ($request) {
             $stockReceive = $this->stockReceive->create($request->all());
             $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
+            $stockReceive->stocks()->createMany($request->stock_receive_items);
+
             return $stockReceive;
         });
     }
