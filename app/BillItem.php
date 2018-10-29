@@ -19,7 +19,7 @@ class BillItem extends Model
      */
     protected $fillable = [
         'bill_id', 'item_id', 'unit_of_measurement_id',
-        'quantity', 'item_pricelist_id'
+        'quantity', 'price'
     ];
 
     /**
