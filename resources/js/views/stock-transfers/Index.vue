@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-             Stock Transfers / View Stock Transfers
+             <div class="float-left">
+                    Stock Transfers / View Stock Transfers
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'stock-transfers.create' }">Create New Stock Transfer</router-link>
+                </div>
          </div>
          <div class="card-body">
             <table class="table table-hover table-sm">

@@ -2,10 +2,15 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Received Orders / View Received Orders
                 <!-- <router-link :to="{ name: 'purchase-orders.create'}">
                     <button class="btn btn-primary float-right">Ad Order</button>
                 </router-link> -->
+                <div class="float-left">
+                    Received Orders / View Received Orders
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'receive-orders.create' }">Create New Received Order</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
