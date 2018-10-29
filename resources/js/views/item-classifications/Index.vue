@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
+                 <div class="float-left">
                 {{ componentVal }} / View {{ componentVal }}
+                </div>
+                <div class="float-right">
+                    <router-link class="text-success" :to="{ name: 'item-classifications.create' }">Create New Item Classification</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

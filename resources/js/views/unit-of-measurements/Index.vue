@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               {{componentVal}}s / View {{componentVal}}s
+                <div class="float-left">
+                    {{componentVal}}s / View {{componentVal}}s
+                </div>
+                <div class="float-right">
+                    <router-link class="text-success" :to="{ name: 'unit-of-measurements.create' }">Create New Unit of Measurement</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
