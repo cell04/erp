@@ -67,12 +67,20 @@ const InvoicesReceive = () => import('./views/invoices/Receive.vue');
 const InvoicesView = () => import('./views/invoices/View');
 
 /**
- * Invoices
+ * Invoices Payment
  *
  */
 const InvoicePaymentIndex = () => import('./views/invoice-payment/Index');
 const InvoicePaymentCreate = () => import('./views/invoice-payment/Create');
-const InvoicePaymentView = () => import('./views/invoice-payment/View.vue');
+const InvoicePaymentView = () => import('./views/invoice-payment/View');
+
+/**
+ * Bills
+ *
+ */
+const BillsIndex = () => import('./views/bills/Index');
+const BillsCreate = () => import('./views/bills/Create');
+const BillsView = () => import('./views/bills/View');
 
 /**
  * Items
@@ -245,6 +253,11 @@ const router = new Router({
         { path: '/invoice-payment', name: 'invoice-payment.index', component: InvoicePaymentIndex },
         { path: '/invoice-payment/create', name: 'invoice-payment.create', component: InvoicePaymentCreate },
         { path: '/invoice-payment/:id', name: 'invoice-payment.view', component: InvoicePaymentView },
+
+        // Bills
+        { path: '/bills', name: 'bills.index', component: BillsIndex },
+        { path: '/bills/create', name: 'bills.create', component: BillsCreate },
+        { path: '/bills/:id', name: 'bills.view', component: BillsView },
 
         // Items
         { path: '/items', name: 'items.index', component: ItemsIndex },
