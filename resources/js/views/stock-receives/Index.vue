@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header clearfix">
                <div class="float-left">
-                    Stock Recieves
+                    Stock Receives
                 </div>
                 <div class="float-right">
                     <router-link class="btn-success btn-sm" :to="{ name: 'stock-receives.create' }">Create New Stock Receive</router-link>
