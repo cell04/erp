@@ -6,6 +6,24 @@
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
+                    <div v-if="bills.status === 0">
+                        <h5>
+                            Invoice Details
+                            <span class="badge badge-info">Issued</span>
+                        </h5>
+                    </div>
+                    <div v-else-if="bills.status === 1">
+                        <h5>
+                            Invoice Details
+                            <span class="badge badge-primary">Partially Paid</span>
+                        </h5>
+                    </div>
+                    <div v-else>
+                        <h5>
+                            Invoice Details
+                            <span class="badge badge-success">Fully Paid</span>
+                        </h5>
+                    </div>
                     <fieldset>
                         <div class="row">
                             <div class="col-md-6 form-group">
@@ -40,7 +58,11 @@
                         </div>
                     </fieldset>
 
-                    <br />
+                    <br>
+                    <h5>
+                        Invoice Item Details
+                    </h5>
+                    <br>
 
                     <table class="table table-hover table-sm">
                         <thead>
