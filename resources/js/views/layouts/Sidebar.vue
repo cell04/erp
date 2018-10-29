@@ -1,14 +1,11 @@
 <template>
-    <!-- just add bkdColor to main class -->
-    <div class="sticky-top py-1 mt-3 background sidenav-container bkdColor">
+    <div class="sticky-top py-1 background sidenav-container bkdColor">
         <ul class="nav flex-column sidebar-nav">
-
             <li class="nav-item">
-                <a  class="nav-link">
-                    <i class="sidebar-icon fas fa-briefcase pr-3"></i>
+                <span>
+                    <i class="sidebar-icon fas fa-briefcase px-3 py-2"></i>
                     Business
-                </a>
-
+                </span>
             </li>
 
             <li class="nav-item">
@@ -25,7 +22,6 @@
                 </router-link>
             </li>
 
-
             <li class="nav-item">
                 <a class="nav-link" href="#purchasing" data-toggle="collapse" aria-expanded="false" aria-controls="purchasing">
                     <i class="sidebar-icon fas fa-shopping-bag pr-3"></i>
@@ -36,13 +32,16 @@
             <div class="collapse" id="purchasing">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'purchase-orders.index' }">Purchasing Order</router-link>
+                        <router-link class="nav-link" :to="{ name: 'purchase-orders.index' }">Purchase Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Invoice</router-link>
+                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Receive Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: '' }">Goods Receipt</router-link>
+                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Bills</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'invoice-payments.index' }">Bill Payments</router-link>
                     </li>
                 </ul>
             </div>
@@ -66,7 +65,19 @@
                         <router-link class="nav-link" :to="{ name: 'items.index' }">Items</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'item-pricelists.index' }">Item Price List</router-link>
+                        <router-link class="nav-link" :to="{ name: 'item-pricelists.index' }">Purchase Item Price Lists</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stocks.index' }">Stocks</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-requests.index' }">Stocks Requests</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-transfers.index' }">Stocks Transfers</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'stock-receives.index' }">Stocks Receives</router-link>
                     </li>
                 </ul>
             </div>
@@ -81,16 +92,13 @@
             <div class="collapse" id="sales">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'contacts.create' }">Module # 1</router-link>
+                        <router-link class="nav-link" :to="{ name: 'quotations.index' }">Quotations</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'contacts.create' }">Module # 2</router-link>
+                        <router-link class="nav-link" :to="{ name: 'bills.create' }">Invoices</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'contacts.create' }">Module # 3</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'contacts.create' }">Module # 4</router-link>
+                        <router-link class="nav-link" :to="{ name: 'bill-payments.create' }">Invoice Payments</router-link>
                     </li>
                 </ul>
             </div>
@@ -100,20 +108,20 @@
 </template>
 
 <style>
-    .bkdColor{
-        background-color: #319c9f;
-    }
-    .sidebar-nav li > a.nav-link{
-        color: white;
-    }
-    .sidenav-container{
-        /* margin-left: -16px; */
-        overflow-y: hidden;
-    }
-    .sidebar-icon{
-        font-size: 1em;
-    }
-    .nav-link .router-link-exact-active{
-        background-color: #236d6f;
-    }
+.bkdColor{
+    background-color: #319c9f;
+}
+.sidebar-nav li > a.nav-link{
+    color: white;
+}
+.sidenav-container{
+    /* margin-left: -16px; */
+    overflow-y: hidden;
+}
+.sidebar-icon{
+    font-size: 1em;
+}
+.nav-link .router-link-exact-active{
+    background-color: #236d6f;
+}
 </style>
