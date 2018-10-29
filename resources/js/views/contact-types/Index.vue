@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Contact Types / View Contact Types
+                <div class="float-left">
+                    Contact Types / View Contact Types
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'contact-types.create' }">Create New Contact Type</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

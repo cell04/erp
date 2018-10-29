@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               Stock Recieves
+               <div class="float-left">
+                    Stock Receives
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'stock-receives.create' }">Create New Stock Receive</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -29,7 +34,7 @@
                     </thead>
                     <tbody v-if="stockReceive">
                         <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user } in stockReceive">
-                            
+
                             <td>{{ number }}</td>
                             <td>{{ stock_receivable_from.name }}</td>
                             <td>{{ stock_receivable_to.name }}</td>

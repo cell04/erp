@@ -7,14 +7,14 @@ Approved By : {{ $content->approvedBy->name }}
 |       Item Name                                                                           |              Quantity                 |                   Price                       |                                               Unit                                    |
 |       :------------                                                                       |              :-------------           |                   :--------                   |                                               :--------                               |
 @foreach ($content->quotationItems as $quotationItem)
-| {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->quantity }}     | {{ $quotationItem->itemPricelist->price }}    |                      {{ $quotationItem->unitOfMeasurement->name }}                    |
+| {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->quantity }}     |           {{ $quotationItem->price }}         |                      {{ $quotationItem->unitOfMeasurement->name }}                    |
 @endforeach
 |                                                                                           |              Total Amount             |             {{ $content->amount }}            |                                                                                       |
 @endcomponent
-@component('mail::button', ['url' => 'http://inventory.test', 'color' => 'success']) 
+@component('mail::button', ['url' => $url . '/2', 'color' => 'success']) 
     Approved 
 @endcomponent    
-@component('mail::button', ['url' => 'http://inventory.test', 'color' => 'error']) 
+@component('mail::button', ['url' => $url . '/3', 'color' => 'error']) 
     Cancelled 
 @endcomponent                             
 Thanks,<br>

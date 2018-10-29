@@ -116,8 +116,6 @@ class QuotationsController extends Controller
             ], 400);
         }
 
-        return $this->quotation->update($request, $id);
-
         if (! $this->quotation->update($request, $id)) {
             return response()->json([
                 'message' => 'Failed to update resource'
@@ -223,9 +221,6 @@ class QuotationsController extends Controller
             ], 400);
         }
 
-        return response()->json([
-            'message'   => 'Resource successfully retrieve',
-            'quotation' => $quotation
-        ], 200);
+        return view('contact-approvals.home')->with('quotation', (object) $quotation);
     }
 }

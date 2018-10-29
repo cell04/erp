@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Item Types / View Item Types
+                <div class="float-left">
+                    Item Types / View Item Types
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'item-types.create' }">Create New Item Type</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

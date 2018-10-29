@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Corporations / View Corporations
+                <div class="float-left">
+                    Corporations / View Corporations
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'corporations.create' }">Create New Corporation</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

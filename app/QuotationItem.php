@@ -24,7 +24,7 @@ class QuotationItem extends Model
      */
     protected $fillable = [
         'quotation_id', 'item_id', 'quantity',
-        'unit_of_measurement_id', 'item_pricelist_id', 'status'
+        'unit_of_measurement_id', 'price', 'status'
     ];
 
     /**
@@ -62,15 +62,5 @@ class QuotationItem extends Model
     public function unitOfMeasurement()
     {
         return $this->belongsTo(UnitOfMeasurement::class);
-    }
-
-    /**
-     * The quotation item belongs to an item pricelist.
-     *
-     * @return object
-     */
-    public function itemPricelist()
-    {
-        return $this->belongsTo(ItemPricelist::class);
     }
 }

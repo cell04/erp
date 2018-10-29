@@ -4,8 +4,9 @@
 Route::post('/auth/login', 'AuthController@login');
 Route::post('/auth/logout', 'AuthController@logout');
 Route::get('/auth/user', 'AuthController@user');
+Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
 
-Route::group(['middleware' => 'api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
     Route::delete('audit-trails/{auditTrail}/force-delete', 'AuditTrailsController@forceDestroy');
@@ -77,6 +78,7 @@ Route::group(['middleware' => 'api'], function () {
     // Invoices
     Route::match(['put', 'patch'], 'invoices/{invoice}/restore', 'InvoicesController@restore');
     Route::delete('invoices/{invoice}/force-delete', 'InvoicesController@forceDestroy');
+    Route::get('invoices/get-all-invoices/', 'InvoicesController@getAllIvoices');
     Route::resource('invoices', 'InvoicesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -86,6 +88,7 @@ Route::group(['middleware' => 'api'], function () {
     // Invoice Payments
     Route::match(['put', 'patch'], 'invoice-payments/{invoicePayment}/restore', 'InvoicePaymentsController@restore');
     Route::delete('invoice-payments/{invoicePayment}/force-delete', 'InvoicePaymentsController@forceDestroy');
+    Route::get('invoice-payments/get-all-invoice-payments/', 'InvoicePaymentsController@getAllIvoicePayment');
     Route::resource('invoice-payments', 'InvoicePaymentsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -237,8 +240,27 @@ Route::group(['middleware' => 'api'], function () {
     Route::match(['put', 'patch'], 'quotations/{quotation}/restore', 'QuotationsController@restore');
     Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
     Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
-    Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
     Route::resource('quotations', 'QuotationsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Bills
+    Route::match(['put', 'patch'], 'bills/{bill}/restore', 'BillsController@restore');
+    Route::delete('bills/{bill}/force-delete', 'BillsController@forceDestroy');
+    Route::get('bills/get-all-bills', 'BillsController@getAllBills');
+    Route::resource('bills', 'BillsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Bill Payments
+    Route::match(['put', 'patch'], 'bill-payments/{bill-payment}/restore', 'BillPaymentsController@restore');
+    Route::delete('bill-payments/{bill-payment}/force-delete', 'BillPaymentsController@forceDestroy');
+    Route::get('bill-payments/get-all-bill-payments', 'BillPaymentsController@getAllBillPayments');
+    Route::resource('bill-payments', 'BillPaymentsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]

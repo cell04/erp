@@ -2,10 +2,15 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Invoices / View Invoice
                 <!-- <router-link :to="{ name: 'bills.create'}">
                     <button class="btn btn-primary float-right">Add New Bill</button>
                 </router-link> -->
+                <div class="float-left">
+                    Invoices / View Invoice
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'invoices.create' }">Create New Invoice</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

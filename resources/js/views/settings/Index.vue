@@ -3,39 +3,43 @@
         <div class="card my-4">
             <ul class="nav nav-pills nav-justified">
                 <li class="nav-item bg-white">
-                    <router-link class="nav-link active p-3" :to="{ name: 'settings.index' }">
-                        System
+                    <router-link class="nav-link p-3" :to="{ name: 'corporations.index' }">
+                        Corporations
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.users' }">
-                        Users
+                    <router-link class="nav-link p-3" :to="{ name: 'contact-types.index' }">
+                        Contact Types
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.units.index' }">
+                    <router-link class="nav-link p-3 " :to="{ name: 'item-types.index' }">
+                        Item Types
+                    </router-link>
+                </li>
+                <li class="nav-item bg-white">
+                    <router-link class="nav-link p-3 " :to="{ name: 'item-classifications.index' }">
+                        Item Classifications
+                    </router-link>
+                </li>
+                <li class="nav-item bg-white">
+                    <router-link class="nav-link p-3" :to="{ name: 'unit-of-measurements.index' }">
                         Unit of Measurements
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3" :to="{ name: 'settings.conversions' }">
-                        Conversions
-                    </router-link>
-                </li>
-                <li class="nav-item bg-white">
-                    <router-link class="nav-link p-3 " :to="{ name: 'settings.paymentTerms' }">
-                        Payment Terms
+                    <router-link class="nav-link p-3" :to="{ name: 'users.index' }">
+                        Users
                     </router-link>
                 </li>
             </ul>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                Available Settings
-            </div>
-            <div class="card-body">
-                Test
+        <div class="row">
+            <div class="col-md-12">
+                <transition name="fade" mode="out-in">
+                    <router-view></router-view>
+                </transition>
             </div>
         </div>
     </div>

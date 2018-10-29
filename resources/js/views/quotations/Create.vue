@@ -8,13 +8,29 @@
                 <form v-on:submit.prevent="createNewQuotation">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" v-model="date" required>
+                            <label>Number</label>
+                            <input type="text" class="form-control" v-model="number" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Contact</label>
                             <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
                         </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>From</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" v-model="from_selected_radio_button" value="warehouse">
+                                <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" v-model="from_selected_radio_button" value="branch">
+                                <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
+                            </div>
+                            <vue-select v-model="fromWarehouse" @input="selectFromWarehouse()" label="name" :options="warehouses" v-show="from_selected_radio_button === 'warehouse'"></vue-select>
+                            <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
+                        </div>
+
                     </div>
 
                     <br>
@@ -50,7 +66,7 @@
                                     {{ quotation_item.unitOfMeasurement }}
                                 </td>
                                 <td>
-                                    <vue-select v-model="quotation_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="quotation_item.itemPricelists"></vue-select>
+                                    <input class="form-control" @input="calculate(index)" v-model.number="quotation_item.price" required>
                                 </td>
                                 <td>{{ quotation_item.subTotal }}</td>
                                 <td>
@@ -90,22 +106,27 @@
         data() {
             return {
                 ifReady: false,
+                from_selected_radio_button: "",
+                fromWarehouse: null,
+                fromBranch: null,
+                warehouses: [],
+                branches: [],
+                stock_receivable_from_id : null,
+                stock_receivable_from_type: null,
                 contacts: [],
                 contact: null,
                 contact_id: "",
                 items: [],
-                date: "",
+                number: "",
                 quotation_items: [
                     {
                         item: '',
                         item_id: '',
-                        quantity: 0,
+                        quantity: '',
                         unitOfMeasurements: [],
                         unitOfMeasurement: '',
                         unit_of_measurement_id: '',
-                        itemPricelists: [],
-                        itemPricelist: 0,
-                        item_pricelist_id: '',
+                        price: 0,
                         subTotal: 0
                     }
                 ],
@@ -115,8 +136,6 @@
         },
 
         mounted() {
-            this.date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
-
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
                     this.contacts = res.data.contacts;
@@ -137,7 +156,27 @@
                 });
             });
 
-            Promise.all([getAllContacts, getAllItems]).then(() => {
+            let promiseBranches = new Promise((resolve, reject) => {
+                axios.get("/api/branches/get-all-branches/").then(res => {
+                    this.branches = res.data.branches;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            let promiseWarehouses = new Promise((resolve, reject) => {
+                axios.get("/api/warehouses/get-all-warehouses/").then(res => {
+                    this.warehouses = res.data.warehouses;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            Promise.all([getAllContacts, getAllItems, promiseBranches, promiseWarehouses]).then(() => {
                 this.ifReady = true;
             });
         },
@@ -160,6 +199,17 @@
                 this.contact_id = this.contact.id;
             },
 
+            selectFromBranch() {
+                this.stock_receivable_from_id = this.fromBranch.id;
+                this.stock_receivable_from_type = "App\\Branch";
+                console.log('Branch - From: ' + this.stock_receivable_from_id + ' type: ' +  this.stock_receivable_from_type);
+            },
+            selectFromWarehouse() {
+                this.stock_receivable_from_id = this.fromWarehouse.id;
+                this.stock_receivable_from_type = "App\\Warehouse";
+                console.log('Warehouse - From: ' + this.stock_receivable_from_id + ' type: ' +  this.stock_receivable_from_type);
+            },
+
             selectItem(index) {
                 this.quotation_items[index].item_id = this.quotation_items[index].item.id;
                 this.quotation_items[index].unitOfMeasurement = this.quotation_items[index].item.default_unit_of_measurement.name;
@@ -174,6 +224,10 @@
                         reject();
                     });
                 });
+            },
+            calculate(index) {
+                this.quotation_items[index].subTotal = (parseFloat(this.quotation_items[index].quantity) * parseFloat(this.quotation_items[index].price));
+                this.updateTotalAmount();
             },
             selectItemPricelist(index) {
                 this.quotation_items[index].item_pricelist_id = this.quotation_items[index].itemPricelist.id;
@@ -203,9 +257,7 @@
                     unitOfMeasurements: [],
                     unitOfMeasurement: '',
                     unit_of_measurement_id: '',
-                    itemPricelists: [],
-                    itemPricelist: '',
-                    item_pricelist_id: '',
+                    price: 0,
                     subTotal: 0
                 });
 
@@ -225,13 +277,15 @@
                         item_id: purchase_order_item.item_id,
                         quantity: purchase_order_item.quantity,
                         unit_of_measurement_id: purchase_order_item.unit_of_measurement_id,
-                        item_pricelist_id: purchase_order_item.item_pricelist_id
+                        price: purchase_order_item.price
                     });
                 });
 
                 let formData = {
                     contact_id: this.$data.contact_id,
-                    date: this.$data.date,
+                    quotable_id: this.stock_receivable_from_id,
+                    quotable_type: this.stock_receivable_from_type,
+                    number: this.number,
                     amount: this.amount,
                     quotation_items: quotationItems
                 };

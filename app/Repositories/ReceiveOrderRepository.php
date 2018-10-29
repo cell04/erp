@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\PurchaseOrder;
 use App\ReceiveOrder;
+use App\Stock;
 use Illuminate\Support\Facades\DB;
 
 class ReceiveOrderRepository extends Repository
@@ -23,6 +25,20 @@ class ReceiveOrderRepository extends Repository
         return DB::transaction(function () use ($request) {
             $receiveOrder = $this->receiveOrder->create($request->all());
             $receiveOrder->receiveOrderItems()->createMany($request->receive_order_items);
+
+            $purchaseOrder = PurchaseOrder::find($request->purchase_order_id);
+
+            foreach ($request->receive_order_items as $receiveOrderItem) {
+                $data = [
+                    'stockable_id' => $purchaseOrder->warehouse_id,
+                    'stockable_type' => 'App\\Warehouse',
+                    'item_id' => $receiveOrderItem['item_id'],
+                    'quantity' => $receiveOrderItem['quantity'],
+                    'unit_of_measurement_id' => $receiveOrderItem['unit_of_measurement_id']
+                ];
+
+                Stock::create($data);
+            }
 
             return $receiveOrder;
         });

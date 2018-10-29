@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    Your Quotation is Manages
                 </div>
             </div>
         </div>

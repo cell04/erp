@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Quotations / View Quotations
+                <div class="float-left">
+                    Quotations / View Quotations
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'quotations.create' }">Create New Quotation</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -22,6 +27,7 @@
                         <tr>
                             <th scope="col">Company</th>
                             <th scope="col">Contact Name</th>
+                            <th scope="col">Number</th>
                             <th scope="col">Date Created</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
@@ -31,11 +37,12 @@
                         <tr :key="index" v-for="(purchaseOrder, index) in quotations">
                             <td>{{ purchaseOrder.contact.company }}</td>
                             <td>{{ purchaseOrder.contact.person }}</td>
+                            <td>{{ purchaseOrder.number }}</td>
                             <td>{{ purchaseOrder.created_at }}</td>
                             <td>{{ purchaseOrder.status }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'quotations.view', params: { id: purchaseOrder.id }}">View</router-link>
-                    
+
                             </td>
                         </tr>
                     </tbody>

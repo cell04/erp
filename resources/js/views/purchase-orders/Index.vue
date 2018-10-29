@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Purchase Orders / View Purchase Orders
+                <div class="float-left">
+                    Purchase Orders / View Purchase Orders
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'purchase-orders.create' }">Create New Purchase Orders</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -35,7 +40,7 @@
                             <td>{{ purchaseOrder.created_at }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
-                                <router-link class="text-success" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
+                                <router-link class="btn-success btn-sm" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
                             </td>
                         </tr>
                     </tbody>

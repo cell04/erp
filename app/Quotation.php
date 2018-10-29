@@ -24,7 +24,7 @@ class Quotation extends Model
      */
     protected $fillable = [
         'corporation_id', 'user_id', 'contact_id', 'quotable_id',
-        'quotable_type', 'amount', 'status', 'approved_by'
+        'quotable_type', 'number', 'amount', 'status', 'approved_by'
     ];
 
     /**
@@ -33,6 +33,15 @@ class Quotation extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'quotable',
+    ];
 
     /**
      * Run functions on boot.

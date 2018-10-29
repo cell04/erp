@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Warehouses / View Warehouses
+                <div class="float-left">
+                    Warehouses / View Warehouses
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'warehouses.create' }">Create New Warehouse</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -37,7 +42,7 @@
                             <td>{{ telephone_number }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'warehouses.view', params: { id: id }}">View</router-link> |
-                                <router-link class="text-success" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create New Stock Request</router-link>
+                                <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create New Stock Request</router-link>
                             </td>
                         </tr>
                     </tbody>
