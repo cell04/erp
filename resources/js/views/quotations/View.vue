@@ -20,7 +20,7 @@
                 <div v-else>
                     <h5>
                         Quotation
-                        <span class="badge badge-success">Contact Approved</span>
+                        <span class="badge badge-success">Customer Approved</span>
                     </h5>
                 </div>
                 <fieldset>
@@ -148,10 +148,8 @@
                 };
 
                 axios.patch('/api/quotations/' + this.$route.params.id, params).then(res => {
-                    this.$router.push({
-                        name: 'quotations.view',
-                        params: { id: this.$route.params.id }
-                    });
+                    this.quotations.status = 1;
+                    this.ifReady = true;
                 }).catch(err => {
                     alert('Please report to the devs');
                     this.ifReady = true;

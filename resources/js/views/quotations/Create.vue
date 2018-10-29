@@ -66,7 +66,7 @@
                                     {{ quotation_item.unitOfMeasurement }}
                                 </td>
                                 <td>
-                                    <vue-select v-model="quotation_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="quotation_item.itemPricelists"></vue-select>
+                                    <input class="form-control" @input="calculate(index)" v-model.number="quotation_item.price" required>
                                 </td>
                                 <td>{{ quotation_item.subTotal }}</td>
                                 <td>
@@ -122,13 +122,11 @@
                     {
                         item: '',
                         item_id: '',
-                        quantity: 0,
+                        quantity: '',
                         unitOfMeasurements: [],
                         unitOfMeasurement: '',
                         unit_of_measurement_id: '',
-                        itemPricelists: [],
-                        itemPricelist: 0,
-                        item_pricelist_id: '',
+                        price: 0,
                         subTotal: 0
                     }
                 ],
@@ -229,6 +227,10 @@
                     });
                 });
             },
+            calculate(index) {
+                this.quotation_items[index].subTotal = (parseFloat(this.quotation_items[index].quantity) * parseFloat(this.quotation_items[index].price));
+                this.updateTotalAmount();
+            },
             selectItemPricelist(index) {
                 this.quotation_items[index].item_pricelist_id = this.quotation_items[index].itemPricelist.id;
                 this.quotation_items[index].subTotal = (parseFloat(this.quotation_items[index].quantity) * parseFloat(this.quotation_items[index].itemPricelist.price));
@@ -257,9 +259,7 @@
                     unitOfMeasurements: [],
                     unitOfMeasurement: '',
                     unit_of_measurement_id: '',
-                    itemPricelists: [],
-                    itemPricelist: '',
-                    item_pricelist_id: '',
+                    price: 0,
                     subTotal: 0
                 });
 
@@ -279,7 +279,7 @@
                         item_id: purchase_order_item.item_id,
                         quantity: purchase_order_item.quantity,
                         unit_of_measurement_id: purchase_order_item.unit_of_measurement_id,
-                        item_pricelist_id: purchase_order_item.item_pricelist_id
+                        price: purchase_order_item.price
                     });
                 });
 
