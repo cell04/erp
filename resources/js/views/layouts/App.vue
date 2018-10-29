@@ -1,13 +1,13 @@
 <template>
     <div>
         <navbar></navbar>
-        <div class="container-fluid mb-5">
+        <div class="container-fluid mb-5 ">
             <div class="row">
-                <div class="col-md-2 no-padding-right">
+                <div class="col-md-2 p-md-0">
                     <sidebar></sidebar>
                 </div>
                 <div class="col-md-10">
-                    <div class="mt-3">
+                    <div class="mt-3 px-md-5">
                         <transition name="fade" mode="out-in">
                             <router-view class="view"></router-view>
                         </transition>
