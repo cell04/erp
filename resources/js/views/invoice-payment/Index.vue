@@ -33,10 +33,10 @@
                                 <router-link class="text-info" :to="{ name: 'invoice-payment.view', params: { id: id }}">
                                     View
                                 </router-link>
-                                |
+                                <!-- |
                                 <router-link class="text-info" :to="{ name: 'invoice-payment.edit', params: { id: id }}">
                                     Edit
-                                </router-link>
+                                </router-link> -->
                             </td>
                         </tr>
                     </tbody>
@@ -92,7 +92,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Invoice Payment</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>

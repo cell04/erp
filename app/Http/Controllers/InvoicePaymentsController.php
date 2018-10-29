@@ -179,4 +179,33 @@ class InvoicePaymentsController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllIvoicePayment()
+    {
+        if (cache()->has('invoice_payments')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'invoice_payments' => cache('invoice_payments', 5)
+            ], 200);
+        }
+
+        if (! $invoicePayments = $this->invoicePayment->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'invoice_payments' => $invoicePayments
+        ], 200);
+    }
 }

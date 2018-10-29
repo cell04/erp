@@ -78,6 +78,7 @@ Route::group(['middleware' => 'api'], function () {
     // Invoices
     Route::match(['put', 'patch'], 'invoices/{invoice}/restore', 'InvoicesController@restore');
     Route::delete('invoices/{invoice}/force-delete', 'InvoicesController@forceDestroy');
+    Route::get('invoices/get-all-invoices/', 'InvoicesController@getAllIvoices');
     Route::resource('invoices', 'InvoicesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -87,6 +88,7 @@ Route::group(['middleware' => 'api'], function () {
     // Invoice Payments
     Route::match(['put', 'patch'], 'invoice-payments/{invoicePayment}/restore', 'InvoicePaymentsController@restore');
     Route::delete('invoice-payments/{invoicePayment}/force-delete', 'InvoicePaymentsController@forceDestroy');
+    Route::get('invoice-payments/get-all-invoice-payments/', 'InvoicePaymentsController@getAllIvoicePayment');
     Route::resource('invoice-payments', 'InvoicePaymentsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
