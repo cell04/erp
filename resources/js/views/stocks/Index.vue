@@ -35,7 +35,7 @@
                             <td>{{ unit_of_measurement.name }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'stocks.view', params: { id: id }}">View</router-link> |
-                                <router-link class="text-success" :to="{ name: '', params: { id: id }}">Convert</router-link>
+                                <router-link class="btn-success btn-sm" :to="{ name: '', params: { id: id }}">Convert</router-link>
                             </td>
                         </tr>
                     </tbody>

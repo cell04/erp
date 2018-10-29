@@ -37,7 +37,7 @@
                             <td>{{ telephone_number }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'warehouses.view', params: { id: id }}">View</router-link> |
-                                <router-link class="text-success" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create New Stock Request</router-link>
+                                <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create New Stock Request</router-link>
                             </td>
                         </tr>
                     </tbody>

@@ -6,7 +6,7 @@
                     Contact Types / View Contact Types
                 </div>
                 <div class="float-right">
-                    <router-link class="text-success" :to="{ name: 'contact-types.create' }">Create New Contact Type</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'contact-types.create' }">Create New Contact Type</router-link>
                 </div>
             </div>
             <div class="card-body">

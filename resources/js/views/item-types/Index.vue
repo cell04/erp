@@ -6,7 +6,7 @@
                     Item Types / View Item Types
                 </div>
                 <div class="float-right">
-                    <router-link class="text-success" :to="{ name: 'item-types.create' }">Create New Item Type</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'item-types.create' }">Create New Item Type</router-link>
                 </div>
             </div>
             <div class="card-body">
