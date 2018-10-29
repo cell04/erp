@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Quotation</label>
-                            <vue-select v-model="billsId" @input="selectBill()" label="quotable_type" :options="bills"></vue-select>
+                            <vue-select v-model="billsId" @input="selectBill()" label="number" :options="bills"></vue-select>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -30,11 +30,6 @@
                         <div class="col-md-6 form-group">
                             <label>Amount</label>
                             <input type="number" class="form-control" v-model="amount" required>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Amount Paid</label>
-                            <input type="number" class="form-control" v-model="amount_paid" required>
                         </div>
                     </div>
 
