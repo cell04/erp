@@ -67,6 +67,30 @@ const InvoicesReceive = () => import('./views/invoices/Receive.vue');
 const InvoicesView = () => import('./views/invoices/View');
 
 /**
+ * Invoices Payment
+ *
+ */
+const InvoicePaymentIndex = () => import('./views/invoice-payment/Index');
+const InvoicePaymentCreate = () => import('./views/invoice-payment/Create');
+const InvoicePaymentView = () => import('./views/invoice-payment/View');
+
+/**
+ * Bills
+ *
+ */
+const BillsIndex = () => import('./views/bills/Index');
+const BillsCreate = () => import('./views/bills/Create');
+const BillsView = () => import('./views/bills/View');
+
+/**
+ * Bills Payment
+ *
+ */
+const BillPaymentIndex = () => import('./views/bill-payment/Index');
+const BillPaymentCreate = () => import('./views/bill-payment/Create');
+const BillPaymentView = () => import('./views/bill-payment/View');
+
+/**
  * Items
  *
  */
@@ -161,6 +185,7 @@ const QuotationView = () => import('./views/quotations/View');
  */
 const ReceiveOrdersIndex = () => import('./views/receive-orders/Index');
 const ReceiveOrdersCreate = () => import('./views/receive-orders/Create');
+const ReceiveOrdersReceive = () => import('./views/receive-orders/Receive.vue');
 const ReceiveOrdersView = () => import('./views/receive-orders/View');
 
 /**
@@ -232,6 +257,21 @@ const router = new Router({
         { path: '/invoices/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
+        // Invoices Payment
+        { path: '/invoice-payment', name: 'invoice-payment.index', component: InvoicePaymentIndex },
+        { path: '/invoice-payment/create', name: 'invoice-payment.create', component: InvoicePaymentCreate },
+        { path: '/invoice-payment/:id', name: 'invoice-payment.view', component: InvoicePaymentView },
+
+        // Bills
+        { path: '/bills', name: 'bills.index', component: BillsIndex },
+        { path: '/bills/create', name: 'bills.create', component: BillsCreate },
+        { path: '/bills/:id', name: 'bills.view', component: BillsView },
+
+        // Bills Payment
+        { path: '/bill-payment', name: 'bill-payment.index', component: BillPaymentIndex },
+        { path: '/bill-payment/create', name: 'bill-payment.create', component: BillPaymentCreate },
+        { path: '/bill-payment/:id', name: 'bill-payment.view', component: BillPaymentView },
+
         // Items
         { path: '/items', name: 'items.index', component: ItemsIndex },
         { path: '/items/create', name: 'items.create', component: ItemsCreate },
@@ -264,6 +304,7 @@ const router = new Router({
         // Receive Orders
         { path: '/received-orders', name: 'receive-orders.index', component: ReceiveOrdersIndex },
         { path: '/received-orders/create', name: 'receive-orders.create', component: ReceiveOrdersCreate },
+        { path: '/received-orders/:id', name: 'receive-orders.receive', component: ReceiveOrdersReceive },
         { path: '/received-orders/:id', name: 'receive-orders.view', component: ReceiveOrdersView },
 
         // Settings

@@ -1,31 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Http\Resources\InvoicePaymentResource;
-use App\Repositories\InvoicePaymentRepository;
-use Illuminate\Http\Request;
+use App\Http\Resources\BillResource;
+use App\Repositories\BillRepository;
 use Illuminate\Support\Facades\Validator;
 
-class InvoicePaymentsController extends Controller
+use Illuminate\Http\Request;
+
+class BillsController extends Controller
 {
-    /**
-     * InvoicePayment repository.
-     *
-     * @var App\Repositories\InvoicePaymentRepository
-     */
-    protected $invoicePayment;
-    
-    /**
-     * Create new instance of invoicePayment controller.
-     *
-     * @param InvoicePaymentRepository invoicePayment InvoicePayment repository
-     */
-    public function __construct(InvoicePaymentRepository $invoicePayment)
+    protected $bill;
+
+    public function __construct(BillRepository $bill)
     {
-        $this->invoicePayment = $invoicePayment;
+        $this->bill = $bill;
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -33,15 +23,19 @@ class InvoicePaymentsController extends Controller
      */
     public function index()
     {
-        if (! $data = InvoicePaymentResource::collection($this->invoicePayment->paginate())) {
+        $data = BillResource::collection(
+            $this->bill->paginateWithFilters(request(), request()->per_page, request()->order_by)
+        );
+
+        if (! $data) {
             return response()->json([
                 'message' => 'Failed to retrieve resource'
             ], 400);
         }
-    
+
         return $data;
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -51,27 +45,27 @@ class InvoicePaymentsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            
+
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
                 'errors'  => $validator->errors()
             ], 400);
         }
-    
-        if (! $this->invoicePayment->store($request)) {
+
+        if (! $this->bill->store($request)) {
             return response()->json([
                 'message' => 'Failed to store resource'
             ], 500);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully stored'
         ], 200);
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -80,18 +74,18 @@ class InvoicePaymentsController extends Controller
      */
     public function show($id)
     {
-        if (! $invoicePayment = $this->invoicePayment->findOrFail($id)) {
+        if (! $bill = $this->bill->findOrFail($id)) {
             return response()->json([
                 'message' => 'Resource does not exist'
             ], 400);
         }
-    
+
         return response()->json([
-            'message' => 'Resource successfully retrieve',
-            'invoicePayment' => $invoicePayment
+            'message'   => 'Resource successfully retrieve',
+            'bill' => $bill
         ], 200);
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -102,27 +96,27 @@ class InvoicePaymentsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            
+
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
                 'errors'  => $validator->errors()
             ], 400);
         }
-    
-        if (! $this->invoicePayment->update($request, $id)) {
+
+        if (! $this->bill->update($request, $id)) {
             return response()->json([
                 'message' => 'Failed to update resource'
             ], 500);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully updated'
         ], 200);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -131,17 +125,17 @@ class InvoicePaymentsController extends Controller
      */
     public function destroy($id)
     {
-        if (! $this->invoicePayment->findOrFail($id)->delete()) {
+        if (! $this->bill->findOrFail($id)->delete()) {
             return response()->json([
                 'message' => 'Failed to delete resource'
             ], 400);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully deleted'
         ], 200);
     }
-    
+
     /**
      * Restore the specified resource from storage.
      *
@@ -150,17 +144,17 @@ class InvoicePaymentsController extends Controller
      */
     public function restore($id)
     {
-        if (! $this->invoicePayment->restore($id)) {
+        if (! $this->bill->restore($id)) {
             return response()->json([
                 'message' => 'Failed to restore resource'
             ], 400);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully restored'
         ], 200);
     }
-    
+
     /**
      * Forcefully remove the specified resource from storage.
      *
@@ -169,12 +163,12 @@ class InvoicePaymentsController extends Controller
      */
     public function forceDestroy($id)
     {
-        if (! $this->invoicePayment->forceDestroy($id)) {
+        if (! $this->bill->forceDestroy($id)) {
             return response()->json([
                 'message' => 'Failed to permanently delete resource'
             ], 400);
         }
-    
+
         return response()->json([
             'message' => 'Resource successfully deleted permanently'
         ], 200);
@@ -185,17 +179,17 @@ class InvoicePaymentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllIvoicePayment()
+    public function getAllBills()
     {
-        if (cache()->has('invoice_payments')) {
+        if (cache()->has('bills')) {
             return response()->json([
                 'response'   => true,
                 'message'    => 'Resources successfully retrieve.',
-                'invoice_payments' => cache('invoice_payments', 5)
+                'bills'      => cache('bills', 5)
             ], 200);
         }
 
-        if (! $invoicePayments = $this->invoicePayment->all()) {
+        if (! $bills = $this->bill->all()) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'
@@ -205,7 +199,7 @@ class InvoicePaymentsController extends Controller
         return response()->json([
             'response'   => true,
             'message'    => 'Resources successfully retrieve.',
-            'invoice_payments' => $invoicePayments
+            'bills'      => $bills
         ], 200);
     }
 }

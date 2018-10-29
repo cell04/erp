@@ -46,6 +46,7 @@ class StockTransferRepository extends Repository
         return DB::transaction(function () use ($request) {
             $stockTransfer = $this->stockTransfer->create($request->all());
             $stockTransfer->stockTransferItems()->createMany($request->stock_transfer_items);
+            
             return $stockTransfer;
         });
     }
