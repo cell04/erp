@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                {{componentVal}}s / View {{componentVal}}
+                <div class="float-left">
+                    {{componentVal}}s / View {{componentVal}}
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'contacts.create' }">Create New Contact</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

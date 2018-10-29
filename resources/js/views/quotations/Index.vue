@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Quotations / View Quotations
+                <div class="float-left">
+                    Quotations / View Quotations
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'quotations.create' }">Create New Quotation</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -35,7 +40,7 @@
                             <td>{{ purchaseOrder.status }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'quotations.view', params: { id: purchaseOrder.id }}">View</router-link>
-                    
+
                             </td>
                         </tr>
                     </tbody>

@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Invoice Payment / Invoice Payment List
+                <div class="float-left">
+                    Invoice Payment / Invoice Payment List
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'invoice-payment.create' }">Create New Invoice Payment</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

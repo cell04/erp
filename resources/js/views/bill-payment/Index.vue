@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Bill Payment / Bill Payment List
+                <div class="float-left">
+                    Bill Payment / Bill Payment List
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'bill-payment.create' }">Create New Item Bill Payment</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

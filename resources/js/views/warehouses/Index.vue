@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Warehouses / View Warehouses
+                <div class="float-left">
+                    Warehouses / View Warehouses
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'warehouses.create' }">Create New Warehouse</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">

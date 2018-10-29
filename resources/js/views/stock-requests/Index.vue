@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-               Stock Requests / View Stock Requests
+               <div class="float-left">
+                    Stock Requests / View Stock Requests
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create' }">Create New Stock Request</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
