@@ -16,32 +16,22 @@
             </li>
 
             <li class="nav-item">
-                <router-link class="nav-link" :to="{ name: 'contacts.index' }">
-                    <i class="sidebar-icon fas fa-user-alt pr-3"></i>
-                    Contacts
-                </router-link>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#purchasing" data-toggle="collapse" aria-expanded="false" aria-controls="purchasing">
-                    <i class="sidebar-icon fas fa-shopping-bag pr-3"></i>
-                    Purchasing
+                <a class="nav-link" href="#sales" data-toggle="collapse" aria-expanded="false" aria-controls="sales">
+                    <i class="sidebar-icon fas fa-dollar-sign pr-3"></i>
+                    Sales
                     <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
-            <div class="collapse" id="purchasing">
+            <div class="collapse" id="sales">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'purchase-orders.index' }">Purchase Orders</router-link>
+                        <router-link class="nav-link" :to="{ name: 'quotations.index' }">Quotations</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Receive Orders</router-link>
+                        <router-link class="nav-link" :to="{ name: 'bills.create' }">Invoices</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Bills</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoice-payments.index' }">Bill Payments</router-link>
+                        <router-link class="nav-link" :to="{ name: 'bill-payments.create' }">Invoice Payments</router-link>
                     </li>
                 </ul>
             </div>
@@ -83,26 +73,35 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="#sales" data-toggle="collapse" aria-expanded="false" aria-controls="sales">
-                    <i class="sidebar-icon fas fa-dollar-sign pr-3"></i>
-                    Sales
+                <a class="nav-link" href="#purchasing" data-toggle="collapse" aria-expanded="false" aria-controls="purchasing">
+                    <i class="sidebar-icon fas fa-shopping-bag pr-3"></i>
+                    Purchasing
                     <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
-            <div class="collapse" id="sales">
+            <div class="collapse" id="purchasing">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'quotations.index' }">Quotations</router-link>
+                        <router-link class="nav-link" :to="{ name: 'purchase-orders.index' }">Purchase Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'bills.create' }">Invoices</router-link>
+                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Receive Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'bill-payments.create' }">Invoice Payments</router-link>
+                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Bills</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{ name: 'invoice-payments.index' }">Bill Payments</router-link>
                     </li>
                 </ul>
             </div>
 
+            <li class="nav-item">
+                <router-link class="nav-link" :to="{ name: 'contacts.index' }">
+                    <i class="sidebar-icon fas fa-user-alt pr-3"></i>
+                    Contacts
+                </router-link>
+            </li>
         </ul>
     </div>
 </template>
