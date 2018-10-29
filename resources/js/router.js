@@ -83,6 +83,14 @@ const BillsCreate = () => import('./views/bills/Create');
 const BillsView = () => import('./views/bills/View');
 
 /**
+ * Bills Payment
+ *
+ */
+const BillPaymentIndex = () => import('./views/bill-payment/Index');
+const BillPaymentCreate = () => import('./views/bill-payment/Create');
+const BillPaymentView = () => import('./views/bill-payment/View');
+
+/**
  * Items
  *
  */
@@ -258,6 +266,11 @@ const router = new Router({
         { path: '/bills', name: 'bills.index', component: BillsIndex },
         { path: '/bills/create', name: 'bills.create', component: BillsCreate },
         { path: '/bills/:id', name: 'bills.view', component: BillsView },
+
+        // Bills Payment
+        { path: '/bill-payment', name: 'bill-payment.index', component: BillPaymentIndex },
+        { path: '/bill-payment/create', name: 'bill-payment.create', component: BillPaymentCreate },
+        { path: '/bill-payment/:id', name: 'bill-payment.view', component: BillPaymentView },
 
         // Items
         { path: '/items', name: 'items.index', component: ItemsIndex },
