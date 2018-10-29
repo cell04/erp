@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Bills / Create New Bill
+            Invoices / Create New Invoice
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -90,7 +90,7 @@
                     </table>
 
                     <div class="pt-3">
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Bill</button>
+                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Invoice</button>
                         <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button>
                     </div>
                 </form>

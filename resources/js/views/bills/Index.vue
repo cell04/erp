@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Bills / View Bill
+                Invoices / View Invoice
                 <!-- <router-link :to="{ name: 'bills.create'}">
                     <button class="btn btn-primary float-right">Add New Bill</button>
                 </router-link> -->
@@ -95,7 +95,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For bills</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoices</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">bills per page</div>

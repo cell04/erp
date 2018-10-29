@@ -8,19 +8,19 @@
                 <div v-if="quotations.status === 0">
                     <h5>
                         Quotation
-                        <span class="badge badge-secondary badge-info">Issued</span>
+                        <span class="badge badge-info">Issued</span>
                     </h5>
                 </div>
                 <div v-else-if="quotations.status === 1">
                     <h5>
                         Quotation
-                        <span class="badge badge-secondary badge-success">Payed</span>
+                        <span class="badge badge-primary">Admin Approved</span>
                     </h5>
                 </div>
                 <div v-else>
                     <h5>
                         Quotation
-                        <span class="badge badge-secondary badge-danger">Cancelled</span>
+                        <span class="badge badge-success">Contact Approved</span>
                     </h5>
                 </div>
                 <fieldset>
@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Origin</label>
-                                <input type="text" class="form-control" v-model="quotations.quotable_type" readonly>
+                                <input type="text" class="form-control" v-model="quotations.quotable.name" readonly>
                             </div>
                         </div>
                     </div>
@@ -92,8 +92,7 @@
                 </table>
 
                 <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewQuotations">Back</button>
-                <!-- <button class="btn btn-danger btn-sm" v-if="quotations.status == 0" @click="closeQuotation(quotations.id, quotations.purchase_order_number)">Approve Quotation</button> -->
-                <!-- <button class="btn btn-danger btn-sm" v-if="quotations.status == 0" @click="closeQuotation(quotations.id, quotations.purchase_order_number)">Close Quotation</button> -->
+                <button class="btn btn-success btn-sm" v-if="quotations.status == 0" @click.prevent="approveQuotation">Approve Quotation</button>
             </div>
             <div v-else>
                 <div class="progress">
@@ -135,34 +134,30 @@
             promise.then(() => {
                 this.ifReady = true;
             });
-
-            
-        
-            // let promise2 = new Promise((resolve, reject) => {
-            //     axios.get('/api/quotations/4').then(res => {
-            //         console.log('Quote 4: ' + JSON.stringify(res.data));
-            //         resolve();
-            //     });
-            // });
         },
 
         methods: {
             viewQuotations() {
                 this.$router.push({ name: 'quotations.index' });
-            }
-            // closeQuotation(id, quotationsId) {
-            //     const formData = { id: id };
+            },
+            approveQuotation() {
+                this.ifReady = false;
 
-            //     if (confirm(`Are you sure you want to close ${quotationsId}`)) {
-            //         axios.post("/api/purchase-orders/close", formData).then(res => {
-            //             alert(`Success! ${quotationsId} is now closed`);
-            //             location.reload();
-            //         }).catch(err => {
-            //             console.log(err);
-            //             alert(`Error! Can't close purchase order`);
-            //         });
-            //     }
-            // }
+                let params = {
+                    status: 1
+                };
+
+                axios.patch('/api/quotations/' + this.$route.params.id, params).then(res => {
+                    this.$router.push({
+                        name: 'quotations.view',
+                        params: { id: this.$route.params.id }
+                    });
+                }).catch(err => {
+                    alert('Please report to the devs');
+                    this.ifReady = true;
+                    console.log(err);
+                });
+            }
         }
     };
 </script>

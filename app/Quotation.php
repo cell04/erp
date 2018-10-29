@@ -35,6 +35,15 @@ class Quotation extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'quotable',
+    ];
+
+    /**
      * Run functions on boot.
      *
      */

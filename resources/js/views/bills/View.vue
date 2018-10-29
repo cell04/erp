@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Bills / View Bill
+                Invoices / View Invoice
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
