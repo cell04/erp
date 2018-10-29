@@ -2,8 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                 <div class="float-left">
-                {{ componentVal }} / View {{ componentVal }}
+                <div class="float-left">
+                    {{ componentVal }} / View {{ componentVal }}
                 </div>
                 <div class="float-right">
                     <router-link class="btn-success btn-sm" :to="{ name: 'item-classifications.create' }">Create New Item Classification</router-link>
