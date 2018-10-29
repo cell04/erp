@@ -80,9 +80,9 @@ const Overview = () => import('./views/Overview');
  * Bills Payment
  *
  */
- const BillPaymentIndex = () => import('./views/bill-payment/Index');
- const BillPaymentCreate = () => import('./views/bill-payment/Create');
- const BillPaymentView = () => import('./views/bill-payment/View');
+ const BillPaymentsIndex = () => import('./views/bill-payments/Index');
+ const BillPaymentsCreate = () => import('./views/bill-payments/Create');
+ const BillPaymentsView = () => import('./views/bill-payments/View');
 
 /**
  * Items
@@ -248,10 +248,10 @@ const Overview = () => import('./views/Overview');
         { path: '/bills/create', name: 'bills.create', component: BillsCreate },
         { path: '/bills/:id', name: 'bills.view', component: BillsView },
 
-        // Bills Payment
-        { path: '/bill-payment', name: 'bill-payment.index', component: BillPaymentIndex },
-        { path: '/bill-payment/create', name: 'bill-payment.create', component: BillPaymentCreate },
-        { path: '/bill-payment/:id', name: 'bill-payment.view', component: BillPaymentView },
+        // Bill Payments
+        { path: '/bill-payments', name: 'bill-payments.index', component: BillPaymentsIndex },
+        { path: '/bill-payments/create', name: 'bill-payments.create', component: BillPaymentsCreate },
+        { path: '/bill-payments/:id', name: 'bill-payments.view', component: BillPaymentsView },
 
         // Items
         { path: '/items', name: 'items.index', component: ItemsIndex },
