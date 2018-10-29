@@ -256,6 +256,16 @@ Route::group(['middleware' => 'api'], function () {
         ]
     ]);
 
+    // Bill Payments
+    Route::match(['put', 'patch'], 'bill-payments/{bill-payment}/restore', 'BillPaymentsController@restore');
+    Route::delete('bill-payments/{bill-payment}/force-delete', 'BillPaymentsController@forceDestroy');
+    Route::get('bill-payments/get-all-bill-payments', 'BillPaymentsController@getAllBillPayments');
+    Route::resource('bill-payments', 'BillPaymentsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
     // Users
     Route::match(['put', 'patch'], 'users/{user}/restore', 'UsersController@restore');
     Route::delete('users/{user}/force-delete', 'UsersController@forceDestroy');
