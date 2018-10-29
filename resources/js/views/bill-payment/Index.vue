@@ -26,8 +26,8 @@
                         </tr>
                     </thead>
                     <tbody v-if="invoicePayment">
-                        <tr :key="id" v-for="{ id, invoice, amount } in invoicePayment">
-                            <td>{{ invoice.reference_number }}</td>
+                        <tr :key="id" v-for="{ id, bill, amount } in invoicePayment">
+                            <td>{{ bill.reference_number }}</td>
                             <td>{{ amount }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'bill-payment.view', params: { id: id }}">
@@ -153,7 +153,7 @@
     const getInvoicePayment = (page, per_page, searchColumnName, searchColumnDescription, order_by, callback) => {
         const params = { page, per_page,searchColumnName, searchColumnDescription,order_by };
 
-        axios.get('/api/invoice-payments', { params }).then(res => {
+        axios.get('/api/bill-payments', { params }).then(res => {
             console.log(res.data);
             callback(null, res.data);
         }).catch(error => {

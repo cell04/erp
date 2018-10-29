@@ -66,10 +66,10 @@
 
         mounted() {
             new Promise((resolve, reject) => {
-                axios.get("/api/invoice-payments/" + this.$route.params.id).then(res => {
-                    this.invoicePayment = res.data.invoicePayment;
-                    this.invoiceId = res.data.invoicePayment.invoice;
-                    console.log('IP: ' + JSON.stringify(res.data));
+                axios.get("/api/bill-payments/" + this.$route.params.id).then(res => {
+                    this.invoicePayment = res.data.billPayment;
+                    this.invoiceId = res.data.billPayment.bill;
+                    // console.log('IP: ' + JSON.stringify(res.data));
                     this.ifReady = true;
                 if (!res.data.response) {
                     return;

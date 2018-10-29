@@ -39,15 +39,15 @@
                 ifReady: false,
                 invoices: [],
                 invoicesData: null,
-                invoice_id: '',
+                bill_id: '',
                 amount: ''
             };
         },
 
         mounted() {
             let promise = new Promise((resolve, reject) => {
-                axios.get("/api/invoices/get-all-invoices/").then(res => {
-                    this.invoices = res.data.invoices;
+                axios.get("/api/bills/get-all-bills/").then(res => {
+                    this.invoices = res.data.bills;
                     // console.log('IP: ' + JSON.stringify(res.data));
                     resolve();
                 }).catch(err => {
@@ -63,13 +63,13 @@
 
         methods: {
             selectInvoices() {
-                this.invoice_id = this.invoicesData.id;
-                console.log('IV id: ' + this.invoice_id);
+                this.bill_id = this.invoicesData.id;
+                console.log('IV id: ' + this.bill_id);
             },
             createNewInvoicePayment() {
                 this.ifReady = false;
 
-                axios.post("/api/invoice-payments", this.$data).then(res => {
+                axios.post("/api/bill-payments", this.$data).then(res => {
                     this.$router.push({ name: 'bill-payment.index' });
                 }).catch(err => {
                     this.ifReady = true;
