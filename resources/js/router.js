@@ -226,13 +226,6 @@ const Overview = () => import('./views/Overview');
         { path: '/contacts/:id', name: 'contacts.view', component: ContactsView },
         { path: '/contacts/:id/edit', name: 'contacts.edit', component: ContactsEdit },
 
-        // Corporations
-        { path: '/corporations/select', name: 'corporations.select', component: CorporationsSelect },
-        { path: '/corporations', name: 'corporations.index', component: CorporationsIndex },
-        { path: '/corporations/create', name: 'corporations.create', component: CorporationsCreate },
-        { path: '/corporations/:id', name: 'corporations.view', component: CorporationsView },
-        { path: '/corporations/:id/edit', name: 'corporations.edit', component: CorporationsEdit },
-
         // Conversions
         { path: '/conversions', name: 'conversions.index', component: ConversionsIndex },
         { path: '/conversions/create', name: 'conversions.create', component: ConversionsCreate },
@@ -286,11 +279,18 @@ const Overview = () => import('./views/Overview');
         // Settings
         { path: '/settings', name: 'settings.index', component: SettingsIndex,
             children: [
+                // Corporations
+                { path: 'corporations/select', name: 'corporations.select', component: CorporationsSelect },
+                { path: 'corporations', name: 'corporations.index', component: CorporationsIndex },
+                { path: 'corporations/create', name: 'corporations.create', component: CorporationsCreate },
+                { path: 'corporations/:id', name: 'corporations.view', component: CorporationsView },
+                { path: 'corporations/:id/edit', name: 'corporations.edit', component: CorporationsEdit },
+
                 // Contact Types
-                { path: '/contact-types', name: 'contact-types.index', component: ContactTypesIndex },
-                { path: '/contact-types/create', name: 'contact-types.create', component: ContactTypesCreate },
-                { path: '/contact-types/:id', name: 'contact-types.view', component: ContactTypesView },
-                { path: '/contact-types/:id/edit', name: 'contact-types.edit', component: ContactTypesEdit },
+                { path: 'contact-types', name: 'contact-types.index', component: ContactTypesIndex },
+                { path: 'contact-types/create', name: 'contact-types.create', component: ContactTypesCreate },
+                { path: 'contact-types/:id', name: 'contact-types.view', component: ContactTypesView },
+                { path: 'contact-types/:id/edit', name: 'contact-types.edit', component: ContactTypesEdit },
                 
                 // Item Types
                 { path: 'item-types', name: 'item-types.index', component: ItemTypesIndex },

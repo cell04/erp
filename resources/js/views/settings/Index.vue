@@ -3,6 +3,11 @@
         <div class="card my-4">
             <ul class="nav nav-pills nav-justified">
                 <li class="nav-item bg-white">
+                    <router-link class="nav-link p-3" :to="{ name: 'corporations.index' }">
+                        Corporations
+                    </router-link>
+                </li>
+                <li class="nav-item bg-white">
                     <router-link class="nav-link p-3" :to="{ name: 'contact-types.index' }">
                         Contact Types
                     </router-link>
