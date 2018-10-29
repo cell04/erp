@@ -6,7 +6,7 @@
                 {{ componentVal }} / View {{ componentVal }}
                 </div>
                 <div class="float-right">
-                    <router-link class="text-success" :to="{ name: 'item-classifications.create' }">Create New Item Classification</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'item-classifications.create' }">Create New Item Classification</router-link>
                 </div>
             </div>
             <div class="card-body">

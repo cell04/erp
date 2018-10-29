@@ -6,7 +6,7 @@
                     Corporations / View Corporations
                 </div>
                 <div class="float-right">
-                    <router-link class="text-success" :to="{ name: 'corporations.create' }">Create New Corporation</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'corporations.create' }">Create New Corporation</router-link>
                 </div>
             </div>
             <div class="card-body">

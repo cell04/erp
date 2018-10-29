@@ -6,7 +6,7 @@
                     {{componentVal}}s / View {{componentVal}}s
                 </div>
                 <div class="float-right">
-                    <router-link class="text-success" :to="{ name: 'unit-of-measurements.create' }">Create New Unit of Measurement</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'unit-of-measurements.create' }">Create New Unit of Measurement</router-link>
                 </div>
             </div>
             <div class="card-body">

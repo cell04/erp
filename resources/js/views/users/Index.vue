@@ -6,7 +6,7 @@
                     Users / View Users
                 </div>
                 <div class="float-right">
-                    <router-link class="text-success" :to="{ name: 'users.create' }">Create New User</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'users.create' }">Create New User</router-link>
                 </div>
             </div>
             <div class="card-body">
