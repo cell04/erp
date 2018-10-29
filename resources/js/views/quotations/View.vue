@@ -76,7 +76,7 @@
                             <td>{{ quotation_item.item.description }}</td>
                             <td>{{ quotation_item.quantity }}</td>
                             <td>{{ quotation_item.unit_of_measurement.name }}</td>
-                            <td>{{ quotation_item.item_pricelist.price }}</td>
+                            <td>{{ quotation_item.price }}</td>
                             <td>{{ quotation_item.subTotal }}</td>
                         </tr>
                         <tr>
@@ -116,11 +116,9 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/quotations/" + this.$route.params.id).then(res => {
-                    // console.log('Quote 4: ' + JSON.stringify(res.data));
                     this.quotations = res.data.quotation;
-
                     this.quotations.quotation_items.map(quotation_item => {
-                        quotation_item.subTotal = quotation_item.quantity * quotation_item.item_pricelist.price;
+                        quotation_item.subTotal = quotation_item.quantity * quotation_item.price;
                         this.total += quotation_item.subTotal;
                     });
 

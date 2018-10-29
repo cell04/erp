@@ -95,7 +95,7 @@ class QuotationRepository extends Repository
             'approvedBy',
             'user',
             'quotationItems' => function ($query) {
-                $query->with('item', 'unitOfMeasurement', 'itemPricelist');
+                $query->with('item', 'unitOfMeasurement');
             }
         ])->findOrFail($id);
     }
