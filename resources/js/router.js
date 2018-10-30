@@ -239,9 +239,9 @@ const Overview = () => import('./views/Overview');
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
         // Invoices Payment
-        { path: '/invoice-payment', name: 'invoice-payment.index', component: InvoicePaymentIndex },
-        { path: '/invoice-payment/create', name: 'invoice-payment.create', component: InvoicePaymentCreate },
-        { path: '/invoice-payment/:id', name: 'invoice-payment.view', component: InvoicePaymentView },
+        { path: '/invoice-payments', name: 'invoice-payments.index', component: InvoicePaymentIndex },
+        { path: '/invoice-payments/create', name: 'invoice-payments.create', component: InvoicePaymentCreate },
+        { path: '/invoice-payments/:id', name: 'invoice-payments.view', component: InvoicePaymentView },
 
         // Bills
         { path: '/bills', name: 'bills.index', component: BillsIndex },
