@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Branch;
+use Illuminate\Support\Facades\DB;
 
 class BranchRepository extends Repository
 {
@@ -15,5 +16,15 @@ class BranchRepository extends Repository
     {
         parent::__construct($branch);
         $this->branch = $branch;
+    }
+
+    public function store($request)
+    {
+        return DB::transaction(function () use ($request) {
+            $branch = $this->branch->create($request->all());
+            $branch->costCenter()->create($branch->toArray());
+
+            return $branch;
+        });
     }
 }

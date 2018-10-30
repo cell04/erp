@@ -6,16 +6,16 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Branch extends Model
+class CostCenter extends Model
 {
     use SoftDeletes, Filtering;
 
     /**
-     * Branches table.
+     * Cost Center table.
      *
      * @var string
      */
-    protected $table = 'branches';
+    protected $table = 'cost_centers';
 
     /**
      * The attributes that are mass assignable.
@@ -23,8 +23,7 @@ class Branch extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'name', 'address', 'city',
-        'zip_code', 'country', 'telephone_number', 'status'
+        'corporation_id', 'cost_centable_id', 'cost_centable_type'
     ];
 
     /**
@@ -33,6 +32,13 @@ class Branch extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = ['costCentable'];
 
     /**
      * Run functions on boot.
@@ -50,7 +56,7 @@ class Branch extends Model
     }
 
     /**
-     * The branch belongs to a corporation.
+     * The cost center belongs to a corporation
      *
      * @return object
      */
@@ -60,27 +66,10 @@ class Branch extends Model
     }
 
     /**
-     * The branch has many stocks.
-     *
-     * @return object
+     * Get all of the owning cost center models.
      */
-    public function stocks()
+    public function costCentable()
     {
-        return $this->morphMany(Stock::class, 'stockable');
-    }
-
-    public function stockRequestFrom()
-    {
-        return $this->morphMany(StockRequest::class, 'stock_requestable_from');
-    }
-
-    public function stockRequestTo()
-    {
-        return $this->morphMany(StockRequest::class, 'stock_requestable_to');
-    }
-
-    public function costCenter()
-    {
-        return $this->morphMany(CostCenter::class, 'cost_centable');
+        return $this->morphTo();
     }
 }

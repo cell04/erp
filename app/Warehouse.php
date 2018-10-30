@@ -69,6 +69,11 @@ class Warehouse extends Model
         return $this->morphMany(Stock::class, 'stockable');
     }
 
+    public function costCenter()
+    {
+        return $this->morphMany(CostCenter::class, 'cost_centable');
+    }
+
     public function stockRequestFrom()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_from');

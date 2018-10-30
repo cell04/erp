@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Warehouse;
+use Illuminate\Support\Facades\DB;
 
 class WarehouseRepository extends Repository
 {
@@ -15,5 +16,15 @@ class WarehouseRepository extends Repository
     {
         parent::__construct($warehouse);
         $this->warehouse = $warehouse;
+    }
+
+    public function store($request)
+    {
+        return DB::transaction(function () use ($request) {
+            $warehouse = $this->warehouse->create($request->all());
+            $warehouse->costCenter()->create($warehouse->toArray());
+
+            return $warehouse;
+        });
     }
 }
