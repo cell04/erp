@@ -8,8 +8,8 @@
                 <form v-on:submit.prevent="createNewQuotation">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" v-model="date" required>
+                            <label>Number</label>
+                            <input type="text" class="form-control" v-model="number" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Contact</label>
@@ -117,7 +117,7 @@
                 contact: null,
                 contact_id: "",
                 items: [],
-                date: "",
+                number: "",
                 quotation_items: [
                     {
                         item: '',
@@ -136,8 +136,6 @@
         },
 
         mounted() {
-            this.date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
-
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
                     this.contacts = res.data.contacts;
@@ -287,7 +285,7 @@
                     contact_id: this.$data.contact_id,
                     quotable_id: this.stock_receivable_from_id,
                     quotable_type: this.stock_receivable_from_type,
-                    date: this.$data.date,
+                    number: this.number,
                     amount: this.amount,
                     quotation_items: quotationItems
                 };

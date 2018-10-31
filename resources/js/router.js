@@ -80,9 +80,9 @@ const Overview = () => import('./views/Overview');
  * Bills Payment
  *
  */
- const BillPaymentIndex = () => import('./views/bill-payment/Index');
- const BillPaymentCreate = () => import('./views/bill-payment/Create');
- const BillPaymentView = () => import('./views/bill-payment/View');
+ const BillPaymentsIndex = () => import('./views/bill-payments/Index');
+ const BillPaymentsCreate = () => import('./views/bill-payments/Create');
+ const BillPaymentsView = () => import('./views/bill-payments/View');
 
 /**
  * Items
@@ -239,19 +239,19 @@ const Overview = () => import('./views/Overview');
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
         // Invoices Payment
-        { path: '/invoice-payment', name: 'invoice-payment.index', component: InvoicePaymentIndex },
-        { path: '/invoice-payment/create', name: 'invoice-payment.create', component: InvoicePaymentCreate },
-        { path: '/invoice-payment/:id', name: 'invoice-payment.view', component: InvoicePaymentView },
+        { path: '/invoice-payments', name: 'invoice-payments.index', component: InvoicePaymentIndex },
+        { path: '/invoice-payments/create', name: 'invoice-payments.create', component: InvoicePaymentCreate },
+        { path: '/invoice-payments/:id', name: 'invoice-payments.view', component: InvoicePaymentView },
 
         // Bills
         { path: '/bills', name: 'bills.index', component: BillsIndex },
         { path: '/bills/create', name: 'bills.create', component: BillsCreate },
         { path: '/bills/:id', name: 'bills.view', component: BillsView },
 
-        // Bills Payment
-        { path: '/bill-payment', name: 'bill-payment.index', component: BillPaymentIndex },
-        { path: '/bill-payment/create', name: 'bill-payment.create', component: BillPaymentCreate },
-        { path: '/bill-payment/:id', name: 'bill-payment.view', component: BillPaymentView },
+        // Bill Payments
+        { path: '/bill-payments', name: 'bill-payments.index', component: BillPaymentsIndex },
+        { path: '/bill-payments/create', name: 'bill-payments.create', component: BillPaymentsCreate },
+        { path: '/bill-payments/:id', name: 'bill-payments.view', component: BillPaymentsView },
 
         // Items
         { path: '/items', name: 'items.index', component: ItemsIndex },

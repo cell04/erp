@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Quotation</label>
-                            <vue-select v-model="billsId" @input="selectBill()" label="quotable_type" :options="bills"></vue-select>
+                            <vue-select v-model="billsId" @input="selectBill()" label="number" :options="bills"></vue-select>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -30,11 +30,6 @@
                         <div class="col-md-6 form-group">
                             <label>Amount</label>
                             <input type="number" class="form-control" v-model="amount" required>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Amount Paid</label>
-                            <input type="number" class="form-control" v-model="amount_paid" required>
                         </div>
                     </div>
 
@@ -71,7 +66,7 @@
                                     {{ bill_item.unitOfMeasurement }}
                                 </td>
                                 <td>
-                                    <vue-select v-model="bill_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="bill_item.itemPricelists"></vue-select>
+                                    <input class="form-control" @input="calculate(index)" v-model.number="bill_item.price" required>
                                 </td>
                                 <td>{{ isNaN(bill_item.subTotal) ? '0.00' : bill_item.subTotal }}</td>
                                 <td>
@@ -119,7 +114,7 @@
                 contact_id: "",
                 due_date: "",
                 amount: "",
-                amount_paid: "",
+                amount_paid: 0,
                 items: [],
                 reference_number: "",
                 receive_order_id: "",
@@ -203,6 +198,9 @@
 
             selectBill() {
                 this.receive_order_id = this.billsId.id;
+                this.amount = this.billsId.amount;
+                this.contact = this.billsId.contact;
+                this.reference_number = this.billsId.number;
                 console.log('RO: ' + this.billsId.id);
             },
 
@@ -220,6 +218,10 @@
                         reject();
                     });
                 });
+            },
+            calculate(index) {
+                this.bill_items[index].subTotal = (parseFloat(this.bill_items[index].quantity) * parseFloat(this.bill_items[index].price));
+                this.updateTotalAmount();
             },
             selectItemPricelist(index) {
                 this.bill_items[index].item_pricelist_id = this.bill_items[index].itemPricelist.id;
@@ -271,7 +273,7 @@
                         item_id: bill_item.item_id,
                         quantity: bill_item.quantity,
                         unit_of_measurement_id: bill_item.unit_of_measurement_id,
-                        item_pricelist_id: bill_item.item_pricelist_id
+                        price: bill_item.price
                     });
                 });
 

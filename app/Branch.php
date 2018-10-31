@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Branch extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Branches table.
@@ -23,6 +24,16 @@ class Branch extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'name', 'address', 'city',
+        'zip_code', 'country', 'telephone_number', 'status'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'name', 'address', 'city',
         'zip_code', 'country', 'telephone_number', 'status'
     ];
@@ -77,5 +88,10 @@ class Branch extends Model
     public function stockRequestTo()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_to');
+    }
+
+    public function costCenter()
+    {
+        return $this->morphMany(CostCenter::class, 'cost_centable');
     }
 }

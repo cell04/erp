@@ -266,6 +266,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         ]
     ]);
 
+    Route::get('cost-centers/get-all-cost-centers', 'CostCentersController@getAllBillPayments');
+    Route::resource('cost-centers', 'CostCentersController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
     // Users
     Route::match(['put', 'patch'], 'users/{user}/restore', 'UsersController@restore');
     Route::delete('users/{user}/force-delete', 'UsersController@forceDestroy');

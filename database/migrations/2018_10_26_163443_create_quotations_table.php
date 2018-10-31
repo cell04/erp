@@ -37,6 +37,7 @@ class CreateQuotationsTable extends Migration
                 ->references('id')
                 ->on('contacts')
                 ->onDelete('cascade');
+            $table->string('number');
             $table->smallInteger('status')->default(0);
             $table->decimal('amount', 20, 2);
             $table->timestamps();

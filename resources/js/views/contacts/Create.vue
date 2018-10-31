@@ -99,6 +99,8 @@
                     this.$router.push({ name: 'contacts.index' });
                 }).catch(err => {
                     console.log(err);
+                    this.ifReady = false;
+                    alert('Error');
                 });
             }
         }

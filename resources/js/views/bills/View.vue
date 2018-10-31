@@ -6,6 +6,24 @@
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
+                    <div v-if="bills.status === 0">
+                        <h5>
+                            Invoice Details
+                            <span class="badge badge-info">Issued</span>
+                        </h5>
+                    </div>
+                    <div v-else-if="bills.status === 1">
+                        <h5>
+                            Invoice Details
+                            <span class="badge badge-primary">Partially Paid</span>
+                        </h5>
+                    </div>
+                    <div v-else>
+                        <h5>
+                            Invoice Details
+                            <span class="badge badge-success">Fully Paid</span>
+                        </h5>
+                    </div>
                     <fieldset>
                         <div class="row">
                             <div class="col-md-6 form-group">
@@ -40,7 +58,11 @@
                         </div>
                     </fieldset>
 
-                    <br />
+                    <br>
+                    <h5>
+                        Invoice Item Details
+                    </h5>
+                    <br>
 
                     <table class="table table-hover table-sm">
                         <thead>
@@ -59,20 +81,20 @@
                                 <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.item_pricelist.price }}</td>
+                                <td>{{ item.price }}</td>
                                 <td>{{ subtotalRow[index] }}</td>
                             </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td>{{total}}</td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
                     <button type="button" class="btn btn-info btn-sm" @click.prevent="viewBills">Back</button>
@@ -90,57 +112,56 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      ifReady: false,
-      bills: [],
-      contacts: [],
-      roRefNum: [],
-      billsItems: []
+    export default {
+        data() {
+            return {
+                ifReady: false,
+                bills: [],
+                contacts: [],
+                roRefNum: [],
+                billsItems: []
+            };
+        },
+
+        mounted() {
+            this.getItem();
+        },
+
+        methods: {
+            getItem() {
+                new Promise((resolve, reject) => {
+                    axios.get("/api/bills/" + this.$route.params.id).then(res => {
+                        this.ifReady = true;
+                        this.bills = res.data.bill;
+                        this.contacts = res.data.bill.contact;
+                        this.billsItems = res.data.bill.bill_items;
+                        this.roRefNum = res.data.bill.quotation;
+                        if (!res.data.response) {
+                            return;
+                        }
+                        resolve();
+                    });
+                });
+            },
+            viewBills() {
+                this.$router.push({
+                    name: "bills.index"
+                });
+            }
+        },
+
+        computed: {
+            subtotalRow() {
+                return this.billsItems.map((item) => {
+                    return Number(item.quantity * item.price)
+                });
+            },
+            total() {
+                return this.billsItems.reduce((total, item) => {
+                    return total + item.quantity * item.price;
+                }, 0);
+            }
+        }
+
     };
-  },
-
-  mounted() {
-    this.getItem();
-  },
-
-  methods: {
-    getItem() {
-      new Promise((resolve, reject) => {
-        axios.get("/api/bills/" + this.$route.params.id).then(res => {
-        //   console.log('Bills: ' + JSON.stringify(res.data.bill));
-          this.ifReady = true;
-          this.bills = res.data.bill;
-          this.contacts = res.data.bill.contact;
-          this.billsItems = res.data.bill.bill_items;
-          this.roRefNum = res.data.bill.quotation;
-          if (!res.data.response) {
-            return;
-          }
-          resolve();
-        });
-      });
-    },
-    viewBills() {
-      this.$router.push({
-        name: "bills.index"
-      });
-    }
-  },
-
-  computed: {
-    subtotalRow() {
-        return this.billsItems.map((item) => {
-        return Number(item.quantity * item.item_pricelist.price)
-        });
-    },
-    total() {
-        return this.billsItems.reduce((total, item) => {
-        return total + item.quantity * item.item_pricelist.price;
-        }, 0);
-    }
-  }
-
-};
 </script>

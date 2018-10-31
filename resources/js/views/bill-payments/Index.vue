@@ -6,7 +6,7 @@
                     Bill Payment / Bill Payment List
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'bill-payment.create' }">Create New Item Bill Payment</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'bill-payments.create' }">Create New Item Bill Payment</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -35,7 +35,7 @@
                             <td>{{ bill.reference_number }}</td>
                             <td>{{ amount }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'bill-payment.view', params: { id: id }}">
+                                <router-link class="text-info" :to="{ name: 'bill-payments.view', params: { id: id }}">
                                     View
                                 </router-link>
                                 <!-- |

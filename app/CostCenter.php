@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class AuditTrail extends Model
+class CostCenter extends Model
 {
     use SoftDeletes, Filtering, LogsActivity;
 
     /**
-     * Audit trails table.
+     * Cost Center table.
      *
      * @var string
      */
-    protected $table = 'audit_trails';
+    protected $table = 'cost_centers';
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +24,7 @@ class AuditTrail extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'user_id', 'module', 'description'
+        'corporation_id', 'cost_centable_id', 'cost_centable_type'
     ];
 
     /**
@@ -33,7 +33,7 @@ class AuditTrail extends Model
      * @var array
      */
     protected static $logAttributes = [
-        'corporation_id', 'user_id', 'module', 'description'
+        'corporation_id', 'cost_centable_id', 'cost_centable_type'
     ];
 
     /**
@@ -42,6 +42,13 @@ class AuditTrail extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = ['costCentable'];
 
     /**
      * Run functions on boot.
@@ -59,7 +66,7 @@ class AuditTrail extends Model
     }
 
     /**
-     * The audit trail belongs to a corporation.
+     * The cost center belongs to a corporation
      *
      * @return object
      */
@@ -69,12 +76,10 @@ class AuditTrail extends Model
     }
 
     /**
-     * The audit trail belongs to a user.
-     *
-     * @return object
+     * Get all of the owning cost center models.
      */
-    public function user()
+    public function costCentable()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 }

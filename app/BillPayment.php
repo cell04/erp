@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class BillPayment extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
     
     /**
      * Bill Payments table.
@@ -23,6 +24,15 @@ class BillPayment extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'bill_id', 'amount'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'bill_id', 'amount'
     ];
     

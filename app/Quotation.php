@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Quotation extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Quotations table.
@@ -24,7 +25,17 @@ class Quotation extends Model
      */
     protected $fillable = [
         'corporation_id', 'user_id', 'contact_id', 'quotable_id',
-        'quotable_type', 'amount', 'status', 'approved_by'
+        'quotable_type', 'number', 'amount', 'status', 'approved_by'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
+        'corporation_id', 'user_id', 'contact_id', 'quotable_id',
+        'quotable_type', 'number', 'amount', 'status', 'approved_by'
     ];
 
     /**

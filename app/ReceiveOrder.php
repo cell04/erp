@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ReceiveOrder extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Receive Order table.
@@ -23,6 +24,16 @@ class ReceiveOrder extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'purchase_order_id', 'contact_id',
+        'user_id', 'reference_number', 'status'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'purchase_order_id', 'contact_id',
         'user_id', 'reference_number', 'status'
     ];

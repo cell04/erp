@@ -3,13 +3,14 @@
 namespace App;
 
 use App\Traits\Filtering;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Contact extends Model
 {
-    use SoftDeletes, Filtering, Notifiable;
+    use SoftDeletes, Filtering, Notifiable, LogsActivity;
 
     /**
      * Contacts table.
@@ -24,6 +25,16 @@ class Contact extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'contact_type_id', 'company', 'company_address',
+        'person', 'email', 'mobile_number', 'credit_limit'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'contact_type_id', 'company', 'company_address',
         'person', 'email', 'mobile_number', 'credit_limit'
     ];

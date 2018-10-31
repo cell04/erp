@@ -27,8 +27,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Date</label>
-                                <input type="text" class="form-control" v-model="quotations.created_at" readonly>
+                                <label>Number</label>
+                                <input type="text" class="form-control" v-model="quotations.number" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">

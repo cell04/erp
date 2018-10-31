@@ -70,7 +70,7 @@
                 this.ifReady = false;
 
                 axios.post("/api/bill-payments", this.$data).then(res => {
-                    this.$router.push({ name: 'bill-payment.index' });
+                    this.$router.push({ name: 'bill-payments.index' });
                 }).catch(err => {
                     this.ifReady = true;
                     console.log(err);
