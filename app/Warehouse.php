@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Warehouse extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Warehouses table.
@@ -33,10 +33,10 @@ class Warehouse extends Model
      *
      * @var array
      */
-    protected static $logAttributes = [
-        'corporation_id', 'name', 'address', 'city',
-        'zip_code', 'country', 'telephone_number', 'status'
-    ];
+    // protected static $logAttributes = [
+    //     'corporation_id', 'name', 'address', 'city',
+    //     'zip_code', 'country', 'telephone_number', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

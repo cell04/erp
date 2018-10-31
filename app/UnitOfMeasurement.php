@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class UnitOfMeasurement extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Unit Of Measurement table.
@@ -32,9 +32,9 @@ class UnitOfMeasurement extends Model
      *
      * @var array
      */
-    protected static $logAttributes = [
-        'corporation_id', 'name', 'abbreviation'
-    ];
+    // protected static $logAttributes = [
+    //     'corporation_id', 'name', 'abbreviation'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

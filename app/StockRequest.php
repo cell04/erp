@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class StockRequest extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Stock Requests table.
@@ -33,10 +33,10 @@ class StockRequest extends Model
      *
      * @var array
      */
-    protected static $logAttributes = [
-        'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type', 'user_id',
-        'stock_requestable_to_id', 'stock_requestable_to_type', 'number', 'status', 'approve_by'
-    ];
+    // protected static $logAttributes = [
+    //     'corporation_id', 'stock_requestable_from_id', 'stock_requestable_from_type', 'user_id',
+    //     'stock_requestable_to_id', 'stock_requestable_to_type', 'number', 'status', 'approve_by'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

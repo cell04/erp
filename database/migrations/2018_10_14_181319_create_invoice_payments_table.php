@@ -25,6 +25,15 @@ class CreateInvoicePaymentsTable extends Migration
                 ->references('id')
                 ->on('invoices')
                 ->onDelete('cascade');
+            $table->integer('mode_of_payment_id')->unsigned();
+            $table->foreign('mode_of_payment_id')
+                ->references('id')
+                ->on('mode_of_payments')
+                ->onDelete('cascade');
+            $table->string('cr_number')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('check')->nullable();
+            $table->string('name');
             $table->decimal('amount', 20, 2);
             $table->timestamps();
             $table->softDeletes();
