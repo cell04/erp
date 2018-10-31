@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Conversion extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Conversions table.
@@ -23,6 +24,16 @@ class Conversion extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'unit_of_measurement_from_id', 'from_value',
+        'unit_of_measurement_to_id', 'to_value'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'unit_of_measurement_from_id', 'from_value',
         'unit_of_measurement_to_id', 'to_value'
     ];

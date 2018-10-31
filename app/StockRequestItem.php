@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class StockRequestItem extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Stock Request Items table.
@@ -23,6 +24,16 @@ class StockRequestItem extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'stock_request_id',
+        'item_id', 'quantity', 'unit_of_measurement_id'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'stock_request_id',
         'item_id', 'quantity', 'unit_of_measurement_id'
     ];

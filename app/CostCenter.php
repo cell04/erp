@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class CostCenter extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Cost Center table.
@@ -23,6 +24,15 @@ class CostCenter extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'cost_centable_id', 'cost_centable_type'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'cost_centable_id', 'cost_centable_type'
     ];
 

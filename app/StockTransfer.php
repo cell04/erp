@@ -6,10 +6,11 @@ use App\StockTransferItem;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class StockTransfer extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Stock Transfers table.
@@ -24,6 +25,16 @@ class StockTransfer extends Model
      * @var array
      */
     protected $fillable = [
+        'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
+        'stock_transferable_to_id', 'stock_transferable_to_type', 'number', 'status'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
         'stock_transferable_to_id', 'stock_transferable_to_type', 'number', 'status'
     ];

@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Corporation extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, LogsActivity;
 
     /**
      * Corporations table.
@@ -23,6 +24,16 @@ class Corporation extends Model
      * @var array
      */
     protected $fillable = [
+        'name', 'description', 'street', 'city',
+        'state', 'zip_code', 'country', 'fax'
+    ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected static $logAttributes = [
         'name', 'description', 'street', 'city',
         'state', 'zip_code', 'country', 'fax'
     ];
