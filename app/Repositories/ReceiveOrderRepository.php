@@ -55,19 +55,14 @@ class ReceiveOrderRepository extends Repository
         $i = 0;
         $total = 0;
 
-        protected $fillable = [
-            'journal_id', 'corporation_id', 'sub_department_id',
-            'account_id', 'type', 'amount'
-        ];
-
         foreach ($receiveOrderItems as $receiveOrderItem) {
-            $selectedItem = $purchaseOrder->purchaseOrderItems()->findOrFail($receiveOrderItem->item_id)->first();
+            $selectedItem = $purchaseOrder->purchaseOrderItems()->where('item_id', $receiveOrderItem->item_id)->first();
             $itemTotalAmount = $receiveOrderItem->quantity * $selectedItem->itemPricelist->price;
             $total = $total + $itemTotalAmount;
 
             $journal_entries[$i++] = [
                 'corporation_id' => request()->headers->get('CORPORATION-ID'),
-                'sub_department_id' => $purchaseOrder->warehouse->costCenter->id,
+                'sub_department_id' => $purchaseOrder->warehouse_id,
                 'amount' => $itemTotalAmount,
                 'type' => 2, //credit entries
             ];
@@ -75,10 +70,12 @@ class ReceiveOrderRepository extends Repository
 
         $journal_entries[$i++] = [
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'sub_department_id' => $purchaseOrder->warehouse->costCenter->id,
+            'sub_department_id' => $purchaseOrder->warehouse_id,
             'amount' => $total,
             'type' => 1, //debit entries
         ];
+
+        // return $journal_entries;
 
         $journal = [
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
@@ -90,7 +87,7 @@ class ReceiveOrderRepository extends Repository
             'journal_entries'   =>  $journal_entries
         ];
 
-        return (object) $journal;
+        return $journal;
     }
 
     public function findOrFail($id)

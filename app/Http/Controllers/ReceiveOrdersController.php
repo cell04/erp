@@ -64,6 +64,8 @@ class ReceiveOrdersController extends Controller
                 'errors'  => $validator->errors()
             ], 400);
         }
+        
+        return $this->receiveOrder->store($request);
 
         if (! $this->receiveOrder->store($request)) {
             return response()->json([
