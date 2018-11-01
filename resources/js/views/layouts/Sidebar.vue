@@ -2,22 +2,22 @@
     <div class="sticky-top py-1 background sidenav-container bkdColor">
         <ul class="nav flex-column sidebar-nav">
             <li class="nav-item">
-                <span>
-                    <i class="sidebar-icon fas fa-briefcase px-3 py-2"></i>
+                <span class="nav-link"  >
+                    <i class="sidebar-icon fas fa-briefcase" style="padding-right: 1.1rem"></i>
                     Business
                 </span>
             </li>
 
             <li class="nav-item">
                 <router-link class="nav-link" :to="{ name: 'overview' }">
-                    <i class="sidebar-icon fas fa-file-alt pr-3"></i>
+                    <i class="sidebar-icon fas fa-file-alt" style="padding-right: 1.3rem"></i>
                     Dashboard
                 </router-link>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="#sales" data-toggle="collapse" aria-expanded="false" aria-controls="sales">
-                    <i class="sidebar-icon fas fa-dollar-sign pr-3"></i>
+                    <i class="sidebar-icon fas fa-dollar-sign pr-4"></i>
                     Sales
                     <i class="float-right fas fa-caret-down"></i>
                 </a>
@@ -122,5 +122,11 @@
 }
 .nav-link .router-link-exact-active{
     background-color: #236d6f;
+}
+.nav-sub-menu   .nav-item .nav-link {
+    margin-left: 30px;
+}
+.sidebar-icon .fas .fa-dollar-sign .pr-4{
+    padding-right: 1.0rem !important
 }
 </style>
