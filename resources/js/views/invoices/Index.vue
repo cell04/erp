@@ -6,10 +6,10 @@
                     <button class="btn btn-primary float-right">Add New Bill</button>
                 </router-link> -->
                 <div class="float-left">
-                    Invoices / View Invoice
+                    <b>Invoices / View Invoice</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'invoices.create' }">Create New Invoice</router-link>
+                    <router-link class="btn btn-primary btn-sm" :to="{ name: 'invoices.create' }"><i class="fas fa-plus"></i> Create New Invoice</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -28,23 +28,19 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Date</th>
+                            <th scope="col">Invoice #</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Reference</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Amount Paid</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="invoices">
                         <tr v-for="invoice in invoices">
-                            <td>{{invoice.due_date}}</td>
-                            <td>{{invoice.status}}</td>
                             <td>{{invoice.reference_number}}</td>
-                            <td>{{invoice.amount}}</td>
-                            <td>{{invoice.amount_paid}}</td>
+                            <td>{{invoice.status}}</td>
+                            <td>{{invoice.due_date}}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'invoices.view', params: { id: invoice.id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'invoices.view', params: { id: invoice.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -100,7 +96,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For bills</button>
+                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoice</button>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">bills per page</div>
