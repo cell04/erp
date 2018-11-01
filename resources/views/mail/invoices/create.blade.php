@@ -5,14 +5,14 @@ Created By : {{ $content->user->name }}<br>
 Reference Number : {{ $content->reference_number }}
 
 @component('mail::table')
-|       Item Name                                                                           |              Quantity                 |                   Price                       |                                               Unit                                    |
-|       :------------                                                                       |              :-------------           |                   :--------                   |                                               :--------                               |
+|       Item Name                                                                           |              Unit                                     |                   Quantity                        |                Price                                      |
+|       :------------                                                                       |              :-------------                           |                   --------:                       |               --------:                                   |
 @foreach ($content->billItems as $billItem)
-| {{ $billItem->item->name }}                                                               |    {{ $billItem->quantity }}          |           {{ $billItem->price }}              |                      {{ $billItem->unitOfMeasurement->name }}                         |
+| {{ $billItem->item->name }}                                                               |    {{ $billItem->unitOfMeasurement->name }}           |           {{ $billItem->quantity }}               |             {{ number_format($billItem->price, 2) }}      |
 @endforeach
-|                                                                                           |              Total Amount             |             {{ $content->amount }}            |                                                                                       |
+|                                                                                           |                                                       |              Total Amount                         |             {{ number_format($content->amount, 2) }}      |
 @endcomponent
-                             
+
 Thanks,<br>
 {{ config('app.name') }}
 @endcomponent

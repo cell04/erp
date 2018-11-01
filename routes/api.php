@@ -266,6 +266,17 @@ Route::group(['middleware' => 'auth:api'], function () {
         ]
     ]);
 
+    // Mode Of Payments
+    Route::match(['put', 'patch'], 'mode-of-payments/{mode-of-payment}/restore', 'ModeOfPaymentsController@restore');
+    Route::delete('mode-of-payments/{mode-of-payment}/force-delete', 'ModeOfPaymentsController@forceDestroy');
+    Route::get('mode-of-payments/get-all-mode-of-payments', 'ModeOfPaymentsController@getAllModeOfPayment');
+    Route::resource('mode-of-payments', 'ModeOfPaymentsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    //Cost Centers
     Route::get('cost-centers/get-all-cost-centers', 'CostCentersController@getAllBillPayments');
     Route::resource('cost-centers', 'CostCentersController', [
         'only' => [

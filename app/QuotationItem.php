@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class QuotationItem extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Quotation Items table.
@@ -33,10 +33,10 @@ class QuotationItem extends Model
      *
      * @var array
      */
-    protected static $logAttributes = [
-        'quotation_id', 'item_id', 'quantity',
-        'unit_of_measurement_id', 'price', 'status'
-    ];
+    // protected static $logAttributes = [
+    //     'quotation_id', 'item_id', 'quantity',
+    //     'unit_of_measurement_id', 'price', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

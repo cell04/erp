@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class ItemClassification extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Item Classifications table.
@@ -27,14 +27,14 @@ class ItemClassification extends Model
         'corporation_id', 'item_type_id', 'name', 'display_name', 'description'
     ];
 
-    /**
-     * The Log attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected static $logAttributes = [
-        'corporation_id', 'item_type_id', 'name', 'display_name', 'description'
-    ];
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'item_type_id', 'name', 'display_name', 'description'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

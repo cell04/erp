@@ -6,11 +6,11 @@ use App\StockTransferItem;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class StockTransfer extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Stock Transfers table.
@@ -34,10 +34,10 @@ class StockTransfer extends Model
      *
      * @var array
      */
-    protected static $logAttributes = [
-        'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
-        'stock_transferable_to_id', 'stock_transferable_to_type', 'number', 'status'
-    ];
+    // protected static $logAttributes = [
+    //     'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
+    //     'stock_transferable_to_id', 'stock_transferable_to_type', 'number', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

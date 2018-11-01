@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class CostCenter extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Cost Center table.
@@ -27,14 +27,14 @@ class CostCenter extends Model
         'corporation_id', 'cost_centable_id', 'cost_centable_type'
     ];
 
-    /**
-     * The Log attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected static $logAttributes = [
-        'corporation_id', 'cost_centable_id', 'cost_centable_type'
-    ];
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'cost_centable_id', 'cost_centable_type'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

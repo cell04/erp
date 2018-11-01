@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvoicePayment extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
     
     /**
      * Invoice Payments table.
@@ -24,17 +24,18 @@ class InvoicePayment extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'invoice_id', 'amount'
+        'corporation_id', 'invoice_id', 'amount',
+        'mode_of_payment_id', 'cr_number', 'bank_name', 'check'
     ];
 
-    /**
-     * The Log attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected static $logAttributes = [
-        'corporation_id', 'invoice_id', 'amount'
-    ];
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'invoice_id', 'amount'
+    // ];
     
     /**
      * The attributes that should be mutated to dates.
@@ -49,7 +50,7 @@ class InvoicePayment extends Model
      * @var array
      */
     protected $with = [
-        'invoice'
+        'invoice', 'modeOfPayment'
     ];
 
     /**
@@ -85,5 +86,15 @@ class InvoicePayment extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    /**
+     *  The invoice payment belongs to an mode of payment.
+     *
+     * @return object
+     */
+    public function modeOfPayment()
+    {
+        return $this->belongsTo(ModeOfPayment::class);
     }
 }

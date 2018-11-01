@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class ReceiveOrder extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Receive Order table.
@@ -33,10 +33,10 @@ class ReceiveOrder extends Model
      *
      * @var array
      */
-    protected static $logAttributes = [
-        'corporation_id', 'purchase_order_id', 'contact_id',
-        'user_id', 'reference_number', 'status'
-    ];
+    // protected static $logAttributes = [
+    //     'corporation_id', 'purchase_order_id', 'contact_id',
+    //     'user_id', 'reference_number', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

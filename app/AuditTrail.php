@@ -5,11 +5,10 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class AuditTrail extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Audit trails table.
@@ -27,14 +26,14 @@ class AuditTrail extends Model
         'corporation_id', 'user_id', 'module', 'description'
     ];
 
-    /**
-     * The Log attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected static $logAttributes = [
-        'corporation_id', 'user_id', 'module', 'description'
-    ];
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'user_id', 'module', 'description'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

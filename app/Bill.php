@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Bill extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     protected $table = 'bills';
 
@@ -24,16 +24,16 @@ class Bill extends Model
         'amount', 'amount_paid', 'status'
     ];
 
-    /**
-     * The Log attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected static $logAttributes = [
-        'corporation_id', 'quotation_id', 'contact_id',
-        'user_id', 'reference_number', 'due_date',
-        'amount', 'amount_paid', 'status'
-    ];
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'quotation_id', 'contact_id',
+    //     'user_id', 'reference_number', 'due_date',
+    //     'amount', 'amount_paid', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

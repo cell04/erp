@@ -5,11 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Corporation extends Model
 {
-    use SoftDeletes, Filtering, LogsActivity;
+    use SoftDeletes, Filtering;
 
     /**
      * Corporations table.
@@ -28,15 +28,15 @@ class Corporation extends Model
         'state', 'zip_code', 'country', 'fax'
     ];
 
-    /**
-     * The Log attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected static $logAttributes = [
-        'name', 'description', 'street', 'city',
-        'state', 'zip_code', 'country', 'fax'
-    ];
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'name', 'description', 'street', 'city',
+    //     'state', 'zip_code', 'country', 'fax'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
