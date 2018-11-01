@@ -15,10 +15,20 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style>
+    .navcolor{
+        background: rgb(255,255,255);
+        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(49, 156, 159,1) 99%);
+    }
+    .navTextColor{
+        color: white;
+    }
+    </style>
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+        <nav class="navbar navbar-expand-md navTextColor navcolor ">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -37,12 +47,12 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <li class="nav-item ">
+                                <a class="nav-link navTextColor" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             <li class="nav-item">
                                 @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link navTextColor" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 @endif
                             </li>
                         @else
