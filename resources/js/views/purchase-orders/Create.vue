@@ -250,7 +250,7 @@
 
                 let purchaseOrderItems = [];
 
-                this.$data.purchase_order_items.forEach(purchase_order_item => {
+                this.purchase_order_items.forEach(purchase_order_item => {
                     purchaseOrderItems.push({
                         item_id: purchase_order_item.item_id,
                         quantity: purchase_order_item.quantity,
@@ -260,9 +260,9 @@
                 });
 
                 let formData = {
-                    reference_number: this.$data.reference_number,
-                    warehouse_id: this.$data.warehouse_id,
-                    contact_id: this.$data.contact_id,
+                    reference_number: this.reference_number,
+                    warehouse_id: this.warehouse_id,
+                    contact_id: this.contact_id,
                     amount: this.amount,
                     purchase_order_items: purchaseOrderItems
                 };

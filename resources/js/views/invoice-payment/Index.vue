@@ -6,7 +6,7 @@
                     Invoice Payment / Invoice Payment List
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'invoice-payment.create' }">Create New Invoice Payment</router-link>
+                    <router-link class="btn-success btn-sm" :to="{ name: 'invoice-payments.create' }">Create New Invoice Payment</router-link>
                 </div>
             </div>
             <div class="card-body">

@@ -1,0 +1,7 @@
+1. Git pull on both Accounting and Inventory.
+2. Drop current Database.
+3. Create a SINGLE Database (whatever name you want)
+4. Change both .env to DB_DATABASE=YOUR_DATABASE_NAME
+5. Run php artisan migrate on both systems (start migrate on inven or vice versa will work)
+6. Run php artisan passport:install --force (Take note on where system did you run this)
+7. Copy both storage/oauth-private.key and storage/oauth-public.key to the system. so if you command #6 in accounting copy it to inventory and vice versa)

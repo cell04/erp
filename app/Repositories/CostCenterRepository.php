@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
@@ -10,6 +10,6 @@ class CostCenterRepository extends Repository
     public function __construct(CostCenter $costCenter)
     {
         parent::__construct($costCenter);
-		$this->costCenter = $costCenter;
+        $this->costCenter = $costCenter;
     }
 }

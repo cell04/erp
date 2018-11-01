@@ -207,6 +207,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::match(['put', 'patch'], 'stock-requests/{stockRequest}/restore', 'StockRequestsController@restore');
     Route::delete('stock-requests/{stockRequest}/force-delete', 'StockRequestsController@forceDestroy');
     Route::get('stock-requests/get-all-stock-requests', 'StockRequestsController@getAllStockRequests');
+    Route::get('stock-requests/get-all-unapproved-stock-requests', 'StockRequestsController@getAllUnapprovedStockReuests');
     Route::post('stock-requests/{stockRequest}/approve', 'StockRequestsController@approve');
     Route::post('stock-requests/{stockRequest}/cancel', 'StockRequestsController@cancel');
     Route::resource('stock-requests', 'StockRequestsController', [
@@ -276,8 +277,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         ]
     ]);
 
-    //Cost Centers
-    Route::get('cost-centers/get-all-cost-centers', 'CostCentersController@getAllBillPayments');
+    // Cost Centers
+    Route::get('cost-centers/get-all-cost-centers', 'CostCentersController@getAllCostCenter');
     Route::resource('cost-centers', 'CostCentersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
