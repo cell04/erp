@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-md navcolor">
         <div class="container-fluid">
             <router-link class="navTextColor" :to="{ name: 'overview' }">
-                <img src="../../assets/tradesoft_logo.png" style="max-width:110px;" alt="Tradesoft Business"/>
+                <img src="../../assets/tradesoft_logo.png" style="width:115px; height:60px; margin-top:-5px; margin-bottom: -10px; margin-left:25   px;" alt="Tradesoft Business"/>
             </router-link>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

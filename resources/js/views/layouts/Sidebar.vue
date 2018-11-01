@@ -2,9 +2,10 @@
     <div class="sticky-top py-1 background sidenav-container bkdColor">
         <ul class="nav flex-column sidebar-nav">
             <li class="nav-item">
-                <span class="nav-link"  >
+                <span class="nav-link icon-white">
                     <i class="sidebar-icon fas fa-briefcase" style="padding-right: 1.1rem"></i>
                     Business
+                    <a href="http://accounting.tradesoft.ph"><i class="icon-white fas fa-calculator float-right"></i></a>
                 </span>
             </li>
 
@@ -109,6 +110,9 @@
 <style>
 .bkdColor{
     background-color: #319c9f;
+}
+.icon-white{
+    color: white;
 }
 .sidebar-nav li > a.nav-link{
     color: white;
