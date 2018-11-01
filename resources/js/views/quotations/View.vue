@@ -27,13 +27,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Number</label>
+                                <label>Quotation #</label>
                                 <input type="text" class="form-control" v-model="quotations.number" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Origin</label>
+                                <label>Stock Origin</label>
                                 <input type="text" class="form-control" v-model="quotations.quotable.name" readonly>
                             </div>
                         </div>
@@ -41,13 +41,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Company</label>
-                                <input type="text" class="form-control" v-model="quotations.contact.company" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Contact</label>
+                                <label>Customer Name</label>
                                 <input type="text" class="form-control" v-model="quotations.contact.person" readonly>
                             </div>
                         </div>
@@ -60,10 +54,10 @@
                 <table class="table table-hover table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">Skock Keeping Unit</th>
+                            <th scope="col">SKU</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Quantity</th>
+                            <th scope="col">Desc</th>
+                            <th scope="col">Qty</th>
                             <th scope="col">UoM</th>
                             <th scope="col">Price</th>
                             <th scope="col">Sub Total</th>
@@ -90,9 +84,9 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewQuotations">Back</button>
-                <button class="btn btn-success btn-sm" v-if="quotations.status == 0" @click.prevent="approveQuotation">Approve Quotation</button>
+                <br>
+                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
+                <button class="btn btn-success btn-sm" v-if="quotations.status == 0" @click.prevent="approveQuotation"><i class="fas fa-thumbs-up"></i> Approve Quotation</button>
             </div>
             <div v-else>
                 <div class="progress">
