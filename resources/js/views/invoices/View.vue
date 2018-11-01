@@ -2,35 +2,25 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Invoices / View Invoice
+                <b>Invoices / View Invoice</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
                     <fieldset>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label>Receive Order</label>
+                                <label>Receive Order #</label>
                                 <input type="text" class="form-control" v-model="roRefNum.reference_number" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
-                                <label>Contact</label>
+                                <label>Customer</label>
                                 <input type="text" class="form-control" v-model="contacts.person" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
-                                <label>Reference #</label>
+                                <label>Invoice #</label>
                                 <input type="text" class="form-control" v-model="invoices.reference_number" readonly>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Amount</label>
-                                <input type="number" class="form-control" v-model="invoices.amount" readonly>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Amount Paid</label>
-                                <input type="number" class="form-control" v-model="invoices.amount_paid" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
@@ -75,7 +65,7 @@
                                 </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewItems">Back</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
                 </div>
 
                 <div v-else>

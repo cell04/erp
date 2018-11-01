@@ -235,7 +235,7 @@ const Overview = () => import('./views/Overview');
         // Invoices
         { path: '/invoices', name: 'invoices.index', component: InvoicesIndex },
         { path: '/invoices/create', name: 'invoices.create', component: InvoicesCreate },
-        { path: '/invoices/:id', name: 'invoices.receive', component: InvoicesReceive },
+        { path: '/invoices/receive/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
         // Invoices Payment
@@ -273,7 +273,7 @@ const Overview = () => import('./views/Overview');
         // Receive Orders
         { path: '/received-orders', name: 'receive-orders.index', component: ReceiveOrdersIndex },
         { path: '/received-orders/create', name: 'receive-orders.create', component: ReceiveOrdersCreate },
-        { path: '/received-orders/:id', name: 'receive-orders.receive', component: ReceiveOrdersReceive },
+        { path: '/received-orders/receive/:id', name: 'receive-orders.receive', component: ReceiveOrdersReceive },
         { path: '/received-orders/:id', name: 'receive-orders.view', component: ReceiveOrdersView },
 
         // Settings

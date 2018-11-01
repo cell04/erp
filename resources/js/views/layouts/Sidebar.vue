@@ -28,10 +28,10 @@
                         <router-link class="nav-link" :to="{ name: 'quotations.index' }">Quotations</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'bills.index' }">Invoices</router-link>
+                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Invoices</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'bill-payments.index' }">Invoice Payments</router-link>
+                        <router-link class="nav-link" :to="{ name: 'invoice-payments.index' }">Invoice Payments</router-link>
                     </li>
                 </ul>
             </div>
@@ -85,13 +85,13 @@
                         <router-link class="nav-link" :to="{ name: 'purchase-orders.index' }">Purchase Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Receive Orders</router-link>
+                        <router-link class="nav-link" :to="{ name: 'receive-orders.index' }">Receive Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Bills</router-link>
+                        <router-link class="nav-link" :to="{ name: 'bills.index' }">Bills</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoice-payments.index' }">Bill Payments</router-link>
+                        <router-link class="nav-link" :to="{ name: 'bill-payments.index' }">Bill Payments</router-link>
                     </li>
                 </ul>
             </div>
