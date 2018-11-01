@@ -216,6 +216,35 @@ class StockRequestsController extends Controller
     }
 
     /**
+     * Retrieve all unapproved resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllUnapprovedStockReuests()
+    {
+        if (cache()->has('stock_requests')) {
+            return response()->json([
+                'response'       => true,
+                'message'        => 'Resources successfully retrieve.',
+                'stock_requests' => cache('stock_requests', 5)
+            ], 200);
+        }
+
+        if (! $stock_requests = $this->stockRequest->getAllUnapprovedStockReuests()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'       => true,
+            'message'        => 'Resources successfully retrieve.',
+            'stock_requests' => $stock_requests
+        ], 200);
+    }
+
+    /**
      * Approve stock request status to approved using specified id.
      *
      * @param  int $id

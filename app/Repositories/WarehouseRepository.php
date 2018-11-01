@@ -18,6 +18,12 @@ class WarehouseRepository extends Repository
         $this->warehouse = $warehouse;
     }
 
+    /**
+     * Store the data in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return boolean
+     */
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
