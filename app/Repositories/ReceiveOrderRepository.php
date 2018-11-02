@@ -98,13 +98,21 @@ class ReceiveOrderRepository extends Repository
         $http = new \GuzzleHttp\Client(['verify' => false ]);
         $url  = env('ACC_URL') . '/api/journals';
         $auth = session('accounting.auth');
+        $corporationId = request()->headers->get('CORPORATION-ID');
+        
+        if (auth('api')->check()) {
+            $userId = auth('api')->user()->id;
+        } else {
+            $userId = auth()->user()->id;
+        }
 
         try {
             $response = $http->post($url, [
                 'form_params' => $data,
                 'headers' => [
                     'Authorization' => $auth['token_type'] . ' ' . $auth['access_token'],
-                    'CORPORATION-ID' => request()->headers->get('CORPORATION-ID')
+                    'CORPORATION-ID' => $corporationId,
+                    'USER-ID' => $userId
                 ]
             ]);
 
