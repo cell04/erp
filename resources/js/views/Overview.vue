@@ -618,24 +618,24 @@
 
             let chartSampleLabel = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
             let chartSampleData = [
-                {
-                    label: 'Type 1',
-                    data: [3, 7, 4, 6],
-                    backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                },
-                {
-                    label: 'Type 2',
-                    data: [4, 3, 5, 7],
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                },
-                {
-                    label: 'Type 3',
-                    data: [7, 2, 6, 9],
-                    backgroundColor: 'rgba(54, 162, 235, 0.9)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                },
+                // {
+                //     label: 'Type 1',
+                //     data: [3, 7, 4, 6],
+                //     backgroundColor: 'rgba(54, 162, 235, 0.3)',
+                //     borderColor: 'rgba(54, 162, 235, 1)',
+                // },
+                // {
+                //     label: 'Type 2',
+                //     data: [4, 3, 5, 7],
+                //     backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                //     borderColor: 'rgba(54, 162, 235, 1)',
+                // },
+                // {
+                //     label: 'Type 3',
+                //     data: [7, 2, 6, 9],
+                //     backgroundColor: 'rgba(54, 162, 235, 0.9)',
+                //     borderColor: 'rgba(54, 162, 235, 1)',
+                // },
             ];
             const options3 = createBasicConfig(
             'bar',
