@@ -100,12 +100,14 @@
             createNewContact() {
                 this.ifReady = false;
 
+                console.log(this.$data);
+
                 axios.post('/api/contacts', this.$data).then(res => {
                     this.$router.push({ name: 'contacts.index' });
                 }).catch(err => {
                     console.log(err);
-                    this.ifReady = false;
                     alert('Error');
+                    this.ifReady = true;
                 });
             }
         }

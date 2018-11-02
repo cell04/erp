@@ -65,7 +65,8 @@
         methods: {
             logout() {
                 axios.post('/logout').then(res => {
-                    //
+                    localStorage.clear();
+                    location.reload();
                 }).catch(function (error) {
                     localStorage.clear();
                     location.reload();

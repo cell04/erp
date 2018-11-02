@@ -1,8 +1,8 @@
 <?php
 
 // Auth
-Route::post('/auth/login', 'AuthController@login');
-Route::post('/auth/logout', 'AuthController@logout');
+Route::post('/auth/login', 'AuthController@apiLogin');
+Route::post('/auth/logout', 'AuthController@apiLogout');
 Route::get('/auth/user', 'AuthController@user');
 Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
 

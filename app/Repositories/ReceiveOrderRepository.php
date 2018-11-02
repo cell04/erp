@@ -80,7 +80,7 @@ class ReceiveOrderRepository extends Repository
 
         // return $journal_entries;
 
-        $journal = [
+        $data = [
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,
             'reference_number'  =>  $purchaseOrder->reference_number,
@@ -90,7 +90,43 @@ class ReceiveOrderRepository extends Repository
             'journal_entries'   =>  $journal_entries
         ];
 
-        return $journal;
+        /*if (session()->has('accounting.auth')) {
+            $accountingAuth = session('accounting.auth');
+            $token = $accountingAuth['token_type'] . ' ' . $accountingAuth['access_token'];
+        }*/
+
+        $http = new \GuzzleHttp\Client(['verify' => false ]);
+        $url  = env('ACC_URL') . '/api/journals';
+        $auth = session('accounting.auth');
+
+        try {
+            $response = $http->post($url, [
+                'form_params' => $data,
+                'headers' => [
+                    'Authorization' => $auth['token_type'] . ' ' . $auth['access_token'],
+                    'CORPORATION-ID' => request()->headers->get('CORPORATION-ID')
+                ]
+            ]);
+
+            return true;
+        } catch (Exception $exception) {
+            if ($exception->getCode() == 400) {
+                return response()->json(
+                    'Invalid Request. Please enter a username or a password.',
+                    $exception->getCode()
+                );
+            } elseif ($exception->getCode() == 401) {
+                return response()->json(
+                    'Your credentials are incorrect Please try again.',
+                    $exception->getCode()
+                );
+            }
+
+            return response()->json(
+                'Something went wrong on the server.',
+                $exception->getCode()
+            );
+        }
     }
 
     public function findOrFail($id)
