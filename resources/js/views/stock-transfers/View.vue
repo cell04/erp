@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Stock Transfers / View Stock Transfer
+            <b>Stock Transfers / View Stock Transfer</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -18,9 +18,12 @@
                     </h5>
                 </div>
                 <fieldset disabled>
-                    <div class="form-group">
-                        <label for="name">Stock Tranfer Number</label>
-                        <input type="text" class="form-control" v-model="stockTransfer.number">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="name">Stock Tranfer #</label>
+                            <input type="text" class="form-control" v-model="stockTransfer.number">
+                        </div>
+                        <div class="col-md-6"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -35,9 +38,9 @@
                 </fieldset>
 
                 <br>
-                <h5>
-                    Stock Transfer Items
-                </h5>
+                <h6>
+                    <u>Stock Transfer Items</u>
+                </h6>
                 <br>
 
                 <table class="table table-hover table-sm">
@@ -59,8 +62,14 @@
                     </tbody>
                 </table>
                 <br><br>
-                <button type="button" class="btn btn-info btn-sm" @click.prevent="viewStockTransfers">Back</button>
-                <button class="btn btn-success btn-sm" v-if="stockTransfer.status === 0" @click.prevent.default="openApproveStockTransferModal">Stock Transferred</button>
+                <div class="clearfix">
+                    <div class="float-left">
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewStockTransfers"><i class="fas fa-chevron-left"></i> Back</button>
+                    </div>
+                    <div class="float-right">
+                        <button class="btn btn-success btn-sm" v-if="stockTransfer.status === 0" @click.prevent.default="openApproveStockTransferModal"><i class="fas fa-thumbs-up"></i> Approve</button>
+                    </div>
+                </div>
             </div>
             <div v-else>
                 <div class="progress">

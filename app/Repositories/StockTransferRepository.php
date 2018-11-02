@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Branch;
-use App\Warehouse;
+use App\Stock;
 use App\StockTransfer;
+use App\Warehouse;
 use Illuminate\Support\Facades\DB;
 
 class StockTransferRepository extends Repository
@@ -22,6 +23,7 @@ class StockTransferRepository extends Repository
      * @var App\Warehouse
      */
     protected $warehouse;
+    protected $stock;
 
     /**
      * Create new instance of stock transfer repository.
@@ -33,12 +35,14 @@ class StockTransferRepository extends Repository
     public function __construct(
         StockTransfer $stockTransfer,
         Branch $branch,
-        Warehouse $warehouse
+        Warehouse $warehouse,
+        Stock $stock
     ) {
         parent::__construct($stockTransfer);
         $this->stockTransfer = $stockTransfer;
         $this->branch        = $branch;
         $this->warehouse     = $warehouse;
+        $this->stock = $stock;
     }
 
     public function store($request)
@@ -46,9 +50,37 @@ class StockTransferRepository extends Repository
         return DB::transaction(function () use ($request) {
             $stockTransfer = $this->stockTransfer->create($request->all());
             $stockTransfer->stockTransferItems()->createMany($request->stock_transfer_items);
-            
+            $this->decrementStocksQuantity($stockTransfer);
+
             return $stockTransfer;
         });
+    }
+
+    public function decrementStocksQuantity($stockTransfer)
+    {
+        $stocks = $stockTransfer->stockTransferableFrom->stocks;
+        $stockTransferItems = $stockTransfer->stockTransferItems;
+
+        foreach ($stockTransferItems as $stockTransferItem) {
+            $itemTransferQuantity = $stockTransferItem->quantity;
+            foreach ($stocks as $stock) {
+                if ($stock->item_id == $stockTransferItem->item_id) {
+                    if ($stock->quantity > 0) {
+                        if ($stock->quantity >= $itemTransferQuantity) {
+                            $stock->decrement('quantity', $itemTransferQuantity);
+                            $itemTransferQuantity = 0;
+                        } else {
+                            if ($itemTransferQuantity > $stock->quantity) {
+                                $stock->decrement('quantity', $stock->quantity);
+                                $itemTransferQuantity = $itemTransferQuantity - $stock->quantity;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return 'ahehe';
     }
 
     public function all()

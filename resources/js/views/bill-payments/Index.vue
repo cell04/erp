@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Bill Payment / Bill Payment List
+                    <b>Bill Payment / Bill Payment List</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'bill-payments.create' }">Create New Item Bill Payment</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'bill-payments.create' }"><i class="fas fa-plus"></i> Create New Item Bill Payment</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -14,7 +14,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Bill Payment - Total Items {{ this.meta.total }}
+                                List of Bill Payment - Total Bill Payment {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -25,18 +25,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Bill Reference #</th>
+                            <th scope="col">Bill #</th>
+                            <th scope="col">CR #</th>
+                            <th scope="col">Mode of Payment</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="invoicePayment">
-                        <tr :key="id" v-for="{ id, bill, amount } in invoicePayment">
+                        <tr :key="id" v-for="{ id, bill, amount, mode_of_payment, cr_number } in invoicePayment">
                             <td>{{ bill.reference_number }}</td>
+                            <td>{{ cr_number }}</td>
+                            <td>{{ mode_of_payment.name }}</td>
                             <td>{{ amount }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'bill-payments.view', params: { id: id }}">
-                                    View
+                                    <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 <!-- |
                                 <router-link class="text-info" :to="{ name: 'invoice-payment.edit', params: { id: id }}">

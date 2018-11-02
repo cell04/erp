@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Contacts / Create New Contact
+            <b>Contacts / Create New Contact</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -42,8 +42,9 @@
                         <label>Credit Limit</label>
                         <input type="number" class="form-control" v-model="credit_limit" min="0" max="99999999" required>
                     </div>
-
-                    <button type="submit" class="btn btn-success btn-sm">Create New Contact</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewContact"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Contact</button>
                 </form>
             </div>
             <div v-else>
@@ -89,6 +90,10 @@
         },
 
         methods: {
+            viewContact() {
+                this.$router.push({ name: 'contacts.index' });
+            },
+
             selectContactType() {
                 this.contact_type_id = this.contactType.id;
             },

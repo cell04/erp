@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Contacts / View Contacts
+                <b>Contacts / View Contacts</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -47,9 +47,9 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewContact">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editContact">Edit {{componentVal}}</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteContactModal">Delete {{componentVal}}</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewContact"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editContact"><i class="fas fa-edit"></i> Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteContactModal"><i class="fas fa-trash-alt"></i> Delete</button>
                 </div>
 
                 <div v-else>

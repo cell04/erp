@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Stock Requests / View Stock Request
+                <b>Stock Requests / View Stock Request</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -56,9 +56,9 @@
                     </fieldset>
 
                     <br>
-                    <h5>
-                        Stock Request Items
-                    </h5>
+                    <h6>
+                        <u>Stock Request Items</u>
+                    </h6>
                     <br>
 
                     <table class="table table-hover table-sm">
@@ -84,13 +84,13 @@
 
                     <div class="clearfix">
                         <div class="float-left">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewStockRequests">Back</button>
-                            <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editStockRequest">Edit Stock Request</button>
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteStockRequestModal">Delete Stock Request</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewStockRequests"><i class="fas fa-chevron-left"></i> Back</button>
+                            <!-- <button type="button" class="btn btn-success btn-sm" @click.prevent.default="editStockRequest"><i class="fas fa-edit"></i> Edit</button> -->
+                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteStockRequestModal"><i class="fas fa-trash-alt"></i> Delete</button>
                         </div>
                         <div class="float-right">
-                            <button class="btn btn-success btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openApproveStockRequestModal">Approve Stock Request</button>
-                            <button class="btn btn-danger btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openCancelStockRequestModal">Cancel Stock Request</button>
+                            <button class="btn btn-success btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openApproveStockRequestModal"><i class="fas fa-thumbs-up"></i> Approve</button>
+                            <button class="btn btn-danger btn-sm" v-if="stockRequest.status === 0" @click.prevent.default="openCancelStockRequestModal"><i class="fas fa-thumbs-down"></i> Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -216,7 +216,7 @@
             editStockRequest() {
                 this.$router.push({
                     name: 'stock-requests.edit',
-                    params: { id: this.stockRequestt.id }
+                    params: { id: this.stockRequest.id }
                 });
             },
             openDeleteStockRequestModal() {

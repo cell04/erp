@@ -37,7 +37,7 @@
                     <tbody v-if="invoices">
                         <tr v-for="invoice in invoices">
                             <td>{{invoice.reference_number}}</td>
-                            <td>{{invoice.status}}</td>
+                            <td>{{ (invoice.status) == 0 ? 'Issued': 'Approved'}}</td>
                             <td>{{invoice.due_date}}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'invoices.view', params: { id: invoice.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
@@ -96,10 +96,10 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoice</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoice</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">bills per page</div>
+                            <div class="input-group-text">Items per page</div>
                         </div>
                         <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
                             <option value="10">10</option>

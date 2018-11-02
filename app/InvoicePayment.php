@@ -24,7 +24,7 @@ class InvoicePayment extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'invoice_id', 'amount',
+        'corporation_id', 'invoice_id', 'amount', 'name',
         'mode_of_payment_id', 'cr_number', 'bank_name', 'check'
     ];
 

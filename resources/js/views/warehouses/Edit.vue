@@ -33,9 +33,10 @@
                                 <input type="text" class="form-control" v-model="telephone_number" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
                         </div>
+                        <br>
 
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewWarehouse">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateWarehouse">Update Warehouse</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewWarehouse"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateWarehouse"><i class="fas fa-plus"></i> Update Warehouse</button>
                     </form>
                 </div>
                 <div v-else>

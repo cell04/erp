@@ -1,16 +1,18 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Stock Requests / Create New Stock Request
+            <b>Stock Requests / Create New Stock Request</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
                 <form v-on:submit.prevent="createNewStockRequest">
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label>Stock Request Number</label>
+                        <div class="col-md-6 form-group">
+                            <label>Stock Request #</label>
                             <input type="text" class="form-control" v-model="number" required>
                         </div>
+                        <div class="col-md-6 form-group"></div>
+
                         <div class="col-md-6 form-group">
                             <label>From</label>
                             <br>
@@ -53,8 +55,8 @@
                         <thead>
                             <tr>
                                 <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Quantity</th>
+                                <th scope="col">Item Name</th>
+                                <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -63,19 +65,26 @@
                             <tr :key="index" v-for="(stock_request_item, index) in stock_request_items">
                                 <td>{{ stock_request_item.item.stock_keeping_unit }}</td>
                                 <td>
-                                 <vue-select v-model="stock_request_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                             </td>
-                             <td><input class="form-control" v-model.number="stock_request_item.quantity"> </td>
-                             <td>{{ stock_request_item.unitOfMeasurement }}</td>
-                             <td>
-                                <button type="button" class="btn btn-danger btn-sm" @click="removeItem">Remove</button>
-                            </td>
+                                    <vue-select v-model="stock_request_item.item" @input="selectItem(index)" label="name" :options="items" required></vue-select>
+                                </td>
+                                <td>
+                                    <input class="form-control" v-model.number="stock_request_item.quantity" required> 
+                                </td>
+                                <td>{{ stock_request_item.unitOfMeasurement }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="removeItem(index)"><i class="fas fa-times-circle"></i></button>
+                                </td>
                         </tr>
                     </tbody>
-                    <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
+                    
                 </table>
+                
+                <div class="pt-3">
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewSreq"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click="addItem"><i class="fas fa-plus-circle"></i> Add Item</button>
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Stock Request</button>
+                </div>
 
-                <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Request</button>
             </form>
         </div>
 
@@ -149,6 +158,11 @@
             });
         },
         methods: {
+
+            viewSreq() {
+                this.$router.push({ name: 'stock-requests.index' });
+            },
+
             selectFromBranch() {
                 this.stock_requestable_from_id = this.fromBranch.id;
                 this.stock_requestable_from_type = "App\\Branch";
@@ -219,3 +233,9 @@
         }
     };
 </script>
+
+<style>
+    td {
+        width: 100px !important;
+    }
+</style>

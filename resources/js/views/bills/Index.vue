@@ -6,10 +6,10 @@
                     <button class="btn btn-primary float-right">Add New Bill</button>
                 </router-link> -->
                 <div class="float-left">
-                    Invoices / View Invoice
+                    <b>Bills / View Bill</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'bills.create' }">Create New Invoice</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'bills.create' }"><i class="fas fa-plus"></i> Create New Invoice</router-link>
                 </div>
 
             </div>
@@ -18,7 +18,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Bills - Total bills {{ this.meta.total }}
+                                List of Bills - Total Bills {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -29,23 +29,23 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Reference</th>
+                            
+                            <th scope="col">Bill #</th>
                             <th scope="col">Amount</th>
-                            <th scope="col">Amount Paid</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="bills">
                         <tr v-for="bill in bills">
-                            <td>{{bill.due_date}}</td>
-                            <td>{{bill.status}}</td>
                             <td>{{bill.reference_number}}</td>
                             <td>{{bill.amount}}</td>
-                            <td>{{bill.amount_paid}}</td>
+                            <td>{{ (bill.amount_paid == 0) ? 'Issued': ((bill.amount_paid) < (bill.amount)) ? 'Partially Paid' : 'Fully Paid'}}</td>
+                            <td>{{bill.due_date}}</td>
+                            
                             <td>
-                                <router-link class="text-info" :to="{ name: 'bills.view', params: { id: bill.id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'bills.view', params: { id: bill.id }}"><i class="fas fa-envelope-open-text"></i>  View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -101,7 +101,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoices</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoices</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">bills per page</div>

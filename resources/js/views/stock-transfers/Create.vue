@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Stock Transfers / Create New Stock Transfer
+            <b>Stock Transfers / Create New Stock Transfer</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -9,10 +9,10 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Stock Request Number</label>
-                            <vue-select v-model="stockRequest" @input="selectStockRequest()" label="number" :options="stockRequests"></vue-select>
+                            <vue-select v-model="stockRequest" @input="selectStockRequest()" label="number" :options="stockRequests" required></vue-select>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Stock Transfer Number</label>
+                            <label>Stock Transfer #</label>
                             <input type="text" class="form-control" v-model="number" autocomplete="off" maxlength="255" required>
                         </div>
                         <div class="col-md-6 form-group">
@@ -26,8 +26,10 @@
                     </div>
 
                     <br>
+                    <h6><u>Stock Transfer Items</u></h6>
+                    <br>
 
-                    <table class="table table-hover table-sm">
+                    <!-- <table class="table table-hover table-sm">
                         <caption>
                             <div class="row">
                                 <div class="col-md-3">
@@ -58,10 +60,37 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
+                    </table> -->
+
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">SKU</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">UOM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr :key="item.id" v-for="(item) in stockRequestItems">
+                                <td>{{ item.item.stock_keeping_unit }}</td>
+                                <td>{{ item.item.name }}</td>
+                                <td>{{ item.item.description }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unit_of_measurement.name }}</td>
+                            </tr>
+                        </tbody>
                     </table>
 
-                    <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Transfer</button>
+                    <br>
+
+                    <div class="pt-3">
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewSTrans"><i class="fas fa-chevron-left"></i> Back</button>
+                        <!-- <button type="button" class="btn btn-outline-success btn-sm" @click="addItem"><i class="fas fa-plus-circle"></i> Add Item</button> -->
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Stock Transfer</button>
+                    </div>
+
                 </form>
             </div>
 
@@ -92,13 +121,15 @@
                 stock_transferable_from_type: null,
                 stock_transferable_to_id: null,
                 stock_transferable_to_type: null,
-                stock_transfer_items: []
+                stock_transfer_items: [],
+                stockRequestItems: []
             };
         },
 
         mounted() {
             let promiseStockRequests = new Promise((resolve, reject) => {
                 axios.get("/api/stock-requests/get-all-stock-requests").then(res => {
+                    // console.log('SR: ' + JSON.stringify(res.data.stock_requests));
                     this.stockRequests = res.data.stock_requests;
                     resolve();
                 }).catch(err => {
@@ -134,6 +165,10 @@
         },
 
         methods: {
+            viewSTrans() {
+                this.$router.push({ name: 'stock-transfer.index' });
+            },
+
             selectStockRequest() {
                 this.stock_request_id = this.stockRequest.id;
 
@@ -149,7 +184,7 @@
                 let promiseStockRequest = new Promise((resolve, reject) => {
                     axios.get("/api/stock-requests/" + this.stockRequest.id).then(res => {
                         this.items = res.data.stockRequest.stock_request_items;
-
+                        this.stockRequestItems =  res.data.stockRequest.stock_request_items;
                         this.items.map(item => {
                             item.name = item.item.name;
                         });
@@ -207,7 +242,7 @@
                     stock_transferable_to_id: this.stock_transferable_to_id,
                     stock_transferable_to_type: this.stock_transferable_to_type,
                     number: this.number,
-                    stock_transfer_items: stockTransferItems
+                    stock_transfer_items: this.stockRequestItems
                 };
 
                 axios.post("/api/stock-transfers", formData).then(res => {

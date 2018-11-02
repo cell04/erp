@@ -2,13 +2,13 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-             <div class="float-left">
-                    Stock Transfers / View Stock Transfers
+                <div class="float-left">
+                    <b>Stock Transfers / View Stock Transfers</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'stock-transfers.create' }">Create New Stock Transfer</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'stock-transfers.create' }"><i class="fas fa-plus"></i> Create New Stock Transfer</router-link>
                 </div>
-         </div>
+            </div>
          <div class="card-body">
             <table class="table table-hover table-sm">
                 <caption>
@@ -25,25 +25,23 @@
                 </caption>
                 <thead>
                     <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Stock Transfer Number</th>
-                        <th scope="col">Transfer From</th>
-                        <th scope="col">Transfer To</th>
+                        <th scope="col">ST #</th>
+                        <th scope="col">ST From</th>
+                        <th scope="col">ST To</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Created By</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Options</th>
                     </tr>
                 </thead>
                 <tbody v-if="stockTransfers">
                     <tr v-for="stockTransfer in stockTransfers">
-                        <td>{{ stockTransfer.id }}</td>
                         <td>{{ stockTransfer.number }}</td>
                         <td>{{ stockTransfer.stock_transferable_from.name }}</td>
                         <td>{{ stockTransfer.stock_transferable_to.name }}</td>
                         <td>{{ stockTransfer.status }}</td>
-                        <td>{{ stockTransfer.user.name }}</td>
+                        <td>{{ stockTransfer.created_at }}</td>
                         <td>
-                            <router-link class="text-info" :to="{ name: 'stock-transfers.view', params: { id: stockTransfer.id }}">View</router-link>
+                            <router-link class="text-secondary" :to="{ name: 'stock-transfers.view', params: { id: stockTransfer.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                         </td>
                     </tr>
                 </tbody>
@@ -99,7 +97,7 @@
 
         <div class="float-right">
             <form class="form-inline">
-                <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Transfers</button>
+                <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Transfers</button> -->
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <div class="input-group-text">Items per page</div>

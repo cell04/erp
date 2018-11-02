@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                {{componentVal}} / View {{componentVal}}
+                <b>{{componentVal}} / View {{componentVal}}</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -37,7 +37,7 @@
                                 <th scope="col">SKU</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Description</th>
-                                <th scope="col">Received Qty</th>
+                                <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Tracking #</th>
@@ -71,7 +71,7 @@
                         </tbody>
                     </table>
                     <br>
-                    <button type="button" class="btn btn-outline-info btn-sm" @click.prevent="viewReceivedOrders">Back</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewReceivedOrders"><i class="fas fa-chevron-left"></i> Back</button>
 
                     <router-link v-if="order.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { po_id: order.id }}">
                         <button class="btn btn-success btn-sm">Receive PO</button>

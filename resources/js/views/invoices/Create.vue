@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Invoices / Create New Invoice
+            <b>Invoices / Create New Invoice</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -35,6 +35,10 @@
 
                     </div>
 
+                    <br>
+                    <h6>
+                        <b><u>Invoice Items</u></b>
+                    </h6>
                     <br>
 
                     <!-- <table class="table table-hover table-sm">
@@ -92,7 +96,7 @@
                                 <th scope="col">SKU</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Description</th>
-                                <th scope="col">Received Qty</th>
+                                <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Tracking #</th>

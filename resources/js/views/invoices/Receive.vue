@@ -13,35 +13,25 @@
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label>Due Date</label>
-                            <input type="date" class="form-control" v-model="due_date">
-                        </div>
-
-                        <div class="col-md-6 form-group">
                             <label>Contact</label>
-                            <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
+                            <input type="text" class="form-control" v-model="contact_person" readonly>
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label>Reference #</label>
+                            <label>Invoice #</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label>Amount</label>
-                            <input type="number" class="form-control" v-model="amount">
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Amount Paid</label>
-                            <input type="number" class="form-control" v-model="amount_paid">
+                            <label>Due Date</label>
+                            <input type="date" class="form-control" v-model="due_date" required>
                         </div>
                         
                     </div>
 
                     <br>
 
-                    <table class="table table-hover table-sm">
+                    <!-- <table class="table table-hover table-sm">
                         <caption>
                             <div class="row">
                                 <div class="col-md-3">
@@ -88,11 +78,49 @@
                                 <td></td>
                             </tr>
                         </tbody>
+                    </table> -->
+
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">SKU</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">UOM</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr :key="item.id" v-for="(item, index) in receive_order_items">
+                                <td>{{ item.item.stock_keeping_unit }}</td>
+                                <td>{{ item.item.name }}</td>
+                                <td>{{ item.item.description }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unit_of_measurement.name }}</td>
+                                <td>{{ item.item_pricelist.price }}</td>
+                                <td>{{ subtotalRow[index] }}</td>
+                            </tr>
+                            <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <b>Total</b>
+                                    </td>
+                                    <td>{{total}}</td>
+                                    <td></td>
+                                </tr>
+                        </tbody>
                     </table>
 
                     <div class="pt-3">
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Invoice</button>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewROs"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>
+                        <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
                     </div>
                 </form>
             </div>
@@ -112,11 +140,13 @@
         data() {
             return {
                 ifReady: false,
+                receive_order_items: [],
                 purchaseOrder: [],
                 receiveOrderId: null,
                 contacts: [],
                 contact: null,
                 contact_id: "",
+                contact_person: "",
                 due_date: "",
                 amount: "",
                 amount_paid: "",
@@ -141,7 +171,7 @@
                     }
                 ],
                 amounts: "",
-                isDisabled: true
+                isDisabled: false
             };
         },
 
@@ -182,7 +212,10 @@
             let getPo = new Promise((resolve, reject) => {
                 axios.get("/api/receive-orders/" + this.$route.params.id).then(res => {
                     this.receiveOrderId = res.data.receiveOrder.reference_number;
+                    this.contact_id = res.data.receiveOrder.contact.id;
+                    this.contact_person = res.data.receiveOrder.contact.person;
                     this.receive_order_id = res.data.receiveOrder.id;
+                    this.receive_order_items = res.data.receiveOrder.receive_order_items;
                     // console.log('RO: ' + JSON.stringify(res.data.receiveOrder));
                     resolve();
                 }).catch(err => {
@@ -198,78 +231,90 @@
         },
 
         computed: {
-            subTotalRow() {
-                return this.invoice_items.map((invoice_item) => {
-                    return (invoice_item.quantity * invoice_item.unit_price);
+            subtotalRow() {
+                return this.receive_order_items.map((item) => {
+                return Number(item.quantity * item.item_pricelist.price)
                 });
             },
             total() {
-                return this.invoice_items.reduce((total, invoice_item) => {
-                    return total + (invoice_item.quantity * invoice_item.unit_price);
+                return this.receive_order_items.reduce((total, item) => {
+                return total + item.quantity * item.item_pricelist.price;
                 }, 0);
             }
         },
 
+        // computed: {
+        //     subTotalRow() {
+        //         return this.invoice_items.map((invoice_item) => {
+        //             return (invoice_item.quantity * invoice_item.unit_price);
+        //         });
+        //     },
+        //     total() {
+        //         return this.invoice_items.reduce((total, invoice_item) => {
+        //             return total + (invoice_item.quantity * invoice_item.unit_price);
+        //         }, 0);
+        //     }
+        // },
+
         methods: {
-            selectContact() {
-                this.contact_id = this.contact.id;
+            viewROs() {
+                this.$router.push({ name: 'receive-orders.index' });
             },
+            // selectItem(index) {
+            //     this.invoice_items[index].item_id = this.invoice_items[index].item.id;
+            //     this.invoice_items[index].unitOfMeasurement = this.invoice_items[index].item.default_unit_of_measurement.name;
+            //     this.invoice_items[index].unit_of_measurement_id = this.invoice_items[index].item.default_unit_of_measurement.id;
 
-            selectItem(index) {
-                this.invoice_items[index].item_id = this.invoice_items[index].item.id;
-                this.invoice_items[index].unitOfMeasurement = this.invoice_items[index].item.default_unit_of_measurement.name;
-                this.invoice_items[index].unit_of_measurement_id = this.invoice_items[index].item.default_unit_of_measurement.id;
+            //     let promise = new Promise((resolve, reject) => {
+            //         axios.get("/api/item-pricelists/get-item-pricelists/" + this.invoice_items[index].item_id).then(res => {
+            //             this.invoice_items[index].itemPricelists = res.data.item_pricelists;
+            //             resolve();
+            //         }).catch(err => {
+            //             console.log(err);
+            //             reject();
+            //         });
+            //     });
+            // },
+            // selectItemPricelist(index) {
+            //     this.invoice_items[index].item_pricelist_id = this.invoice_items[index].itemPricelist.id;
+            //     this.invoice_items[index].subTotal = (parseFloat(this.invoice_items[index].quantity) * parseFloat(this.invoice_items[index].itemPricelist.price));
+            //     this.updateTotalAmount();
+            // },
+            // updateTotalAmount() {
+            //     let total = 0;
 
-                let promise = new Promise((resolve, reject) => {
-                    axios.get("/api/item-pricelists/get-item-pricelists/" + this.invoice_items[index].item_id).then(res => {
-                        this.invoice_items[index].itemPricelists = res.data.item_pricelists;
-                        resolve();
-                    }).catch(err => {
-                        console.log(err);
-                        reject();
-                    });
-                });
-            },
-            selectItemPricelist(index) {
-                this.invoice_items[index].item_pricelist_id = this.invoice_items[index].itemPricelist.id;
-                this.invoice_items[index].subTotal = (parseFloat(this.invoice_items[index].quantity) * parseFloat(this.invoice_items[index].itemPricelist.price));
-                this.updateTotalAmount();
-            },
-            updateTotalAmount() {
-                let total = 0;
+            //     this.invoice_items.forEach(invoice_item => {
+            //         total += invoice_item.subTotal;
+            //     });
 
-                this.invoice_items.forEach(invoice_item => {
-                    total += invoice_item.subTotal;
-                });
+            //     this.amounts = total;
 
-                this.amounts = total;
+            //     if (this.amounts > 0) {
+            //         this.isDisabled = false;
+            //     } else {
+            //         this.isDisabled = true;
+            //     }
+            // },
+            // addNewItem() {
+            //     this.invoice_items.push({
+            //         item: '',
+            //         item_id: '',
+            //         quantity: '',
+            //         unitOfMeasurements: [],
+            //         unitOfMeasurement: '',
+            //         unit_of_measurement_id: '',
+            //         itemPricelists: [],
+            //         itemPricelist: '',
+            //         item_pricelist_id: '',
+            //         subTotal: 0
+            //     });
 
-                if (this.amounts > 0) {
-                    this.isDisabled = false;
-                } else {
-                    this.isDisabled = true;
-                }
-            },
-            addNewItem() {
-                this.invoice_items.push({
-                    item: '',
-                    item_id: '',
-                    quantity: '',
-                    unitOfMeasurements: [],
-                    unitOfMeasurement: '',
-                    unit_of_measurement_id: '',
-                    itemPricelists: [],
-                    itemPricelist: '',
-                    item_pricelist_id: '',
-                    subTotal: 0
-                });
-
-                this.updateTotalAmount();
-            },
-            deleteRow(index) {
-                this.invoice_items.splice(index, 1);
-                this.updateTotalAmount();
-            },
+            //     this.updateTotalAmount();
+            // },
+            // deleteRow(index) {
+            //     this.invoice_items.splice(index, 1);
+            //     this.updateTotalAmount();
+            // },
             createNewInvoice() {
                 this.ifReady = false;
 
@@ -285,13 +330,13 @@
                 });
 
                 let formData = {
-                    invoice_items: invoiceItems,
+                    invoice_items: this.$data.receive_order_items,
                     receive_order_id: this.receive_order_id,
                     contact_id: this.$data.contact_id,
                     reference_number: this.$data.reference_number,
                     due_date: this.$data.due_date,
-                    amount: this.$data.amount,
-                    amount_paid: this.$data.amount_paid
+                    amount: 0,
+                    amount_paid: 0
                 };
 
                 console.log(formData);

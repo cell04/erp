@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Item Price Lists / Create New Item Price List
+            <b>Item Price Lists / Create New Item Price List</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -14,8 +14,9 @@
                         <label for="name">Price</label>
                         <input type="number" class="form-control" v-model="price" autocomplete="off" minlength="2" maxlength="255" step=".01" placeholder="0.00" required>
                     </div>
-
-                    <button type="submit" class="btn btn-success btn-sm">Create New Item Price List</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemPricelist"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Item Price List</button>
                 </form>
             </div>
 
@@ -58,6 +59,10 @@
         },
 
         methods: {
+            viewItemPricelist() {
+                this.$router.push({ name: 'item-pricelists.index' });
+            },
+
             selectItem() {
                 this.item_id = this.item.id;
                 console.log('item_id: ' + this.item_id);

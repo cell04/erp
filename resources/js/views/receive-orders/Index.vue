@@ -2,14 +2,11 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                <!-- <router-link :to="{ name: 'purchase-orders.create'}">
-                    <button class="btn btn-primary float-right">Ad Order</button>
-                </router-link> -->
                 <div class="float-left">
-                    Received Orders / View Received Orders
+                    <b>Received Orders / View Received Orders</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'receive-orders.create' }">Create New Received Order</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'receive-orders.create' }"><i class="fas fa-plus"></i> Create New Received Order</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -28,22 +25,24 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Received Date</th>
-                            <th scope="col">Reference #</th>
+                            <th scope="col">RO #</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date Created</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="items">
                         <tr :key="item.id" v-for="item in items">
-                            <td>{{ item.created_at }}</td>
                             <td>{{ item.reference_number }}</td>
+                            <td>{{ item.status }}</td>
+                            <td>{{ item.created_at }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'receive-orders.view', params: { id: item.id }}">
-                                    View
+                                <router-link class="text-secondary" :to="{ name: 'receive-orders.view', params: { id: item.id }}">
+                                    <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 |
-                                <router-link class="text-info" :to="{ name: 'invoices.receive', params: { id: item.id }}">
-                                    Create Invoice
+                                <router-link class="text-secondary" :to="{ name: 'invoices.receive', params: { id: item.id }}">
+                                    <i class="fas fa-receipt"></i> Receive Invoice
                                 </router-link>
                             </td>
                         </tr>
@@ -100,7 +99,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Items</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Receive Orders</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -323,7 +322,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'receive-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -342,7 +341,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'receive-orders.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
@@ -361,7 +360,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'receive-orders.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
@@ -380,7 +379,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'receive-orders.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page,searchColumnName: this.searchColumnName,
@@ -398,7 +397,7 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'receive-orders.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
@@ -420,6 +419,15 @@
                 if (err) {
                     this.error = err.toString();
                 } else {
+                    let itemsStatus = {
+                        0: "Issued",
+                        1: "Closed",
+                    };
+
+                    items.map(item => {
+                        item.status = itemsStatus[item.status];
+                    });
+
                     this.items = items;
                     this.links = links;
                     this.meta = meta;
@@ -481,7 +489,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'receive-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -501,7 +509,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'items.index',
+                    name: 'receive-orders.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,

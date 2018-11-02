@@ -2,23 +2,49 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Invoice Payments / View Invoice Payment
+                <b>Invoice Payments / View Invoice Payment</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
                     <fieldset disabled>
-                        <div class="form-group">
-                            <label for="name">Invoice Reference #</label>
-                            <input type="text" class="form-control" v-model="invoiceId.reference_number" autocomplete="off" minlength="2" maxlength="255" required>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="name">Invoice #</label>
+                                <input type="text" class="form-control" v-model="invoiceId.reference_number" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">Amount</label>
+                                <input type="text" class="form-control" v-model="invoicePayment.amount" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">Mode of Payment</label>
+                                <input type="text" class="form-control" v-model="invoicePayment.mode_of_payment.name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">CR #</label>
+                                <input type="text" class="form-control" v-model="invoicePayment.cr_number" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group" v-if="invoicePayment.mode_of_payment_id == 2">
+                                <label for="name">Bank Name</label>
+                                <input type="text" class="form-control" v-model="invoicePayment.bank_name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group" v-if="invoicePayment.mode_of_payment_id == 2">
+                                <label for="name">Check #</label>
+                                <input type="text" class="form-control" v-model="invoicePayment.check" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            
+                            
                         </div>
 
-                        <div class="form-group">
-                            <label for="name">Amount</label>
-                            <input type="text" class="form-control" v-model="invoicePayment.amount" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
                     </fieldset>
+                    <br>
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewInvoice">Back</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewInvoice"><i class="fas fa-chevron-left"></i> Back</button>
                     <!-- <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification">Edit Item Class</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal">Delete Item Class</button> -->
                 </div>
@@ -82,7 +108,7 @@
         methods: {
             viewInvoice() {
                 this.$router.push({
-                    name: 'invoice-payment.index'
+                    name: 'invoice-payments.index'
                 });
             },
             // editItemClassification() {
