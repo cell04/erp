@@ -110,7 +110,6 @@
                                         <b>Total</b>
                                     </td>
                                     <td>{{total}}</td>
-                                    <td></td>
                                 </tr>
                         </tbody>
                     </table>
