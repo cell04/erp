@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Corporation extends Model
 {
@@ -26,6 +27,16 @@ class Corporation extends Model
         'name', 'description', 'street', 'city',
         'state', 'zip_code', 'country', 'fax'
     ];
+
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'name', 'description', 'street', 'city',
+    //     'state', 'zip_code', 'country', 'fax'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -52,6 +63,46 @@ class Corporation extends Model
     public function branches()
     {
         return $this->hasMany(Branch::class);
+    }
+
+    /**
+     * The corporation has one inventory receive not billed account.
+     *
+     * @return array object
+     */
+    public function inventoryReceiveNotBilledAccount()
+    {
+        return $this->hasOne(InventoryReceiveNotBilledAccount::class);
+    }
+
+    /**
+     * The corporation has one payable account.
+     *
+     * @return array object
+     */
+    public function payableAccount()
+    {
+        return $this->hasOne(PayableAccount::class);
+    }
+
+    /**
+     * The corporation has one cash account.
+     *
+     * @return array object
+     */
+    public function cashAccount()
+    {
+        return $this->hasOne(CashAccount::class);
+    }
+
+    /**
+     * The corporation has one inventory return not Credited account.
+     *
+     * @return array object
+     */
+    public function inventoryReturnNotCreditedAccount()
+    {
+        return $this->hasOne(InventoryReturnNotCreditedAccount::class);
     }
 
     /**

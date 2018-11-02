@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvoicePaymentsTable extends Migration
+class CreateInventoryReceiveNotBilledAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,14 @@ class CreateInvoicePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_payments', function (Blueprint $table) {
+        Schema::create('inventory_receive_not_billed_accounts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
             $table->foreign('corporation_id')
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
-            $table->integer('invoice_id')->unsigned();
-            $table->foreign('invoice_id')
-                ->references('id')
-                ->on('invoices')
-                ->onDelete('cascade');
-            $table->decimal('amount', 20, 2);
+            $table->integer('account_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,6 +33,6 @@ class CreateInvoicePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_payments');
+        Schema::dropIfExists('inventory_receive_not_billed_accounts');
     }
 }

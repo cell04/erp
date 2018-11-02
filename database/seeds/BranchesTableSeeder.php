@@ -1,5 +1,6 @@
 <?php
 
+use App\CostCenter;
 use Illuminate\Database\Seeder;
 
 class BranchesTableSeeder extends Seeder
@@ -12,5 +13,11 @@ class BranchesTableSeeder extends Seeder
     public function run()
     {
         factory(App\Branch::class, 1)->create();
+
+        CostCenter::create([
+            'corporation_id' => 1, 
+            'cost_centable_id' => 1, 
+            'cost_centable_type' => 'App\\Branch',
+        ]);
     }
 }

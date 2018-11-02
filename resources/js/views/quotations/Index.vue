@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Quotations / View Quotations
+                    <b>Quotations / View Quotations</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'quotations.create' }">Create New Quotation</router-link>
+                    <router-link class="btn btn-primary btn-sm" :to="{ name: 'quotations.create' }"><i class="fas fa-plus"></i> Create New Quotation</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -25,23 +25,21 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Company</th>
-                            <th scope="col">Contact Name</th>
-                            <th scope="col">Number</th>
-                            <th scope="col">Date Created</th>
+                            <th scope="col">Quotation #</th>
+                            <th scope="col">Customer</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Date Created</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="quotations">
                         <tr :key="index" v-for="(purchaseOrder, index) in quotations">
-                            <td>{{ purchaseOrder.contact.company }}</td>
-                            <td>{{ purchaseOrder.contact.person }}</td>
                             <td>{{ purchaseOrder.number }}</td>
-                            <td>{{ purchaseOrder.created_at }}</td>
+                            <td>{{ purchaseOrder.contact.person }}</td>
                             <td>{{ purchaseOrder.status }}</td>
+                            <td>{{ purchaseOrder.created_at }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'quotations.view', params: { id: purchaseOrder.id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'quotations.view', params: { id: purchaseOrder.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
 
                             </td>
                         </tr>
@@ -98,7 +96,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Quotations</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Quotations</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>

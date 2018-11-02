@@ -2,13 +2,11 @@
     <nav class="navbar navbar-expand-md navcolor">
         <div class="container-fluid">
             <router-link class="navTextColor" :to="{ name: 'overview' }">
-                <img src="../../assets/tradesoft_logo.png" style="max-width:110px;" alt="Tradesoft Business"/>
+                <img src="../../assets/tradesoft_logo.png" style="width:115px; height:60px; margin-top:-5px; margin-bottom: -10px; margin-left:25   px;" alt="Tradesoft Business"/>
             </router-link>
-
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <!-- <li v-if="corporation">
@@ -16,6 +14,7 @@
                     </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle navTextColor" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user px-2"></i>
                             {{ user.name }} <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -65,7 +64,8 @@
         methods: {
             logout() {
                 axios.post('/logout').then(res => {
-                    //
+                    localStorage.clear();
+                    location.reload();
                 }).catch(function (error) {
                     localStorage.clear();
                     location.reload();
@@ -82,5 +82,8 @@
     }
     .navTextColor{
         color: white;
+    }
+    .fas .fa-user .px-1{
+        color: white !important;
     }
 </style>

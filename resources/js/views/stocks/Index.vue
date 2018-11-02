@@ -2,44 +2,95 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Stocks
+                <b>Stocks</b>
             </div>
             <div class="card-body">
-                <table class="table table-hover table-sm">
-                    <caption>
-                        <div class="row">
-                            <div class="col-md-9">
-                                List of Stocks - Total Items {{ this.meta.total }}
-                            </div>
-                            <div class="col-md-3">
-                                <div class="progress" height="30px;" v-if="showProgress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-warehouse-tab" data-toggle="tab" href="#nav-warehouse" role="tab" aria-controls="nav-warehouse" aria-selected="true">Warehouse</a>
+                        <a class="nav-item nav-link" id="nav-branch-tab" data-toggle="tab" href="#nav-branch" role="tab" aria-controls="nav-branch" aria-selected="false">Branch</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <!-- Warehouse List -->
+                    <div class="tab-pane fade show active" id="nav-warehouse" role="tabpanel" aria-labelledby="nav-warehouse-tab">
+                        <table class="table table-hover table-sm">
+                            <caption>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        List of Stocks - Total Items {{ this.meta.total }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="progress" height="30px;" v-if="showProgress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Stock From</th>
-                            <th scope="col">Item</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">UOM</th>
-                            <th scope="col">Options</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="stocks">
-                        <tr v-for="{ id, stockable_id, stockable, item, quantity, unit_of_measurement } in stocks">
-                            <td>{{ stockable.name }}</td>
-                            <td>{{ item.name }}</td>
-                            <td>{{ quantity }}</td>
-                            <td>{{ unit_of_measurement.name }}</td>
-                            <td>
-                                <router-link class="text-info" :to="{ name: 'stocks.view', params: { id: id }}">View</router-link> |
-                                <router-link class="btn-success btn-sm" :to="{ name: '', params: { id: id }}">Convert</router-link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Stock From</th>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">UOM</th>
+                                    <th scope="col">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="stocks">
+                                <tr v-for="{ id, stockable_id, stockable, item, quantity, unit_of_measurement } in stocks">
+                                    <td>{{ stockable.name }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ quantity }}</td>
+                                    <td>{{ unit_of_measurement.name }}</td>
+                                    <td>
+                                        <router-link class="text-secondary" :to="{ name: 'stocks.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                        <!-- <router-link class="btn-success btn-sm" :to="{ name: '', params: { id: id }}">Convert</router-link> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Branch List -->
+                    <div class="tab-pane fade" id="nav-branch" role="tabpanel" aria-labelledby="nav-branch-tab">
+                        <table class="table table-hover table-sm">
+                            <caption>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        List of Stocks - Total Items {{ this.meta.total }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="progress" height="30px;" v-if="showProgress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Stock From</th>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">UOM</th>
+                                    <th scope="col">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="stocks">
+                                <tr v-for="{ id, stockable_id, stockable, item, quantity, unit_of_measurement } in stocks">
+                                    <td>{{ stockable.name }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ quantity }}</td>
+                                    <td>{{ unit_of_measurement.name }}</td>
+                                    <td>
+                                        <router-link class="text-secondary" :to="{ name: 'stocks.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                        <!-- <router-link class="btn-success btn-sm" :to="{ name: '', params: { id: id }}">Convert</router-link> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                
             </div>
         </div>
 
@@ -329,7 +380,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'stocks.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -346,7 +397,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'stocks.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
@@ -363,7 +414,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'stocks.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
@@ -380,7 +431,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'stocks.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page,
@@ -397,7 +448,7 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'stocks.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
@@ -478,7 +529,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'stocks.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -495,7 +546,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'warehouses.index',
+                    name: 'stocks.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,

@@ -2,43 +2,38 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Invoices / View Invoice
+                <b>Bills / View Bill</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
-                    <div v-if="bills.status === 0">
+                    <div v-if="bills.amount_paid == 0.00">
                         <h5>
-                            Invoice Details
+                            Bill Details
                             <span class="badge badge-info">Issued</span>
                         </h5>
                     </div>
-                    <div v-else-if="bills.status === 1">
+                    <div v-else-if="bills.amount_paid < bills.amount">
                         <h5>
-                            Invoice Details
+                            Bill Details
                             <span class="badge badge-primary">Partially Paid</span>
                         </h5>
                     </div>
                     <div v-else>
                         <h5>
-                            Invoice Details
+                            Bill Details
                             <span class="badge badge-success">Fully Paid</span>
                         </h5>
                     </div>
                     <fieldset>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label>Quotation</label>
-                                <input type="text" class="form-control" v-model="roRefNum.amount" readonly>
+                                <label>Bill #</label>
+                                <input type="text" class="form-control" v-model="bills.reference_number" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label>Contact</label>
                                 <input type="text" class="form-control" v-model="contacts.person" readonly>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Reference #</label>
-                                <input type="text" class="form-control" v-model="bills.reference_number" readonly>
                             </div>
 
                             <div class="col-md-6 form-group">
@@ -69,7 +64,7 @@
                             <tr>
                                 <th scope="col">Name</th>
                                 <th scope="col">Description</th>
-                                <th scope="col">Received Qty</th>
+                                <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Amount</th>
@@ -97,7 +92,8 @@
                             </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewBills">Back</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBills"><i class="fas fa-chevron-left"></i> Back</button>
                 </div>
 
                 <div v-else>
@@ -131,6 +127,7 @@
             getItem() {
                 new Promise((resolve, reject) => {
                     axios.get("/api/bills/" + this.$route.params.id).then(res => {
+                        console.log('Bills: ' + JSON.stringify(res.data));
                         this.ifReady = true;
                         this.bills = res.data.bill;
                         this.contacts = res.data.bill.contact;

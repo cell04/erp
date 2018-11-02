@@ -26,6 +26,15 @@ class AuditTrail extends Model
         'corporation_id', 'user_id', 'module', 'description'
     ];
 
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'user_id', 'module', 'description'
+    // ];
+
     /**
      * The attributes that should be mutated to dates.
      *

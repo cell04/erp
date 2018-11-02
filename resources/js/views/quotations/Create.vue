@@ -8,11 +8,16 @@
                 <form v-on:submit.prevent="createNewQuotation">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Number</label>
-                            <input type="text" class="form-control" v-model="number" required>
+                            <label>Quotation Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" id="btnGroupAddon">Q</div>
+                                </div>
+                                <input type="text" class="form-control" v-model="number" required placeholder="Quotation #" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                            </div>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Contact</label>
+                            <label>Customer</label>
                             <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
                         </div>
 
@@ -34,7 +39,11 @@
                     </div>
 
                     <br>
-
+                    <h6>
+                        <b><u>Quotation Items</u></b>
+                    </h6>
+                    <br>
+                    
                     <table class="table table-hover table-sm">
                         <caption>
                             <div class="row">
@@ -44,10 +53,10 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">Stock Keeping Unit</th>
+                                <th scope="col">SKU</th>
                                 <th scope="col">Item</th>
                                 <th scope="col">Quantity</th>
-                                <th scope="col">Unit of Measurement</th>
+                                <th scope="col">UOM</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Sub Total</th>
                                 <th scope="col">Action</th>
@@ -70,7 +79,7 @@
                                 </td>
                                 <td>{{ quotation_item.subTotal }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                 </td>
                             </tr>
                             <tr>
@@ -85,8 +94,9 @@
                     </table>
 
                     <div class="pt-3">
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Quotation</button>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click="addNewItem"><i class="fas fa-plus-circle"></i> Add New Item</button>
+                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Quotation</button>
                     </div>
                 </form>
             </div>
@@ -136,9 +146,10 @@
         },
 
         mounted() {
+            // Customer's List
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
-                    this.contacts = res.data.contacts;
+                    this.contacts = res.data.contacts.filter(cust => cust.contact_type_id == 1);
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -195,6 +206,10 @@
         },
 
         methods: {
+            viewQuotations() {
+                this.$router.push({ name: 'quotations.index' });
+            },
+
             selectContact() {
                 this.contact_id = this.contact.id;
             },
@@ -285,7 +300,7 @@
                     contact_id: this.$data.contact_id,
                     quotable_id: this.stock_receivable_from_id,
                     quotable_type: this.stock_receivable_from_type,
-                    number: this.number,
+                    number: 'Q' + this.number,
                     amount: this.amount,
                     quotation_items: quotationItems
                 };
@@ -302,3 +317,10 @@
         }
     };
 </script>
+
+<style>
+    td {
+        width: 100px !important;
+    }
+</style>
+

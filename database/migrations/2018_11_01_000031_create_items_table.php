@@ -30,6 +30,10 @@ class CreateItemsTable extends Migration
                 ->references('id')
                 ->on('unit_of_measurements')
                 ->onDelete('cascade');
+            $table->integer('asset_account_id')->unsigned()->nullable();
+            $table->integer('cogs_account_id')->unsigned()->nullable();
+            $table->integer('sales_account_id')->unsigned()->nullable();
+            $table->integer('expense_account_id')->unsigned()->nullable();
             $table->integer('item_classification_id')->unsigned();
             $table->foreign('item_classification_id')
                 ->references('id')

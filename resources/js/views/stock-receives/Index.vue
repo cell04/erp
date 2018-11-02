@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                <div class="float-left">
-                    Stock Receives
+                    <b>Stock Receives</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'stock-receives.create' }">Create New Stock Receive</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'stock-receives.create' }"><i class="fas fa-plus"></i> Create New Stock Receive</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -25,22 +25,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Stock Receive Number</th>
-                            <th scope="col">Stock Receive From</th>
-                            <th scope="col">Stock Receive To</th>
-                            <th scope="col">Created By</th>
+                            <th scope="col">SR #</th>
+                            <th scope="col">SR From</th>
+                            <th scope="col">SR To</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
                     <tbody v-if="stockReceive">
-                        <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user } in stockReceive">
+                        <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user, created_at } in stockReceive">
 
                             <td>{{ number }}</td>
                             <td>{{ stock_receivable_from.name }}</td>
                             <td>{{ stock_receivable_to.name }}</td>
-                            <td>{{ user.name }}</td>
+                            <td>{{ created_at }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'stock-receives.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'stock-receives.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -96,7 +96,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Receive</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Receive</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>

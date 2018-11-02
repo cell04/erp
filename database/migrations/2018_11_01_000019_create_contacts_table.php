@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBillPaymentsTable extends Migration
+class CreateContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,25 @@ class CreateBillPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bill_payments', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
             $table->foreign('corporation_id')
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
-            $table->integer('bill_id')->unsigned();
-            $table->foreign('bill_id')
+            $table->integer('contact_type_id')->unsigned();
+            $table->foreign('contact_type_id')
                 ->references('id')
-                ->on('bills')
+                ->on('contact_types')
                 ->onDelete('cascade');
-            $table->decimal('amount', 20, 2);
+            $table->string('company');
+            $table->string('company_address');
+            $table->string('person');
+            $table->string('email')->unique();
+            $table->string('mobile_number')->nullable();
+            $table->decimal('credit_limit', 20, 2)->nullable();
+            $table->integer('account_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,6 +44,6 @@ class CreateBillPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bill_payments');
+        Schema::dropIfExists('contacts');
     }
 }

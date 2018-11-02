@@ -60,7 +60,17 @@ class Warehouse extends Model
     }
 
     /**
-     * The branch has many stocks.
+     * The warehoouse is a cost center.
+     *
+     * @return array object
+     */
+    public function costCenter()
+    {
+        return $this->morphMany(CostCenter::class, 'cost_centable');
+    }
+
+    /**
+     * The warehouse has many stocks.
      *
      * @return object
      */
@@ -69,11 +79,21 @@ class Warehouse extends Model
         return $this->morphMany(Stock::class, 'stockable');
     }
 
+    /**
+     * The warehouse has many stock request from.
+     *
+     * @return array object
+     */
     public function stockRequestFrom()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_from');
     }
 
+    /**
+     * The warehouse has many stock request to.
+     *
+     * @return array object
+     */
     public function stockRequestTo()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_to');

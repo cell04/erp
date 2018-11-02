@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Branches / Create New Branch
+                <b>Branches / Create New Branch</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -33,8 +33,9 @@
                                 <input type="text" class="form-control" v-model="telephone_number" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
                         </div>
-
-                        <button type="submit" class="btn btn-success btn-sm">Create New Branch</button>
+                        <br>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBranches"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Branch</button>
                     </form>
                 </div>
 
@@ -64,6 +65,10 @@
         },
 
         methods: {
+            viewBranches() {
+                this.$router.push({ name: 'branches.index' });
+            },
+
             createNewBranch() {
                 this.ifReady = false;
 

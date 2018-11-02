@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class PurchaseOrder extends Model
 {
@@ -26,6 +27,16 @@ class PurchaseOrder extends Model
         'corporation_id', 'user_id', 'reference_number',
         'warehouse_id', 'contact_id', 'amount', 'status'
     ];
+
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'user_id', 'reference_number',
+    //     'warehouse_id', 'contact_id', 'amount', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

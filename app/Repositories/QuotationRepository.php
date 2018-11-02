@@ -87,6 +87,70 @@ class QuotationRepository extends Repository
         });
     }
 
+    // public function decrementStocksQuantity($quotation)
+    // {
+    //     $stocks = $stockTransfer->stockTransferableFrom->stocks;
+    //     $stockTransferItems = $stockTransfer->stockTransferItems;
+
+    //     foreach ($stockTransferItems as $stockTransferItem) {
+    //         $itemTransferQuantity = $stockTransferItem->quantity;
+    //         foreach ($stocks as $stock) {
+    //             if ($stock->item_id == $stockTransferItem->item_id) {
+    //                 if ($stock->quantity > 0) {
+    //                     if ($stock->quantity >= $itemTransferQuantity) {
+    //                         $stock->decrement('quantity', $itemTransferQuantity);
+    //                         $itemTransferQuantity = 0;
+    //                     } else {
+    //                         if ($itemTransferQuantity > $stock->quantity) {
+    //                             $stock->decrement('quantity', $stock->quantity);
+    //                             $itemTransferQuantity = $itemTransferQuantity - $stock->quantity;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return 'ahehe';
+    // }
+
+    public function generateSalesEntries($quotation)
+    {
+        $i = 0;
+
+        foreach ($quotation->quotationItems as $quotationItem) {
+            $journal_entries[$i++] = [
+                'account_id' => $quotation->item->sales_account_id,
+                'corporation_id' => request()->headers->get('CORPORATION-ID'),
+                'cost_center_id' => $quotation->quotable->id,
+                'amount' => $quotation->amount,
+                'type' => 2, //credit entries
+            ];
+        }
+
+        $journal_entries[$i++] = [
+            'account_id' => session('cash'),
+            'corporation_id' => request()->headers->get('CORPORATION-ID'),
+            'cost_center_id' => $quotation->quotable->id,
+            'amount' => $quotation->amount,
+            'type' => 1, //debit entries
+        ];
+
+        // return $journal_entries;
+
+        $journal = [
+            'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
+            'user_id'           =>  auth('api')->user()->id,
+            'reference_number'  =>  $quotation->number,
+            'memo'              =>  'Quotation',
+            'amount'            =>  $quotation->amount,
+            'posting_period'    =>  $quotation->updated_at,
+            'journal_entries'   =>  $journal_entries
+        ];
+
+        return $journal;
+    }
+
     public function findOrFail($id)
     {
         return  $this->quotation->with([
@@ -108,6 +172,8 @@ class QuotationRepository extends Repository
             if ($quotation->status == 1) {
                 $quotation->update(['status' => $status]);
                 if ($quotation->status == 2) {
+                     // return $journal = $this->generateSalesEntries($quotation);
+                    // $this->deductStocksQuantity($quotation);
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
 

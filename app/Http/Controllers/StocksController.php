@@ -183,4 +183,33 @@ class StocksController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllStock()
+    {
+        if (cache()->has('stocks')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'stocks' => cache('stocks', 5)
+            ], 200);
+        }
+
+        if (! $stocks = $this->stock->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'stocks' => $stocks
+        ], 200);
+    }
 }

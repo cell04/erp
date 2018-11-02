@@ -91,11 +91,13 @@
                     </tbody>
                 </table>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewPurchaseOrders">Back</button>
-                <router-link v-if="purchaseOrder.status == 0" :to="{ name: 'receive-orders.create', params: { po_id: purchaseOrder.id }}">
-                    <button class="btn btn-success btn-sm">Receive Purchase Order</button>
+                <br>
+                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewPurchaseOrders"><i class="fas fa-chevron-left"></i> Back</button>
+                <router-link v-if="purchaseOrder.status == 0" :to="{ name: 'receive-orders.receive', params: { po_id: purchaseOrder.id }}">
+                    <button class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i> Receive PO</button>
                 </router-link>
-                <button class="btn btn-danger btn-sm" v-if="purchaseOrder.status == 0" @click="closePurchaseOrder(purchaseOrder.id, purchaseOrder.purchase_order_number)">Close Purchase Order</button>
+                <!-- <button class="btn btn-danger btn-sm" v-if="purchaseOrder.status == 0" @click="closePurchaseOrder(purchaseOrder.id, purchaseOrder.purchase_order_number)"> <i class="fas fa-times"></i> Close PO</button> -->
+            
             </div>
             <div v-else>
                 <div class="progress">
@@ -119,7 +121,6 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
-                    console.log(res.data.purchaseOrder);
                     this.purchaseOrder = res.data.purchaseOrder;
 
                     this.purchaseOrder.purchase_order_items.map(purchase_order_item => {

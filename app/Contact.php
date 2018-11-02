@@ -3,9 +3,9 @@
 namespace App;
 
 use App\Traits\Filtering;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Contact extends Model
 {
@@ -25,7 +25,7 @@ class Contact extends Model
      */
     protected $fillable = [
         'corporation_id', 'contact_type_id', 'company', 'company_address',
-        'person', 'email', 'mobile_number', 'credit_limit'
+        'person', 'email', 'mobile_number', 'credit_limit', 'account_id'
     ];
 
     /**

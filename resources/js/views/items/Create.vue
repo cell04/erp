@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Items / Create New Item
+                <b>Items / Create New Item</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -50,8 +50,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button type="submit" class="btn btn-success btn-sm">Create New Item</button>
+                        <br>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Item</button>
 
                     </form>
                 </div>
@@ -145,6 +146,10 @@
         },
 
         methods: {
+            viewItems() {
+                this.$router.push({ name: 'items.index' });
+            },
+
             selectItemUnit() {
                 this.default_unit_of_measurement_id = this.itemUnitId.id;
                 console.log('GetItemUnitId: ' + this.default_unit_of_measurement_id);

@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Warehouses / View Warehouses
+                    <b>Warehouses / View Warehouses</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'warehouses.create' }">Create New Warehouse</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'warehouses.create' }"><i class="fas fa-plus"></i> Create New Warehouse</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -41,8 +41,8 @@
                             <td>{{ zip_code }}</td>
                             <td>{{ telephone_number }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'warehouses.view', params: { id: id }}">View</router-link> |
-                                <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create New Stock Request</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'warehouses.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                <!-- <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create New Stock Request</router-link> -->
                             </td>
                         </tr>
                     </tbody>

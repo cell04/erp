@@ -60,6 +60,16 @@ class StockRequestRepository extends Repository
         return $this->stockRequest->where('status', 1)->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')->get();
     }
 
+    /**
+     * Get all resources in the storage with the status of 0.
+     *
+     * @return array json object
+     */
+    public function getAllUnapprovedStockReuests()
+    {
+        return $this->stockRequest->where('status', 0)->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')->get();
+    }
+
     public function paginateWithFilters(
         $request = null,
         $length = 10,

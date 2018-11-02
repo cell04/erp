@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Stock extends Model
 {
@@ -26,6 +27,16 @@ class Stock extends Model
         'corporation_id', 'stockable_id', 'stockable_type',
         'item_id', 'quantity', 'unit_of_measurement_id'
     ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'stockable_id', 'stockable_type',
+    //     'item_id', 'quantity', 'unit_of_measurement_id'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.

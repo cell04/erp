@@ -60,6 +60,16 @@ class Branch extends Model
     }
 
     /**
+     * The branch is a cost center.
+     *
+     * @return object
+     */
+    public function costCenter()
+    {
+        return $this->morphMany(CostCenter::class, 'cost_centable');
+    }
+
+    /**
      * The branch has many stocks.
      *
      * @return object
@@ -69,11 +79,21 @@ class Branch extends Model
         return $this->morphMany(Stock::class, 'stockable');
     }
 
+    /**
+     * The branch has many stock request from.
+     *
+     * @return array object
+     */
     public function stockRequestFrom()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_from');
     }
 
+    /**
+     * The branch has many stock request to.
+     *
+     * @return array object
+     */
     public function stockRequestTo()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_to');

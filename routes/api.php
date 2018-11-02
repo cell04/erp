@@ -1,12 +1,16 @@
 <?php
 
 // Auth
-Route::post('/auth/login', 'AuthController@login');
-Route::post('/auth/logout', 'AuthController@logout');
+Route::post('/auth/login', 'AuthController@apiLogin');
+Route::post('/auth/logout', 'AuthController@apiLogout');
 Route::get('/auth/user', 'AuthController@user');
 Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['auth:api', 'corporation.default.account']], function () {
+    Route::post('test', function () {
+        return cache(auth('api')->user()->id . ' accounting.auth');
+    });
+
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
     Route::delete('audit-trails/{auditTrail}/force-delete', 'AuditTrailsController@forceDestroy');
@@ -177,6 +181,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Stocks
     Route::match(['put', 'patch'], 'stocks/{stock}/restore', 'StocksController@restore');
     Route::delete('stocks/{stock}/force-delete', 'StocksController@forceDestroy');
+    Route::get('stocks/get-all-stocks', 'StocksController@getAllStock');
     Route::resource('stocks', 'StocksController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -207,6 +212,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::match(['put', 'patch'], 'stock-requests/{stockRequest}/restore', 'StockRequestsController@restore');
     Route::delete('stock-requests/{stockRequest}/force-delete', 'StockRequestsController@forceDestroy');
     Route::get('stock-requests/get-all-stock-requests', 'StockRequestsController@getAllStockRequests');
+    Route::get('stock-requests/get-all-unapproved-stock-requests', 'StockRequestsController@getAllUnapprovedStockReuests');
     Route::post('stock-requests/{stockRequest}/approve', 'StockRequestsController@approve');
     Route::post('stock-requests/{stockRequest}/cancel', 'StockRequestsController@cancel');
     Route::resource('stock-requests', 'StockRequestsController', [
@@ -261,6 +267,64 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('bill-payments/{bill-payment}/force-delete', 'BillPaymentsController@forceDestroy');
     Route::get('bill-payments/get-all-bill-payments', 'BillPaymentsController@getAllBillPayments');
     Route::resource('bill-payments', 'BillPaymentsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Inventory Receive Not Billed Account
+    Route::match(['put', 'patch'], 'inventory-receive-not-billed/{inventory-receive-not-billed}/restore', 'InventoryReceiveNotBilledAccountsController@restore');
+    Route::delete('inventory-receive-not-billed/{inventory-receive-not-billed}/force-delete', 'InventoryReceiveNotBilledAccountsController@forceDestroy');
+    Route::get('inventory-receive-not-billed/get-all-inventory-receive-not-billed', 'InventoryReceiveNotBilledAccountsController@getAllInventoryReceiveNotBilledAccounts');
+    Route::resource('inventory-receive-not-billed', 'InventoryReceiveNotBilledAccountsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Inventory Receive Not Billed Account
+    Route::match(['put', 'patch'], 'inventory-return-not-credited/{inventory-return-not-credited}/restore', 'InventoryReturnNotCreditedAccountsController@restore');
+    Route::delete('inventory-return-not-credited/{inventory-return-not-credited}/force-delete', 'InventoryReturnNotCreditedAccountsController@forceDestroy');
+    Route::get('inventory-return-not-credited/get-all-inventory-return-not-credited', 'InventoryReturnNotCreditedAccountsController@getAllInventoryReturnNotCreditedAccounts');
+    Route::resource('inventory-return-not-credited', 'InventoryReturnNotCreditedAccountsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Account Payable
+    Route::match(['put', 'patch'], 'account-payables/{account-payable}/restore', 'PayableAccountsController@restore');
+    Route::delete('account-payables/{account-payable}/force-delete', 'PayableAccountsController@forceDestroy');
+    Route::get('account-payables/get-all-account-payable', 'PayableAccountsController@getAllPayableAccounts');
+    Route::resource('account-payables', 'PayableAccountsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Account Payable
+    Route::match(['put', 'patch'], 'cash/{cash}/restore', 'CashAccountsController@restore');
+    Route::delete('cash/{cash}/force-delete', 'CashAccountsController@forceDestroy');
+    Route::get('cash/get-all-cash', 'CashAccountsController@getAllCashAccounts');
+    Route::resource('cash', 'CashAccountsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Mode Of Payments
+    Route::match(['put', 'patch'], 'mode-of-payments/{mode-of-payment}/restore', 'ModeOfPaymentsController@restore');
+    Route::delete('mode-of-payments/{mode-of-payment}/force-delete', 'ModeOfPaymentsController@forceDestroy');
+    Route::get('mode-of-payments/get-all-mode-of-payments', 'ModeOfPaymentsController@getAllModeOfPayment');
+    Route::resource('mode-of-payments', 'ModeOfPaymentsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Cost Centers
+    Route::get('cost-centers/get-all-cost-centers', 'CostCentersController@getAllCostCenter');
+    Route::resource('cost-centers', 'CostCentersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]

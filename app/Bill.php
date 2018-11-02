@@ -10,6 +10,11 @@ class Bill extends Model
 {
     use SoftDeletes, Filtering;
 
+    /**
+     * Bills table.
+     *
+     * @var string
+     */
     protected $table = 'bills';
 
     /**
@@ -19,8 +24,9 @@ class Bill extends Model
      */
     protected $fillable = [
         'corporation_id', 'quotation_id', 'contact_id',
-        'user_id', 'reference_number', 'due_date',
-        'amount', 'amount_paid', 'status'
+        'user_id', 'billable_id', 'billable_type',
+        'reference_number', 'due_date', 'amount',
+        'amount_paid', 'status'
     ];
 
     /**
