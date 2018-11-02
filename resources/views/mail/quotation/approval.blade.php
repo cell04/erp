@@ -7,7 +7,7 @@ Approved By : {{ $content->approvedBy->name }}
 |       Item Name                                                                           |              Unit                                             |                   Quantity                        |                       Price                                   |
 |       :------------                                                                       |              :-------------                                   |                   :--------                       |                       :--------                               |
 @foreach ($content->quotationItems as $quotationItem)
-| {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->unitOfMeasurement->name }}              |           {{ $quotationItem->quantity }}          |             {{ number_format($quotation->price, 2) }}         |
+| {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->unitOfMeasurement->name }}              |           {{ $quotationItem->quantity }}          |             {{ number_format($quotationItem->price, 2) }}     |
 @endforeach
 |                                                                                           |                                                               |              Total Amount                         |             {{ number_format($content->amount, 2) }}          |
 @endcomponent

@@ -20,22 +20,18 @@ class CorporationDefaultAccount
             $corporation = Corporation::findOrFail(request()->headers->get('CORPORATION-ID'));
 
             if (empty(session('irnb'))) {
-
                 session()->put('irnb', $corporation->inventoryReceiveNotBilledAccount->account_id);
             }
 
             if (empty(session('irnc'))) {
-
                 session()->put('irnc', $corporation->inventoryReturnNotCreditedAccount->account_id);
             }
 
             if (empty(session('account-payable'))) {
-
                 session()->put('account-payable', $corporation->payableAccount->account_id);
             }
 
             if (empty(session('cash'))) {
-
                 session()->put('cash', $corporation->cashAccount->account_id);
             }
         }

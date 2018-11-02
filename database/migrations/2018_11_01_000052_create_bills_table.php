@@ -20,6 +20,8 @@ class CreateBillsTable extends Migration
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
+            $table->integer('billable_id')->unsigned();
+            $table->string('billable_type');
             $table->integer('quotation_id')->unsigned();
             $table->foreign('quotation_id')
                 ->references('id')

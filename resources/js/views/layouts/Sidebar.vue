@@ -31,15 +31,15 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link link" :to="{ name: 'invoices.index' }">
-                                <span class="sub-content">
-                                    <i class="fas fa-caret-right pr-2 "></i>
-                                    Invoices
-                                </span>
-                            </router-link>
+                        <router-link class="nav-link link" :to="{ name: 'bills.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Invoices
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link link" :to="{ name: 'invoice-payments.index' }">
+                        <router-link class="nav-link link" :to="{ name: 'bill-payments.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
                                 Invoice Payments
@@ -94,7 +94,7 @@
                         <router-link class="nav-link link" :to="{ name: 'stocks.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                 Stocks
+                                Stocks
                             </span>
                         </router-link>
                     </li>
@@ -102,7 +102,7 @@
                         <router-link class="nav-link link" :to="{ name: 'stock-requests.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                 Stocks Requests
+                                Stocks Requests
                             </span>
                         </router-link>
                     </li>
@@ -138,7 +138,7 @@
                         <router-link class="nav-link link" :to="{ name: 'purchase-orders.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                               Purchase Orders
+                                Purchase Orders
                             </span>
                         </router-link>
                     </li>
@@ -146,23 +146,23 @@
                         <router-link class="nav-link link" :to="{ name: 'receive-orders.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                               Receive Orders
+                                Receive Orders
                             </span>
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link link" :to="{ name: 'bills.index' }">
+                        <router-link class="nav-link link" :to="{ name: 'invoices.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                               Bills
+                                Bills
                             </span>
-                            </router-link>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link link" :to="{ name: 'bill-payments.index' }">
+                        <router-link class="nav-link link" :to="{ name: 'invoice-payments.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                               Bills Payment
+                                Bills Payment
                             </span>
                         </router-link>
                     </li>
