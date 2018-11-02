@@ -2,23 +2,47 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Bill Payments / View Bill Payment
+                <b>Bill Payments / View Bill Payment</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
                     <fieldset disabled>
-                        <div class="form-group">
-                            <label for="name">Bill Reference #</label>
-                            <input type="text" class="form-control" v-model="invoiceId.reference_number" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="name">Bill #</label>
+                                <input type="text" class="form-control" v-model="billId.reference_number" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="name">Amount</label>
-                            <input type="text" class="form-control" v-model="invoicePayment.amount" autocomplete="off" minlength="2" maxlength="255" required>
+                            <div class="col-md-6 form-group">
+                                <label for="name">Amount</label>
+                                <input type="text" class="form-control" v-model="billPayment.amount" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">Mode of Payment</label>
+                                <input type="text" class="form-control" v-model="billPayment.mode_of_payment.name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">CR #</label>
+                                <input type="text" class="form-control" v-model="billPayment.cr_number" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group" v-if="billPayment.mode_of_payment_id == 2">
+                                <label for="name">Bank Name</label>
+                                <input type="text" class="form-control" v-model="billPayment.bank_name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group" v-if="billPayment.mode_of_payment_id == 2">
+                                <label for="name">Check #</label>
+                                <input type="text" class="form-control" v-model="billPayment.check" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
                         </div>
+                        
+
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewBill">Back</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewBill"><i class="fas fa-chevron-left"></i> Back</button>
                     <!-- <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification">Edit Item Class</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal">Delete Item Class</button> -->
                 </div>
@@ -59,16 +83,16 @@
         data() {
             return {
                 ifReady: false,
-                invoiceId: '',
-                invoicePayment: []
+                billId: '',
+                billPayment: []
             };
         },
 
         mounted() {
             new Promise((resolve, reject) => {
                 axios.get("/api/bill-payments/" + this.$route.params.id).then(res => {
-                    this.invoicePayment = res.data.billPayment;
-                    this.invoiceId = res.data.billPayment.bill;
+                    this.billPayment = res.data.billPayment;
+                    this.billId = res.data.billPayment.bill;
                     // console.log('IP: ' + JSON.stringify(res.data));
                     this.ifReady = true;
                 if (!res.data.response) {
@@ -82,7 +106,7 @@
         methods: {
             viewBill() {
                 this.$router.push({
-                    name: 'bill-payment.index'
+                    name: 'bill-payments.index'
                 });
             },
             // editItemClassification() {

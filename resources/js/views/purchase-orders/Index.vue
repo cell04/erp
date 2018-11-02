@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Purchase Orders / View Purchase Orders
+                    <b>Purchase Orders / View Purchase Orders</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'purchase-orders.create' }">Create New Purchase Orders</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'purchase-orders.create' }"><i class="fas fa-plus"></i> Create New Purchase Orders</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -25,22 +25,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Reference Number</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">PO #</th>
                             <th scope="col">Amount</th>
-                            <th scope="col">Date Created</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="purchaseOrders">
                         <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
                             <td>{{ purchaseOrder.reference_number }}</td>
-                            <td>{{ purchaseOrder.status }}</td>
                             <td>{{ purchaseOrder.amount }}</td>
+                            <td>{{ purchaseOrder.status }}</td>
                             <td>{{ purchaseOrder.created_at }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}">View</router-link> |
-                                <router-link class="btn-success btn-sm" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}">Receive Purchase Order</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link> |
+                                <router-link class="text-secondary" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}"><i class="fas fa-receipt"></i> Receive PO</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -96,7 +96,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Purchase Orders</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Purchase Orders</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>

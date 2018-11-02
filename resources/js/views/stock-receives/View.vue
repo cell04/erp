@@ -52,7 +52,7 @@
                         </tbody>
                     </table>
                     <br>
-                    <button type="button" class="btn btn-outline-info btn-sm" @click.prevent="viewItems">Back</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewSRec"><i class="fas fa-chevron-left"></i> Back</button>
                 </div>
 
                 <div v-else>
@@ -103,7 +103,7 @@ export default {
         });
       });
     },
-    viewItems() {
+    viewSRec() {
       this.$router.push({
         name: "stock-receives.index"
       });

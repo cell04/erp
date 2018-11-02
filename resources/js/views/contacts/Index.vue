@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    {{componentVal}}s / View {{componentVal}}
+                    <b>{{componentVal}}s / View {{componentVal}}</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'contacts.create' }">Create New Contact</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'contacts.create' }">Create New Contact</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -25,10 +25,9 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Company Name</th>
-                            <th scope="col">Contact Person</th>
-                            <th scope="col">Email Address</th>
-                            <th scope="col">Mobile Number</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Contact</th>
+                            <th scope="col">Email</th>
                             <th scope="col">Type</th>
                             <th scope="col">Options</th>
                         </tr>
@@ -38,7 +37,6 @@
                             <td>{{ company }}</td>
                             <td>{{ person }}</td>
                             <td>{{ email }}</td>
-                            <td>{{ mobile_number }}</td>
                             <td>{{ contact_type.display_name }}</td>
                             <td>
                                 <router-link class="text-info" :to="{ name: 'contacts.view', params: { id: id }}">View</router-link>

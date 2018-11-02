@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Contacts / View Contacts
+            <b>Contacts / View Contacts</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -44,8 +44,8 @@
                         <input type="text" class="form-control" v-model="company_address" id="company_address">
                     </div>
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewContact">Back</button>
-                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContact">Update Contact</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewContact"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContact"><i class="fas fa-edit"></i> Update Contact</button>
                 </form>
             </div>
 

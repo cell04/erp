@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Branches / Edit Branch
+                <b>Branches / Edit Branch</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -34,8 +34,8 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewBranch">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateBranch">Update Branch</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewBranch"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateBranch"><i class="fas fa-edit"></i> Update Branch</button>
                     </form>
                 </div>
                 <div v-else>

@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Price Lists / View Item Price List
+                <b>Item Price Lists / View Item Price List</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -17,10 +17,10 @@
                             <input type="text" class="form-control" v-model="itemPricelist.price" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
                     </fieldset>
-
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItemPricelists">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemPricelists">Edit Item Price List</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemPricelistsModal">Delete Item Price List</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemPricelists"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemPricelists"><i class="fas fa-edit"></i> Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemPricelistsModal"><i class="fas fa-trash-alt"></i> Delete</button>
                 </div>
                 <div v-else>
                     <div class="progress">

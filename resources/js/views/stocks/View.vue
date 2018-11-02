@@ -27,7 +27,7 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent.default="viewStocks">Back</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewStocks"><i class="fas fa-chevron-left"></i> Back</button>
                 </div>
                 <div v-else>
                     <div class="progress">

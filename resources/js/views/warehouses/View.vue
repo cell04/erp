@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Warehouses / View Warehouse
+                <b>Warehouses / View Warehouse</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -34,11 +34,11 @@
                             </div>
                         </div>
                     </fieldset>
-
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewWarehouses">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editWarehouse">Edit Warehouse</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteWarehouseModal">Delete Warehouse</button>
-                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="createNewStockRequest">Create New Stock Request</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewWarehouses"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editWarehouse"><i class="fas fa-edit"></i> Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteWarehouseModal"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="createNewStockRequest"><i class="fas fa-plus"></i> Create New Stock Request</button>
                 </div>
                 <div v-else>
                     <div class="progress">

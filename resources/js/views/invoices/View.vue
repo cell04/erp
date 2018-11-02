@@ -53,18 +53,32 @@
                                 <td>{{ subtotalRow[index] }}</td>
                             </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Price before Vat</b>
+                                </td>
+                                <td>{{total - (total * .12)}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Vat</b>
+                                </td>
+                                <td>{{(total * .12)}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td>{{total}}</td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
+                    <br>
                     <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
                 </div>
 

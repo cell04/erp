@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Invoice Payment / Invoice Payment List
+                    <b>Invoice Payment / Invoice Payment List</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'invoice-payment.create' }">Create New Invoice Payment</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'invoice-payments.create' }"><i class="fas fa-plus"></i> Create New Invoice Payment</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -25,18 +25,22 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Invoice Reference #</th>
+                            <th scope="col">Invoice #</th>
+                            <th scope="col">CR #</th>
+                            <th scope="col">Mode of Payment</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="invoicePayment">
-                        <tr :key="id" v-for="{ id, invoice, amount } in invoicePayment">
+                        <tr :key="id" v-for="{ id, invoice, amount, mode_of_payment, cr_number } in invoicePayment">
                             <td>{{ invoice.reference_number }}</td>
+                            <td>{{ cr_number }}</td>
+                            <td>{{ mode_of_payment.name }}</td>
                             <td>{{ amount }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'invoice-payment.view', params: { id: id }}">
-                                    View
+                                <router-link class="text-secondary" :to="{ name: 'invoice-payments.view', params: { id: id }}">
+                                    <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 <!-- |
                                 <router-link class="text-info" :to="{ name: 'invoice-payment.edit', params: { id: id }}">
@@ -159,7 +163,7 @@
         const params = { page, per_page,searchColumnName, searchColumnDescription,order_by };
 
         axios.get('/api/invoice-payments', { params }).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             callback(error, error.res.data);
@@ -223,7 +227,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/invoice-payments/').then(res => {
-                    console.log('IP: ' + JSON.stringify(res.data));
+                    // console.log('IP: ' + JSON.stringify(res.data));
                     resolve();
                 });
             });
@@ -272,7 +276,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'invoice-payments.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
@@ -282,7 +286,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'invoice-payments.index',
                     query: {
                         page,
                         per_page: this.meta.per_page
@@ -292,7 +296,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'invoice-payments.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page
@@ -302,7 +306,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'invoice-payments.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page
@@ -312,7 +316,7 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'invoice-payments.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page
@@ -385,7 +389,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'invoice-payments.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
@@ -396,7 +400,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'invoice-payments.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,

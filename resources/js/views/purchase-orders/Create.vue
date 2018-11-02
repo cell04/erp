@@ -1,33 +1,31 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Purchase Orders / Create New Purchase Order
+            <b>Purchase Orders / Create New Purchase Order</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
-                <h5>
-                    Purchase Order
-                </h5>
                 <form v-on:submit.prevent="createNewPurchaseOrder">
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label>Reference #</label>
+                        <div class="col-md-6 form-group">
+                            <label>Purchase Order #</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
                         </div>
+                        <div class="col-md-6 form-group"></div>
                         <div class="col-md-6 form-group">
                             <label>Warehouse</label>
                             <vue-select v-model="warehouse" @input="selectWarehouse()" label="name" :options="warehouses"></vue-select>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Contact</label>
+                            <label>Supplier</label>
                             <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
                         </div>
                     </div>
 
                     <br>
-                    <h5>
-                        Purchase Order Items
-                    </h5>
+                    <h6>
+                        <b><u>Purchase Order Items</u></b>
+                    </h6>
                     <br>
 
                     <table class="table table-hover table-sm">
@@ -39,10 +37,10 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">Stock Keeping Unit</th>
+                                <th scope="col">SKU</th>
                                 <th scope="col">Item</th>
                                 <th scope="col">Quantity</th>
-                                <th scope="col">Unit of Measurement</th>
+                                <th scope="col">UOM</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Sub Total</th>
                                 <th scope="col">Action</th>
@@ -65,7 +63,7 @@
                                 </td>
                                 <td>{{ purchase_order_item.subTotal }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                 </td>
                             </tr>
                             <tr>
@@ -80,8 +78,9 @@
                     </table>
 
                     <div class="pt-3">
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled">Create New Purchase Order</button>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewPOs"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click="addNewItem"><i class="fas fa-plus-circle"></i> Add New Item</button>
+                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Purchase Order</button>
                     </div>
                 </form>
             </div>
@@ -131,9 +130,10 @@
         mounted() {
             this.date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
 
+            // Supplier's List
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
-                    this.contacts = res.data.contacts;
+                    this.contacts = res.data.contacts.filter(cust => cust.contact_type_id == 2);
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -180,6 +180,10 @@
         },
 
         methods: {
+            viewPOs() {
+                this.$router.push({ name: 'purchase-orders.index' });
+            },
+
             selectContact() {
                 this.contact_id = this.contact.id;
             },
@@ -279,3 +283,9 @@
         }
     };
 </script>
+
+<style>
+    td {
+        width: 100px !important;
+    }
+</style>

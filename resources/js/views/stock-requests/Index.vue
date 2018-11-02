@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                <div class="float-left">
-                    Stock Requests / View Stock Requests
+                    <b>Stock Requests / View Stock Requests</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create' }">Create New Stock Request</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'stock-requests.create' }"><i class="fas fa-plus"></i> Create New Stock Request</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -25,27 +25,23 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Stock Request Number</th>
-                            <th scope="col">Stock Request from</th>
-                            <th scope="col">Stock Request to</th>
+                            <th scope="col">SR #</th>
+                            <th scope="col">SR From</th>
+                            <th scope="col">SR To</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Created By</th>
-                            <th scope="col">Approved/Cancelled By</th>
+                            <!-- <th scope="col">Approved/Cancelled By</th> -->
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
                     <tbody v-if="stockRequests">
-                        <tr v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, user, approve_by } in stockRequests">
-                            <td>{{ id }}</td>
+                        <tr v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, approve_by } in stockRequests">
                             <td>{{ number }}</td>
                             <td>{{ stock_requestable_from.name }}</td>
                             <td>{{ stock_requestable_to.name }}</td>
                             <td>{{ status }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ approve_by ? approve_by.name : null }}</td>
+                            <!-- <td>{{ approve_by ? approve_by.name : null }}</td> -->
                             <td>
-                                <router-link class="text-info" :to="{ name: 'stock-requests.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'stock-requests.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -101,7 +97,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Requests</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Requests</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>

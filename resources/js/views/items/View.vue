@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                {{componentVal}} / View {{componentVal}}
+                <b>{{componentVal}} / View {{componentVal}}</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -47,9 +47,10 @@
                             </div>
                         </div>
                     </fieldset>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewItems">Back</button>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="editItems">Edit Item</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent="openDeleteItemModal">Delete Item</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItems"><i class="fas fa-edit"></i> Edit Item</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent="openDeleteItemModal"><i class="fas fa-trash-alt"></i> Delete Item</button>
                 </div>
                 <div v-else>
                     <div class="progress">

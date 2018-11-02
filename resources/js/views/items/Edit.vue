@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Items / Edit Item
+                <b>Items / Edit Item</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -44,9 +44,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItems">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItem">Update Item</button>
+                        <br>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItem"><i class="fas fa-edit"></i> Update Item</button>
                     </form>
                 </div>
                 <div v-else>

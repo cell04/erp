@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Item Price List / Edit Item Price List
+            <b>Item Price List / Edit Item Price List</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -15,9 +15,9 @@
                         <label for="name">Price</label>
                         <input type="text" class="form-control" v-model="price" autocomplete="off" minlength="2" maxlength="255" required>
                     </div>
-
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItemPricelists">Back</button>
-                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItemPricelist">Update Item Price List</button>
+                    <br>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemPricelists"><i class="fas fa-chevron-left"></i>Back</button>
+                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItemPricelist"><i class="fas fa-edit"></i> Update Item Price List</button>
                 </form>
             </div>
             <div v-else>

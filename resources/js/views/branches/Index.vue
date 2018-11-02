@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Branches / View Branches
+                    <b>Branches / View Branches</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'branches.create' }">Create New Branch</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'branches.create' }"><i class="fas fa-plus"></i> Create New Branch</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -14,7 +14,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Branches - Total Items {{ this.meta.total }}
+                                List of Branches - Total Branch {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -25,26 +25,24 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">City</th>
                             <th scope="col">Country</th>
-                            <th scope="col">Zip Code</th>
-                            <th scope="col">Telephone Number</th>
+                            <th scope="col">Zip</th>
+                            <th scope="col">Telephone</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
                     <tbody v-if="branches">
                         <tr v-for="{ id, name, city, country, zip_code, telephone_number } in branches">
-                            <td>{{ id }}</td>
                             <td>{{ name }}</td>
                             <td>{{ city }}</td>
                             <td>{{ country }}</td>
                             <td>{{ zip_code }}</td>
                             <td>{{ telephone_number }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'branches.view', params: { id: id }}">View</router-link> |
-                                <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create', params: { id: id },  query: { type: 'branch' }}">Create New Stock Request</router-link>
+                                <router-link class="text-info" :to="{ name: 'branches.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                <!-- <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create', params: { id: id },  query: { type: 'branch' }}">Create New Stock Request</router-link> -->
                             </td>
                         </tr>
                     </tbody>

@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Items / View Items
+                    <b>Items / View Items</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'items.create' }">Create New Item</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'items.create' }"><i class="fas fa-plus"></i> Create New Item</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -37,12 +37,12 @@
                             <td>{{ item.name }}</td>
                             <td>{{ item.description }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'items.view', params: { id: item.id }}">
-                                    View
+                                <router-link class="text-secondary" :to="{ name: 'items.view', params: { id: item.id }}">
+                                    <i class="fas fa-envelope-open-text"></i>  View
                                 </router-link>
                                 |
-                                <router-link class="text-info" :to="{ name: 'items.edit', params: { id: item.id }}">
-                                    Edit
+                                <router-link class="text-secondary" :to="{ name: 'items.edit', params: { id: item.id }}">
+                                    <i class="fas fa-edit"></i> Edit
                                 </router-link>
                             </td>
                         </tr>

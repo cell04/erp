@@ -39,6 +39,10 @@
                     </div>
 
                     <br>
+                    <h6>
+                        <b><u>Quotation Items</u></b>
+                    </h6>
+                    <br>
                     
                     <table class="table table-hover table-sm">
                         <caption>
@@ -142,8 +146,9 @@
         },
 
         mounted() {
+            // Customer's List
             let getAllContacts = new Promise((resolve, reject) => {
-                axios.get("/api/contacts/get-all-contacts/?orderby=person").then(res => {
+                axios.get("/api/contacts/get-all-contacts/").then(res => {
                     this.contacts = res.data.contacts.filter(cust => cust.contact_type_id == 1);
                     resolve();
                 }).catch(err => {
