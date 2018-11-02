@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
@@ -38,12 +39,12 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request)
+    public function apiLogin()
     {
         $http = new \GuzzleHttp\Client(['verify' => false ]);
         $url  = env('APP_URL') . '/oauth/token';
 
-        $clientSecret = DB::table('oauth_clients')->where('name', 'Inventory Password Grant Client')->first()->secret;
+        $clientSecret = DB::table('oauth_clients')->where('name', 'ERP Password Grant Client')->first()->secret;
 
         try {
             $response = $http->post($url, [
@@ -83,13 +84,89 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function logout()
+    public function apiLogout()
     {
         auth()->user()->tokens->each(
             function ($token, $key) {
                 $token->delete();
             }
         );
+
+        return response()->json('Logged out successfully', 200);
+    }
+
+    /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * Login user.
+     *
+     * @param Request $request Request class
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request)
+    {
+        $http = new \GuzzleHttp\Client(['verify' => false ]);
+        $url  = env('ACC_URL') . '/oauth/token';
+
+        $clientSecret = DB::table('oauth_clients')->where('name', 'ERP Password Grant Client')->first()->secret;
+
+        try {
+            $response = $http->post($url, [
+                'form_params' => [
+                    'grant_type'    => 'password',
+                    'client_id'     => '2',
+                    'client_secret' => $clientSecret,
+                    'username'      => $request->email,
+                    'password'      => $request->password,
+                    'scope'         => '*',
+                ],
+            ]);
+
+            session()->put('accounting.auth', json_decode((string) $response->getBody(), true));
+        } catch (Exception $exception) {
+            if ($exception->getCode() == 400) {
+                return response()->json(
+                    'Invalid Request. Please enter a username or a password.',
+                    $exception->getCode()
+                );
+            } elseif ($exception->getCode() == 401) {
+                return response()->json(
+                    'Your credentials are incorrect Please try again.',
+                    $exception->getCode()
+                );
+            }
+
+            return response()->json(
+                'Something went wrong on the server.',
+                $exception->getCode()
+            );
+        }
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            // Authentication passed...
+            return redirect()->intended('/');
+        }
+    }
+
+    /**
+     * Logout user and delete token.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function logout()
+    {
+        Auth::logout();
 
         return response()->json('Logged out successfully', 200);
     }
