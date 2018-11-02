@@ -428,7 +428,7 @@
             const getAllQuotations = () => {
                 axios.get('/api/quotations/get-all-quotations').then( res => {
                     const allQuotations = res.data.quotations
-                    //console.groupCollapsed('Quotation Request')
+                    console.groupCollapsed('Quotation Request')
 
                     const log = JSON.stringify(allQuotations)
                     //console.log('All Quotation', JSON.parse(log));
@@ -441,17 +441,17 @@
                     .filter( quo => (quo.status === 0) && ( new Date(quo.created_at).getDate() === this.dateToday.getDate() ))
 
                     //console.log('Issued Quotations',issuedQuotations)
-                    //console.groupEnd()
+                    console.groupEnd()
 
                 }).catch( error => console.error(error))
             }
 
             const getAllInvoices = () => {
                 axios.get('/api/invoices/get-all-invoices').then( res => {
-                    //console.groupCollapsed('Invoice Request')
+                    console.groupCollapsed('Invoice Request')
                         const allInvoices = res.data.invoices.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
                         //console.log('All Invoices ->',allInvoices)
-                    //console.groupEnd()
+                    console.groupEnd()
                 }).catch( error => console.error(error))
             }
 
@@ -462,12 +462,12 @@
                     let currAmount = curr.amount ? curr.amount : 0
                     return parseInt(prevAmount) + parseInt(currAmount)
                 })
-                return finalAmount ? finalAmount + 10000: 0
+                return finalAmount ? finalAmount: 0
             }
 
             const getAllInvoicePayments = () => {
                 axios.get('/api/invoice-payments/get-all-invoice-payments').then( res => {
-                    //console.groupCollapsed('Invoice Payments')
+                    console.groupCollapsed('Invoice Payments')
                         const allInvoices = res.data.invoice_payments
                         this.invoices = allInvoices ? allInvoices.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)) : []
                         //console.log('All Invoices ->',JSON.parse(JSON.stringify({res:allInvoices})))
@@ -509,7 +509,7 @@
 
                         //console.log('Week Data ->', weekData)
 
-                    //console.groupEnd()
+                    console.groupEnd()
                 }).catch( error => console.error(error))
             }
 
@@ -546,25 +546,25 @@
 
             const getAllPurchaseOrders = () => {
                 axios.get('/api/purchase-orders/get-all-purchase-orders').then( res => {
-                    //console.groupCollapsed('Purchase Orders')
+                    console.groupCollapsed('Purchase Orders')
                         const allPurchaseOrders = res.data.purchase_orders
                         //console.log('All Purchase Orders ->',JSON.parse(JSON.stringify({res:res.data.purchase_orders})))
                         const issuedReceiveOrders = allPurchaseOrders.filter( data => data.status === 0)
                         //console.log('Issued Purchase Orders ->', allPurchaseOrders)
                         this.todaysPurchaseOrders = allPurchaseOrders.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
                         this.purchaseOrders = this.todaysPurchaseOrders.filter( (val, i) => i < 10)
-                    //console.groupEnd()
+                    console.groupEnd()
                 }).catch( error => console.error(error))
             }
 
             const getAllReceiveOrder = () => {
                 axios.get('/api/receive-orders/get-all-receive-orders').then( res => {
-                    //console.groupCollapsed('Receive Orders')
+                    console.groupCollapsed('Receive Orders')
                         const allReceiveOrders = res.data.receive_orders
                         //console.log('All receive Orders ->', allReceiveOrders)
                         this.todaysReceiveOrders = allReceiveOrders ? allReceiveOrders.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)): []
                         this.purchaseOrders = this.todaysPurchaseOrders.filter( (val, i) => i < 10)
-                    //console.groupEnd()
+                    console.groupEnd()
                 }).catch( error => console.error(error))
             }
 
@@ -575,29 +575,29 @@
                         //console.log('All Stock Transfers ->',JSON.parse(JSON.stringify({res:allStockTransfer})))
                         const stockTransferApproval = allStockTransfer.filter( data => data.status === 0)
                         this.stockTransfers = stockTransferApproval ? stockTransferApproval.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)): []
-                    //console.groupEnd()
+                    console.groupEnd()
                 }).catch( error => console.error(error))
             }
 
             const getAllStockRequest = () => {
                 axios.get('/api/stock-requests/get-all-unapproved-stock-requests').then( res => {
-                    //console.groupCollapsed('Stock Requests')
+                    console.groupCollapsed('Stock Requests')
                         const allStockRequests = res.data.stock_requests
                         const log =  JSON.stringify( {stock_request: allStockRequests})
                         //console.log('All Stock Requests ->',JSON.parse(log))
                         this.stockRequests = allStockRequests ? allStockRequests.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)) : []
-                    //console.groupEnd()
+                    console.groupEnd()
                 }).catch( error => console.error(error))
             }
 
             const getAllBills = () => {
                 axios.get('/api/bill-payments/get-all-bill-payments').then( res => {
-                    //console.groupCollapsed('Bills Payment')
+                    console.groupCollapsed('Bills Payment')
                         const allBills = {bills: res.data.bills_payments}
                         const log =  JSON.stringify(allBills)
                         //console.log('All Bills ->',JSON.parse(log))
                         // this.bills = allBills.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-                    //console.groupEnd()
+                    console.groupEnd()
                 }).catch( error => console.error(error))
             }
 

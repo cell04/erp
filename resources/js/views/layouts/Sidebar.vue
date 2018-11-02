@@ -4,12 +4,12 @@
             <li class="nav-item">
                 <span class="nav-link icon-white mainNavColor">
                     <i class="sidebar-icon fas fa-briefcase" style="padding-right: 1.1rem"></i>
-                    Business
+                    <strong>Business</strong>
                     <a href="http://accounting.tradesoft.ph"><i class="icon-white fas fa-calculator float-right pt-1"></i></a>
                 </span>
             </li>
 
-            <li class="nav-item link">
+            <li class="nav-item link" v-bind:class="isActive(['overview'])">
                 <router-link class="nav-link" :to="{ name: 'overview' }">
                     <i class="sidebar-icon fas fa-file-alt" style="padding-right: 1.3rem"></i>
                     Dashboard
@@ -17,15 +17,15 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#sales" data-toggle="collapse" aria-expanded="false" aria-controls="sales">
+                <a class="nav-link" href="#sales" data-toggle="collapse" :aria-expanded="this.expand.sales" aria-controls="sales" v-bind:class="isActive(this.salesRoute)">
                     <i class="sidebar-icon fas fa-dollar-sign pr-4"></i>
                     Sales
                     <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
             <div class="collapse" id="sales">
-                <ul class="nav ml-3 flex-column nav-sub-menu">
-                    <li class="nav-item">
+                <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.salesRoute)">
+                    <li class="nav-item" >
                         <router-link class="nav-link link" :to="{ name: 'quotations.index' }">
                             <span class="sub-content"> <i class="fas fa-caret-right pr-2 "></i> Quotations</span>
                         </router-link>
@@ -50,14 +50,14 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="#inventory" data-toggle="collapse" aria-expanded="false" aria-controls="inventory">
+                <a class="nav-link" href="#inventory" data-toggle="collapse" aria-expanded="false" aria-controls="inventory" v-bind:class="isActive(this.inventoryRoute)">
                     <i class="sidebar-icon fas fa-archive pr-3"></i>
                     Inventory
                     <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
             <div class="collapse" id="inventory">
-                <ul class="nav ml-3 flex-column nav-sub-menu">
+                <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.inventoryRoute)">
                     <li class="nav-item">
                         <router-link class="nav-link link" :to="{ name: 'warehouses.index' }">
                             <span class="sub-content">
@@ -126,14 +126,14 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="#purchasing" data-toggle="collapse" aria-expanded="false" aria-controls="purchasing">
+                <a class="nav-link" href="#purchasing" data-toggle="collapse" aria-expanded="false" aria-controls="purchasing" v-bind:class="isActive(this.purchasingRoute)">
                     <i class="sidebar-icon fas fa-shopping-bag pr-3"></i>
                     Purchasing
                     <i class="float-right fas fa-caret-down"></i>
                 </a>
             </li>
             <div class="collapse" id="purchasing">
-                <ul class="nav ml-3 flex-column nav-sub-menu">
+                <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.purchasingRoute)">
                     <li class="nav-item">
                         <router-link class="nav-link link" :to="{ name: 'purchase-orders.index' }">
                             <span class="sub-content">
@@ -169,7 +169,7 @@
                 </ul>
             </div>
 
-            <li class="nav-item">
+            <li class="nav-item" v-bind:class="isActive(['contacts'])">
                 <router-link class="nav-link link" :to="{ name: 'contacts.index' }">
                     <i class="sidebar-icon fas fa-user-alt pr-3"></i>
                     Contacts
@@ -184,14 +184,36 @@
     export default {
         data () {
             return{
-
+                activeClass:true,
+                currentRoute: '',
+                salesRoute: ['quotations','invoices','invoice-payments'],
+                inventoryRoute: ['warehouses','branches','items','item-pricelists','stocks','stock-requests','stock-transfers','stock-receives'],
+                purchasingRoute: ['purchase-orders','receive-orders','bills','bill-payments'],
+                expand: {
+                    sales: true,
+                    inventory:false,
+                    purchasing:false,
+                }
             }
         },
-        mounted() {
+        methods: {
+            isActive( routeArray ){
+                let newCurrentRoute = this.currentRoute === 'overview' ? this.currentRoute
+                : this.currentRoute.substring(0, this.currentRoute.lastIndexOf('.'))
+                let filteredRoute = []
+                if( routeArray.filter ){
+                    filteredRoute = routeArray.filter( data => {
+                     return data === newCurrentRoute
+                    })
+                }
+                // console.log('Filtered Route -> ', routeArray, filteredRoute)
+                return ( filteredRoute && filteredRoute.length > 0) ? 'selected' : ''
+            }
         },
         watch:{
             $route (to, from){
-                console.log(to)
+                console.log('Route ->', to.name)
+                this.currentRoute = to.name
             }
         }
     }
@@ -239,5 +261,11 @@
 }
 .router-link-exact-active .fa-caret-right{
     display: inline;
+}
+.selected, .selected .nav-link{
+    background-color: #236d6f;
+}
+.selected .nav-link {
+    background-color: #287e80;
 }
 </style>
