@@ -60,7 +60,7 @@ class InvoicePaymentsController extends Controller
                 'errors'  => $validator->errors()
             ], 400);
         }
-    
+        
         if (! $this->invoicePayment->store($request)) {
             return response()->json([
                 'message' => 'Failed to store resource'

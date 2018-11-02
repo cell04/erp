@@ -43,7 +43,8 @@ class ReceiveOrderRepository extends Repository
                 Stock::create($data);
             }
 
-            return $this->generateReceiveOrderEntries($receiveOrder, $receiveOrderItems);
+            //journal entries
+            $receiveOrderEntries = $this->generateReceiveOrderEntries($receiveOrder, $receiveOrderItems);
 
             return $receiveOrder;
         });
@@ -61,18 +62,20 @@ class ReceiveOrderRepository extends Repository
             $total = $total + $itemTotalAmount;
 
             $journal_entries[$i++] = [
+                'account_id' => $selectedItem->item->asset_account_id,
                 'corporation_id' => request()->headers->get('CORPORATION-ID'),
-                'sub_department_id' => $purchaseOrder->warehouse_id,
+                'cost_center_id' => $purchaseOrder->warehouse_id,
                 'amount' => $itemTotalAmount,
-                'type' => 2, //credit entries
+                'type' => 1, //debit entries
             ];
         }
 
         $journal_entries[$i++] = [
+            'account_id' => session('irnb'),
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'sub_department_id' => $purchaseOrder->warehouse_id,
+            'cost_center_id' => $purchaseOrder->warehouse_id,
             'amount' => $total,
-            'type' => 1, //debit entries
+            'type' => 2, //credit entries
         ];
 
         // return $journal_entries;
