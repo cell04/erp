@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Branch;
-use App\Warehouse;
+use App\Stock;
 use App\StockTransfer;
+use App\Warehouse;
 use Illuminate\Support\Facades\DB;
 
 class StockTransferRepository extends Repository
@@ -22,6 +23,7 @@ class StockTransferRepository extends Repository
      * @var App\Warehouse
      */
     protected $warehouse;
+    protected $stock;
 
     /**
      * Create new instance of stock transfer repository.
@@ -33,12 +35,14 @@ class StockTransferRepository extends Repository
     public function __construct(
         StockTransfer $stockTransfer,
         Branch $branch,
-        Warehouse $warehouse
+        Warehouse $warehouse,
+        Stock $stock
     ) {
         parent::__construct($stockTransfer);
         $this->stockTransfer = $stockTransfer;
         $this->branch        = $branch;
         $this->warehouse     = $warehouse;
+        $this->stock = $stock;
     }
 
     public function store($request)
