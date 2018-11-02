@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Purchase Order</label>
-                            <vue-select v-model="purchaseOrder" @input="selectPurchaseOrder()" label="reference_number" :options="purchaseOrders"></vue-select>
+                            <vue-select v-model="purchaseOrder" @input="selectPurchaseOrder()" label="reference_number" :options="purchaseOrders" required></vue-select>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Supplier</label>
@@ -91,6 +91,7 @@
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Amount</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,23 +99,27 @@
                                 <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
                                 <td>{{ item.item.description }}</td>
-                                <td>{{ item.quantity }}</td>
+                                <td><input type="text" class="form-control" v-model="item.quantity" required></td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ subtotalRow[index] }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
+                                </td>
                             </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td>{{total}}</td>
+                                <td></td>
+                            </tr>
+                            
                         </tbody>
                     </table>
 
@@ -300,21 +305,21 @@
             //     this.receive_order_items[index].subTotal = (parseFloat(this.receive_order_items[index].quantity) * parseFloat(this.receive_order_items[index].itemPricelist.price));
             //     this.updateTotalAmount();
             // },
-            // updateTotalAmount() {
-            //     let total = 0;
+            updateTotalAmount() {
+                let total = 0;
 
-            //     this.receive_order_items.forEach(receive_order_item => {
-            //         total += receive_order_item.subTotal;
-            //     });
+                this.received_items.forEach(receive_order_item => {
+                    total += receive_order_item.subTotal;
+                });
 
-            //     this.amount = total;
+                // this.amount = total;
 
-            //     if (this.amount > 0) {
-            //         this.isDisabled = false;
-            //     } else {
-            //         this.isDisabled = true;
-            //     }
-            // },
+                // if (this.amount > 0) {
+                //     this.isDisabled = false;
+                // } else {
+                //     this.isDisabled = true;
+                // }
+            },
             // addNewItem() {
             //     this.receive_order_items.push({
             //         item: '',
@@ -333,10 +338,10 @@
 
             //     this.updateTotalAmount();
             // },
-            // deleteRow(index) {
-            //     this.receive_order_items.splice(index, 1);
-            //     this.updateTotalAmount();
-            // },
+            deleteRow(index) {
+                this.received_items.splice(index, 1);
+                this.updateTotalAmount();
+            },
             createNewReceiveOrder() {
                 this.ifReady = false;
 

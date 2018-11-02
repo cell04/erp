@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\InvoicePayment;
+use App\Journal;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class InvoicePaymentRepository extends Repository
@@ -23,7 +25,7 @@ class InvoicePaymentRepository extends Repository
         return DB::transaction(function () use ($request) {
             $invoicePayment = $this->invoicePayment->create($request->all());
             //Journal Entries
-            return $billPaymentEntries = $this->generateBillPaymentEntries($invoicePayment);
+            $billPaymentEntries = $this->generateBillPaymentEntries($invoicePayment);
             return $invoicePayment;
         });
     }
@@ -31,11 +33,16 @@ class InvoicePaymentRepository extends Repository
     public function generateBillPaymentEntries($invoicePayment)
     {
         $i = 0;
+        $costCenters = $invoicePayment->invoice->receiveOrder->purchaseOrder->warehouse->costCenter;
+
+        foreach ($costCenters as $costCenter) {
+            $costCenterID = $costCenter->id;
+        }
 
         $journal_entries[$i++] = [
             'account_id' => session('account-payable'),
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'cost_center_id' => $invoicePayment->invoice->receiveOrder->purchaseOrder->warehouse_id,
+            'cost_center_id' => $costCenterID,
             'amount' => $invoicePayment->amount,
             'type' => 1, //debit entries
         ];
@@ -43,23 +50,23 @@ class InvoicePaymentRepository extends Repository
          $journal_entries[$i++] = [
             'account_id' => $invoicePayment->invoice->contact->account_id,
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'cost_center_id' => $invoicePayment->invoice->receiveOrder->purchaseOrder->warehouse_id,
+            'cost_center_id' => $costCenterID,
             'amount' => $invoicePayment->amount,
             'type' => 2, //credit entries
         ];
 
         // return $journal_entries;
 
-        $journal = [
+        $journal = Journal::create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,
             'reference_number'  =>  $invoicePayment->invoice->reference_number,
             'memo'              =>  'Bills Payments',
             'amount'            =>  $invoicePayment->amount,
-            'posting_period'    =>  $invoicePayment->created_at,
-            'journal_entries'   =>  $journal_entries
-        ];
+            'contact_id'        =>  $invoicePayment->invoice->contact_id,
+            'posting_period'    =>  Carbon::parse($invoicePayment->created_at)
+        ]);
 
-        return $journal;
+        return $journal->journalEntries()->createMany($journal_entries);
     }
 }

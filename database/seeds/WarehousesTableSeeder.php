@@ -1,5 +1,6 @@
 <?php
 
+use App\CostCenter;
 use Illuminate\Database\Seeder;
 
 class WarehousesTableSeeder extends Seeder
@@ -12,5 +13,11 @@ class WarehousesTableSeeder extends Seeder
     public function run()
     {
         factory(App\Warehouse::class, 1)->create();
+
+        CostCenter::create([
+            'corporation_id' => 1, 
+            'cost_centable_id' => 1, 
+            'cost_centable_type' => 'App\\Warehouse',
+        ]);
     }
 }

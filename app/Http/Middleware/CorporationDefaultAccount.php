@@ -33,6 +33,11 @@ class CorporationDefaultAccount
 
                 session()->put('account-payable', $corporation->payableAccount->account_id);
             }
+
+            if (empty(session('cash'))) {
+
+                session()->put('cash', $corporation->cashAccount->account_id);
+            }
         }
         return $next($request);
     }
