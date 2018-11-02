@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Invoice;
+use App\Journal;
 use Illuminate\Support\Facades\DB;
 
 class InvoiceRepository extends Repository
@@ -31,6 +32,7 @@ class InvoiceRepository extends Repository
             $invoice->invoiceItems()->createMany($request->invoice_items);
             //Journal Entries
             $invoiceEntries = $this->generateBillEntries($invoice);
+
             return $invoice;
         });
     }
@@ -38,11 +40,16 @@ class InvoiceRepository extends Repository
     public function generateBillEntries($invoice)
     {
         $i = 0;
+        $costCenters = $invoice->receiveOrder->purchaseOrder->warehouse->costCenter;
+
+        foreach ($costCenters as $costCenter) {
+            $costCenterID = $costCenter->id;
+        }
 
         $journal_entries[$i++] = [
             'account_id' => session('irnb'),
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'cost_center_id' => $invoice->receiveOrder->purchaseOrder->warehouse_id,
+            'cost_center_id' => $costCenterID,
             'amount' => $invoice->amount,
             'type' => 1, //debit entries
         ];
@@ -50,23 +57,23 @@ class InvoiceRepository extends Repository
          $journal_entries[$i++] = [
             'account_id' => session('account-payable'),
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'cost_center_id' => $invoice->receiveOrder->purchaseOrder->warehouse_id,
+            'cost_center_id' => $costCenterID,
             'amount' => $invoice->amount,
             'type' => 2, //credit entries
         ];
 
         // return $journal_entries;
 
-        $journal = [
+        $journal = Journal::create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,
             'reference_number'  =>  $invoice->reference_number,
             'memo'              =>  'Bills',
             'amount'            =>  $invoice->amount,
-            'posting_period'    =>  $invoice->created_at,
-            'journal_entries'   =>  $journal_entries
-        ];
+            'contact_id'        =>  $invoice->contact_id,
+            'posting_period'    =>  $invoice->created_at
+        ]);
 
-        return $journal;
+        return $journal->journalEntries()->createMany($journal_entries);
     }
 }

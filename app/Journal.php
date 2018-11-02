@@ -5,53 +5,34 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Spatie\Activitylog\Traits\LogsActivity;
 
-class InvoicePayment extends Model
+class Journal extends Model
 {
     use SoftDeletes, Filtering;
-    
+
     /**
-     * Invoice Payments table.
+     * Journals table.
      *
      * @var string
      */
-    protected $table = 'invoice_payments';
-    
+    protected $table = 'journals';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'invoice_id', 'amount',
-        'mode_of_payment_id', 'cr_number', 'bank_name', 'check'
+        'corporation_id', 'user_id', 'contact_id', 'reference_number',
+        'memo', 'amount', 'status', 'posting_period'
     ];
 
-    // /**
-    //  * The Log attributes that are mass assignable.
-    //  *
-    //  * @var array
-    //  */
-    // protected static $logAttributes = [
-    //     'corporation_id', 'invoice_id', 'amount'
-    // ];
-    
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = ['deleted_at'];
-
-    /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = [
-        'invoice', 'modeOfPayment'
-    ];
 
     /**
      * Run functions on boot.
@@ -65,11 +46,27 @@ class InvoicePayment extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            if (auth('api')->check()) {
+                $model->user_id = auth('api')->user()->id;
+            } else {
+                $model->user_id = request()->headers->get('USER-ID');
+            }
         });
     }
 
+    // /**
+    //  * The journal belongs to a contact.
+    //  *
+    //  * @return object
+    //  */
+    // public function contact()
+    // {
+    //     return $this->belongsTo(Contact::class);
+    // }
+
     /**
-     * The invoice payment belongs to a corporation.
+     * The journal belongs to a corporation.
      *
      * @return object
      */
@@ -79,22 +76,22 @@ class InvoicePayment extends Model
     }
 
     /**
-     *  The invoice payment belongs to an invoice.
+     * The journal belongs to a user.
      *
      * @return object
      */
-    public function invoice()
+    public function user()
     {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
-     *  The invoice payment belongs to an mode of payment.
+     * The journal has many journal entries.
      *
-     * @return object
+     * @return array object
      */
-    public function modeOfPayment()
+    public function journalEntries()
     {
-        return $this->belongsTo(ModeOfPayment::class);
+        return $this->hasMany(JournalEntry::class);
     }
 }

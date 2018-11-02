@@ -75,8 +75,6 @@ class QuotationRepository extends Repository
 
                 //check if quotation is approved
                 if ($quotation->status == 1 && ! empty($quotation->approved_by)) {
-                    // $this->generateSalesEntries($quotation);
-                    // $this->deductStocksQuantity($quotation);
                     //send email notification to quotation contact
                     $contact = $this->contact->find($quotation->contact_id);
                     $contact->notify(new QuotationApproval($quotation));
@@ -174,6 +172,8 @@ class QuotationRepository extends Repository
             if ($quotation->status == 1) {
                 $quotation->update(['status' => $status]);
                 if ($quotation->status == 2) {
+                     // return $journal = $this->generateSalesEntries($quotation);
+                    // $this->deductStocksQuantity($quotation);
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
 
