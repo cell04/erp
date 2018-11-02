@@ -33,7 +33,6 @@ class CreateInvoicePaymentsTable extends Migration
             $table->string('cr_number')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('check')->nullable();
-            $table->string('name');
             $table->decimal('amount', 20, 2);
             $table->timestamps();
             $table->softDeletes();

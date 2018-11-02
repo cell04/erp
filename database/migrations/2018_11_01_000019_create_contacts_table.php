@@ -31,6 +31,7 @@ class CreateContactsTable extends Migration
             $table->string('email')->unique();
             $table->string('mobile_number')->nullable();
             $table->decimal('credit_limit', 20, 2)->nullable();
+            $table->integer('account_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

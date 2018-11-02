@@ -6,7 +6,7 @@ Route::post('/auth/logout', 'AuthController@logout');
 Route::get('/auth/user', 'AuthController@user');
 Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['auth:api', 'corporation.default.account']], function () {
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
     Route::delete('audit-trails/{auditTrail}/force-delete', 'AuditTrailsController@forceDestroy');
@@ -262,6 +262,36 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('bill-payments/{bill-payment}/force-delete', 'BillPaymentsController@forceDestroy');
     Route::get('bill-payments/get-all-bill-payments', 'BillPaymentsController@getAllBillPayments');
     Route::resource('bill-payments', 'BillPaymentsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Inventory Receive Not Billed Account
+    Route::match(['put', 'patch'], 'inventory-receive-not-billed/{inventory-receive-not-billed}/restore', 'InventoryReceiveNotBilledAccountsController@restore');
+    Route::delete('inventory-receive-not-billed/{inventory-receive-not-billed}/force-delete', 'InventoryReceiveNotBilledAccountsController@forceDestroy');
+    Route::get('inventory-receive-not-billed/get-all-inventory-receive-not-billed', 'InventoryReceiveNotBilledAccountsController@getAllInventoryReceiveNotBilledAccounts');
+    Route::resource('inventory-receive-not-billed', 'InventoryReceiveNotBilledAccountsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Inventory Receive Not Billed Account
+    Route::match(['put', 'patch'], 'inventory-return-not-credited/{inventory-return-not-credited}/restore', 'InventoryReturnNotCreditedAccountsController@restore');
+    Route::delete('inventory-return-not-credited/{inventory-return-not-credited}/force-delete', 'InventoryReturnNotCreditedAccountsController@forceDestroy');
+    Route::get('inventory-return-not-credited/get-all-inventory-return-not-credited', 'InventoryReturnNotCreditedAccountsController@getAllInventoryReturnNotCreditedAccounts');
+    Route::resource('inventory-return-not-credited', 'InventoryReturnNotCreditedAccountsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Account Payable
+    Route::match(['put', 'patch'], 'account-payables/{account-payable}/restore', 'PayableAccountsController@restore');
+    Route::delete('account-payables/{account-payable}/force-delete', 'PayableAccountsController@forceDestroy');
+    Route::get('account-payables/get-all-account-payable', 'PayableAccountsController@getAllPayableAccounts');
+    Route::resource('account-payables', 'PayableAccountsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]

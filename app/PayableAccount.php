@@ -5,18 +5,12 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Spatie\Activitylog\Traits\LogsActivity;
 
-class CostCenter extends Model
+class PayableAccount extends Model
 {
     use SoftDeletes, Filtering;
 
-    /**
-     * Cost Center table.
-     *
-     * @var string
-     */
-    protected $table = 'cost_centers';
+    protected $table = 'payable_accounts';
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +18,7 @@ class CostCenter extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'cost_centable_id', 'cost_centable_type'
+        'corporation_id', 'account_id'
     ];
 
     // /**
@@ -44,13 +38,6 @@ class CostCenter extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = ['costCentable'];
-
-    /**
      * Run functions on boot.
      *
      */
@@ -63,33 +50,5 @@ class CostCenter extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
-    }
-
-    /**
-     * The cost center belongs to a corporation
-     *
-     * @return object
-     */
-    public function corporation()
-    {
-        return $this->belongsTo(Corporation::class);
-    }
-
-    /**
-     * The cost center belongs to a account
-     *
-     * @return object
-     */
-    public function account()
-    {
-        return $this->belongsTo(Account::class);
-    }
-
-    /**
-     * Get all of the owning cost center models.
-     */
-    public function costCentable()
-    {
-        return $this->morphTo();
     }
 }
