@@ -181,6 +181,21 @@
 
 <script>
 
+    export default {
+        data () {
+            return{
+
+            }
+        },
+        mounted() {
+        },
+        watch:{
+            $route (to, from){
+                console.log(to)
+            }
+        }
+    }
+
 </script>
 
 <style>
