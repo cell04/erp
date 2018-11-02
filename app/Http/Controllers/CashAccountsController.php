@@ -2,28 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CashAccountResource;
+use App\Repositories\CashAccountRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\ReceiveOrderResource;
-use App\Repositories\ReceiveOrderRepository;
 
-class ReceiveOrdersController extends Controller
+class CashAccountsController extends Controller
 {
-    /**
-     * ReceiveOrder repository.
-     *
-     * @var App\Repositories\ReceiveOrderRepository
-     */
-    protected $receiveOrder;
+    protected $cashAccount;
 
-    /**
-     * Create new instance of receive order controller.
-     *
-     * @param ReceiveOrderRepository receiveOrder ReceiveOrder repository
-     */
-    public function __construct(ReceiveOrderRepository $receiveOrder)
+    public function __construct(CashAccountRepository $cashAccount)
     {
-        $this->receiveOrder = $receiveOrder;
+        $this->cashAccount = $cashAccount;
     }
 
     /**
@@ -33,8 +23,8 @@ class ReceiveOrdersController extends Controller
      */
     public function index()
     {
-        $data = ReceiveOrderResource::collection(
-            $this->receiveOrder->paginateWithFilters(request(), request()->per_page, request()->order_by)
+        $data = CashAccountResource::collection(
+            $this->cashAccount->paginateWithFilters(request(), request()->per_page, request()->order_by)
         );
 
         if (! $data) {
@@ -55,26 +45,27 @@ class ReceiveOrdersController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+           
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
-                'errors'  => $validator->errors()
+                'response' => false,
+                'message'  => 'Validation failed.',
+                'errors'   => $validator->errors()
             ], 400);
         }
 
-        return $this->receiveOrder->store($request);
-
-        if (! $this->receiveOrder->store($request)) {
+        if (! $this->cashAccount->store($request)) {
             return response()->json([
-                'message' => 'Failed to store resource'
+                'response' => false,
+                'message'  => 'Failed to store resource.'
             ], 500);
         }
 
         return response()->json([
-            'message' => 'Resource successfully stored'
+            'response' => true,
+            'message'  => 'Resource successfully stored.'
         ], 200);
     }
 
@@ -86,15 +77,17 @@ class ReceiveOrdersController extends Controller
      */
     public function show($id)
     {
-        if (! $receiveOrder = $this->receiveOrder->findOrFail($id)) {
+        if (! $cashAccount = $this->cashAccount->findOrFail($id)) {
             return response()->json([
-                'message' => 'Resource does not exist'
-            ], 400);
+                'response' => false,
+                'message'  => 'Resource does not exist.'
+            ], 200);
         }
 
         return response()->json([
-            'message' => 'Resource successfully retrieve',
-            'receiveOrder' => $receiveOrder
+            'response'    => true,
+            'message'     => 'Resource successfully retrieve.',
+            'cashAccount' => $cashAccount
         ], 200);
     }
 
@@ -108,24 +101,27 @@ class ReceiveOrdersController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+    
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
-                'errors'  => $validator->errors()
+                'response' => false,
+                'message'  => 'Validation failed.',
+                'errors'   => $validator->errors()
             ], 400);
         }
 
-        if (! $this->receiveOrder->update($request, $id)) {
+        if (! $this->cashAccount->update($request, $id)) {
             return response()->json([
-                'message' => 'Failed to update resource'
+                'response' => false,
+                'message'  => 'Failed to update resource.'
             ], 500);
         }
 
         return response()->json([
-            'message' => 'Resource successfully updated'
+            'response' => true,
+            'message'  => 'Resource successfully updated.'
         ], 200);
     }
 
@@ -137,14 +133,16 @@ class ReceiveOrdersController extends Controller
      */
     public function destroy($id)
     {
-        if (! $this->receiveOrder->findOrFail($id)->delete()) {
+        if (! $this->cashAccount->findOrFail($id)->delete()) {
             return response()->json([
-                'message' => 'Failed to delete resource'
+                'response' => false,
+                'message'  => 'Failed to delete resource.'
             ], 400);
         }
 
         return response()->json([
-            'message' => 'Resource successfully deleted'
+            'response' => true,
+            'message'  => 'Resource successfully deleted.'
         ], 200);
     }
 
@@ -156,14 +154,16 @@ class ReceiveOrdersController extends Controller
      */
     public function restore($id)
     {
-        if (! $this->receiveOrder->restore($id)) {
+        if (! $this->cashAccount->restore($id)) {
             return response()->json([
-                'message' => 'Failed to restore resource'
+                'response' => false,
+                'message'  => 'Failed to restore resource.'
             ], 400);
         }
 
         return response()->json([
-            'message' => 'Resource successfully restored'
+            'response' => true,
+            'message'  => 'Resource successfully restored.'
         ], 200);
     }
 
@@ -175,14 +175,16 @@ class ReceiveOrdersController extends Controller
      */
     public function forceDestroy($id)
     {
-        if (! $this->receiveOrder->forceDestroy($id)) {
+        if (! $this->cashAccount->forceDestroy($id)) {
             return response()->json([
-                'message' => 'Failed to permanently delete resource'
+                'response' => false,
+                'message'  => 'Failed to permanently delete resource.'
             ], 400);
         }
 
         return response()->json([
-            'message' => 'Resource successfully deleted permanently'
+            'response' => true,
+            'message'  => 'Resource successfully deleted permanently.'
         ], 200);
     }
 
@@ -191,17 +193,17 @@ class ReceiveOrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllReceiveOrder()
+    public function getAllCashAccounts()
     {
-        if (cache()->has('receive-orders')) {
+        if (cache()->has('cash_accounts')) {
             return response()->json([
-                'response'   => true,
-                'message'    => 'Resources successfully retrieve.',
-                'receive_orders' => cache('receive-orders', 5)
+                'response'     => true,
+                'message'      => 'Resources successfully retrieve.',
+                'cash_accounts' => cache('cash_accounts')
             ], 200);
         }
 
-        if (! $receiveOrders = $this->receiveOrder->all()) {
+        if (! $cash_accounts = $this->cashAccount->all()) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'
@@ -209,9 +211,9 @@ class ReceiveOrdersController extends Controller
         }
 
         return response()->json([
-            'response'   => true,
-            'message'    => 'Resources successfully retrieve.',
-            'receive_orders' => $receiveOrders
+            'response'     => true,
+            'message'      => 'Resources successfully retrieve.',
+            'cash_accounts' => $cash_accounts
         ], 200);
     }
 }

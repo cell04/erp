@@ -95,10 +95,13 @@
                                 <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
                                 <td>{{ item.item.description }}</td>
-                                <td>{{ item.quantity }}</td>
+                                <td><input type="text" class="form-control" v-model="item.quantity" required></td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ subtotalRow[index] }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
+                                </td>
                             </tr>
                             <tr>
                                     <td></td>
@@ -286,21 +289,21 @@
             //     this.receive_order_items[index].subTotal = (parseFloat(this.receive_order_items[index].quantity) * parseFloat(this.receive_order_items[index].itemPricelist.price));
             //     this.updateTotalAmount();
             // },
-            // updateTotalAmount() {
-            //     let total = 0;
+            updateTotalAmount() {
+                let total = 0;
 
-            //     this.receive_order_items.forEach(receive_order_item => {
-            //         total += receive_order_item.subTotal;
-            //     });
+                this.receive_order_items.forEach(receive_order_item => {
+                    total += receive_order_item.subTotal;
+                });
 
-            //     this.amount = total;
+                // this.amount = total;
 
-            //     if (this.amount > 0) {
-            //         this.isDisabled = false;
-            //     } else {
-            //         this.isDisabled = true;
-            //     }
-            // },
+                // if (this.amount > 0) {
+                //     this.isDisabled = false;
+                // } else {
+                //     this.isDisabled = true;
+                // }
+            },
             // addNewItem() {
             //     this.receive_order_items.push({
             //         item: '',
@@ -319,10 +322,10 @@
 
             //     this.updateTotalAmount();
             // },
-            // deleteRow(index) {
-            //     this.receive_order_items.splice(index, 1);
-            //     this.updateTotalAmount();
-            // },
+            deleteRow(index) {
+                this.receive_order_items.splice(index, 1);
+                this.updateTotalAmount();
+            },
             createNewReceiveOrder() {
                 this.ifReady = false;
 

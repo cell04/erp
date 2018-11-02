@@ -86,7 +86,7 @@
                 </table>
                 <br>
                 <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
-                <!-- <button class="btn btn-success btn-sm" v-if="quotations.status == 0" @click.prevent="approveQuotation"><i class="fas fa-thumbs-up"></i> Approve Quotation</button> -->
+                <button class="btn btn-success btn-sm" v-if="quotations.status == 0" @click.prevent="approveQuotation"><i class="fas fa-thumbs-up"></i> Approve Quotation</button>
             </div>
             <div v-else>
                 <div class="progress">

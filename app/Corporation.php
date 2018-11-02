@@ -86,6 +86,16 @@ class Corporation extends Model
     }
 
     /**
+     * The corporation has one cash account.
+     *
+     * @return array object
+     */
+    public function cashAccount()
+    {
+        return $this->hasOne(CashAccount::class);
+    }
+
+    /**
      * The corporation has one inventory return not Credited account.
      *
      * @return array object

@@ -302,6 +302,16 @@ Route::group(['middleware' => ['auth:api', 'corporation.default.account']], func
         ]
     ]);
 
+    // Account Payable
+    Route::match(['put', 'patch'], 'cash/{cash}/restore', 'CashAccountsController@restore');
+    Route::delete('cash/{cash}/force-delete', 'CashAccountsController@forceDestroy');
+    Route::get('cash/get-all-cash', 'CashAccountsController@getAllCashAccounts');
+    Route::resource('cash', 'CashAccountsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
     // Mode Of Payments
     Route::match(['put', 'patch'], 'mode-of-payments/{mode-of-payment}/restore', 'ModeOfPaymentsController@restore');
     Route::delete('mode-of-payments/{mode-of-payment}/force-delete', 'ModeOfPaymentsController@forceDestroy');
