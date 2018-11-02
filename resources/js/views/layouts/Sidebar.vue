@@ -9,7 +9,7 @@
                 </span>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item link">
                 <router-link class="nav-link" :to="{ name: 'overview' }">
                     <i class="sidebar-icon fas fa-file-alt" style="padding-right: 1.3rem"></i>
                     Dashboard
@@ -26,13 +26,25 @@
             <div class="collapse" id="sales">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'quotations.index' }">Quotations</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'quotations.index' }">
+                            <span class="sub-content"> <i class="fas fa-caret-right pr-2 "></i> Quotations</span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoices.index' }">Invoices</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'invoices.index' }">
+                                <span class="sub-content">
+                                    <i class="fas fa-caret-right pr-2 "></i>
+                                    Invoices
+                                </span>
+                            </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'invoice-payments.index' }">Invoice Payments</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'invoice-payments.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Invoice Payments
+                            </span>
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -47,28 +59,68 @@
             <div class="collapse" id="inventory">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'warehouses.index' }">Warehouses</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'warehouses.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Warehouses
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'branches.index' }">Branches</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'branches.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Branches
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'items.index' }">Items</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'items.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Items
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'item-pricelists.index' }">Purchase Item Price Lists</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'item-pricelists.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Purchase Item Price Lists
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'stocks.index' }">Stocks</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'stocks.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                 Stocks
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'stock-requests.index' }">Stocks Requests</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'stock-requests.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                 Stocks Requests
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'stock-transfers.index' }">Stocks Transfers</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'stock-transfers.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Stocks Transfers
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'stock-receives.index' }">Stocks Receives</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'stock-receives.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Stocks Receives
+                            </span>
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -83,22 +135,42 @@
             <div class="collapse" id="purchasing">
                 <ul class="nav ml-3 flex-column nav-sub-menu">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'purchase-orders.index' }">Purchase Orders</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'purchase-orders.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                               Purchase Orders
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'receive-orders.index' }">Receive Orders</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'receive-orders.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                               Receive Orders
+                            </span>
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'bills.index' }">Bills</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'bills.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                               Bills
+                            </span>
+                            </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'bill-payments.index' }">Bill Payments</router-link>
+                        <router-link class="nav-link link" :to="{ name: 'bill-payments.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                               Bills Payment
+                            </span>
+                        </router-link>
                     </li>
                 </ul>
             </div>
 
             <li class="nav-item">
-                <router-link class="nav-link" :to="{ name: 'contacts.index' }">
+                <router-link class="nav-link link" :to="{ name: 'contacts.index' }">
                     <i class="sidebar-icon fas fa-user-alt pr-3"></i>
                     Contacts
                 </router-link>
@@ -131,8 +203,11 @@
 .nav-link .router-link-exact-active{
     background-color: #236d6f;
 }
-.nav-sub-menu   .nav-item .nav-link {
-    margin-left: 30px;
+.nav-sub-menu .nav-item .nav-link {
+    margin-left: -15px;
+}
+.sub-content{
+    margin-left: 45px;
 }
 .sidebar-icon .fas .fa-dollar-sign .pr-4{
     padding-right: 1.0rem !important
@@ -140,5 +215,14 @@
 .mainNavColor{
     background: rgb(26, 100, 102);
     background: linear-gradient(90deg, rgba(26, 100, 102,1) 0%, rgba(43, 165, 169,1) 99%);
+}
+.link:hover{
+    background-color: #287e80;
+}
+.link .fa-caret-right{
+    display: none;
+}
+.router-link-exact-active .fa-caret-right{
+    display: inline;
 }
 </style>
