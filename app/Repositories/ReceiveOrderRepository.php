@@ -62,44 +62,41 @@ class ReceiveOrderRepository extends Repository
             $total = $total + $itemTotalAmount;
 
             $journal_entries[$i++] = [
-                'account_id' => $selectedItem->item->asset_account_id,
+                'account_id'     => $selectedItem->item->asset_account_id,
                 'corporation_id' => request()->headers->get('CORPORATION-ID'),
                 'cost_center_id' => $purchaseOrder->warehouse_id,
-                'amount' => $itemTotalAmount,
-                'type' => 1, //debit entries
+                'amount'         => $itemTotalAmount,
+                'type'           => 1
             ];
         }
 
         $journal_entries[$i++] = [
-            'account_id' => session('irnb'),
+            'account_id'     => session('irnb'),
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
             'cost_center_id' => $purchaseOrder->warehouse_id,
-            'amount' => $total,
-            'type' => 2, //credit entries
+            'amount'         => $total,
+            'type'           => 2
         ];
 
         // return $journal_entries;
 
         $data = [
-            'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
-            'user_id'           =>  auth('api')->user()->id,
-            'reference_number'  =>  $purchaseOrder->reference_number,
-            'memo'              =>  'Receive Order',
-            'amount'            =>  $total,
-            'posting_period'    =>  $receiveOrder->created_at,
-            'journal_entries'   =>  $journal_entries
+            'corporation_id'   => request()->headers->get('CORPORATION-ID'),
+            'user_id'          => auth('api')->user()->id,
+            'contact_id'       => request()->contact_id,
+            'reference_number' => $purchaseOrder->reference_number,
+            'memo'             => 'Receive Order',
+            'amount'           => $total,
+            'posting_period'   => $receiveOrder->created_at,
+            'journal_entries'  => $journal_entries
         ];
-
-        /*if (session()->has('accounting.auth')) {
-            $accountingAuth = session('accounting.auth');
-            $token = $accountingAuth['token_type'] . ' ' . $accountingAuth['access_token'];
-        }*/
 
         $http = new \GuzzleHttp\Client(['verify' => false ]);
         $url  = env('ACC_URL') . '/api/journals';
-        $auth = session('accounting.auth');
+        $auth = cache(auth('api')->user()->id . ' accounting.auth');
         $corporationId = request()->headers->get('CORPORATION-ID');
-        
+        $token = 'Bearer ' . $auth['access_token'];
+
         if (auth('api')->check()) {
             $userId = auth('api')->user()->id;
         } else {
@@ -110,13 +107,14 @@ class ReceiveOrderRepository extends Repository
             $response = $http->post($url, [
                 'form_params' => $data,
                 'headers' => [
-                    'Authorization' => $auth['token_type'] . ' ' . $auth['access_token'],
+                    'Authorization'  => $token,
                     'CORPORATION-ID' => $corporationId,
-                    'USER-ID' => $userId
+                    'USER-ID'        => $userId,
+                    'Accept'         => 'application/json'
                 ]
             ]);
 
-            return true;
+            return json_decode($response->getBody(), true);
         } catch (Exception $exception) {
             if ($exception->getCode() == 400) {
                 return response()->json(

@@ -114,47 +114,47 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $http = new \GuzzleHttp\Client(['verify' => false ]);
-        $url  = env('ACC_URL') . '/oauth/token';
+        $credentials = $request->only('email', 'password');
 
-        $clientSecret = DB::table('oauth_clients')->where('name', 'ERP Password Grant Client')->first()->secret;
+        if (Auth::attempt($credentials)) {
+            $http = new \GuzzleHttp\Client(['verify' => false ]);
+            $url  = env('ACC_URL') . '/oauth/token';
 
-        try {
-            $response = $http->post($url, [
-                'form_params' => [
-                    'grant_type'    => 'password',
-                    'client_id'     => '2',
-                    'client_secret' => $clientSecret,
-                    'username'      => $request->email,
-                    'password'      => $request->password,
-                    'scope'         => '*',
-                ],
-            ]);
+            $clientSecret = DB::table('oauth_clients')->where('name', 'ERP Password Grant Client')->first()->secret;
 
-            session()->put('accounting.auth', json_decode((string) $response->getBody(), true));
-        } catch (Exception $exception) {
-            if ($exception->getCode() == 400) {
+            try {
+                $response = $http->post($url, [
+                    'form_params' => [
+                        'grant_type'    => 'password',
+                        'client_id'     => '2',
+                        'client_secret' => $clientSecret,
+                        'username'      => $request->email,
+                        'password'      => $request->password,
+                        'scope'         => '*',
+                    ],
+                ]);
+
+                $auth = json_decode((string) $response->getBody(), true);
+                cache()->put(auth()->user()->id . ' accounting.auth', $auth, 560);
+            } catch (Exception $exception) {
+                if ($exception->getCode() == 400) {
+                    return response()->json(
+                        'Invalid Request. Please enter a username or a password.',
+                        $exception->getCode()
+                    );
+                } elseif ($exception->getCode() == 401) {
+                    return response()->json(
+                        'Your credentials are incorrect Please try again.',
+                        $exception->getCode()
+                    );
+                }
+
                 return response()->json(
-                    'Invalid Request. Please enter a username or a password.',
-                    $exception->getCode()
-                );
-            } elseif ($exception->getCode() == 401) {
-                return response()->json(
-                    'Your credentials are incorrect Please try again.',
+                    'Something went wrong on the server.',
                     $exception->getCode()
                 );
             }
 
-            return response()->json(
-                'Something went wrong on the server.',
-                $exception->getCode()
-            );
-        }
-
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            // Authentication passed...
             return redirect()->intended('/');
         }
     }

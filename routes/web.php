@@ -2,12 +2,15 @@
 
 //Auth::routes();
 
-Route::get('/accounting-test', function () {
-    $http = new \GuzzleHttp\Client(['verify' => false ]);
-    $url  = env('ACC_URL') . '/api/journals';
+Route::get('accounting-test', function () {
+    $http = new \GuzzleHttp\Client(['verify' => false]);
+    $url  = 'https://accounting.dev/api/journals';
     $auth = session('accounting.auth');
     $corporationId = request()->headers->get('CORPORATION-ID');
-    
+    $token = 'Bearer ' . $auth['access_token'];
+
+    return cache(auth()->user()->id . ' accounting.auth');
+
     if (auth('api')->check()) {
         $userId = auth('api')->user()->id;
     } else {
@@ -15,11 +18,52 @@ Route::get('/accounting-test', function () {
     }
 
     try {
-        $response = $http->get($url, [
+        $client = new \GuzzleHttp\Client(['base_uri' => 'https://accounting.dev/api/', 'verify' => false]);
+
+        $response = $client->request('GET', 'journals', [
             'headers' => [
-                'Authorization' => $auth['token_type'] . ' ' . $auth['access_token'],
-                'CORPORATION-ID' => $corporationId,
-                'USER-ID' => $userId
+                'Authorization' => $token,
+                'Accept'        => 'application/json'
+            ]
+        ]);
+
+        $body = $response->getBody();
+        return $body;
+    } catch (Exception $exception) {
+        if ($exception->getCode() == 400) {
+            return response()->json(
+                'Invalid Request. Please enter a username or a password.',
+                $exception->getCode()
+            );
+        } elseif ($exception->getCode() == 401) {
+            return response()->json(
+                'Your credentials are incorrect Please try again.',
+                $exception->getCode()
+            );
+        }
+
+        return response()->json(
+            'Something went wrong on the server.',
+            $exception->getCode()
+        );
+    }
+    /*$http = new \GuzzleHttp\Client(['verify' => false ]);
+    $url  = 'https://accounting.dev/api/journals';
+    $auth = session('accounting.auth');
+    $corporationId = request()->headers->get('CORPORATION-ID');
+    $token = 'Bearer ' . $auth['access_token'];
+
+    if (auth('api')->check()) {
+        $userId = auth('api')->user()->id;
+    } else {
+        $userId = auth()->user()->id;
+    }
+
+    try {
+        $response = $http->get('https://accounting.dev/api/journals', [
+            'headers' => [
+                'Authorization' => $token,
+                'Accept'        => 'application/json',
             ]
         ]);
 
@@ -41,7 +85,7 @@ Route::get('/accounting-test', function () {
             'Something went wrong on the server.',
             $exception->getCode()
         );
-    }
+    }*/
 });
 
 // Login
