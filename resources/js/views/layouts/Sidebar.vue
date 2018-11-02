@@ -1,10 +1,11 @@
 <template>
     <div class="sticky-top py-1 background sidenav-container bkdColor">
-        <ul class="nav flex-column sidebar-nav">
+        <ul class="nav flex-column sidebar-nav " style="margin-top: -4px;">
             <li class="nav-item">
-                <span class="nav-link"  >
+                <span class="nav-link icon-white mainNavColor">
                     <i class="sidebar-icon fas fa-briefcase" style="padding-right: 1.1rem"></i>
                     Business
+                    <a href="http://accounting.tradesoft.ph"><i class="icon-white fas fa-calculator float-right pt-1"></i></a>
                 </span>
             </li>
 
@@ -106,9 +107,16 @@
     </div>
 </template>
 
+<script>
+
+</script>
+
 <style>
 .bkdColor{
     background-color: #319c9f;
+}
+.icon-white{
+    color: white;
 }
 .sidebar-nav li > a.nav-link{
     color: white;
@@ -128,5 +136,9 @@
 }
 .sidebar-icon .fas .fa-dollar-sign .pr-4{
     padding-right: 1.0rem !important
+}
+.mainNavColor{
+    background: rgb(26, 100, 102);
+    background: linear-gradient(90deg, rgba(26, 100, 102,1) 0%, rgba(43, 165, 169,1) 99%);
 }
 </style>
