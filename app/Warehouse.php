@@ -5,7 +5,6 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Warehouse extends Model
 {
@@ -27,16 +26,6 @@ class Warehouse extends Model
         'corporation_id', 'name', 'address', 'city',
         'zip_code', 'country', 'telephone_number', 'status'
     ];
-
-    /**
-     * The Log attributes that are mass assignable.
-     *
-     * @var array
-     */
-    // protected static $logAttributes = [
-    //     'corporation_id', 'name', 'address', 'city',
-    //     'zip_code', 'country', 'telephone_number', 'status'
-    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -71,7 +60,17 @@ class Warehouse extends Model
     }
 
     /**
-     * The branch has many stocks.
+     * The warehoouse is a cost center.
+     *
+     * @return array object
+     */
+    public function costCenter()
+    {
+        return $this->morphMany(CostCenter::class, 'cost_centable');
+    }
+
+    /**
+     * The warehouse has many stocks.
      *
      * @return object
      */
@@ -80,16 +79,21 @@ class Warehouse extends Model
         return $this->morphMany(Stock::class, 'stockable');
     }
 
-    public function costCenter()
-    {
-        return $this->morphMany(CostCenter::class, 'cost_centable');
-    }
-
+    /**
+     * The warehouse has many stock request from.
+     *
+     * @return array object
+     */
     public function stockRequestFrom()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_from');
     }
 
+    /**
+     * The warehouse has many stock request to.
+     *
+     * @return array object
+     */
     public function stockRequestTo()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_to');
