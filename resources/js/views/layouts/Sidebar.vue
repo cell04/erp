@@ -186,9 +186,10 @@
             return{
                 activeClass:true,
                 currentRoute: '',
-                salesRoute: ['quotations','invoices','invoice-payments'],
+                // Contains the the routes for the dropdown
+                salesRoute: ['quotations','bills','bill-payments'],
+                purchasingRoute: ['purchase-orders','receive-orders','invoices','invoice-payments'],
                 inventoryRoute: ['warehouses','branches','items','item-pricelists','stocks','stock-requests','stock-transfers','stock-receives'],
-                purchasingRoute: ['purchase-orders','receive-orders','bills','bill-payments'],
                 expand: {
                     sales: true,
                     inventory:false,
@@ -212,7 +213,6 @@
         },
         watch:{
             $route (to, from){
-                console.log('Route ->', to.name)
                 this.currentRoute = to.name
             }
         }
