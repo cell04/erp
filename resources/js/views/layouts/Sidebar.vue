@@ -5,7 +5,7 @@
                 <span class="nav-link icon-white mainNavColor">
                     <i class="sidebar-icon fas fa-briefcase" style="padding-right: 1.1rem"></i>
                     Business
-                    <a href="http://accounting.tradesoft.ph"><i class="icon-white fas fa-calculator float-right"></i></a>
+                    <a href="http://accounting.tradesoft.ph"><i class="icon-white fas fa-calculator float-right pt-1"></i></a>
                 </span>
             </li>
 
@@ -106,6 +106,10 @@
         </ul>
     </div>
 </template>
+
+<script>
+
+</script>
 
 <style>
 .bkdColor{
