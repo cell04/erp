@@ -46,9 +46,37 @@ class StockTransferRepository extends Repository
         return DB::transaction(function () use ($request) {
             $stockTransfer = $this->stockTransfer->create($request->all());
             $stockTransfer->stockTransferItems()->createMany($request->stock_transfer_items);
-            
+            $this->decrementStocksQuantity($stockTransfer);
+
             return $stockTransfer;
         });
+    }
+
+    public function decrementStocksQuantity($stockTransfer)
+    {
+        $stocks = $stockTransfer->stockTransferableFrom->stocks;
+        $stockTransferItems = $stockTransfer->stockTransferItems;
+
+        foreach ($stockTransferItems as $stockTransferItem) {
+            $itemTransferQuantity = $stockTransferItem->quantity;
+            foreach ($stocks as $stock) {
+                if ($stock->item_id == $stockTransferItem->item_id) {
+                    if ($stock->quantity > 0) {
+                        if ($stock->quantity >= $itemTransferQuantity) {
+                            $stock->decrement('quantity', $itemTransferQuantity);
+                            $itemTransferQuantity = 0;
+                        } else {
+                            if ($itemTransferQuantity > $stock->quantity) {
+                                $stock->decrement('quantity', $stock->quantity);
+                                $itemTransferQuantity = $itemTransferQuantity - $stock->quantity;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return 'ahehe';
     }
 
     public function all()

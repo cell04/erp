@@ -18,8 +18,12 @@ class ItemsTableSeeder extends Seeder
             'name'                           => 'Oats',
             'description'                    => 'Oats description',
             'stock_keeping_unit'             => rand(10000, 99999),
-            'default_unit_of_measurement_id' => 1
-        ]);
+            'default_unit_of_measurement_id' => 1,
+            'asset_account_id'               => 1,
+            'cogs_account_id'                => 1,
+            'sales_account_id'               => 1,
+            'expense_account_id'             => 1
+         ]);
 
         DB::table('items')->insert([
             'corporation_id'                 => 1,
@@ -28,7 +32,11 @@ class ItemsTableSeeder extends Seeder
             'name'                           => 'Rice',
             'description'                    => 'Rice description',
             'stock_keeping_unit'             => rand(10000, 99999),
-            'default_unit_of_measurement_id' => 1
+            'default_unit_of_measurement_id' => 1,
+            'asset_account_id'               => 1,
+            'cogs_account_id'                => 1,
+            'sales_account_id'               => 1,
+            'expense_account_id'             => 1
         ]);
 
         DB::table('items')->insert([
@@ -38,7 +46,11 @@ class ItemsTableSeeder extends Seeder
             'name'                           => 'Coca-cola',
             'description'                    => 'Coca-cola description',
             'stock_keeping_unit'             => rand(10000, 99999),
-            'default_unit_of_measurement_id' => 4
+            'default_unit_of_measurement_id' => 4,
+            'asset_account_id'               => 1,
+            'cogs_account_id'                => 1,
+            'sales_account_id'               => 1,
+            'expense_account_id'             => 1
         ]);
 
         DB::table('items')->insert([
@@ -48,7 +60,11 @@ class ItemsTableSeeder extends Seeder
             'name'                           => 'Mountain Dew',
             'description'                    => 'Mountain dew description',
             'stock_keeping_unit'             => rand(10000, 99999),
-            'default_unit_of_measurement_id' => 4
+            'default_unit_of_measurement_id' => 4,
+            'asset_account_id'               => 1,
+            'cogs_account_id'                => 1,
+            'sales_account_id'               => 1,
+            'expense_account_id'             => 1
         ]);
     }
 }

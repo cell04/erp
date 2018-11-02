@@ -66,6 +66,36 @@ class Corporation extends Model
     }
 
     /**
+     * The corporation has one inventory receive not billed account.
+     *
+     * @return array object
+     */
+    public function inventoryReceiveNotBilledAccount()
+    {
+        return $this->hasOne(InventoryReceiveNotBilledAccount::class);
+    }
+
+    /**
+     * The corporation has one payable account.
+     *
+     * @return array object
+     */
+    public function payableAccount()
+    {
+        return $this->hasOne(PayableAccount::class);
+    }
+
+    /**
+     * The corporation has one inventory return not Credited account.
+     *
+     * @return array object
+     */
+    public function inventoryReturnNotCreditedAccount()
+    {
+        return $this->hasOne(InventoryReturnNotCreditedAccount::class);
+    }
+
+    /**
      * The corporation has many contacts.
      *
      * @return array object

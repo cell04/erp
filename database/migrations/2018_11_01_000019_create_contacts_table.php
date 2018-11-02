@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvoicePaymentsTable extends Migration
+class CreateContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,28 +13,25 @@ class CreateInvoicePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_payments', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
             $table->foreign('corporation_id')
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
-            $table->integer('invoice_id')->unsigned();
-            $table->foreign('invoice_id')
+            $table->integer('contact_type_id')->unsigned();
+            $table->foreign('contact_type_id')
                 ->references('id')
-                ->on('invoices')
+                ->on('contact_types')
                 ->onDelete('cascade');
-            $table->integer('mode_of_payment_id')->unsigned();
-            $table->foreign('mode_of_payment_id')
-                ->references('id')
-                ->on('mode_of_payments')
-                ->onDelete('cascade');
-            $table->string('cr_number')->nullable();
-            $table->string('bank_name')->nullable();
-            $table->string('check')->nullable();
-            $table->string('name');
-            $table->decimal('amount', 20, 2);
+            $table->string('company');
+            $table->string('company_address');
+            $table->string('person');
+            $table->string('email')->unique();
+            $table->string('mobile_number')->nullable();
+            $table->decimal('credit_limit', 20, 2)->nullable();
+            $table->integer('account_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -47,6 +44,6 @@ class CreateInvoicePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_payments');
+        Schema::dropIfExists('contacts');
     }
 }
