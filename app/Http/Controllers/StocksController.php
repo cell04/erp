@@ -212,4 +212,19 @@ class StocksController extends Controller
             'stocks' => $stocks
         ], 200);
     }
+
+    public function getAllStocksPerLocation()
+    {
+        $data = StockResource::collection(
+            $this->stock->paginateWithFilters(request(), request()->per_page, request()->order_by)
+        );
+
+        if (! $data) {
+            return response()->json([
+                'message' => 'Failed to retrieve resource'
+            ], 400);
+        }
+
+        return $data;
+    }
 }

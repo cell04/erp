@@ -4,13 +4,13 @@ Created By : {{ $content->user->name }}<br>
 Approved By : {{ $content->approvedBy->name }}
 
 @component('mail::table')
-|       Item Name                                                                           |              Unit                                             |                   Quantity                        |                       Price                                   |
-|       :------------                                                                       |              :-------------                                   |                   :--------                       |                       :--------                               |
+|       Item Name                                                                           |              Unit                                             |                   Quantity                        |                       Price                                   |                       Subtotal                                                        |
+|       :------------                                                                       |              :-------------                                   |                   :--------                       |                       :--------                               |                       :--------                                                       |
 @foreach ($content->quotationItems as $quotationItem)
-| {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->unitOfMeasurement->name }}              |           {{ $quotationItem->quantity }}          |             {{ number_format($quotationItem->price, 2) }}     |
-@endforeach
-|                                                                                           |                                                               |              Total Amount                         |             {{ number_format($content->amount, 2) }}          |
+| {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->unitOfMeasurement->name }}              |           {{ $quotationItem->quantity }}          |             {{ number_format($quotationItem->price, 2) }}     |             {{ number_format($quotationItem->quantity * $quotationItem->price, 2) }}  |
+@endforeach             
 @endcomponent
+# Total Amount: {{ number_format($content->amount, 2) }}
 @component('mail::button', ['url' => $url . '/2', 'color' => 'success']) 
     Approved 
 @endcomponent    

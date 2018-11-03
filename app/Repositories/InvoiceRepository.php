@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceRepository extends Repository
 {
+    
     /**
      * Create new instance of invoice repository.
      *
@@ -28,6 +29,7 @@ class InvoiceRepository extends Repository
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
+
             $invoice = $this->invoice->create($request->all());
             $invoice->invoiceItems()->createMany($request->invoice_items);
             //Journal Entries
