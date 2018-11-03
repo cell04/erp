@@ -115,45 +115,6 @@ class QuotationRepository extends Repository
     //     return 'ahehe';
     // }
 
-    public function generateSalesEntries($quotation)
-    {
-        $i = 0;
-
-        foreach ($quotation->quotationItems as $quotationItem) {
-            $journal_entries[$i++] = [
-                'account_id' => $quotationItem->item->sales_account_id,
-                'corporation_id' => $quotation->corporation_id,
-                'cost_center_id' => $quotation->quotable->id,
-                'amount' => $quotationItem->price * $quotationItem->quantity,
-                'type' => 2, //credit entries
-            ];
-        }
-
-
-
-        $journal_entries[$i++] = [
-            'account_id' => $quotation->corporation->cashAccount->account_id,
-            'corporation_id' => $quotation->corporation_id,
-            'cost_center_id' => $quotation->quotable->id,
-            'amount' => $quotation->amount,
-            'type' => 1, //debit entries
-        ];
-
-        // return $journal_entries;
-
-        $journal = Journal::create([
-            'corporation_id'    =>  $quotation->corporation_id,
-            'user_id'           =>  $quotation->user_id,
-            'reference_number'  =>  $quotation->number,
-            'memo'              =>  'Quotation',
-            'amount'            =>  $quotation->amount,
-            'posting_period'    =>  $quotation->updated_at,
-            'contact_id'        =>  $quotation->contact_id
-        ]);
-
-        return $journal->journalEntries()->createMany($journal_entries);
-    }
-
     public function findOrFail($id)
     {
         return  $this->quotation->with([
@@ -175,7 +136,7 @@ class QuotationRepository extends Repository
             if ($quotation->status == 1) {
                 $quotation->update(['status' => $status]);
                 if ($quotation->status == 2) {
-                    $journal = $this->generateSalesEntries($quotation);
+                    
                     // $this->deductStocksQuantity($quotation);
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }

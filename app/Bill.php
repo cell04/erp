@@ -58,7 +58,11 @@ class Bill extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
 
-            $model->user_id = auth('api')->user()->id;
+            if (auth('api')->user()) {
+                $model->user_id = auth('api')->user()->id;
+            } else {
+
+            }
         });
     }
 

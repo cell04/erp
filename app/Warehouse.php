@@ -89,6 +89,12 @@ class Warehouse extends Model
         return $this->morphMany(StockRequest::class, 'stock_requestable_from');
     }
 
+    public function bills()
+    {
+        return $this->morphMany(Bill::class, 'billable');
+    }
+
+
     /**
      * The warehouse has many stock request to.
      *

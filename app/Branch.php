@@ -59,6 +59,11 @@ class Branch extends Model
         return $this->belongsTo(Corporation::class);
     }
 
+    public function bills()
+    {
+        return $this->morphMany(Bill::class, 'billable');
+    }
+
     /**
      * The branch is a cost center.
      *
