@@ -82,9 +82,8 @@ class ReceiveOrderRepository extends Repository
             'amount' => $total,
             'type' => 2, //credit entries
         ];
-
+        
         // return $journal_entries;
-
         $journal = Journal::create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,
