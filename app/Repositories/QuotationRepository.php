@@ -2,13 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Quotation;
 use App\Contact;
+use App\Contracts\RepositoryInterface;
+use App\Journal;
+use App\Notifications\QuotationApproval;
+use App\Quotation;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\QuotationApproval;
 
 class QuotationRepository extends Repository
 {
@@ -114,43 +115,6 @@ class QuotationRepository extends Repository
     //     return 'ahehe';
     // }
 
-    public function generateSalesEntries($quotation)
-    {
-        $i = 0;
-
-        foreach ($quotation->quotationItems as $quotationItem) {
-            $journal_entries[$i++] = [
-                'account_id' => $quotation->item->sales_account_id,
-                'corporation_id' => request()->headers->get('CORPORATION-ID'),
-                'cost_center_id' => $quotation->quotable->id,
-                'amount' => $quotation->amount,
-                'type' => 2, //credit entries
-            ];
-        }
-
-        $journal_entries[$i++] = [
-            'account_id' => session('cash'),
-            'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'cost_center_id' => $quotation->quotable->id,
-            'amount' => $quotation->amount,
-            'type' => 1, //debit entries
-        ];
-
-        // return $journal_entries;
-
-        $journal = [
-            'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
-            'user_id'           =>  auth('api')->user()->id,
-            'reference_number'  =>  $quotation->number,
-            'memo'              =>  'Quotation',
-            'amount'            =>  $quotation->amount,
-            'posting_period'    =>  $quotation->updated_at,
-            'journal_entries'   =>  $journal_entries
-        ];
-
-        return $journal;
-    }
-
     public function findOrFail($id)
     {
         return  $this->quotation->with([
@@ -172,7 +136,7 @@ class QuotationRepository extends Repository
             if ($quotation->status == 1) {
                 $quotation->update(['status' => $status]);
                 if ($quotation->status == 2) {
-                     // return $journal = $this->generateSalesEntries($quotation);
+                    
                     // $this->deductStocksQuantity($quotation);
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
@@ -183,4 +147,9 @@ class QuotationRepository extends Repository
             return array('quotation' => $quotation, 'message' => 'Quotation is already Managed');
         });
     }
+
+    // public function deductStocksQuantity($quotation)
+    // {
+        
+    // }
 }

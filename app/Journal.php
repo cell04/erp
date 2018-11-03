@@ -50,7 +50,11 @@ class Journal extends Model
             if (auth('api')->check()) {
                 $model->user_id = auth('api')->user()->id;
             } else {
-                $model->user_id = request()->headers->get('USER-ID');
+                if (request()->headers->get('USER-ID')) {
+                    $model->user_id = request()->headers->get('USER-ID');
+                } else {
+                    
+                }
             }
         });
     }

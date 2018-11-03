@@ -19,10 +19,10 @@ class ItemsTableSeeder extends Seeder
             'description'                    => 'Oats description',
             'stock_keeping_unit'             => rand(10000, 99999),
             'default_unit_of_measurement_id' => 1,
-            'asset_account_id'               => 1,
-            'cogs_account_id'                => 1,
-            'sales_account_id'               => 1,
-            'expense_account_id'             => 1
+            'asset_account_id'               => 11,
+            'cogs_account_id'                => 9,
+            'sales_account_id'               => 6,
+            'expense_account_id'             => 8
          ]);
 
         DB::table('items')->insert([
@@ -33,10 +33,10 @@ class ItemsTableSeeder extends Seeder
             'description'                    => 'Rice description',
             'stock_keeping_unit'             => rand(10000, 99999),
             'default_unit_of_measurement_id' => 1,
-            'asset_account_id'               => 1,
-            'cogs_account_id'                => 1,
-            'sales_account_id'               => 1,
-            'expense_account_id'             => 1
+            'asset_account_id'               => 11,
+            'cogs_account_id'                => 9,
+            'sales_account_id'               => 6,
+            'expense_account_id'             => 8
         ]);
 
         DB::table('items')->insert([
@@ -47,10 +47,10 @@ class ItemsTableSeeder extends Seeder
             'description'                    => 'Coca-cola description',
             'stock_keeping_unit'             => rand(10000, 99999),
             'default_unit_of_measurement_id' => 4,
-            'asset_account_id'               => 1,
-            'cogs_account_id'                => 1,
-            'sales_account_id'               => 1,
-            'expense_account_id'             => 1
+            'asset_account_id'               => 11,
+            'cogs_account_id'                => 9,
+            'sales_account_id'               => 6,
+            'expense_account_id'             => 8
         ]);
 
         DB::table('items')->insert([
@@ -61,10 +61,10 @@ class ItemsTableSeeder extends Seeder
             'description'                    => 'Mountain dew description',
             'stock_keeping_unit'             => rand(10000, 99999),
             'default_unit_of_measurement_id' => 4,
-            'asset_account_id'               => 1,
-            'cogs_account_id'                => 1,
-            'sales_account_id'               => 1,
-            'expense_account_id'             => 1
+            'asset_account_id'               => 11,
+            'cogs_account_id'                => 9,
+            'sales_account_id'               => 6,
+            'expense_account_id'             => 8
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Bill;
 use App\BillPayment;
+use App\Journal;
 use App\Repositories\Repository;
 
 class BillPaymentRepository extends Repository
@@ -24,9 +25,9 @@ class BillPaymentRepository extends Repository
      */
     public function store($request)
     {
-        $this->billPayment->create($request->all());
+        $billPayment = $this->billPayment->create($request->all());
+        $this->generateInvoicePaymentEntries($billPayment);
         $bill = Bill::find($request->bill_id);
-
         $oldAmountPaid = $bill->amount_paid;
 
         $newAmountPaid = $bill->amount_paid + $request->amount;
@@ -44,5 +45,40 @@ class BillPaymentRepository extends Repository
         $bill->save();
 
         return true;
+    }
+
+    public function generateInvoicePaymentEntries($billPayment)
+    {
+        $i = 0;
+
+        $journal_entries[$i++] = [
+            'account_id' => $billPayment->bill->contact->account_id,
+            'corporation_id' => $billPayment->bill->corporation_id,
+            'cost_center_id' => $billPayment->bill->billable_id,
+            'amount' => $billPayment->amount,
+            'type' => 1, //credit entries
+        ];
+
+        $journal_entries[$i++] = [
+            'account_id' => session('cash'),
+            'corporation_id' => $billPayment->bill->corporation_id,
+            'cost_center_id' => $billPayment->bill->billable_id,
+            'amount' => $billPayment->amount,
+            'type' => 2, //debit entries
+        ];
+
+        // return $journal_entries;
+
+        $journal = Journal::create([
+            'corporation_id'    =>  $billPayment->bill->corporation_id,
+            'user_id'           =>  $billPayment->bill->user_id,
+            'reference_number'  =>  $billPayment->bill->reference_number,
+            'memo'              =>  'Invoice Payments',
+            'amount'            =>  $billPayment->amount,
+            'posting_period'    =>  $billPayment->updated_at,
+            'contact_id'        =>  $billPayment->bill->contact_id
+        ]);
+
+        return $journal->journalEntries()->createMany($journal_entries);
     }
 }
