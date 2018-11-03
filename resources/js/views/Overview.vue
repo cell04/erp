@@ -3,22 +3,21 @@
 
             <div class="row">
                 <div class="col-12 my-3">
-                    <span class="h3">Sales Report </span>
+                    <span class="h3">Dashboard</span>
                 </div>
             </div>
 
             <!-- Sales Report by Branch -->
-            <div class="row">
+            <!-- <div class="row">
 
-                <div class="col-5">
-                    <!-- Sales Report by Branch -->
+                <div class="col-5 pr-0">
                     <span class="chart-1">
                         <div class="card card-min">
                             <div class="card-body card-mod">
                                 <canvas id="sales-report-branch" class="chart"></canvas>
                             </div>
                             <div class="card-footer">
-                                <small class="text-muted">Sales Report by Branch</small>
+                                <small class="text-muted">Sales by Branch</small>
                             </div>
                         </div>
                     </span>
@@ -26,11 +25,8 @@
 
                 <div class="col-7">
                     <div class="card card-min">
-                        <!-- <div class="card-header">
-                            <span class="subcontent-header"> Overview</span>
-                        </div> -->
                         <div class="card-body card-mod">
-                            <vue-select v-model="selectedBranchWeek" placeholder="Select a Week" @input="changeBranchWeek()" label="Select Week" :options="options"></vue-select>
+                            <vue-select v-model="selectedBranchWeek" placeholder="Select a Branch" @input="changeBranchWeek()" label="Select Week" :options="options"></vue-select>
                             <table class="table table-hover table-sm mt-1">
                                 <thead>
                                     <tr>
@@ -40,8 +36,6 @@
                                 </thead>
                                 <tbody class="">
                                     <tr>
-                                        <!-- <td>sdas</td>
-                                        <td>dasdas</td> -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -49,18 +43,18 @@
                     </div>
                 </div>
 
-            </div>
+            </div> -->
 
             <!-- Sales Report by Type -->
-            <div class="row mt-3">
-                <div class="col-5">
+            <!-- <div class="row mt-3">
+                <div class="col-5 pr-0">
                     <span class="chart-1">
                         <div class="card">
                             <div class="card-body">
                                 <canvas id="sales-report-type" class="chart"></canvas>
                             </div>
                             <div class="card-footer">
-                                <small class="text-muted">Sales Report by Type</small>
+                                <small class="text-muted">Sales by Type</small>
                             </div>
                         </div>
                     </span>
@@ -69,18 +63,18 @@
                 <div class="col-7">
                     <div class="card card-min">
                         <div class="card-body card-mod">
-                            <vue-select v-model="selectedTypeWeek" placeholder="Select a Week" @input="changeBranchWeek()"  :options="options"></vue-select>
+                            <vue-select v-model="selectedTypeWeek" placeholder="Select a Type" @input="changeTypeWeek()"  :options="options"></vue-select>
                             <table class="table table-hover table-sm mt-1">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Type</th>
+                                        <th scope="col">Week</th>
                                         <th scope="col">Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody class="">
-                                    <tr>
-                                        <!-- <td>sdas</td>
-                                        <td>dasdas</td> -->
+                                     <tr v-bind:key="index" v-for="(data, index) in this.salesTypeTableData">
+                                        <td>Week No. {{index + 1}}</td>
+                                        <td>{{data.val}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -88,20 +82,20 @@
                     </div>
                 </div>
 
-            </div>
+            </div> -->
 
             <div class="row">
-                <div class="col-md-8 col-sm-6">
+                <div class="col-md-8 col-sm-6 pr-0">
 
                     <!-- Main Content Grid -->
                     <div class="grid">
 
                         <div class="row mt-3">
                             <!-- Quotations for Approval -->
-                            <div class="col-6">
+                            <div class="col-6 pr-0">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span class="subcontent-header"> Quotations for Approval</span>
+                                        <span class="subcontent-header"> <strong>Quotations for Approval</strong></span>
                                     </div>
                                     <span v-if="this.quotationsForApproval && this.quotationsForApproval.length > 0">
                                         <ul class="list-group list-group-flush" :key="quote.id" v-for="quote in this.quotationsForApproval">
@@ -122,7 +116,7 @@
                             <div class="col-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span class="subcontent-header"> Stock Requests for Approval</span>
+                                        <span class="subcontent-header"> <strong>Stock Requests for Approval</strong></span>
                                     </div>
                                     <span v-if="this.stockRequests && this.stockRequests.length > 0">
                                         <ul class="list-group list-group-flush" :key="stock.id" v-for="stock in this.stockRequests">
@@ -140,10 +134,10 @@
                             </div>
 
                             <!-- Sales Report -->
-                            <div class="col-6 mt-2">
+                            <div class="col-6 mt-2 pr-0">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span class="subcontent-header"> Stock Transfers for Approval</span>
+                                        <span class="subcontent-header"> <strong>Stock Transfers for Approval</strong></span>
                                     </div>
                                     <span v-if="this.stockTransfers && this.stockTransfers.length > 0">
                                         <ul class="list-group list-group-flush" :key="stock.id" v-for="stock in this.stockTransfers">
@@ -164,7 +158,7 @@
                             <div class="col-6 mt-2">
                                 <div class="card">
                                     <div class="card-header">
-                                        <span class="subcontent-header"> Purchase Orders for Approval</span>
+                                        <span class="subcontent-header"> <strong>Purchase Orders for Approval</strong></span>
                                     </div>
                                     <span v-if="this.purchaseOrders && this.purchaseOrders.length > 0">
                                         <ul class="list-group list-group-flush" :key="po.id" v-for="po in this.purchaseOrders">
@@ -199,7 +193,9 @@
                                                 </div> -->
                                             </div>
                                             <div class="card-footer text-center">
-                                                Today's Issued Purchase Order
+                                                <strong>
+                                                    Today's Issued Purchase Order
+                                                </strong>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +212,9 @@
                                                 </div> -->
                                             </div>
                                             <div class="card-footer text-center">
+                                                <strong>
                                                 Today's Issued Received Order
+                                                </strong>
                                             </div>
                                         </div>
                                     </div>
@@ -233,7 +231,9 @@
                                                 </div> -->
                                             </div>
                                             <div class="card-footer text-center">
+                                                <strong>
                                                 Today's Profit
+                                                </strong>
                                             </div>
                                         </div>
                                     </div>
@@ -312,7 +312,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <span class="subcontent-header"> Latest Purchase Orders</span>
+                                    <span class="subcontent-header"><strong> Latest Purchase Orders </strong></span>
                                 </div>
                                 <span v-if="this.purchaseOrders && this.purchaseOrders.length > 0">
                                     <ul class="list-group list-group-flush" :key="po.id" v-for="po in this.purchaseOrders">
@@ -335,7 +335,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <span class="subcontent-header"> Latest Quotations</span>
+                                    <span class="subcontent-header"> <strong>Latest Quotations</strong></span>
                                 </div>
                                 <span v-if="this.quotations && this.quotations.length > 0">
                                     <ul class="list-group list-group-flush" :key="quote.id" v-for="quote in this.quotations">
@@ -401,13 +401,46 @@
                 invoicePayment: '',
                 stockRequest:[],
                 stockTransfers:[],
-                options: [
-                    'Week 1',
-                    'Week 2',
-                    'Week 3',
-                    'Week 4'
-                ],
+                options: [],
                 totalProfit:0,
+                chartLabels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                salesTypeTableData: [],
+                salesTypeChartData: [
+                    {
+                        label: 'Foods',
+                        data:  [
+                                {
+                                    val: 1
+                                },
+                                {
+                                    val: 2
+                                },
+                                {
+                                    val: 3
+                                },
+                                {
+                                    val: 4
+                                }
+                            ],
+                    },
+                    {
+                        label: 'Oats',
+                        data:  [
+                                {
+                                    val: 5
+                                },
+                                {
+                                    val: 10
+                                },
+                                {
+                                    val: 30
+                                },
+                                {
+                                    val: 40
+                                }
+                            ],
+                    }
+                ],
             };
         },
 
@@ -416,13 +449,67 @@
                 //console.log(this.selectedBranchWeek)
             },
             changeTypeWeek(){
-                //console.log(this.selectedTypeWeek)
+                console.log(this.selectedTypeWeek)
+                this.salesTypeChartData.map( (data, i) => {
+                    if( data.label === this.selectedTypeWeek){
+                        this.salesTypeTableData = this.salesTypeChartData[i].data
+                    }
+                })
             },
             kFormatter(num) {
                 return num > 999 ? (num/1000).toFixed(1) + 'K' : num
             }
         },
         mounted () {
+
+             const weeks = [
+               {
+                   label: 'Drinks',
+                   data:  [
+                        {
+                            val: 1
+                        },
+                        {
+                            val: 2
+                        },
+                        {
+                            val: 3
+                        },
+                        {
+                            val: 4
+                        }
+                    ],
+               }
+            ]
+            const createWeekData = ( weekArray) => {
+                return weekArray.map( (week,i) => {
+                    return {
+                        label: week.label,
+                        data: week.data.map( data => data.val),
+                        backgroundColor: `rgba(54, 162, 235, ${week.shade})`,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                    }
+                })
+            }
+
+            const createTypeChartData = (weekdata) => {
+                return weekdata.map( arr => {
+                    return {
+                        label: arr.label,
+                        data: arr.data,
+                        backgroundColor: `rgba(54, 162, 235, ${arr.percent})`,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                    }
+                })
+            }
+
+            const createOptions = ( weekArray ) => {
+                return weekArray.map( data => data.label)
+            }
+
+            this.salesTypeTableData = this.salesTypeChartData[0].data
+            console.log(this.salesTypeTableData)
+            this.options = createOptions( this.salesTypeChartData )
 
             //console.clear();
             const getAllQuotations = () => {
@@ -457,11 +544,13 @@
 
             const getTotalProfit = ( array ) =>{
                 let tempAmount = 0
-                const finalAmount =  array.reduce( (prev,curr) => {
-                    let prevAmount = prev.amount ? prev.amount : 0
-                    let currAmount = curr.amount ? curr.amount : 0
-                    return parseInt(prevAmount) + parseInt(currAmount)
-                })
+                if( array.reduce ){
+                    const finalAmount =  array.reduce( (prev,curr) => {
+                        let prevAmount = prev.amount ? prev.amount : 0
+                        let currAmount = curr.amount ? curr.amount : 0
+                        return parseInt(prevAmount) + parseInt(currAmount)
+                    })
+                }
                 return finalAmount ? finalAmount: 0
             }
 
@@ -511,37 +600,6 @@
 
                     console.groupEnd()
                 }).catch( error => console.error(error))
-            }
-
-            const createTypeChartData = (weekdata) => {
-
-                let chartSampleData = [
-                {
-                    label: '',
-                    data: weekdata[0],
-                    backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                },
-                {
-                    label: 'Type 2',
-                    data: [4, 3, 5, 7],
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                },
-                {
-                    label: 'Type 3',
-                    data: [7, 2, 6, 9],
-                    backgroundColor: 'rgba(54, 162, 235, 0.9)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                },
-                {
-                    label: 'Type 4',
-                    data: [7, 2, 6, 9],
-                    backgroundColor: 'rgba(54, 162, 235, 0.9)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                },
-            ];
-
             }
 
             const getAllPurchaseOrders = () => {
@@ -616,43 +674,36 @@
                 this.$router.push({ name: 'corporations.select' })
             }
 
-            let chartSampleLabel = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-            let chartSampleData = [
-                // {
-                //     label: 'Type 1',
-                //     data: [3, 7, 4, 6],
-                //     backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                //     borderColor: 'rgba(54, 162, 235, 1)',
-                // },
-                // {
-                //     label: 'Type 2',
-                //     data: [4, 3, 5, 7],
-                //     backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                //     borderColor: 'rgba(54, 162, 235, 1)',
-                // },
-                // {
-                //     label: 'Type 3',
-                //     data: [7, 2, 6, 9],
-                //     backgroundColor: 'rgba(54, 162, 235, 0.9)',
-                //     borderColor: 'rgba(54, 162, 235, 1)',
-                // },
-            ];
-            const options3 = createBasicConfig(
+            const salesBranchOptions = createBasicConfig(
             'bar',
-            chartSampleLabel,
-            chartSampleData, {
+            this.chartLabels,
+            createWeekData(weeks), {
                 scales: {
                 yAxes: [
                     {
-                    ticks: {
-                        beginAtZero: true,
-                    },
+                        ticks: {
+                            beginAtZero: true,
+                        },
                     },
                 ],
                 },
             })
-            generateChart('sales-report-branch', options3)
-            generateChart('sales-report-type', options3)
+            const salesTypeOptions = createBasicConfig(
+            'bar',
+            this.chartLabels,
+            createWeekData(this.salesTypeChartData), {
+                scales: {
+                yAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                    },
+                ],
+                },
+            })
+            generateChart('sales-report-branch', salesBranchOptions)
+            generateChart('sales-report-type', salesTypeOptions)
 
 
 
@@ -755,12 +806,12 @@
                         },
                     })
 
-                    this.salesReportChart = generateChart('chart1', options3)
+                    // this.salesReportChart = generateChart('chart1', options3)
                     // this.todaysPurchaseOrderChart = generateChart('chart2', options2)
                     // this.todaysReceivedOrderChart = generateChart('chart3', options2)
                     // this.todaysProfitChart = generateChart('chart4', options2)
-                    this.salesComparisonChart = generateChart('chart5', options)
-                    this.purchaseComparisonChart = generateChart('chart6', options3)
+                    // this.salesComparisonChart = generateChart('chart5', options)
+                    // this.purchaseComparisonChart = generateChart('chart6', options3)
                     resolve();
                 });
             });
