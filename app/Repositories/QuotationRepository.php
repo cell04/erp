@@ -2,13 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Quotation;
 use App\Contact;
+use App\Contracts\RepositoryInterface;
+use App\Journal;
+use App\Notifications\QuotationApproval;
+use App\Quotation;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\QuotationApproval;
 
 class QuotationRepository extends Repository
 {
@@ -120,17 +121,19 @@ class QuotationRepository extends Repository
 
         foreach ($quotation->quotationItems as $quotationItem) {
             $journal_entries[$i++] = [
-                'account_id' => $quotation->item->sales_account_id,
-                'corporation_id' => request()->headers->get('CORPORATION-ID'),
+                'account_id' => $quotationItem->item->sales_account_id,
+                'corporation_id' => $quotation->corporation_id,
                 'cost_center_id' => $quotation->quotable->id,
-                'amount' => $quotation->amount,
+                'amount' => $quotationItem->price * $quotationItem->quantity,
                 'type' => 2, //credit entries
             ];
         }
 
+
+
         $journal_entries[$i++] = [
-            'account_id' => session('cash'),
-            'corporation_id' => request()->headers->get('CORPORATION-ID'),
+            'account_id' => $quotation->corporation->cashAccount->account_id,
+            'corporation_id' => $quotation->corporation_id,
             'cost_center_id' => $quotation->quotable->id,
             'amount' => $quotation->amount,
             'type' => 1, //debit entries
@@ -138,17 +141,17 @@ class QuotationRepository extends Repository
 
         // return $journal_entries;
 
-        $journal = [
-            'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
-            'user_id'           =>  auth('api')->user()->id,
+        $journal = Journal::create([
+            'corporation_id'    =>  $quotation->corporation_id,
+            'user_id'           =>  $quotation->user_id,
             'reference_number'  =>  $quotation->number,
             'memo'              =>  'Quotation',
             'amount'            =>  $quotation->amount,
             'posting_period'    =>  $quotation->updated_at,
-            'journal_entries'   =>  $journal_entries
-        ];
+            'contact_id'        =>  $quotation->contact_id
+        ]);
 
-        return $journal;
+        return $journal->journalEntries()->createMany($journal_entries);
     }
 
     public function findOrFail($id)
@@ -172,7 +175,7 @@ class QuotationRepository extends Repository
             if ($quotation->status == 1) {
                 $quotation->update(['status' => $status]);
                 if ($quotation->status == 2) {
-                     // return $journal = $this->generateSalesEntries($quotation);
+                    $journal = $this->generateSalesEntries($quotation);
                     // $this->deductStocksQuantity($quotation);
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
@@ -183,4 +186,9 @@ class QuotationRepository extends Repository
             return array('quotation' => $quotation, 'message' => 'Quotation is already Managed');
         });
     }
+
+    // public function deductStocksQuantity($quotation)
+    // {
+        
+    // }
 }

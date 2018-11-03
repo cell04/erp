@@ -57,6 +57,7 @@ class ReceiveOrderRepository extends Repository
         $i = 0;
         $total = 0;
         $costCenters = $purchaseOrder->warehouse->costCenter;
+
         foreach ($costCenters as $costCenter) {
             $costCenterID = $costCenter->id;
         }
@@ -67,23 +68,22 @@ class ReceiveOrderRepository extends Repository
             $total = $total + $itemTotalAmount;
 
             $journal_entries[$i++] = [
-                'account_id' => $selectedItem->item->asset_account_id,
+                'account_id'     => $selectedItem->item->asset_account_id,
                 'corporation_id' => request()->headers->get('CORPORATION-ID'),
-                'cost_center_id' => $costCenterID,
-                'amount' => $itemTotalAmount,
-                'type' => 1, //debit entries
+                'cost_center_id' => $purchaseOrder->warehouse_id,
+                'amount'         => $itemTotalAmount,
+                'type'           => 1
             ];
         }
 
         $journal_entries[$i++] = [
-            'account_id' => session('irnb'),
+            'account_id'     => session('irnb'),
             'corporation_id' => request()->headers->get('CORPORATION-ID'),
-            'cost_center_id' => $costCenterID,
-            'amount' => $total,
-            'type' => 2, //credit entries
+            'cost_center_id' => $purchaseOrder->warehouse_id,
+            'amount'         => $total,
+            'type'           => 2
         ];
-        
-        // return $journal_entries;
+
         $journal = Journal::create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,

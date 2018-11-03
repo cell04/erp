@@ -31,14 +31,6 @@
                             <label>Due Date</label>
                             <input type="date" class="form-control" v-model="due_date" required>
                         </div>
-
-                        <!-- <div class="col-md-6 form-group">
-                            <label>Amount Paid</label>
-                            <input type="number" class="form-control" v-model="amount_paid" required>
-                        </div>                       -->
-
-                        
-
                     </div>
 
                     <br>
@@ -68,13 +60,13 @@
                                 <td>{{ item.price }}</td>
                             </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -166,19 +158,21 @@
                 items: [],
                 reference_number: "",
                 receive_order_id: "",
+                billable_id: '',
+                billable_type: '',
                 bill_items: [
-                    {
-                        item: '',
-                        item_id: '',
-                        quantity: 0,
-                        unitOfMeasurements: [],
-                        unitOfMeasurement: '',
-                        unit_of_measurement_id: '',
-                        itemPricelists: [],
-                        itemPricelist: 0,
-                        item_pricelist_id: '',
-                        subTotal: 0
-                    }
+                {
+                    item: '',
+                    item_id: '',
+                    quantity: 0,
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: 0,
+                    item_pricelist_id: '',
+                    subTotal: 0
+                }
                 ],
                 amounts: "",
                 isDisabled: false
@@ -264,6 +258,9 @@
                     this.q_contact_name = res.data.quotation.contact.person;
                     this.amount = res.data.quotation.amount;
                     this.quotation_items = res.data.quotation.quotation_items;
+                    this.billable_id = res.data.quotation.quotable_id;
+                    this.billable_type = res.data.quotation.quotable_type;
+
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -362,6 +359,8 @@
                     bill_items: this.$data.quotation_items,
                     quotation_id: this.$data.receive_order_id,
                     contact_id: this.$data.q_contact_id,
+                    billable_id: this.billable_id,
+                    billable_type: this.billable_type,
                     reference_number: this.$data.reference_number,
                     due_date: this.$data.due_date,
                     amount: this.$data.amount,

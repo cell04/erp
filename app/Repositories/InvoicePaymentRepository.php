@@ -24,8 +24,10 @@ class InvoicePaymentRepository extends Repository
     {
         return DB::transaction(function () use ($request) {
             $invoicePayment = $this->invoicePayment->create($request->all());
+            $invoicePayment->invoice()->increment('amount_paid', $invoicePayment->amount);
             //Journal Entries
             $billPaymentEntries = $this->generateBillPaymentEntries($invoicePayment);
+
             return $invoicePayment;
         });
     }

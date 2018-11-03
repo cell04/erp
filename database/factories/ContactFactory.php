@@ -12,6 +12,6 @@ $factory->define(App\Contact::class, function (Faker $faker) {
         'email'           => $faker->unique()->safeEmail,
         'mobile_number'   => $faker->e164PhoneNumber,
         'credit_limit'    => 0,
-        'account_id'      => 1,
+        'account_id'      => 17,
     ];
 });

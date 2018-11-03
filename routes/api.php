@@ -7,6 +7,10 @@ Route::get('/auth/user', 'AuthController@user');
 Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
 
 Route::group(['middleware' => ['auth:api', 'corporation.default.account']], function () {
+    Route::post('test', function () {
+        return cache(auth('api')->user()->id . ' accounting.auth');
+    });
+
     // Audit Trails
     Route::match(['put', 'patch'], 'audit-trails/{auditTrail}/restore', 'AuditTrailsController@restore');
     Route::delete('audit-trails/{auditTrail}/force-delete', 'AuditTrailsController@forceDestroy');
