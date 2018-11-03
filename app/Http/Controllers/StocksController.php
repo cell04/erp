@@ -216,7 +216,7 @@ class StocksController extends Controller
     public function getAllStocksPerLocation()
     {
         $data = StockResource::collection(
-            $this->stock->paginateWithFilters(request(), request()->per_page, request()->order_by)
+            $this->stock->paginateWithFiltersPerLocation(request(), request()->per_page, request()->order_by)
         );
 
         if (! $data) {

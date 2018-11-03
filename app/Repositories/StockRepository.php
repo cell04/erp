@@ -17,7 +17,7 @@ class StockRepository extends Repository
         $this->stock = $stock;
     }
 
-    public function paginateWithFilters(
+    public function paginateWithFiltersPerLocation(
         $request = null,
         $length = 10,
         $orderBy = 'desc',
