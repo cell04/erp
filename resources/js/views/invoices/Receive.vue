@@ -26,7 +26,6 @@
                             <label>Due Date</label>
                             <input type="date" class="form-control" v-model="due_date" required>
                         </div>
-                        
                     </div>
 
                     <br>
@@ -111,7 +110,7 @@
                                     <td>
                                         <b>Total</b>
                                     </td>
-                                    <td>{{total}}</td>
+                                    <td>{{ total }}</td>
                                     <td></td>
                                 </tr>
                         </tbody>
@@ -335,7 +334,7 @@
                     contact_id: this.$data.contact_id,
                     reference_number: this.$data.reference_number,
                     due_date: this.$data.due_date,
-                    amount: 0,
+                    amount: this.amount,
                     amount_paid: 0
                 };
 
