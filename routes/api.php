@@ -182,6 +182,7 @@ Route::group(['middleware' => ['auth:api', 'corporation.default.account']], func
     Route::match(['put', 'patch'], 'stocks/{stock}/restore', 'StocksController@restore');
     Route::delete('stocks/{stock}/force-delete', 'StocksController@forceDestroy');
     Route::get('stocks/get-all-stocks', 'StocksController@getAllStock');
+    Route::post('stocks/get-all-stocks-per-location', 'StocksController@getAllStocksPerLocation');
     Route::resource('stocks', 'StocksController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
