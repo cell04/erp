@@ -3,14 +3,14 @@
 
             <div class="row">
                 <div class="col-12 my-3">
-                    <span class="h3">Sales </span>
+                    <span class="h3">Dashboard</span>
                 </div>
             </div>
 
             <!-- Sales Report by Branch -->
-            <div class="row">
+            <!-- <div class="row">
 
-                <!-- <div class="col-5 pr-0">
+                <div class="col-5 pr-0">
                     <span class="chart-1">
                         <div class="card card-min">
                             <div class="card-body card-mod">
@@ -41,12 +41,12 @@
                             </table>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
-            </div>
+            </div> -->
 
             <!-- Sales Report by Type -->
-            <div class="row mt-3">
+            <!-- <div class="row mt-3">
                 <div class="col-5 pr-0">
                     <span class="chart-1">
                         <div class="card">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> -->
 
             <div class="row">
                 <div class="col-md-8 col-sm-6 pr-0">
@@ -806,12 +806,12 @@
                         },
                     })
 
-                    this.salesReportChart = generateChart('chart1', options3)
+                    // this.salesReportChart = generateChart('chart1', options3)
                     // this.todaysPurchaseOrderChart = generateChart('chart2', options2)
                     // this.todaysReceivedOrderChart = generateChart('chart3', options2)
                     // this.todaysProfitChart = generateChart('chart4', options2)
-                    this.salesComparisonChart = generateChart('chart5', options)
-                    this.purchaseComparisonChart = generateChart('chart6', options3)
+                    // this.salesComparisonChart = generateChart('chart5', options)
+                    // this.purchaseComparisonChart = generateChart('chart6', options3)
                     resolve();
                 });
             });
