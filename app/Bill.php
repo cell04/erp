@@ -60,8 +60,6 @@ class Bill extends Model
 
             if (auth('api')->user()) {
                 $model->user_id = auth('api')->user()->id;
-            } else {
-
             }
         });
     }

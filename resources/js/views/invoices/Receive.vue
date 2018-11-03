@@ -26,7 +26,6 @@
                             <label>Due Date</label>
                             <input type="date" class="form-control" v-model="due_date" required>
                         </div>
-                        
                     </div>
 
                     <br>
@@ -103,17 +102,17 @@
                                 <td>{{ subtotalRow[index] }}</td>
                             </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td>{{ total }}</td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -157,18 +156,18 @@
                 reference_number: "",
                 receive_order_id: "",
                 invoice_items: [
-                    {
-                        item: '',
-                        item_id: '',
-                        quantity: 0,
-                        unitOfMeasurements: [],
-                        unitOfMeasurement: '',
-                        unit_of_measurement_id: '',
-                        itemPricelists: [],
-                        itemPricelist: 0,
-                        item_pricelist_id: '',
-                        subTotal: 0
-                    }
+                {
+                    item: '',
+                    item_id: '',
+                    quantity: 0,
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: 0,
+                    item_pricelist_id: '',
+                    subTotal: 0
+                }
                 ],
                 amounts: "",
                 isDisabled: false
@@ -216,6 +215,15 @@
                     this.contact_person = res.data.receiveOrder.contact.person;
                     this.receive_order_id = res.data.receiveOrder.id;
                     this.receive_order_items = res.data.receiveOrder.receive_order_items;
+
+                    let total = 0;
+
+                    this.receive_order_items.forEach(invoice_item => {
+                        total += invoice_item.subTotal;
+                    });
+
+                    this.amount = total;
+
                     // console.log('RO: ' + JSON.stringify(res.data.receiveOrder));
                     resolve();
                 }).catch(err => {
@@ -233,12 +241,12 @@
         computed: {
             subtotalRow() {
                 return this.receive_order_items.map((item) => {
-                return Number(item.quantity * item.item_pricelist.price)
+                    return Number(item.quantity * item.item_pricelist.price)
                 });
             },
             total() {
                 return this.receive_order_items.reduce((total, item) => {
-                return total + item.quantity * item.item_pricelist.price;
+                    return total + item.quantity * item.item_pricelist.price;
                 }, 0);
             }
         },
@@ -335,7 +343,7 @@
                     contact_id: this.$data.contact_id,
                     reference_number: this.$data.reference_number,
                     due_date: this.$data.due_date,
-                    amount: 0,
+                    amount: this.amount,
                     amount_paid: 0
                 };
 

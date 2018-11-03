@@ -33,13 +33,13 @@
                         </tr>
                     </thead>
                     <tbody v-if="quotations">
-                        <tr :key="index" v-for="(purchaseOrder, index) in quotations">
-                            <td>{{ purchaseOrder.number }}</td>
-                            <td>{{ purchaseOrder.contact.person }}</td>
-                            <td>{{ purchaseOrder.status }}</td>
-                            <td>{{ purchaseOrder.created_at }}</td>
+                        <tr :key="index" v-for="(quotation, index) in quotations">
+                            <td>{{ quotation.number }}</td>
+                            <td>{{ quotation.contact.person }}</td>
+                            <td>{{ quotation.status }}</td>
+                            <td>{{ quotation.created_at }}</td>
                             <td>
-                                <router-link class="text-secondary" :to="{ name: 'quotations.view', params: { id: purchaseOrder.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'quotations.view', params: { id: quotation.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
 
                             </td>
                         </tr>
@@ -411,13 +411,14 @@
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    let purchaseOrderStatus = {
+                    let status = {
                         0: "Issued",
-                        1: "Closed",
+                        1: "Admin Approved",
+                        2: "Customer Approbed"
                     };
 
-                    quotations.map(purchaseOrder => {
-                        purchaseOrder.status = purchaseOrderStatus[purchaseOrder.status];
+                    quotations.map(quotation => {
+                        quotation.status = status[quotation.status];
                     });
 
                     this.quotations = quotations;
