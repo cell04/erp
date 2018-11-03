@@ -5,12 +5,12 @@ Created By : {{ $content->user->name }}<br>
 Reference Number : {{ $content->reference_number }}
 
 @component('mail::table')
-|       Item Name                                                                           |              Unit                                     |                   Quantity                        |                Price                                      |
-|       :------------                                                                       |              :-------------                           |                   --------:                       |               --------:                                   |
+|       Item Name                                                                           |              Unit                                     |                   Quantity                        |                Price                                      |               SubTotal                                              |
+|       :------------                                                                       |              :-------------                           |                   --------:                       |               --------:                                   |               --------:                                             |
 @foreach ($content->billItems as $billItem)
-| {{ $billItem->item->name }}                                                               |    {{ $billItem->unitOfMeasurement->name }}           |           {{ $billItem->quantity }}               |             {{ number_format($billItem->price, 2) }}      |
+| {{ $billItem->item->name }}                                                               |    {{ $billItem->unitOfMeasurement->name }}           |           {{ $billItem->quantity }}               |             {{ number_format($billItem->price, 2) }}      |   {{ number_format($billItem->quantity * $billItem->price, 2) }}    |    
 @endforeach
-|                                                                                           |                                                       |              Total Amount                         |             {{ number_format($content->amount, 2) }}      |
+|                                                                                           |                                                       |                                                   |                   Total Amount                            |                   {{ number_format($content->amount, 2) }}          |
 @endcomponent
 
 Thanks,<br>
