@@ -31,7 +31,11 @@ class CreateBillItemsTable extends Migration
                 ->references('id')
                 ->on('unit_of_measurements')
                 ->onDelete('cascade');
-            $table->decimal('price', 20, 2);
+            $table->integer('item_pricelist_id')->unsigned();
+            $table->foreign('item_pricelist_id')
+                ->references('id')
+                ->on('item_pricelists')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

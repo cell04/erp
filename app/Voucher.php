@@ -53,10 +53,10 @@ class Voucher extends Model
 
         static::creating(function ($model) {
             $model->corporation_id = request()->headers->get('CORPORATION-ID');
-            $model->user_id = auth('api')->user()->id;
-            if ($model->status == 1) {
-                $model->approved_by = auth('api')->user()->id;
-            }
+            // $model->user_id = auth('api')->user()->id;
+            // if ($model->status == 1) {
+            //     $model->approved_by = auth('api')->user()->id;
+            // }
         });
     }
 

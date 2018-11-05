@@ -111,4 +111,14 @@ class ReceiveOrder extends Model
     {
         return $this->hasMany(ReceiveOrderItem::class);
     }
+
+    /**
+     * The receive order has many receive order items.
+     *
+     * @return object
+     */
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
 }

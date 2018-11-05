@@ -6,7 +6,7 @@ Route::post('/auth/logout', 'AuthController@apiLogout');
 Route::get('/auth/user', 'AuthController@user');
 Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
 
-Route::group(['middleware' => ['auth:api', 'corporation.default.account']], function () {
+Route::group(['middleware' => ['api', 'corporation.default.account']], function () {
     Route::post('test', function () {
         return cache(auth('api')->user()->id . ' accounting.auth');
     });

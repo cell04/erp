@@ -212,4 +212,24 @@ class PurchaseOrdersController extends Controller
             'purchase_orders' => $purchaseOrder
         ], 200);
     }
+
+    // /**
+    //  * Display the specified resource.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function getAvailableItemQuantity($id)
+    // {
+    //     if (! $purchaseOrder = $this->purchaseOrders->getAvailableItemQuantity($id)) {
+    //         return response()->json([
+    //             'message' => 'Resource does not exist'
+    //         ], 400);
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Resource successfully retrieve',
+    //         'purchaseOrder' => $purchaseOrder
+    //     ], 200);
+    // }
 }

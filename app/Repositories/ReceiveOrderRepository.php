@@ -11,17 +11,19 @@ use Illuminate\Support\Facades\DB;
 class ReceiveOrderRepository extends Repository
 {
     protected $purchaseOrder;
+    private $journal;
 
     /**
      * Create new instance of receive order repository.
      *
      * @param ReceiveOrder $receiveOrder ReceiveOrder repository.
      */
-    public function __construct(ReceiveOrder $receiveOrder, PurchaseOrder $purchaseOrder)
+    public function __construct(ReceiveOrder $receiveOrder, PurchaseOrder $purchaseOrder, Journal $journal)
     {
         parent::__construct($receiveOrder);
         $this->receiveOrder = $receiveOrder;
         $this->purchaseOrder = $purchaseOrder;
+        $this->journal = $journal;
     }
 
     public function store($request)
@@ -132,7 +134,7 @@ class ReceiveOrderRepository extends Repository
             'type'           => 2
         ];
 
-        $journal = Journal::create([
+        $journal = $this->journal->create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,
             'reference_number'  =>  $purchaseOrder->reference_number,
