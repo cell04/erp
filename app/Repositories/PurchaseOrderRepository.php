@@ -74,4 +74,10 @@ class PurchaseOrderRepository extends Repository
             return $purchaseOrder;
         });
     }
+
+    public function all()
+    {
+        return $this->purchaseOrder->where('status', 0)
+        ->get();
+    }
 }

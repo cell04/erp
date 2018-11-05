@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\InvoicePayment;
 use App\Journal;
+use App\Voucher;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -25,8 +26,8 @@ class InvoicePaymentRepository extends Repository
         return DB::transaction(function () use ($request) {
             $invoicePayment = $this->invoicePayment->create($request->all());
             $invoicePayment->invoice()->increment('amount_paid', $invoicePayment->amount);
-            //Journal Entries
-            $billPaymentEntries = $this->generateBillPaymentEntries($invoicePayment);
+            //Store Entries
+            $this->generateBillPaymentEntries($invoicePayment);
 
             return $invoicePayment;
         });
@@ -57,8 +58,7 @@ class InvoicePaymentRepository extends Repository
             'type' => 2, //credit entries
         ];
 
-        // return $journal_entries;
-
+        //store Journal
         $journal = Journal::create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,
@@ -69,6 +69,22 @@ class InvoicePaymentRepository extends Repository
             'posting_period'    =>  Carbon::parse($invoicePayment->created_at)
         ]);
 
-        return $journal->journalEntries()->createMany($journal_entries);
+        // Store Journal Entries
+        $journalEntries = $journal->journalEntries()->createMany($journal_entries);
+
+        //Store Voucher
+        $voucher = $journal->voucher()->create([
+            'verified_by'       =>  auth('api')->user()->id,
+            'reference_number'  =>  $invoicePayment->invoice->reference_number,
+            'number'            =>  $invoicePayment->cr_number,
+            'memo'              =>  'Bills Payments',
+            'amount'            =>  $invoicePayment->amount,
+            'contact_id'        =>  $invoicePayment->invoice->contact_id,
+            'posting_period'    =>  Carbon::parse($invoicePayment->created_at),
+            'status'            =>  1
+        ]);
+
+        //Store Voucher Entries
+        return $voucher->voucherEntries()->createMany($journalEntries->toArray());
     }
 }

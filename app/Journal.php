@@ -98,4 +98,14 @@ class Journal extends Model
     {
         return $this->hasMany(JournalEntry::class);
     }
+
+    /**
+     * The journal has many journal entries.
+     *
+     * @return array object
+     */
+    public function voucher()
+    {
+        return $this->hasOne(Voucher::class);
+    }
 }
