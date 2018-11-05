@@ -24,7 +24,7 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'receive_order_id', 'contact_id',
+        'corporation_id', 'quotation_id', 'contact_id',
         'user_id', 'reference_number', 'due_date',
         'amount', 'amount_paid', 'status'
     ];
@@ -53,7 +53,7 @@ class Invoice extends Model
      * @var array
      */
     protected $with = [
-        'receiveOrder', 'invoiceItems', 'contact'
+        'quotation', 'invoiceItems', 'contact'
     ];
 
     /**
@@ -69,7 +69,13 @@ class Invoice extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
 
-            $model->user_id = auth('api')->user()->id;
+            if (auth('api')->user()) {
+                $model->user_id = auth('api')->user()->id;
+            }
+
+            if (request()->headers->get('USER-ID')) {
+                $model->user_id = request()->headers->get('USER-ID');
+            }       
         });
     }
 
@@ -108,8 +114,8 @@ class Invoice extends Model
      *
      * @return object
      */
-    public function receiveOrder()
+    public function quotation()
     {
-        return $this->belongsTo(ReceiveOrder::class);
+        return $this->belongsTo(Quotation::class);
     }
 }

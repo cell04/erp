@@ -27,48 +27,52 @@ class InvoicePaymentRepository extends Repository
             $invoicePayment = $this->invoicePayment->create($request->all());
             $invoicePayment->invoice()->increment('amount_paid', $invoicePayment->amount);
             //update invoice status
-            $this->updateBillStatus($invoicePayment);
+            $this->updateInvoiceStatus($invoicePayment);
             //Store Entries
-            // $this->generateBillPaymentEntries($invoicePayment);
+            $this->generateInvoicePaymentEntries($invoicePayment);
 
             return $invoicePayment;
         });
     }
 
-    // public function generateInvoicePaymentEntries($billPayment)
-    // {
-    //     $i = 0;
+    public function generateInvoicePaymentEntries($invoicePayment)
+    {
+        $i = 0;
+        $costCenters = $invoicePayment->invoice->quotation->quotable->costCenter;
 
-    //     $journal_entries[$i++] = [
-    //         'account_id' => $billPayment->bill->contact->account_id,
-    //         'corporation_id' => $billPayment->bill->corporation_id,
-    //         'cost_center_id' => $billPayment->bill->billable_id,
-    //         'amount' => $billPayment->amount,
-    //         'type' => 1, //credit entries
-    //     ];
+        foreach ($costCenters as $costCenter) {
+            $costCenterID = $costCenter->id;
+        }
+        $journal_entries[$i++] = [
+            'account_id' => $invoicePayment->invoice->contact->account_id,
+            'corporation_id' => $invoicePayment->invoice->corporation_id,
+            'cost_center_id' => $costCenterID,
+            'amount' => $invoicePayment->amount,
+            'type' => 1, //credit entries
+        ];
 
-    //     $journal_entries[$i++] = [
-    //         'account_id' => session('cash'),
-    //         'corporation_id' => $billPayment->bill->corporation_id,
-    //         'cost_center_id' => $billPayment->bill->billable_id,
-    //         'amount' => $billPayment->amount,
-    //         'type' => 2, //debit entries
-    //     ];
+        $journal_entries[$i++] = [
+            'account_id' => session('cash'),
+            'corporation_id' => $invoicePayment->invoice->corporation_id,
+            'cost_center_id' => $costCenterID,
+            'amount' => $invoicePayment->amount,
+            'type' => 2, //debit entries
+        ];
 
-    //     // return $journal_entries;
+        // return $journal_entries;
 
-    //     $journal = Journal::create([
-    //         'corporation_id'    =>  $billPayment->bill->corporation_id,
-    //         'user_id'           =>  $billPayment->bill->user_id,
-    //         'reference_number'  =>  $billPayment->bill->reference_number,
-    //         'memo'              =>  'Invoice Payments',
-    //         'amount'            =>  $billPayment->amount,
-    //         'posting_period'    =>  $billPayment->updated_at,
-    //         'contact_id'        =>  $billPayment->bill->contact_id
-    //     ]);
+        $journal = Journal::create([
+            'corporation_id'    =>  $invoicePayment->invoice->corporation_id,
+            'user_id'           =>  $invoicePayment->invoice->user_id,
+            'reference_number'  =>  $invoicePayment->invoice->reference_number,
+            'memo'              =>  'Invoice Payments',
+            'amount'            =>  $invoicePayment->amount,
+            'posting_period'    =>  $invoicePayment->updated_at,
+            'contact_id'        =>  $invoicePayment->invoice->contact_id
+        ]);
 
-    //     return $journal->journalEntries()->createMany($journal_entries);
-    // }
+        return $journal->journalEntries()->createMany($journal_entries);
+    }
 
     // public function generateBillPaymentEntries($invoicePayment)
     // {
