@@ -45,7 +45,8 @@ class CostCentersController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-          
+            'cost_centable_id'      => 'required|integer',
+            'cost_centable_type'    => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -101,9 +102,8 @@ class CostCentersController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|min:2|max:255',
-            'description' => 'required|min:2',
-            'country'     => 'required|min:2'
+            'cost_centable_id'      => 'required|integer',
+            'cost_centable_type'    => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {

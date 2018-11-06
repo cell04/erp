@@ -55,7 +55,14 @@ class PurchaseOrdersController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'warehouse_id'                                  =>  'required|integer',
+            'contact_id'                                    =>  'required|integer',
+            'reference_number'                              =>  'required|string|max:255',
+            'amount'                                        =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_id'                =>  'required|integer',
+            'purchase_order_items.*.unit_of_measurement_id' =>  'required|integer',
+            'purchase_order_items.*.quantity'               =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_pricelist_id'      =>  'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +113,14 @@ class PurchaseOrdersController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'warehouse_id'                                  =>  'required|integer',
+            'contact_id'                                    =>  'required|integer',
+            'reference_number'                              =>  'required|string|max:255',
+            'amount'                                        =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_id'                =>  'required|integer',
+            'purchase_order_items.*.unit_of_measurement_id' =>  'required|integer',
+            'purchase_order_items.*.quantity'               =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_pricelist_id'      =>  'required|integer'
         ]);
 
         if ($validator->fails()) {
