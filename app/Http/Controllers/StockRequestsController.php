@@ -57,7 +57,15 @@ class StockRequestsController extends Controller
         return $this->stockRequest->store($request);
 
         $validator = Validator::make($request->all(), [
-
+            'stock_transfer_id'                             =>  'required|integer',
+            'stock_requestable_from_id'                     =>  'required|integer',
+            'stock_requestable_from_type'                   =>  'required|string|max:255',
+            'stock_requestable_to_id'                       =>  'required|integer',
+            'stock_requestable_to_type'                     =>  'required|string|max:255',
+            'number'                                        =>  'required|string|max:255',
+            'stock_request_items.*.item_id'                 =>  'required|integer',
+            'stock_request_items.*.unit_of_measurement_id'  =>  'required|integer',
+            'stock_request_items.*.quantity'                =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -108,7 +116,15 @@ class StockRequestsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'stock_transfer_id'                             =>  'required|integer',
+            'stock_requestable_from_id'                     =>  'required|integer',
+            'stock_requestable_from_type'                   =>  'required|string|max:255',
+            'stock_requestable_to_id'                       =>  'required|integer',
+            'stock_requestable_to_type'                     =>  'required|string|max:255',
+            'number'                                        =>  'required|string|max:255',
+            'stock_request_items.*.item_id'                 =>  'required|integer',
+            'stock_request_items.*.unit_of_measurement_id'  =>  'required|integer',
+            'stock_request_items.*.quantity'                =>  'required|numeric|min:0'
         ]);
         return $this->stockRequest->update($request, $id);
         if ($validator->fails()) {
