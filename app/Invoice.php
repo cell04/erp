@@ -5,7 +5,6 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Invoice extends Model
 {
@@ -28,17 +27,6 @@ class Invoice extends Model
         'user_id', 'reference_number', 'due_date',
         'amount', 'amount_paid', 'status'
     ];
-
-    // /**
-    //  * The Log attributes that are mass assignable.
-    //  *
-    //  * @var array
-    //  */
-    // protected static $logAttributes = [
-    //     'corporation_id', 'receive_order_id', 'contact_id',
-    //     'user_id', 'reference_number', 'due_date',
-    //     'amount', 'amount_paid', 'status'
-    // ];
     
     /**
      * The attributes that should be mutated to dates.
@@ -75,7 +63,7 @@ class Invoice extends Model
 
             if (request()->headers->get('USER-ID')) {
                 $model->user_id = request()->headers->get('USER-ID');
-            }       
+            }
         });
     }
 
