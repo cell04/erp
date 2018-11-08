@@ -28,8 +28,10 @@
                         </div> -->
 
                         <div class="col-md-6 form-group">
-                            <label>Due Date</label>
-                            <input type="date" class="form-control" v-model="due_date" required>
+                            <div class="dateStyle">
+                                <label>Due Date</label>
+                                <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                            </div>
                         </div>
                     </div>
 
@@ -135,6 +137,7 @@
         mounted() {
             // this.bill_items.expiration_date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
             // console.log('EXP Date: ' + this.this.date);
+            this.due_date = new Date();
 
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
@@ -193,7 +196,7 @@
 
             getBillsData(id) {
                 axios.get("/api/receive-orders/" + id).then(res => {
-                    console.log('Quote: ' + JSON.stringify(res.data));
+                    // console.log('Quote: ' + JSON.stringify(res.data));
                     this.ro_contact_id = res.data.receiveOrder.contact_id;
                     this.ro_contact_name = res.data.receiveOrder.contact.person;
                     this.amount = res.data.receiveOrder.amount;
@@ -243,7 +246,7 @@
                     billable_id: this.billable_id,
                     billable_type: this.billable_type,
                     reference_number: this.$data.reference_number,
-                    due_date: this.$data.due_date,
+                    due_date: moment(this.$data.due_date).format('YYYY-MM-DD'),
                     amount: '0',
                     amount_paid: '0'
                 };
@@ -260,3 +263,9 @@
         }
     };
 </script>
+
+<style>
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
+    }
+</style>

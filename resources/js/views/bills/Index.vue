@@ -230,7 +230,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/bills/').then(res => {
-                    console.log('Bills: ' + JSON.stringify(res.data));
+                    // console.log('Bills: ' + JSON.stringify(res.data));
                     resolve();
                 });
             });

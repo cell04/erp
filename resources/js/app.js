@@ -18,6 +18,7 @@ import store from './store';
 import router from './router';
 import VueSelect from 'vue-select';
 import ChartJS from 'chart.js';
+import DatePicker from 'vuejs-datepicker';
 
 // Global Broadcasting
 window.Broadcast = new Vue();
@@ -25,6 +26,7 @@ window.Chart = ChartJS;
 
 // Components
 Vue.component('vue-select', VueSelect);
+Vue.component('datepicker', DatePicker);
 
 // Layouts
 Vue.component('navbar', require('./views/layouts/Navbar.vue'));

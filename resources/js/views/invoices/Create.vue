@@ -23,8 +23,12 @@
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label>Due Date</label>
-                            <input type="date" class="form-control" v-model="due_date" required>
+                            <!-- <label>Due Date</label>
+                            <input type="date" class="form-control" v-model="due_date" required> -->
+                            <div class="dateStyle">
+                                <label>Due Date</label>
+                                <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                            </div>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -268,7 +272,7 @@
                     quotation_id: this.quotation_id,
                     contact_id: this.$data.contact_id,
                     reference_number: 'I' + this.$data.reference_number,
-                    due_date: this.$data.due_date,
+                    due_date: moment(this.$data.due_date).format('YYYY-MM-DD'),
                     amount: this.total,
                     amount_paid: 0
                 };
@@ -285,3 +289,9 @@
         }
     };
 </script>
+
+<style>
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
+    }
+</style>
