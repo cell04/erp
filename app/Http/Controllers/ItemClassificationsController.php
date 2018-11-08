@@ -55,7 +55,10 @@ class ItemClassificationsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'item_type_id'  =>  'required|integer',
+            'name'          =>  'required|string|max:255',
+            'display_name'  =>  'required|string|max:255',
+            'description'   =>  'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +109,10 @@ class ItemClassificationsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'item_type_id'  =>  'required|integer',
+            'name'          =>  'required|string|max:255',
+            'display_name'  =>  'required|string|max:255',
+            'description'   =>  'required|string|max:255'
         ]);
 
         if ($validator->fails()) {

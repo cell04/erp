@@ -55,9 +55,14 @@ class CorporationsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|min:2|max:255',
-            'description' => 'required|min:2',
-            'country'     => 'required|min:2'
+            'name'          => 'required|string|min:2|max:255',
+            'description'   => 'required|string|min:2|max:255',
+            'country'       => 'required|string|min:2|max:255',
+            'street'        => 'required|string|min:2|max:255',
+            'city'          => 'required|string|min:2|max:255',
+            'state'         => 'required|string|min:2|max:255',
+            'zip_code'      => 'required|integer',
+            'fax'           => 'required|string|min:0|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -113,9 +118,14 @@ class CorporationsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|min:2|max:255',
-            'description' => 'required|min:2',
-            'country'     => 'required|min:2'
+            'name'          => 'required|string|min:2|max:255',
+            'description'   => 'required|string|min:2|max:255',
+            'country'       => 'required|string|min:2|max:255',
+            'street'        => 'required|string|min:2|max:255',
+            'city'          => 'required|string|min:2|max:255',
+            'state'         => 'required|string|min:2|max:255',
+            'zip_code'      => 'required|integer',
+            'fax'           => 'required|string|min:0|max:255'
         ]);
 
         if ($validator->fails()) {

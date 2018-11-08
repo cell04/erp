@@ -55,7 +55,7 @@ class PurchaseOrderItemsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +106,7 @@ class PurchaseOrderItemsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            
         ]);
 
         if ($validator->fails()) {

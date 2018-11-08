@@ -55,7 +55,8 @@ class ItemPricelistsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'item_id'  =>  'required|integer',
+            'price'    =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {

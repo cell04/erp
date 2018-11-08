@@ -117,44 +117,6 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $http = new \GuzzleHttp\Client(['verify' => false ]);
-            $url  = env('ACC_URL') . '/oauth/token';
-
-            $clientSecret = DB::table('oauth_clients')->where('name', 'ERP Password Grant Client')->first()->secret;
-
-            try {
-                $response = $http->post($url, [
-                    'form_params' => [
-                        'grant_type'    => 'password',
-                        'client_id'     => '2',
-                        'client_secret' => $clientSecret,
-                        'username'      => $request->email,
-                        'password'      => $request->password,
-                        'scope'         => '*',
-                    ],
-                ]);
-
-                $auth = json_decode((string) $response->getBody(), true);
-                cache()->put(auth()->user()->id . ' accounting.auth', $auth, 560);
-            } catch (Exception $exception) {
-                if ($exception->getCode() == 400) {
-                    return response()->json(
-                        'Invalid Request. Please enter a username or a password.',
-                        $exception->getCode()
-                    );
-                } elseif ($exception->getCode() == 401) {
-                    return response()->json(
-                        'Your credentials are incorrect Please try again.',
-                        $exception->getCode()
-                    );
-                }
-
-                return response()->json(
-                    'Something went wrong on the server.',
-                    $exception->getCode()
-                );
-            }
-
             return redirect()->intended('/');
         }
     }
