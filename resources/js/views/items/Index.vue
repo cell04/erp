@@ -38,7 +38,7 @@
                             <td>{{ item.description }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'items.view', params: { id: item.id }}">
-                                    <i class="fas fa-envelope-open-text"></i>  View
+                                    <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 |
                                 <router-link class="text-secondary" :to="{ name: 'items.edit', params: { id: item.id }}">

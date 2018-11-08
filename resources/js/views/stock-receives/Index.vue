@@ -36,9 +36,9 @@
                         <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user, created_at } in stockReceive">
 
                             <td>{{ number }}</td>
-                            <td>{{ stock_receivable_from.name }}</td>
-                            <td>{{ stock_receivable_to.name }}</td>
-                            <td>{{ created_at }}</td>
+                            <td>{{ stock_receivable_from.name | Upper }}</td>
+                            <td>{{ stock_receivable_to.name | Upper }}</td>
+                            <td>{{ created_at | DateFormat }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'stock-receives.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                             </td>
@@ -216,6 +216,18 @@
                 showProgress: false,
                 pageNumbers: []
             };
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
         },
 
         beforeRouteEnter (to, from, next) {

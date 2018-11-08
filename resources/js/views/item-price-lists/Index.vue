@@ -37,7 +37,13 @@
                             <td>{{ itemPriceList.item.name }}</td>
                             <td>{{ itemPriceList.price }}</td>
                             <td>
-                                <router-link class="text-secondary" :to="{ name: 'item-pricelists.view', params: { id: itemPriceList.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'item-pricelists.view', params: { id: itemPriceList.id }}">
+                                    <i class="fas fa-envelope-open-text"></i> View
+                                </router-link>
+                                |
+                                <router-link class="text-secondary" :to="{ name: 'item-pricelists.edit', params: { id: itemPriceList.id }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>

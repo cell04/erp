@@ -208,7 +208,7 @@
 
             selectStockTransfers() {
                 this.stock_transfer_id = this.stockTransfersData.id;
-                console.log('SR: ' + this.stock_transfer_id);
+                // console.log('SR: ' + this.stock_transfer_id);
                 this.getStockReceiveData(this.stock_transfer_id);
             },
 
