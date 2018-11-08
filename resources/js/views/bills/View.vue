@@ -76,7 +76,7 @@
                                 <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.price }}</td>
+                                <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ subtotalRow[index] }}</td>
                             </tr>
                             <tr>
@@ -127,12 +127,12 @@
             getItem() {
                 new Promise((resolve, reject) => {
                     axios.get("/api/bills/" + this.$route.params.id).then(res => {
-                        console.log('Bills: ' + JSON.stringify(res.data));
+                        // console.log('Bills: ' + JSON.stringify(res.data));
                         this.ifReady = true;
                         this.bills = res.data.bill;
                         this.contacts = res.data.bill.contact;
                         this.billsItems = res.data.bill.bill_items;
-                        this.roRefNum = res.data.bill.quotation;
+                        this.roRefNum = res.data.bill.receive_order;
                         if (!res.data.response) {
                             return;
                         }
@@ -150,12 +150,12 @@
         computed: {
             subtotalRow() {
                 return this.billsItems.map((item) => {
-                    return Number(item.quantity * item.price)
+                    return Number(item.quantity * item.item_pricelist.price)
                 });
             },
             total() {
                 return this.billsItems.reduce((total, item) => {
-                    return total + item.quantity * item.price;
+                    return total + item.quantity * item.item_pricelist.price;
                 }, 0);
             }
         }

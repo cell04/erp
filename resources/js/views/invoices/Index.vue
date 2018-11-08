@@ -2,9 +2,6 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                <!-- <router-link :to="{ name: 'bills.create'}">
-                    <button class="btn btn-primary float-right">Add New Bill</button>
-                </router-link> -->
                 <div class="float-left">
                     <b>Invoices / View Invoice</b>
                 </div>
@@ -29,6 +26,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Invoice #</th>
+                            <th scope="col">Customer</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date</th>
                             <th scope="col">Action</th>
@@ -37,6 +35,7 @@
                     <tbody v-if="invoices">
                         <tr v-for="invoice in invoices">
                             <td>{{invoice.reference_number}}</td>
+                            <td>{{invoice.contact.person | Upper}}</td>
                             <td>{{ (invoice.status) == 0 ? 'Issued': 'Approved'}}</td>
                             <td>{{invoice.due_date}}</td>
                             <td>
@@ -218,6 +217,12 @@
                 showProgress: false,
                 pageNumbers: []
             };
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            }
         },
 
         beforeRouteEnter (to, from, next) {

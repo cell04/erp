@@ -35,9 +35,9 @@
                     <tbody v-if="quotations">
                         <tr :key="index" v-for="(quotation, index) in quotations">
                             <td>{{ quotation.number }}</td>
-                            <td>{{ quotation.contact.person }}</td>
+                            <td>{{ quotation.contact.person | Upper }}</td>
                             <td>{{ quotation.status }}</td>
-                            <td>{{ quotation.created_at }}</td>
+                            <td>{{ quotation.created_at | DateFormat}}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'quotations.view', params: { id: quotation.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
 
@@ -233,6 +233,18 @@
                 showProgress: false,
                 pageNumbers: []
             };
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
         },
 
         beforeRouteEnter (to, from, next) {

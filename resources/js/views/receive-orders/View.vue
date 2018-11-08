@@ -110,7 +110,7 @@ export default {
     getReceivedOrder() {
       new Promise((resolve, reject) => {
         axios.get("/api/receive-orders/" + this.$route.params.id).then(res => {
-        //   console.log('RO: ' + JSON.stringify(res.data));
+          console.log('RO: ' + JSON.stringify(res.data));
           this.ifReady = true;
           this.order = res.data.receiveOrder;
           this.contacts = res.data.receiveOrder.contact;

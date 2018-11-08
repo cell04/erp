@@ -55,7 +55,7 @@
                             <tr>
                                 <th scope="col">SKU</th>
                                 <th scope="col">Item</th>
-                                <th scope="col">Quantity</th>
+                                <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Sub Total</th>
@@ -77,7 +77,7 @@
                                 <td>
                                     <input class="form-control" @input="calculate(index)" v-model.number="quotation_item.price" required>
                                 </td>
-                                <td>{{ quotation_item.subTotal }}</td>
+                                <td>{{ quotation_item.subTotal | Decimal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                 </td>
@@ -87,7 +87,7 @@
                                 <td>
                                     <b>Total</b>
                                 </td>
-                                <td>{{ amount }}</td>
+                                <td><b>{{ amount | Decimal }}</b></td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -140,9 +140,17 @@
                         subTotal: 0
                     }
                 ],
-                amount: "",
+                amount: 0,
                 isDisabled: true
             };
+        },
+
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
         },
 
         mounted() {

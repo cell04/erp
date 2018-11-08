@@ -47,7 +47,7 @@ class BillItem extends Model
      * @var array
      */
     protected $with = [
-        'item', 'unitOfMeasurement', 'itemPriceList'
+        'item', 'unitOfMeasurement', 'itemPricelist'
     ];
 
     /**
@@ -75,7 +75,7 @@ class BillItem extends Model
      *
      * @return object
      */
-    public function itemPriceList()
+    public function itemPricelist()
     {
         return $this->belongsTo(ItemPricelist::class);
     }

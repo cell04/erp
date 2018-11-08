@@ -8,8 +8,8 @@
                 <form v-on:submit.prevent="createNewBill">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Quotation #</label>
-                            <vue-select v-model="billsId" @input="selectBill()" label="number" :options="bills" required></vue-select>
+                            <label>Receive Order #</label>
+                            <vue-select v-model="receiveOrdersId" @input="selectRO()" label="reference_number" :options="receiveOrders" required></vue-select>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -19,13 +19,13 @@
 
                         <div class="col-md-6 form-group">
                             <label>Supplier</label>
-                            <input type="text" class="form-control" v-model="q_contact_name" readonly>
+                            <input type="text" class="form-control" v-model="ro_contact_name" readonly>
                         </div>
 
-                        <div class="col-md-6 form-group">
+                        <!-- <div class="col-md-6 form-group">
                             <label>Amount</label>
                             <input type="number" class="form-control" v-model="amount" readonly>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-6 form-group">
                             <label>Due Date</label>
@@ -51,13 +51,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr :key="item.id" v-for="(item) in quotation_items">
+                            <tr :key="item.id" v-for="(item) in receive_order_items">
                                 <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
                                 <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.price }}</td>
+                                <td>{{ item.item_pricelist.price }}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -101,7 +101,7 @@
                                     {{ bill_item.unitOfMeasurement }}
                                 </td>
                                 <td>
-                                    <input class="form-control" @input="calculate(index)" v-model.number="bill_item.price" required>
+                                    <input class="form-control" @input="calculate(index)" v-model.number="bill_item.item_pricelist.price" required>
                                 </td>
                                 <td>{{ isNaN(bill_item.subTotal) ? '0.00' : bill_item.subTotal }}</td>
                                 <td>
@@ -143,15 +143,17 @@
         data() {
             return {
                 ifReady: false,
-                quotation_items: [],
+                receive_order_items: [],
+                receiveOrders: [],
+                receiveOrdersId: null,
                 bills: [],
                 billsContact: [],
                 billsId: null,
                 contacts: [],
                 contact: null,
                 contact_id: "",
-                q_contact_id: "",
-                q_contact_name: "",
+                ro_contact_id: "",
+                ro_contact_name: "",
                 due_date: "",
                 amount: "",
                 amount_paid: 0,
@@ -204,9 +206,9 @@
             });
 
             let getAllRo = new Promise((resolve, reject) => {
-                axios.get("/api/quotations/get-all-quotations/").then(res => {
-                    this.bills = res.data.quotations;
-                    this.billsContact = res.data.quotations.contact;
+                axios.get("/api/receive-orders/get-all-receive-orders/").then(res => {
+                    this.receiveOrders = res.data.receive_orders;
+                    this.billsContact = res.data.receive_orders.contact;
                     // console.log('RO: ' + JSON.stringify(res.data));
                     resolve();
                 }).catch(err => {
@@ -235,12 +237,12 @@
 
         computed: {
             // subtotalRow() {
-            //     return this.quotation_items.map((item) => {
+            //     return this.receive_order_items.map((item) => {
             //     return Number(item.quantity * item.item_pricelist.price)
             //     });
             // },
             // total() {
-            //     return this.quotation_items.reduce((total, item) => {
+            //     return this.receive_order_items.reduce((total, item) => {
             //     return total + item.quantity * item.item_pricelist.price;
             //     }, 0);
             // }
@@ -252,14 +254,14 @@
             },
 
             getBillsData(id) {
-                axios.get("/api/quotations/" + id).then(res => {
-                    // console.log('Quote: ' + JSON.stringify(res.data));
-                    this.q_contact_id = res.data.quotation.contact_id;
-                    this.q_contact_name = res.data.quotation.contact.person;
-                    this.amount = res.data.quotation.amount;
-                    this.quotation_items = res.data.quotation.quotation_items;
-                    this.billable_id = res.data.quotation.quotable_id;
-                    this.billable_type = res.data.quotation.quotable_type;
+                axios.get("/api/receive-orders/" + id).then(res => {
+                    console.log('Quote: ' + JSON.stringify(res.data));
+                    this.ro_contact_id = res.data.receiveOrder.contact_id;
+                    this.ro_contact_name = res.data.receiveOrder.contact.person;
+                    this.amount = res.data.receiveOrder.amount;
+                    this.receive_order_items = res.data.receiveOrder.receive_order_items;
+                    this.billable_id = res.data.receiveOrder.quotable_id;
+                    this.billable_type = res.data.receiveOrder.quotable_type;
 
                     resolve();
                 }).catch(err => {
@@ -273,13 +275,13 @@
             //     this.contact_id = this.contact.id;
             // },
 
-            selectBill() {
-                this.receive_order_id = this.billsId.id;
+            selectRO() {
+                this.receive_order_id = this.receiveOrdersId.id;
                 // this.amount = this.billsId.amount;
                 // this.contact = this.billsId.contact;
                 // this.reference_number = this.billsId.number;
                 console.log('Date: ' + this.due_date);
-                this.getBillsData(this.billsId.id);
+                this.getBillsData(this.receiveOrdersId.id);
             },
 
             // selectItem(index) {
@@ -346,24 +348,24 @@
 
                 let quotationItems = [];
 
-                this.$data.quotation_items.forEach(quotation_item => {
+                this.$data.receive_order_items.forEach(quotation_item => {
                     quotationItems.push({
                         item_id: quotation_item.item_id,
                         quantity: quotation_item.quantity,
                         unit_of_measurement_id: quotation_item.unit_of_measurement_id,
-                        price: quotation_item.price
+                        price: quotation_item.item_pricelist.price
                     });
                 });
 
                 let formData = {
-                    bill_items: this.$data.quotation_items,
-                    quotation_id: this.$data.receive_order_id,
-                    contact_id: this.$data.q_contact_id,
+                    bill_items: this.receive_order_items,
+                    receive_order_id: this.$data.receive_order_id,
+                    contact_id: this.$data.ro_contact_id,
                     billable_id: this.billable_id,
                     billable_type: this.billable_type,
                     reference_number: this.$data.reference_number,
                     due_date: this.$data.due_date,
-                    amount: this.$data.amount,
+                    amount: '0',
                     amount_paid: '0'
                 };
 
