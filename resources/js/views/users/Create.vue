@@ -28,8 +28,9 @@
                             <label for="mobile_number">Mobile Number</label>
                             <input type="text" class="form-control" v-model="mobile_number" autocomplete="off" minlength="11" maxlength="11" required>
                         </div>
-
-                        <button type="submit" class="btn btn-success btn-sm">Create New User</button>
+                        
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewUser"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New User</button>
                     </form>
                 </div>
 
@@ -57,6 +58,10 @@
         },
 
         methods: {
+            viewUser() {
+                this.$router.push({ name: 'users.index' });
+            },
+
             createNewUser() {
                 this.ifReady = false;
 

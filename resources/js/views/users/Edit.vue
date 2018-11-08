@@ -22,8 +22,8 @@
                             <input type="text" class="form-control" v-model="mobile_number">
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewUsers">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateAdmin">Update Admin</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUsers"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateAdmin"><i class="fas fa-edit"></i> Update Admin</button>
                     </form>
                 </div>
                 <div v-else>

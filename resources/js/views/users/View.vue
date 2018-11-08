@@ -21,9 +21,9 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewUsers">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUser">Edit User</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUserModal">Delete User</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUsers"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUser"><i class="fas fa-edit"></i> Edit User</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUserModal"><i class="fas fa-trash-alt"></i> Delete User</button>
                 </div>
                 <div v-else>
                     <div class="progress">

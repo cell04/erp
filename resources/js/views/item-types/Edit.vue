@@ -22,8 +22,8 @@
                     </div>
                 </fieldset>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewItemTypes">Back</button>
-                <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType">Update Item Type</button>
+                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes"><i class="fas fa-chevron-left"></i> Back</button>
+                <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType"><i class="fas fa-edit"></i> Update Item Type</button>
             </div>
             <div v-else>
                 <div class="progress">

@@ -64,9 +64,9 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewCorporations">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editCorporation">Edit Corporation</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteCorporationModal">Delete Corporation</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewCorporations"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editCorporation"><i class="fas fa-edit"></i>  Edit Corporation</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteCorporationModal"><i class="fas fa-trash-alt"></i> Delete Corporation</button>
                 </div>
                 <div v-else>
                     <div class="progress">

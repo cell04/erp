@@ -22,9 +22,9 @@
                             <textarea class="form-control" v-model="itemType.description" id="description" readonly></textarea>
                         </div>
                     </fieldset>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewItemTypes">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType">Edit Item Type</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemType">Delete Item Type</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType"><i class="fas fa-edit"></i> Edit Item Type</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemType"><i class="fas fa-trash-alt"></i> Delete Item Type</button>
                 </div>
                 <div v-else>
                     <div class="progress">

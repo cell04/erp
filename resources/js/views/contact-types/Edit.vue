@@ -22,8 +22,8 @@
                             <textarea class="form-control" v-model="description" rows="3" maxlength="500" required></textarea>
                         </div>
 
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewContactType">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContactType">Update Contact Type</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewContactType"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContactType"><i class="fas fa-edit"></i> Update Contact Type</button>
                     </form>
                 </div>
                 <div v-else>

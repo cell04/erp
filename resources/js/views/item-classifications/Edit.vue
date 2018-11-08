@@ -28,8 +28,8 @@
                             <input type="text" class="form-control" v-model="description" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
 
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItemClassification">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItemClassification">Update Item Class</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemClassification"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItemClassification"><i class="fas fa-edit"></i> Update Item Class</button>
                     </form>
                 </div>
                 <div v-else>

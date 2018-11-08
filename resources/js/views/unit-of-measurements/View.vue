@@ -19,9 +19,9 @@
 
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewUnitOfMeasurements">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUnitOfMeasurements">Edit Unit of Measurement</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUnitOfMeasurementModal">Delete Unit of Measurement</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUnitOfMeasurements"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUnitOfMeasurements"><i class="fas fa-edit"></i>  Edit Unit of Measurement</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUnitOfMeasurementModal"><i class="fas fa-trash-alt"></i> Delete Unit of Measurement</button>
                 </div>
                 <div v-else>
                     <div class="progress">

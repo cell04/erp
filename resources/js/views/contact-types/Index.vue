@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Contact Types / View Contact Types
+                    Settings / Contact Types
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'contact-types.create' }">Create New Contact Type</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'contact-types.create' }"><i class="fas fa-plus"></i> Create New Contact Type</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -35,7 +35,13 @@
                             <td>{{ name }}</td>
                             <td>{{ display_name }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'contact-types.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'contact-types.view', params: { id: id }}">
+                                   <i class="fas fa-envelope-open-text"></i> View
+                                </router-link>
+                                |
+                                <router-link class="text-secondary" :to="{ name: 'contact-types.edit', params: { id: id }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>
