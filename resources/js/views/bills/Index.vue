@@ -31,6 +31,7 @@
                         <tr>
                             
                             <th scope="col">Bill #</th>
+                            <th scope="col">Supplier</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date</th>
@@ -40,9 +41,10 @@
                     <tbody v-if="bills">
                         <tr v-for="bill in bills">
                             <td>{{bill.reference_number}}</td>
+                            <td>{{bill.contact.person | Upper}}</td>
                             <td>{{bill.amount}}</td>
                             <td>{{ (bill.amount_paid == 0) ? 'Issued': ((bill.amount_paid) < (bill.amount)) ? 'Partially Paid' : 'Fully Paid'}}</td>
-                            <td>{{bill.due_date}}</td>
+                            <td>{{bill.due_date | DateFormat}}</td>
                             
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'bills.view', params: { id: bill.id }}"><i class="fas fa-envelope-open-text"></i>  View</router-link>
@@ -223,6 +225,27 @@
                 showProgress: false,
                 pageNumbers: []
             };
+        },
+
+        mounted() {
+            let promise = new Promise((resolve, reject) => {
+                axios.get('/api/bills/').then(res => {
+                    console.log('Bills: ' + JSON.stringify(res.data));
+                    resolve();
+                });
+            });
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
         },
 
         beforeRouteEnter (to, from, next) {

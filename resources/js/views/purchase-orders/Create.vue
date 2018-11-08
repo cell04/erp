@@ -61,7 +61,7 @@
                                 <td>
                                     <vue-select v-model="purchase_order_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="purchase_order_item.itemPricelists"></vue-select>
                                 </td>
-                                <td>{{ purchase_order_item.subTotal }}</td>
+                                <td>{{ purchase_order_item.subTotal | Decimal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                 </td>
@@ -71,7 +71,7 @@
                                 <td>
                                     <b>Total</b>
                                 </td>
-                                <td>{{ amount }}</td>
+                                <td>{{ amount | Decimal }}</td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -125,6 +125,14 @@
                 amount: "",
                 isDisabled: true
             };
+        },
+
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
         },
 
         mounted() {

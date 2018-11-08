@@ -77,17 +77,14 @@
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
-                                <td>{{ subtotalRow[index] }}</td>
+                                <td>{{ subtotalRow[index] | Decimal}}</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td colspan="4"></td>
                                 <td>
                                     <b>Total</b>
                                 </td>
-                                <td>{{total}}</td>
+                                <td>{{total | Decimal}}</td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -117,6 +114,14 @@
                 roRefNum: [],
                 billsItems: []
             };
+        },
+
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
         },
 
         mounted() {

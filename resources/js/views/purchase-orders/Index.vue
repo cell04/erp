@@ -26,6 +26,7 @@
                     <thead>
                         <tr>
                             <th scope="col">PO #</th>
+                            <th scope="col">Supplier</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date</th>
@@ -35,12 +36,14 @@
                     <tbody v-if="purchaseOrders">
                         <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
                             <td>{{ purchaseOrder.reference_number }}</td>
+                            <td>{{ purchaseOrder.contact.person | Upper }}</td>
                             <td>{{ purchaseOrder.amount }}</td>
                             <td>{{ purchaseOrder.status }}</td>
-                            <td>{{ purchaseOrder.created_at }}</td>
+                            <td>{{ purchaseOrder.created_at | DateFormat}}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link> |
                                 <router-link class="text-secondary" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}"><i class="fas fa-receipt"></i> Receive PO</router-link>
+                                <router-link class="text-secondary isDisabled" v-if="purchaseOrder.status !== 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}"><i class="fas fa-receipt"></i> Receive PO</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -310,6 +313,27 @@
             }
         },
 
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
+        },
+
+        mounted() {
+            let promise = new Promise((resolve, reject) => {
+                axios.get('/api/purchase-orders/').then(res => {
+                    // console.log('PO: ' + JSON.stringify(res.data));
+                    resolve();
+                });
+            });
+        },
+
         methods: {
             closePO(id, po_number) {
                 const formData = {
@@ -525,3 +549,13 @@
         }
     }
 </script>
+
+<style>
+    .isDisabled {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+    }
+</style>

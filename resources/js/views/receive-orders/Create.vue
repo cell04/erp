@@ -27,60 +27,6 @@
                     </h6>
                     <br>
 
-                    <!-- <table class="table table-hover table-sm">
-                        <caption>
-                            <div class="row">
-                                <div class="col-md-3">
-                                </div>
-                            </div>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Unit of Measurement</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Tracking #</th>
-                                <th scope="col">Sub Total</th>
-                                <th scope="col">Expiration</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(receive_order_item, index) in receive_order_items" :key="index">
-                                <td>{{ receive_order_item.item.stock_keeping_unit }}</td>
-                                <td>
-                                    <vue-select v-model="receive_order_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                                </td>
-                                <td>
-                                    <input class="form-control" v-model.number="receive_order_item.quantity" required>
-                                </td>
-                                <td>
-                                    {{ receive_order_item.unitOfMeasurement }}
-                                </td>
-                                <td>
-                                    <vue-select v-model="receive_order_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="receive_order_item.itemPricelists"></vue-select>
-                                </td>
-                                <td><input type="text" class="form-control" v-model.number="receive_order_item.tracking_number" required></td>
-                                <td>{{ isNaN(receive_order_item.subTotal) ? '0.00' : receive_order_item.subTotal }}</td>
-                                <td><input type="date" class="form-control" v-model="receive_order_item.expiration_date"></td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td>{{ isNaN(amount)  ? '0.00': amount }}</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-
                     <table class="table table-hover table-sm">
                         <thead>
                             <tr>
@@ -102,7 +48,7 @@
                                 <td><input type="text" class="form-control" v-model="item.quantity" required></td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
-                                <td>{{ subtotalRow[index] }}</td>
+                                <td>{{ subtotalRow[index] | Decimal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                 </td>
@@ -116,7 +62,7 @@
                                 <td>
                                     <b>Total</b>
                                 </td>
-                                <td>{{total}}</td>
+                                <td>{{total | Decimal}}</td>
                                 <td></td>
                             </tr>
                             
@@ -227,19 +173,6 @@
             });
         },
 
-        // computed: {
-        //     subTotalRow() {
-        //         return this.receive_order_items.map((receive_order_item) => {
-        //             return (receive_order_item.quantity * receive_order_item.unit_price);
-        //         });
-        //     },
-        //     total() {
-        //         return this.receive_order_items.reduce((total, receive_order_item) => {
-        //             return total + (receive_order_item.quantity * receive_order_item.unit_price);
-        //         }, 0);
-        //     }
-        // },
-
         computed: {
             subtotalRow() {
                 return this.received_items.map((item) => {
@@ -250,6 +183,14 @@
                 return this.received_items.reduce((total, item) => {
                 return total + item.quantity * item.item_pricelist.price;
                 }, 0);
+            }
+        },
+
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
             }
         },
 
@@ -272,72 +213,20 @@
                 });
             },
 
-            // selectContact() {
-            //     this.contact_id = this.contact.id;
-            // },
-            // selectWarehouse() {
-            //     this.warehouse_id = this.warehouse.id;
-            // },
             selectPurchaseOrder() {
                 this.purchase_order_id = this.purchaseOrder.id;
                 this.reference_number = this.purchaseOrder.reference_number;
                 this.getPoDetails(this.purchaseOrder.id)
             },
-            // selectItem(index) {
-            //     if (this.receive_order_items[index].item instanceof Object) {
-            //         this.receive_order_items[index].item_id = this.receive_order_items[index].item.id;
-            //         this.receive_order_items[index].unitOfMeasurement = this.receive_order_items[index].item.default_unit_of_measurement.name;
-            //         this.receive_order_items[index].unit_of_measurement_id = this.receive_order_items[index].item.default_unit_of_measurement.id;
 
-            //         let promise = new Promise((resolve, reject) => {
-            //             axios.get("/api/item-pricelists/get-item-pricelists/" + this.receive_order_items[index].item_id).then(res => {
-            //                 this.receive_order_items[index].itemPricelists = res.data.item_pricelists;
-            //                 resolve();
-            //             }).catch(err => {
-            //                 console.log(err);
-            //                 reject();
-            //             });
-            //         });
-            //     }
-            // },
-            // selectItemPricelist(index) {
-            //     this.receive_order_items[index].item_pricelist_id = this.receive_order_items[index].itemPricelist.id;
-            //     this.receive_order_items[index].subTotal = (parseFloat(this.receive_order_items[index].quantity) * parseFloat(this.receive_order_items[index].itemPricelist.price));
-            //     this.updateTotalAmount();
-            // },
             updateTotalAmount() {
                 let total = 0;
 
                 this.received_items.forEach(receive_order_item => {
                     total += receive_order_item.subTotal;
                 });
-
-                // this.amount = total;
-
-                // if (this.amount > 0) {
-                //     this.isDisabled = false;
-                // } else {
-                //     this.isDisabled = true;
-                // }
             },
-            // addNewItem() {
-            //     this.receive_order_items.push({
-            //         item: '',
-            //         item_id: '',
-            //         quantity: '',
-            //         unitOfMeasurements: [],
-            //         unitOfMeasurement: '',
-            //         unit_of_measurement_id: '',
-            //         itemPricelists: [],
-            //         itemPricelist: '',
-            //         item_pricelist_id: '',
-            //         tracking_number: '',
-            //         expiration_date: '',
-            //         subTotal: 0
-            //     });
-
-            //     this.updateTotalAmount();
-            // },
+            
             deleteRow(index) {
                 this.received_items.splice(index, 1);
                 this.updateTotalAmount();

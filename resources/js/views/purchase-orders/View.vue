@@ -31,12 +31,6 @@
                                 <input type="text" class="form-control" v-model="purchaseOrder.reference_number" readonly>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Date</label>
-                                <input type="text" class="form-control" v-model="purchaseOrder.created_at" readonly>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -60,13 +54,13 @@
                 <table class="table table-hover table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">Skock Keeping Unit</th>
+                            <th scope="col">SKU</th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Quantity</th>
+                            <th scope="col">Qty</th>
                             <th scope="col">UoM</th>
                             <th scope="col">Price</th>
-                            <th scope="col">Sub Total</th>
+                            <th class="text-right">Sub Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,16 +71,12 @@
                             <td>{{ purchase_order_item.quantity }}</td>
                             <td>{{ purchase_order_item.unit_of_measurement.name }}</td>
                             <td>{{ purchase_order_item.item_pricelist.price }}</td>
-                            <td>{{ purchase_order_item.subTotal }}</td>
+                            <td align="right">{{ purchase_order_item.subTotal | Decimal }}</td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td colspan="5"></td>
                             <td><b>Total</b></td>
-                            <td><b>{{ total }}</b></td>
+                            <td align="right"><b>{{ total | Decimal }}</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -94,7 +84,7 @@
                 <br>
                 <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewPurchaseOrders"><i class="fas fa-chevron-left"></i> Back</button>
                 <router-link v-if="purchaseOrder.status == 0" :to="{ name: 'receive-orders.receive', params: { po_id: purchaseOrder.id }}">
-                    <button class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i> Receive PO</button>
+                    <button class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Receive PO</button>
                 </router-link>
                 <!-- <button class="btn btn-danger btn-sm" v-if="purchaseOrder.status == 0" @click="closePurchaseOrder(purchaseOrder.id, purchaseOrder.purchase_order_number)"> <i class="fas fa-times"></i> Close PO</button> -->
             
@@ -118,9 +108,18 @@
             };
         },
 
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
+        },
+
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
+                    // console.log('PO details: ' + JSON.stringify(res.data));
                     this.purchaseOrder = res.data.purchaseOrder;
 
                     this.purchaseOrder.purchase_order_items.map(purchase_order_item => {

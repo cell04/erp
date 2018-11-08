@@ -69,56 +69,7 @@
                             </tr>
                         </tbody>
                     </table>
-
-                    <!-- <table class="table table-hover table-sm">
-                        <caption>
-                            <div class="row">
-                                <div class="col-md-3">
-                                </div>
-                            </div>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Unit of Measurement</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Sub Total</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(bill_item, index) in bill_items" :key="index">
-                                <td>{{ bill_item.item.stock_keeping_unit }}</td>
-                                <td>
-                                    <vue-select v-model="bill_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                                </td>
-                                <td>
-                                    <input class="form-control" v-model.number="bill_item.quantity" required>
-                                </td>
-                                <td>
-                                    {{ bill_item.unitOfMeasurement }}
-                                </td>
-                                <td>
-                                    <input class="form-control" @input="calculate(index)" v-model.number="bill_item.item_pricelist.price" required>
-                                </td>
-                                <td>{{ isNaN(bill_item.subTotal) ? '0.00' : bill_item.subTotal }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td>{{ isNaN(amounts)  ? '0.00': amounts }}</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-
+                    
                     <br>
                     <div class="pt-3">
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBills"><i class="fas fa-chevron-left"></i> Back</button>
@@ -222,19 +173,6 @@
             });
         },
 
-        // computed: {
-        //     subTotalRow() {
-        //         return this.bill_items.map((bill_item) => {
-        //             return (bill_item.quantity * bill_item.unit_price);
-        //         });
-        //     },
-        //     total() {
-        //         return this.bill_items.reduce((total, bill_item) => {
-        //             return total + (bill_item.quantity * bill_item.unit_price);
-        //         }, 0);
-        //     }
-        // },
-
         computed: {
             // subtotalRow() {
             //     return this.receive_order_items.map((item) => {
@@ -284,65 +222,6 @@
                 this.getBillsData(this.receiveOrdersId.id);
             },
 
-            // selectItem(index) {
-            //     this.bill_items[index].item_id = this.bill_items[index].item.id;
-            //     this.bill_items[index].unitOfMeasurement = this.bill_items[index].item.default_unit_of_measurement.name;
-            //     this.bill_items[index].unit_of_measurement_id = this.bill_items[index].item.default_unit_of_measurement.id;
-
-            //     let promise = new Promise((resolve, reject) => {
-            //         axios.get("/api/item-pricelists/get-item-pricelists/" + this.bill_items[index].item_id).then(res => {
-            //             this.bill_items[index].itemPricelists = res.data.item_pricelists;
-            //             resolve();
-            //         }).catch(err => {
-            //             console.log(err);
-            //             reject();
-            //         });
-            //     });
-            // },
-            // calculate(index) {
-            //     this.bill_items[index].subTotal = (parseFloat(this.bill_items[index].quantity) * parseFloat(this.bill_items[index].price));
-            //     this.updateTotalAmount();
-            // },
-            // selectItemPricelist(index) {
-            //     this.bill_items[index].item_pricelist_id = this.bill_items[index].itemPricelist.id;
-            //     this.bill_items[index].subTotal = (parseFloat(this.bill_items[index].quantity) * parseFloat(this.bill_items[index].itemPricelist.price));
-            //     this.updateTotalAmount();
-            // },
-            // updateTotalAmount() {
-            //     let total = 0;
-
-            //     this.bill_items.forEach(bill_item => {
-            //         total += bill_item.subTotal;
-            //     });
-
-            //     this.amounts = total;
-
-            //     if (this.amounts > 0) {
-            //         this.isDisabled = false;
-            //     } else {
-            //         this.isDisabled = true;
-            //     }
-            // },
-            // addNewItem() {
-            //     this.bill_items.push({
-            //         item: '',
-            //         item_id: '',
-            //         quantity: '',
-            //         unitOfMeasurements: [],
-            //         unitOfMeasurement: '',
-            //         unit_of_measurement_id: '',
-            //         itemPricelists: [],
-            //         itemPricelist: '',
-            //         item_pricelist_id: '',
-            //         subTotal: 0
-            //     });
-
-            //     this.updateTotalAmount();
-            // },
-            // deleteRow(index) {
-            //     this.bill_items.splice(index, 1);
-            //     this.updateTotalAmount();
-            // },
             createNewBill() {
                 this.ifReady = false;
 
@@ -368,16 +247,6 @@
                     amount: '0',
                     amount_paid: '0'
                 };
-
-                // let formData = {
-                //     bill_items: [],
-                //     quotation_id: 1,
-                //     contact_id: 1,
-                //     reference_number: 123,
-                //     due_date: this.$data.due_date,
-                //     amount: 0,
-                //     amount_paid: 0
-                // };
 
                 console.log(formData);
 

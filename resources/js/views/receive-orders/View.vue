@@ -41,7 +41,7 @@
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Tracking #</th>
-                                <th scope="col">Amount</th>
+                                <th class="text-right">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,21 +53,16 @@
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ item.tracking_number }}</td>
-                                <td>{{ subtotalRow[index] }}</td>
+                                <td align="right">{{ subtotalRow[index] | Decimal}}</td>
                             </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
+                                <td colspan="6"></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td align="right">{{total | Decimal}}</td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
                     <br>
@@ -101,6 +96,14 @@ export default {
       contacts: []
     };
   },
+
+    filters: {
+        Decimal: function (value) {
+            if (value) {
+                return value.toFixed(2);
+            }
+        }
+    },
 
   mounted() {
     this.getReceivedOrder();
