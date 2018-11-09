@@ -86,6 +86,14 @@
                         <router-link class="nav-link link" :to="{ name: 'item-pricelists.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
+                                Item Price Lists
+                            </span>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link link" :to="{ name: 'purchase-item-pricelists.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
                                 Purchase Item Price Lists
                             </span>
                         </router-link>
@@ -189,7 +197,7 @@
                 // Contains the the routes for the dropdown
                 salesRoute: ['quotations', 'invoices','invoice-payments'],
                 purchasingRoute: ['purchase-orders','receive-orders','bills','bill-payments'],
-                inventoryRoute: ['warehouses','branches','items','item-pricelists','stocks','stock-requests','stock-transfers','stock-receives'],
+                inventoryRoute: ['warehouses','branches','items','item-pricelists', 'purchase-item-pricelists','stocks','stock-requests','stock-transfers','stock-receives'],
                 expand: {
                     sales: true,
                     inventory:false,
