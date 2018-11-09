@@ -36,6 +36,7 @@
                                 <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
+                                <th scope="col">Expiration</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -48,17 +49,14 @@
                                 <td><input type="text" class="form-control" v-model="item.quantity" required></td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
+                                <td><input type="date" class="form-control" v-model="item.expiration_date" required></td>
                                 <td>{{ subtotalRow[index] | Decimal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                 </td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td colspan="6"></td>
                                 <td>
                                     <b>Total</b>
                                 </td>
@@ -123,7 +121,8 @@
                 }
                 ],
                 amount: "",
-                isDisabled: false
+                isDisabled: false,
+                poQuantity: []
             };
         },
 
@@ -201,11 +200,22 @@
 
             getPoDetails(id) {
                 axios.get("/api/purchase-orders/" + id).then(res => {
-                    this.purchaseOrderData = res.data;
+                    this.purchaseOrderData = res.data.purchaseOrder;
                     // console.log('RO: ' + JSON.stringify(res.data.purchaseOrder));
                     this.contact = res.data.purchaseOrder.contact.person;
                     this.contact_id = res.data.purchaseOrder.contact_id;
                     this.received_items = res.data.purchaseOrder.purchase_order_items;
+                    this.warehouse_id = res.data.purchaseOrder.warehouse.id;
+                    // console.log('RO: ' + JSON.stringify(res.data.purchaseOrder.purchase_order_items));
+                    
+                    // Original data of Purchase Order Items
+                    this.received_items.forEach(purchase_order_item => {
+                        this.poQuantity.push({
+                            quantity: purchase_order_item.quantity,
+                        });
+                    });
+                    // console.log('QTY: ' + JSON.stringify(this.poQuantity));
+
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -230,6 +240,7 @@
             deleteRow(index) {
                 this.received_items.splice(index, 1);
                 this.updateTotalAmount();
+                this.poQuantity.splice(index, 1);
             },
             createNewReceiveOrder() {
                 this.ifReady = false;
@@ -247,6 +258,18 @@
                     });
                 });
 
+                // Purchase Order Items
+                let purchaseOrderItems = [];
+                let allQty = this.poQuantity[0];
+                this.$data.received_items.forEach(purchase_order_item => {
+                        purchaseOrderItems.push({
+                        item_id: purchase_order_item.item_id,
+                        quantity: allQty.quantity - purchase_order_item.quantity,
+                        unit_of_measurement_id: purchase_order_item.unit_of_measurement_id,
+                        item_pricelist_id: purchase_order_item.item_pricelist_id
+                    });
+                });
+
                 let formData = {
                     reference_number: this.$data.ro_number,
                     contact_id: this.$data.contact_id,
@@ -254,9 +277,27 @@
                     purchase_order_id: this.purchase_order_id
                 };
 
+                let formDataPO = {
+                    warehouse_id: this.warehouse_id,
+                    contact_id: this.purchaseOrderData.contact_id,
+                    reference_number: this.purchaseOrderData.reference_number,
+                    amount: this.purchaseOrderData.amount,
+                    purchase_order_items: purchaseOrderItems
+                };
+
                 axios.post("/api/receive-orders", formData).then(res => {
                     console.log(res.data);
-                    this.$router.push({ name: "receive-orders.index" });
+
+                    axios.patch("/api/purchase-orders/" + this.purchase_order_id, formDataPO).then(res => {
+                        console.log(res.data);
+                        this.$router.push({ name: "receive-orders.index" });
+                    }).catch(err => {
+                        console.log(err);
+                        alert(`Error! Can't Update purchase order`);
+                        this.ifReady = true;
+                    });
+
+                    // this.$router.push({ name: "receive-orders.index" });
                 }).catch(err => {
                     console.log(err);
                     alert(`Error! Can't create receive order`);

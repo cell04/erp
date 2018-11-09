@@ -41,6 +41,7 @@
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Tracking #</th>
+                                <th scope="col">Expiration</th>
                                 <th class="text-right">Amount</th>
                             </tr>
                         </thead>
@@ -53,10 +54,11 @@
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ item.tracking_number }}</td>
+                                <td>{{ item.expiration_date | DateFormat}}</td>
                                 <td align="right">{{ subtotalRow[index] | Decimal}}</td>
                             </tr>
                             <tr>
-                                <td colspan="6"></td>
+                                <td colspan="7"></td>
                                 <td>
                                     <b>Total</b>
                                 </td>
@@ -101,6 +103,11 @@ export default {
         Decimal: function (value) {
             if (value) {
                 return value.toFixed(2);
+            }
+        },
+        DateFormat: function (value) {
+            if (value) {
+                return moment(value).format('M/DD/YYYY');
             }
         }
     },
