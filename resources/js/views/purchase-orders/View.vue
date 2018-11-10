@@ -58,6 +58,8 @@
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Qty</th>
+                            <th scope="col">Received Qty</th>
+                            <th scope="col">Remaining Qty</th>
                             <th scope="col">UoM</th>
                             <th scope="col">Price</th>
                             <th class="text-right">Sub Total</th>
@@ -68,13 +70,15 @@
                             <td>{{ purchase_order_item.item.stock_keeping_unit }}</td>
                             <td>{{ purchase_order_item.item.name }}</td>
                             <td>{{ purchase_order_item.item.description }}</td>
-                            <td>{{ purchase_order_item.quantity }}</td>
+                            <td>{{ purchase_order_item.quantity}}</td>
+                            <td>{{ purchase_order_item.receive_quantity }}</td>
+                            <td>{{ (purchase_order_item.quantity - purchase_order_item.receive_quantity) }}</td>
                             <td>{{ purchase_order_item.unit_of_measurement.name }}</td>
                             <td>{{ purchase_order_item.item_pricelist.price }}</td>
                             <td align="right">{{ purchase_order_item.subTotal | Decimal }}</td>
                         </tr>
                         <tr>
-                            <td colspan="5"></td>
+                            <td colspan="7"></td>
                             <td><b>Total</b></td>
                             <td align="right"><b>{{ total | Decimal }}</b></td>
                         </tr>
@@ -119,7 +123,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
-                    // console.log('PO details: ' + JSON.stringify(res.data));
+                    console.log('PO details: ' + JSON.stringify(res.data.purchaseOrder.purchase_order_items));
                     this.purchaseOrder = res.data.purchaseOrder;
 
                     this.purchaseOrder.purchase_order_items.map(purchase_order_item => {

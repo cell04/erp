@@ -49,7 +49,7 @@
                                 <td><input type="text" class="form-control" v-model="item.quantity" required></td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
-                                <td><input type="date" class="form-control" v-model="item.expiration_date" required></td>
+                                <td><div class="dateStyle"><datepicker v-model="item.expiration_date" :bootstrap-styling="true" placeholder="Expiration Date" required></datepicker></div></td>
                                 <td>{{ subtotalRow[index] | Decimal }}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
@@ -121,8 +121,7 @@
                 }
                 ],
                 amount: "",
-                isDisabled: false,
-                poQuantity: []
+                isDisabled: false
             };
         },
 
@@ -207,14 +206,6 @@
                     this.received_items = res.data.purchaseOrder.purchase_order_items;
                     this.warehouse_id = res.data.purchaseOrder.warehouse.id;
                     // console.log('RO: ' + JSON.stringify(res.data.purchaseOrder.purchase_order_items));
-                    
-                    // Original data of Purchase Order Items
-                    this.received_items.forEach(purchase_order_item => {
-                        this.poQuantity.push({
-                            quantity: purchase_order_item.quantity,
-                        });
-                    });
-                    // console.log('QTY: ' + JSON.stringify(this.poQuantity));
 
                     resolve();
                 }).catch(err => {
@@ -254,19 +245,7 @@
                         unit_of_measurement_id: receive_order_item.unit_of_measurement_id,
                         item_pricelist_id: receive_order_item.item_pricelist_id,
                         tracking_number: this.$data.ro_number,
-                        expiration_date: receive_order_item.expiration_date
-                    });
-                });
-
-                // Purchase Order Items
-                let purchaseOrderItems = [];
-                let allQty = this.poQuantity[0];
-                this.$data.received_items.forEach(purchase_order_item => {
-                        purchaseOrderItems.push({
-                        item_id: purchase_order_item.item_id,
-                        quantity: allQty.quantity - purchase_order_item.quantity,
-                        unit_of_measurement_id: purchase_order_item.unit_of_measurement_id,
-                        item_pricelist_id: purchase_order_item.item_pricelist_id
+                        expiration_date: moment(receive_order_item.expiration_date).format('YYYY-MM-DD')
                     });
                 });
 
@@ -277,27 +256,10 @@
                     purchase_order_id: this.purchase_order_id
                 };
 
-                let formDataPO = {
-                    warehouse_id: this.warehouse_id,
-                    contact_id: this.purchaseOrderData.contact_id,
-                    reference_number: this.purchaseOrderData.reference_number,
-                    amount: this.purchaseOrderData.amount,
-                    purchase_order_items: purchaseOrderItems
-                };
-
                 axios.post("/api/receive-orders", formData).then(res => {
                     console.log(res.data);
 
-                    axios.patch("/api/purchase-orders/" + this.purchase_order_id, formDataPO).then(res => {
-                        console.log(res.data);
-                        this.$router.push({ name: "receive-orders.index" });
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! Can't Update purchase order`);
-                        this.ifReady = true;
-                    });
-
-                    // this.$router.push({ name: "receive-orders.index" });
+                    this.$router.push({ name: "receive-orders.index" });
                 }).catch(err => {
                     console.log(err);
                     alert(`Error! Can't create receive order`);
@@ -307,3 +269,9 @@
         }
     };
 </script>
+
+<style>
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
+    }
+</style>
