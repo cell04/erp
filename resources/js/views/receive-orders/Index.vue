@@ -26,6 +26,7 @@
                     <thead>
                         <tr>
                             <th scope="col">RO #</th>
+                            <th scope="col">Supplier</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date Created</th>
                             <th scope="col">Action</th>
@@ -34,14 +35,15 @@
                     <tbody v-if="items">
                         <tr :key="item.id" v-for="item in items">
                             <td>{{ item.reference_number }}</td>
+                            <td>{{ item.contact.person | Upper}}</td>
                             <td>{{ item.status }}</td>
-                            <td>{{ item.created_at }}</td>
+                            <td>{{ item.created_at | DateFormat}}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'receive-orders.view', params: { id: item.id }}">
                                     <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 |
-                                <router-link class="text-secondary" :to="{ name: 'invoices.receive', params: { id: item.id }}">
+                                <router-link class="text-secondary" :to="{ name: 'receive-orders.receive', params: { id: item.id }}">
                                     <i class="fas fa-receipt"></i> Receive Invoice
                                 </router-link>
                             </td>
@@ -316,6 +318,27 @@
                 if (this.links.next == null) { return 'disabled'; }
                 return;
             }
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
+        },
+
+        mounted() {
+            let promise = new Promise((resolve, reject) => {
+                axios.get('/api/receive-orders/').then(res => {
+                    // console.log('RO: ' + JSON.stringify(res.data));
+                    resolve();
+                });
+            });
         },
 
         methods: {

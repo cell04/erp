@@ -140,7 +140,7 @@
                 $('#approveStockTransferModal').modal('hide');
 
                 axios.post("/api/stock-transfers/" + this.stockTransfer.id + "/transferred").then(res => {
-                    console.log(res.data);
+                    // console.log(res.data);
                     this.stockTransfer.status = 1;
                     this.ifReady = true;
                 }).catch(err => {

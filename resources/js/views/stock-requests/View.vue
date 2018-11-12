@@ -181,7 +181,7 @@
         },
 
         mounted() {
-            console.log(JSON.parse(localStorage.getItem('user')));
+            // console.log(JSON.parse(localStorage.getItem('user')));
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/stock-requests/" + this.$route.params.id).then(res => {
                     this.stockRequest = res.data.stockRequest;

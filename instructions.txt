@@ -5,3 +5,14 @@
 5. Run php artisan migrate on both systems (start migrate on inven or vice versa will work)
 6. Run php artisan passport:install --force (Take note on where system did you run this)
 7. Copy both storage/oauth-private.key and storage/oauth-public.key to the system. so if you command #6 in accounting copy it to inventory and vice versa)
+
+
+We're using Node v10.* LTS
+
+1. clone accounting and inventory
+2. composer install and npm install on both
+3. create single database and assign on both .env
+4. command php artisan migrate first on inventory then accounting
+5. command php artisan db:seed first on inventory then accounting
+6. npm run watch on both
+7. **(Optional) command php artisan passport:install if you want to test the API using Postman

@@ -41,7 +41,8 @@
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Tracking #</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Expiration</th>
+                                <th class="text-right">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,21 +54,17 @@
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ item.tracking_number }}</td>
-                                <td>{{ subtotalRow[index] }}</td>
+                                <td>{{ item.expiration_date | DateFormat}}</td>
+                                <td align="right">{{ subtotalRow[index] | Decimal}}</td>
                             </tr>
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
+                                <td colspan="7"></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td align="right">{{total | Decimal}}</td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
                     <br>
@@ -102,6 +99,19 @@ export default {
     };
   },
 
+    filters: {
+        Decimal: function (value) {
+            if (value) {
+                return value.toFixed(2);
+            }
+        },
+        DateFormat: function (value) {
+            if (value) {
+                return moment(value).format('M/DD/YYYY');
+            }
+        }
+    },
+
   mounted() {
     this.getReceivedOrder();
   },
@@ -110,7 +120,7 @@ export default {
     getReceivedOrder() {
       new Promise((resolve, reject) => {
         axios.get("/api/receive-orders/" + this.$route.params.id).then(res => {
-        //   console.log('RO: ' + JSON.stringify(res.data));
+          console.log('RO: ' + JSON.stringify(res.data));
           this.ifReady = true;
           this.order = res.data.receiveOrder;
           this.contacts = res.data.receiveOrder.contact;

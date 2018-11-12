@@ -27,9 +27,9 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent.default="viewItemClassification">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification">Edit Item Class</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal">Delete Item Class</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemClassification"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification"><i class="fas fa-edit"></i> Edit Item Class</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal"><i class="fas fa-trash-alt"></i> Delete Item Class</button>
                 </div>
                 <div v-else>
                     <div class="progress">

@@ -27,7 +27,7 @@ class InvoicePaymentRepository extends Repository
             $invoicePayment = $this->invoicePayment->create($request->all());
             $invoicePayment->invoice()->increment('amount_paid', $invoicePayment->amount);
             //update invoice status
-            $this->updateInvoiceStatus($invoicePayment);
+            // $this->updateInvoiceStatus($invoicePayment);
             //Store Entries
             $this->generateInvoicePaymentEntries($invoicePayment);
 

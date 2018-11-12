@@ -16,8 +16,9 @@
                             <label>Abbreviation</label>
                             <input type="text" class="form-control" v-model="abbreviation" autocomplete="off" minlength="1" maxlength="255" required>
                         </div>
-
-                        <button type="submit" class="btn btn-success btn-sm">Create New Unit of Measurement</button>
+                        
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewUOM"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Unit of Measurement</button>
                     </form>
                 </div>
 
@@ -43,6 +44,10 @@
         },
 
         methods: {
+            viewUOM() {
+                this.$router.push({ name: 'unit-of-measurements.index' });
+            },
+
             createNewUnitOfMeasurement() {
                 this.ifReady = false;
                 axios.post('/api/unit-of-measurements', this.$data).then(res => {

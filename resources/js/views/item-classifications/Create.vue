@@ -26,7 +26,8 @@
                             <textarea class="form-control" v-model="description" required></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-success btn-sm">Create New Item Class</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemClass"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Item Class</button>
                     </form>
                 </div>
 
@@ -71,6 +72,10 @@
         },
 
         methods: {
+            viewItemClass() {
+                this.$router.push({ name: 'item-classifications.index' });
+            },
+
             selectItemType() {
                 this.item_type_id = this.itemType.id;
             },

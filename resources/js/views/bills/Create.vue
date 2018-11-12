@@ -8,8 +8,8 @@
                 <form v-on:submit.prevent="createNewBill">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Quotation #</label>
-                            <vue-select v-model="billsId" @input="selectBill()" label="number" :options="bills" required></vue-select>
+                            <label>Receive Order #</label>
+                            <vue-select v-model="receiveOrdersId" @input="selectRO()" label="reference_number" :options="receiveOrders" required></vue-select>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -19,17 +19,19 @@
 
                         <div class="col-md-6 form-group">
                             <label>Supplier</label>
-                            <input type="text" class="form-control" v-model="q_contact_name" readonly>
+                            <input type="text" class="form-control" v-model="ro_contact_name" readonly>
                         </div>
 
-                        <div class="col-md-6 form-group">
+                        <!-- <div class="col-md-6 form-group">
                             <label>Amount</label>
                             <input type="number" class="form-control" v-model="amount" readonly>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-6 form-group">
-                            <label>Due Date</label>
-                            <input type="date" class="form-control" v-model="due_date" required>
+                            <div class="dateStyle">
+                                <label>Due Date</label>
+                                <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                            </div>
                         </div>
                     </div>
 
@@ -51,13 +53,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr :key="item.id" v-for="(item) in quotation_items">
+                            <tr :key="item.id" v-for="(item) in receive_order_items">
                                 <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
                                 <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.price }}</td>
+                                <td>{{ item.item_pricelist.price }}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -69,56 +71,7 @@
                             </tr>
                         </tbody>
                     </table>
-
-                    <!-- <table class="table table-hover table-sm">
-                        <caption>
-                            <div class="row">
-                                <div class="col-md-3">
-                                </div>
-                            </div>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Unit of Measurement</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Sub Total</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(bill_item, index) in bill_items" :key="index">
-                                <td>{{ bill_item.item.stock_keeping_unit }}</td>
-                                <td>
-                                    <vue-select v-model="bill_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                                </td>
-                                <td>
-                                    <input class="form-control" v-model.number="bill_item.quantity" required>
-                                </td>
-                                <td>
-                                    {{ bill_item.unitOfMeasurement }}
-                                </td>
-                                <td>
-                                    <input class="form-control" @input="calculate(index)" v-model.number="bill_item.price" required>
-                                </td>
-                                <td>{{ isNaN(bill_item.subTotal) ? '0.00' : bill_item.subTotal }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td>{{ isNaN(amounts)  ? '0.00': amounts }}</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-
+                    
                     <br>
                     <div class="pt-3">
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBills"><i class="fas fa-chevron-left"></i> Back</button>
@@ -143,15 +96,17 @@
         data() {
             return {
                 ifReady: false,
-                quotation_items: [],
+                receive_order_items: [],
+                receiveOrders: [],
+                receiveOrdersId: null,
                 bills: [],
                 billsContact: [],
                 billsId: null,
                 contacts: [],
                 contact: null,
                 contact_id: "",
-                q_contact_id: "",
-                q_contact_name: "",
+                ro_contact_id: "",
+                ro_contact_name: "",
                 due_date: "",
                 amount: "",
                 amount_paid: 0,
@@ -182,6 +137,7 @@
         mounted() {
             // this.bill_items.expiration_date = moment(new Date(), 'DDMMMYYYY').endOf('month').format('YYYY-MM-DD');
             // console.log('EXP Date: ' + this.this.date);
+            this.due_date = new Date();
 
             let getAllContacts = new Promise((resolve, reject) => {
                 axios.get("/api/contacts/get-all-contacts/").then(res => {
@@ -204,9 +160,9 @@
             });
 
             let getAllRo = new Promise((resolve, reject) => {
-                axios.get("/api/quotations/get-all-quotations/").then(res => {
-                    this.bills = res.data.quotations;
-                    this.billsContact = res.data.quotations.contact;
+                axios.get("/api/receive-orders/get-all-receive-orders/").then(res => {
+                    this.receiveOrders = res.data.receive_orders;
+                    this.billsContact = res.data.receive_orders.contact;
                     // console.log('RO: ' + JSON.stringify(res.data));
                     resolve();
                 }).catch(err => {
@@ -220,27 +176,14 @@
             });
         },
 
-        // computed: {
-        //     subTotalRow() {
-        //         return this.bill_items.map((bill_item) => {
-        //             return (bill_item.quantity * bill_item.unit_price);
-        //         });
-        //     },
-        //     total() {
-        //         return this.bill_items.reduce((total, bill_item) => {
-        //             return total + (bill_item.quantity * bill_item.unit_price);
-        //         }, 0);
-        //     }
-        // },
-
         computed: {
             // subtotalRow() {
-            //     return this.quotation_items.map((item) => {
+            //     return this.receive_order_items.map((item) => {
             //     return Number(item.quantity * item.item_pricelist.price)
             //     });
             // },
             // total() {
-            //     return this.quotation_items.reduce((total, item) => {
+            //     return this.receive_order_items.reduce((total, item) => {
             //     return total + item.quantity * item.item_pricelist.price;
             //     }, 0);
             // }
@@ -252,14 +195,14 @@
             },
 
             getBillsData(id) {
-                axios.get("/api/quotations/" + id).then(res => {
+                axios.get("/api/receive-orders/" + id).then(res => {
                     // console.log('Quote: ' + JSON.stringify(res.data));
-                    this.q_contact_id = res.data.quotation.contact_id;
-                    this.q_contact_name = res.data.quotation.contact.person;
-                    this.amount = res.data.quotation.amount;
-                    this.quotation_items = res.data.quotation.quotation_items;
-                    this.billable_id = res.data.quotation.quotable_id;
-                    this.billable_type = res.data.quotation.quotable_type;
+                    this.ro_contact_id = res.data.receiveOrder.contact_id;
+                    this.ro_contact_name = res.data.receiveOrder.contact.person;
+                    this.amount = res.data.receiveOrder.amount;
+                    this.receive_order_items = res.data.receiveOrder.receive_order_items;
+                    this.billable_id = res.data.receiveOrder.quotable_id;
+                    this.billable_type = res.data.receiveOrder.quotable_type;
 
                     resolve();
                 }).catch(err => {
@@ -273,109 +216,40 @@
             //     this.contact_id = this.contact.id;
             // },
 
-            selectBill() {
-                this.receive_order_id = this.billsId.id;
+            selectRO() {
+                this.receive_order_id = this.receiveOrdersId.id;
                 // this.amount = this.billsId.amount;
                 // this.contact = this.billsId.contact;
                 // this.reference_number = this.billsId.number;
                 console.log('Date: ' + this.due_date);
-                this.getBillsData(this.billsId.id);
+                this.getBillsData(this.receiveOrdersId.id);
             },
 
-            // selectItem(index) {
-            //     this.bill_items[index].item_id = this.bill_items[index].item.id;
-            //     this.bill_items[index].unitOfMeasurement = this.bill_items[index].item.default_unit_of_measurement.name;
-            //     this.bill_items[index].unit_of_measurement_id = this.bill_items[index].item.default_unit_of_measurement.id;
-
-            //     let promise = new Promise((resolve, reject) => {
-            //         axios.get("/api/item-pricelists/get-item-pricelists/" + this.bill_items[index].item_id).then(res => {
-            //             this.bill_items[index].itemPricelists = res.data.item_pricelists;
-            //             resolve();
-            //         }).catch(err => {
-            //             console.log(err);
-            //             reject();
-            //         });
-            //     });
-            // },
-            // calculate(index) {
-            //     this.bill_items[index].subTotal = (parseFloat(this.bill_items[index].quantity) * parseFloat(this.bill_items[index].price));
-            //     this.updateTotalAmount();
-            // },
-            // selectItemPricelist(index) {
-            //     this.bill_items[index].item_pricelist_id = this.bill_items[index].itemPricelist.id;
-            //     this.bill_items[index].subTotal = (parseFloat(this.bill_items[index].quantity) * parseFloat(this.bill_items[index].itemPricelist.price));
-            //     this.updateTotalAmount();
-            // },
-            // updateTotalAmount() {
-            //     let total = 0;
-
-            //     this.bill_items.forEach(bill_item => {
-            //         total += bill_item.subTotal;
-            //     });
-
-            //     this.amounts = total;
-
-            //     if (this.amounts > 0) {
-            //         this.isDisabled = false;
-            //     } else {
-            //         this.isDisabled = true;
-            //     }
-            // },
-            // addNewItem() {
-            //     this.bill_items.push({
-            //         item: '',
-            //         item_id: '',
-            //         quantity: '',
-            //         unitOfMeasurements: [],
-            //         unitOfMeasurement: '',
-            //         unit_of_measurement_id: '',
-            //         itemPricelists: [],
-            //         itemPricelist: '',
-            //         item_pricelist_id: '',
-            //         subTotal: 0
-            //     });
-
-            //     this.updateTotalAmount();
-            // },
-            // deleteRow(index) {
-            //     this.bill_items.splice(index, 1);
-            //     this.updateTotalAmount();
-            // },
             createNewBill() {
                 this.ifReady = false;
 
                 let quotationItems = [];
 
-                this.$data.quotation_items.forEach(quotation_item => {
+                this.$data.receive_order_items.forEach(quotation_item => {
                     quotationItems.push({
                         item_id: quotation_item.item_id,
                         quantity: quotation_item.quantity,
                         unit_of_measurement_id: quotation_item.unit_of_measurement_id,
-                        price: quotation_item.price
+                        price: quotation_item.item_pricelist.price
                     });
                 });
 
                 let formData = {
-                    bill_items: this.$data.quotation_items,
-                    quotation_id: this.$data.receive_order_id,
-                    contact_id: this.$data.q_contact_id,
+                    bill_items: this.receive_order_items,
+                    receive_order_id: this.$data.receive_order_id,
+                    contact_id: this.$data.ro_contact_id,
                     billable_id: this.billable_id,
                     billable_type: this.billable_type,
                     reference_number: this.$data.reference_number,
-                    due_date: this.$data.due_date,
-                    amount: this.$data.amount,
+                    due_date: moment(this.$data.due_date).format('YYYY-MM-DD'),
+                    amount: '0',
                     amount_paid: '0'
                 };
-
-                // let formData = {
-                //     bill_items: [],
-                //     quotation_id: 1,
-                //     contact_id: 1,
-                //     reference_number: 123,
-                //     due_date: this.$data.due_date,
-                //     amount: 0,
-                //     amount_paid: 0
-                // };
 
                 console.log(formData);
 
@@ -389,3 +263,9 @@
         }
     };
 </script>
+
+<style>
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
+    }
+</style>

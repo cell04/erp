@@ -111,6 +111,24 @@ const Overview = () => import('./views/Overview');
  const ItemPricelistsView = () => import('./views/item-price-lists/View');
  const ItemPricelistsEdit = () => import('./views/item-price-lists/Edit');
 
+ /**
+ * Default Account
+ *
+ */
+const DefaultAccountsIndex = () => import('./views/default-accounts/Index');
+const DefaultAccountsCreate = () => import('./views/default-accounts/Create');
+const DefaultAccountsView = () => import('./views/default-accounts/View');
+const DefaultAccountsEdit = () => import('./views/default-accounts/Edit');
+
+ /**
+ * Purchase Item Pricelist
+ *
+ */
+const PurchaseItemPricelistsIndex = () => import('./views/purchase-item-pricelists/Index');
+const PurchaseItemPricelistsCreate = () => import('./views/purchase-item-pricelists/Create');
+const PurchaseItemPricelistsView = () => import('./views/purchase-item-pricelists/View');
+const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelists/Edit');
+
 /**
  * Item Types
  *
@@ -264,6 +282,18 @@ const Overview = () => import('./views/Overview');
         { path: '/item-pricelists/create', name: 'item-pricelists.create', component: ItemPricelistsCreate },
         { path: '/item-pricelists/:id', name: 'item-pricelists.view', component: ItemPricelistsView },
         { path: '/item-pricelists/:id/edit', name: 'item-pricelists.edit', component: ItemPricelistsEdit },
+
+        // Default Accounts
+        { path: '/default-accounts', name: 'default-accounts.index', component: DefaultAccountsIndex },
+        { path: '/default-accounts/create', name: 'default-accounts.create', component: DefaultAccountsCreate },
+        { path: '/default-accounts/:id', name: 'default-accounts.view', component: DefaultAccountsView },
+        { path: '/default-accounts/:id/edit', name: 'default-accounts.edit', component: DefaultAccountsEdit },
+
+        // Purchase Item Pricelists
+        { path: '/purchase-item-pricelists', name: 'purchase-item-pricelists.index', component: PurchaseItemPricelistsIndex },
+        { path: '/purchase-item-pricelists/create', name: 'purchase-item-pricelists.create', component: PurchaseItemPricelistsCreate },
+        { path: '/purchase-item-pricelists/:id', name: 'purchase-item-pricelists.view', component: PurchaseItemPricelistsView },
+        { path: '/purchase-item-pricelists/:id/edit', name: 'purchase-item-pricelists.edit', component: PurchaseItemPricelistsEdit },
 
         // Purchase Orders
         { path: '/purchase-orders', name: 'purchase-orders.index', component: PurchaseOrdersIndex },

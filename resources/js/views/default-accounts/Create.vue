@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Item Types / Create New Item Type
+            Default Accounts / Create New Default Account
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -15,10 +15,6 @@
                             <label>Display Name</label>
                             <input type="text" class="form-control" v-model="display_name" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
                     </div>
 
                     <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemType"><i class="fas fa-chevron-left"></i> Back</button>
@@ -41,23 +37,22 @@
                 ifReady: true,
                 name:'',
                 display_name:'',
-                description: ''
             };
         },
 
         methods: {
             viewItemType() {
-                this.$router.push({ name: 'item-types.index' });
+                this.$router.push({ name: 'default-accounts.index' });
             },
 
             createNewItemType () {
-                axios.post('/api/item-types', this.$data).then(res => {
-                    console.log(res.data);
-                    this.$router.push({ name: 'item-types.index' });
-                }).catch(err => {
-                    console.log(err);
-                    alert(`Error! Can't create item type`);
-                });
+                // axios.post('/api/item-types', this.$data).then(res => {
+                //     console.log(res.data);
+                //     this.$router.push({ name: 'item-types.index' });
+                // }).catch(err => {
+                //     console.log(err);
+                //     alert(`Error! Can't create item type`);
+                // });
             }
         }
     }

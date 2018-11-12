@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Types / View Item Type
+                Default Accounts / View Default Account
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -23,8 +23,8 @@
                         </div>
                     </fieldset>
                     <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes"><i class="fas fa-chevron-left"></i> Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType"><i class="fas fa-edit"></i> Edit Item Type</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemType"><i class="fas fa-trash-alt"></i> Delete Item Type</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent="editItemType"><i class="fas fa-edit"></i> Edit Default Account</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemType"><i class="fas fa-trash-alt"></i> Delete Default Account</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -39,7 +39,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Item Type?</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Default Account?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -85,12 +85,12 @@
         methods: {
             viewItemTypes() {
                 this.$router.push({
-                    name: 'item-types.index'
+                    name: 'default-accounts.index'
                 });
             },
             editItemType() {
                 this.$router.push({
-                    name: 'item-types.edit',
+                    name: 'default-accounts.edit',
                     params: { id: this.itemType.id }
                 });
             },
@@ -99,7 +99,7 @@
             },
             deleteItemType() {
                 axios.delete('/api/item-types/' + this.$route.params.id).then(res => {
-                    this.$router.push({ name: 'item-types.index' });
+                    this.$router.push({ name: 'default-accounts.index' });
                     $('#deleteItemTypeModal').modal('hide');
                 }).catch(err => {
                     console.log(err);

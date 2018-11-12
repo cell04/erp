@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Settings / {{ componentVal }}
+                    <b>Purchase Item Price Lists / View Purchase Item Price List</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'item-classifications.create' }"><i class="fas fa-plus"></i> Create New Item Classification</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'purchase-item-pricelists.create' }">Create New Item Price List</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -14,7 +14,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Item Types - Total Items {{ this.meta.total }}
+                                List of Purchase Item Prices - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -25,23 +25,23 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Display Name</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Item Name</th>
+                            <th scope="col">Price</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="itemClassification">
-                        <tr :key="id" v-for="{ id, name, display_name, description } in itemClassification">
-                            <td>{{ name }}</td>
-                            <td>{{ display_name }}</td>
-                            <td>{{ description }}</td>
+                    <tbody v-if="itemPriceLists">
+                        <tr v-for="itemPriceList in itemPriceLists">
+                            <td>{{ itemPriceList.id }}</td>
+                            <td>{{ itemPriceList.item.name }}</td>
+                            <td>{{ itemPriceList.price }}</td>
                             <td>
-                                <router-link class="text-secondary" :to="{ name: 'item-classifications.view', params: { id: id }}">
-                                   <i class="fas fa-envelope-open-text"></i> View
+                                <router-link class="text-secondary" :to="{ name: 'purchase-item-pricelists.view', params: { id: itemPriceList.id }}">
+                                    <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 |
-                                <router-link class="text-secondary" :to="{ name: 'item-classifications.edit', params: { id: id }}">
+                                <router-link class="text-secondary" :to="{ name: 'purchase-item-pricelists.edit', params: { id: itemPriceList.id }}">
                                     <i class="fas fa-edit"></i> Edit
                                 </router-link>
                             </td>
@@ -63,7 +63,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -84,7 +84,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -99,8 +99,8 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
-                    <div class="input-group">
+                    <label class="sr-only" for="Number of Items">Number of Items</label>
+                    <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
                         </div>
@@ -113,69 +113,34 @@
                     </div>
                 </form>
             </div>
-
-
-
-        </div>
-        <div  class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Search Item Types</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control" v-model="searchColumnDescription" maxlength="1000" required></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Order By</label>
-                            <select class="form-control" v-model="order_by">
-                                <option value="desc">Newest</option>
-                                <option value="asc">Oldest</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer clearfix">
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
-    const getItemClassification = (page, per_page, searchColumnName, searchColumnDescription, order_by, callback) => {
-        const params = { page, per_page,searchColumnName, searchColumnDescription,order_by };
+    const getItemPricelists = (page, per_page, callback) => {
+        const params = { page, per_page };
 
-        axios.get('/api/item-classifications', { params }).then(res => {
+        axios.get('/api/item-pricelists', { params }).then(res => {
             console.log(res.data);
-            callback(null, res.data);
+            new Promise((resolve, reject) => {
+                callback(null, res.data);
+            });
         }).catch(error => {
-            callback(error, error.res.data);
+            if (error.response.status == 401) {
+                location.reload();
+            }
+
+            if (error.response.status == 500) {
+                alert('Kindly report this issue to the devs.');
+            }
         });
     };
 
     export default {
         data() {
             return {
-                componentVal: 'Item Classification',
-                itemClassification: null,
-                searchColumnName: null,
-                searchColumnDescription: null,
-                order_by: 'desc',
+                itemPriceLists: null,
                 meta: {
                     current_page: null,
                     from: null,
@@ -199,27 +164,21 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getItemClassification(to.query.page, 10,
-                    to.query.searchColumnName,
-                    to.query.searchColumnDescription,to.query.order_by, (err, data) => {
-                        next(vm => vm.setData(err, data));
-                    });
+                getItemPricelists(to.query.page, 10, (err, data) => {
+                    next(vm => vm.setData(err, data));
+                });
             } else {
-                getItemClassification(to.query.page, to.query.per_page,
-                    to.query.searchColumnName,
-                    to.query.searchColumnDescription,to.query.order_by, (err, data) => {
-                        next(vm => vm.setData(err, data));
-                    });
+                getItemPricelists(to.query.page, to.query.per_page, (err, data) => {
+                    next(vm => vm.setData(err, data));
+                });
             }
         },
 
         beforeRouteUpdate (to, from, next) {
-            getItemClassification(to.query.page, this.meta.per_page,
-                to.query.searchColumnName,
-                to.query.searchColumnDescription,to.query.order_by,(err, data) => {
-                    this.setData(err, data);
-                    next();
-                });
+            getItemPricelists(to.query.page, this.meta.per_page, (err, data) => {
+                this.setData(err, data);
+                next();
+            });
         },
 
         computed: {
@@ -265,7 +224,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'purchase-item-pricelists.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
@@ -275,7 +234,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'purchase-item-pricelists.index',
                     query: {
                         page,
                         per_page: this.meta.per_page
@@ -285,7 +244,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'purchase-item-pricelists.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page
@@ -295,7 +254,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'purchase-item-pricelists.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page
@@ -305,19 +264,20 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'purchase-item-pricelists.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page
                     }
                 });
             },
-            setData(err, { data: itemClassification, links, meta }) {
+            setData(err, { data: itemPriceLists, links, meta }) {
                 this.pageNumbers = [];
+
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.itemClassification = itemClassification;
+                    this.itemPriceLists = itemPriceLists;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -378,34 +338,12 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'purchase-item-pricelists.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
                     }
                 });
-            },
-            search() {
-                $('#searchModal').modal('hide');
-                this.showProgress = true;
-                this.$router.push({
-                    name: 'item-classifications.index',
-                    query: {
-                        page: 1,
-                        per_page: this.meta.per_page,
-                        searchColumnName: this.searchColumnName,
-                        searchColumnDescription: this.searchColumnDescription,
-                        order_by: this.order_by
-                    }
-                });
-            },
-            clear() {
-                this.searchColumnName        = '';
-                this.searchColumnDescription = '';
-                this.order_by                = 'desc';
-            },
-            openSearchModal() {
-                $('#searchModal').modal('show');
             }
         }
     }

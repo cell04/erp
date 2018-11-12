@@ -41,8 +41,13 @@
                             <td>{{ zip_code }}</td>
                             <td>{{ telephone_number }}</td>
                             <td>
-                                <router-link class="text-secondary" :to="{ name: 'warehouses.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
-                                <!-- <router-link class="btn-success btn-sm" :to="{ name: 'stock-requests.create', params: { id: id }, query: { type: 'warehouse' }}">Create New Stock Request</router-link> -->
+                                <router-link class="text-secondary" :to="{ name: 'warehouses.view', params: { id: id }}">
+                                    <i class="fas fa-envelope-open-text"></i> View
+                                </router-link>
+                                |
+                                <router-link class="text-secondary" :to="{ name: 'warehouses.edit', params: { id: id }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>

@@ -19,12 +19,12 @@
                 </li>
                 <li class="nav-item bg-white">
                     <router-link class="nav-link p-3 " :to="{ name: 'item-classifications.index' }">
-                        Item Classifications
+                        Item Class
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">
                     <router-link class="nav-link p-3" :to="{ name: 'unit-of-measurements.index' }">
-                        Unit of Measurements
+                        UOM
                     </router-link>
                 </li>
                 <li class="nav-item bg-white">

@@ -39,7 +39,13 @@
                             <td>{{ email }}</td>
                             <td>{{ contact_type.display_name }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'contacts.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'contacts.view', params: { id: id }}">
+                                    <i class="fas fa-envelope-open-text"></i> View
+                                </router-link>
+                                |
+                                <router-link class="text-secondary" :to="{ name: 'contacts.edit', params: { id: id }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>

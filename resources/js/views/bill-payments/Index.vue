@@ -32,14 +32,14 @@
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="invoicePayment">
-                        <tr :key="id" v-for="{ id, bill, amount, mode_of_payment, cr_number } in invoicePayment">
+                    <tbody v-if="billPayment">
+                        <tr :key="id" v-for="{ id, bill, amount, mode_of_payment, cr_number } in billPayment">
                             <td>{{ bill.reference_number }}</td>
                             <td>{{ cr_number }}</td>
                             <td>{{ mode_of_payment.name }}</td>
                             <td>{{ amount }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'bill-payments.view', params: { id: id }}">
+                                <router-link class="text-secondary" :to="{ name: 'bill-payments.view', params: { id: id }}">
                                     <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 <!-- |
@@ -159,7 +159,7 @@
 </template>
 
 <script>
-    const getInvoicePayment = (page, per_page, searchColumnName, searchColumnDescription, order_by, callback) => {
+    const getBillPayment = (page, per_page, searchColumnName, searchColumnDescription, order_by, callback) => {
         const params = { page, per_page,searchColumnName, searchColumnDescription,order_by };
 
         axios.get('/api/bill-payments', { params }).then(res => {
@@ -174,7 +174,7 @@
         data() {
             return {
                 componentVal: 'Item Classification',
-                invoicePayment: null,
+                billPayment: null,
                 searchColumnName: null,
                 searchColumnDescription: null,
                 order_by: 'desc',
@@ -201,13 +201,13 @@
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getInvoicePayment(to.query.page, 10,
+                getBillPayment(to.query.page, 10,
                     to.query.searchColumnName,
                     to.query.searchColumnDescription,to.query.order_by, (err, data) => {
                         next(vm => vm.setData(err, data));
                     });
             } else {
-                getInvoicePayment(to.query.page, to.query.per_page,
+                getBillPayment(to.query.page, to.query.per_page,
                     to.query.searchColumnName,
                     to.query.searchColumnDescription,to.query.order_by, (err, data) => {
                         next(vm => vm.setData(err, data));
@@ -216,7 +216,7 @@
         },
 
         beforeRouteUpdate (to, from, next) {
-            getInvoicePayment(to.query.page, this.meta.per_page,
+            getBillPayment(to.query.page, this.meta.per_page,
                 to.query.searchColumnName,
                 to.query.searchColumnDescription,to.query.order_by,(err, data) => {
                     this.setData(err, data);
@@ -227,7 +227,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/invoice-payments/').then(res => {
-                    console.log('IP: ' + JSON.stringify(res.data));
+                    // console.log('BP: ' + JSON.stringify(res.data));
                     resolve();
                 });
             });
@@ -323,12 +323,12 @@
                     }
                 });
             },
-            setData(err, { data: invoicePayment, links, meta }) {
+            setData(err, { data: billPayment, links, meta }) {
                 this.pageNumbers = [];
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.invoicePayment = invoicePayment;
+                    this.billPayment = billPayment;
                     this.links = links;
                     this.meta = meta;
                 }

@@ -55,7 +55,15 @@ class StockTransfersController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'stock_request_id'                              =>  'required|integer',
+            'stock_transferable_from_id'                    =>  'required|integer',
+            'stock_transferable_from_type'                  =>  'required|string|max:255',
+            'stock_transferable_to_id'                      =>  'required|integer',
+            'stock_transferable_to_type'                    =>  'required|string|max:255',
+            'number'                                        =>  'required|string|max:255',
+            'stock_transfer_items.*.item_id'                =>  'required|integer',
+            'stock_transfer_items.*.unit_of_measurement_id' =>  'required|integer',
+            'stock_transfer_items.*.quantity'               =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -108,7 +116,15 @@ class StockTransfersController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'stock_request_id'                              =>  'required|integer',
+            'stock_transferable_from_id'                    =>  'required|integer',
+            'stock_transferable_from_type'                  =>  'required|string|max:255',
+            'stock_transferable_to_id'                      =>  'required|integer',
+            'stock_transferable_to_type'                    =>  'required|string|max:255',
+            'number'                                        =>  'required|string|max:255',
+            'stock_transfer_items.*.item_id'                =>  'required|integer',
+            'stock_transfer_items.*.unit_of_measurement_id' =>  'required|integer',
+            'stock_transfer_items.*.quantity'               =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {

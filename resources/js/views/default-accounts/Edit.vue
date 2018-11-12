@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Item Types / Edit Item Type
+            Default Accountss / Edit Default Accounts
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -23,7 +23,7 @@
                 </fieldset>
 
                 <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes"><i class="fas fa-chevron-left"></i> Back</button>
-                <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType"><i class="fas fa-edit"></i> Update Item Type</button>
+                <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType"><i class="fas fa-edit"></i> Update Default Accounts</button>
             </div>
             <div v-else>
                 <div class="progress">
@@ -66,7 +66,7 @@
         methods: {
             viewItemTypes() {
                 this.$router.push({
-                    name: 'item-types.view',
+                    name: 'default-accounts.view',
                     params: { id: this.$route.params.id }
                 });
             },
@@ -75,7 +75,7 @@
 
                 axios.put('/api/item-types/' + this.$route.params.id, this.$data).then(res => {
                     this.$router.push({
-                        name: 'item-types.view',
+                        name: 'default-accounts.view',
                         params: { id: this.$route.params.id }
                     });
                 }).catch(err => {

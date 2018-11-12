@@ -36,10 +36,10 @@
                 <tbody v-if="stockTransfers">
                     <tr v-for="stockTransfer in stockTransfers">
                         <td>{{ stockTransfer.number }}</td>
-                        <td>{{ stockTransfer.stock_transferable_from.name }}</td>
-                        <td>{{ stockTransfer.stock_transferable_to.name }}</td>
+                        <td>{{ stockTransfer.stock_transferable_from.name | Upper }}</td>
+                        <td>{{ stockTransfer.stock_transferable_to.name | Upper }}</td>
                         <td>{{ stockTransfer.status }}</td>
-                        <td>{{ stockTransfer.created_at }}</td>
+                        <td>{{ stockTransfer.created_at | DateFormat }}</td>
                         <td>
                             <router-link class="text-secondary" :to="{ name: 'stock-transfers.view', params: { id: stockTransfer.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                         </td>
@@ -173,7 +173,7 @@
         };
 
         axios.get('/api/stock-transfers', { params }).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -212,6 +212,18 @@
                 showProgress: false,
                 pageNumbers: []
             };
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
         },
 
         beforeRouteEnter (to, from, next) {

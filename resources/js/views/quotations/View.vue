@@ -60,7 +60,7 @@
                             <th scope="col">Qty</th>
                             <th scope="col">UoM</th>
                             <th scope="col">Price</th>
-                            <th scope="col">Sub Total</th>
+                            <th class="text-right">Sub Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,7 +71,7 @@
                             <td>{{ quotation_item.quantity }}</td>
                             <td>{{ quotation_item.unit_of_measurement.name }}</td>
                             <td>{{ quotation_item.price }}</td>
-                            <td>{{ quotation_item.subTotal }}</td>
+                            <td align="right">{{ quotation_item.subTotal | Decimal }}</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -80,7 +80,7 @@
                             <td></td>
                             <td></td>
                             <td><b>Total</b></td>
-                            <td><b>{{ total }}</b></td>
+                            <td align="right"><b>{{ total | Decimal }}</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -105,6 +105,14 @@
                 quotations: [],
                 total: 0
             };
+        },
+
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
         },
 
         mounted() {
