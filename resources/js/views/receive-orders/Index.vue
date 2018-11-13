@@ -43,8 +43,8 @@
                                     <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 |
-                                <router-link class="text-secondary" :to="{ name: 'receive-orders.receive', params: { id: item.id }}">
-                                    <i class="fas fa-receipt"></i> Receive Invoice
+                                <router-link class="text-secondary" :to="{ name: 'bills.receive', params: { id: item.id }}">
+                                    <i class="fas fa-receipt"></i> Bill Receive Order
                                 </router-link>
                             </td>
                         </tr>
