@@ -88,33 +88,6 @@ class QuotationRepository extends Repository
         });
     }
 
-    // public function decrementStocksQuantity($quotation)
-    // {
-    //     $stocks = $stockTransfer->stockTransferableFrom->stocks;
-    //     $stockTransferItems = $stockTransfer->stockTransferItems;
-
-    //     foreach ($stockTransferItems as $stockTransferItem) {
-    //         $itemTransferQuantity = $stockTransferItem->quantity;
-    //         foreach ($stocks as $stock) {
-    //             if ($stock->item_id == $stockTransferItem->item_id) {
-    //                 if ($stock->quantity > 0) {
-    //                     if ($stock->quantity >= $itemTransferQuantity) {
-    //                         $stock->decrement('quantity', $itemTransferQuantity);
-    //                         $itemTransferQuantity = 0;
-    //                     } else {
-    //                         if ($itemTransferQuantity > $stock->quantity) {
-    //                             $stock->decrement('quantity', $stock->quantity);
-    //                             $itemTransferQuantity = $itemTransferQuantity - $stock->quantity;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     return 'ahehe';
-    // }
-
     public function findOrFail($id)
     {
         return  $this->quotation->with([
@@ -135,9 +108,9 @@ class QuotationRepository extends Repository
             $quotation = $this->quotation->findOrFail($id);
             if ($quotation->status == 1) {
                 $quotation->update(['status' => $status]);
-                if ($quotation->status == 2) {
+                if ($quotation->status == 2) {                  
+                    $this->deductStocksQuantity($quotation);
                     
-                    // $this->deductStocksQuantity($quotation);
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
 
@@ -148,8 +121,28 @@ class QuotationRepository extends Repository
         });
     }
 
-    // public function deductStocksQuantity($quotation)
-    // {
-        
-    // }
+    public function deductStocksQuantity($quotation)
+    {
+        foreach ($quotation->quotationItems as $quotationItem) {
+            $stocks = $quotation->quotable->stocks()->where('item_id', $quotationItem->item_id)->get();
+            $itemQuantity = $quotationItem->quantity;
+            foreach ($stocks as $stock) {
+                if ($stock->item_id == $quotationItem->item_id) {
+                    if ($stock->quantity > 0) {
+                        if ($stock->quantity >= $itemQuantity) {
+                            $stock->decrement('quantity', $itemQuantity);
+                            $itemQuantity = 0;
+                        } else {
+                            if ($itemQuantity > $stock->quantity) {
+                                $stock->decrement('quantity', $stock->quantity);
+                                $itemQuantity = $itemQuantity - $stock->quantity;
+                            }
+                        }
+                    }
+                }
+            }   
+        }
+
+        return true;   
+    }
 }
