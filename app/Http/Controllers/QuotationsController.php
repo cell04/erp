@@ -55,8 +55,8 @@ class QuotationsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'quoatable_id'                                  =>  'required|integer',
-            'quoatable_type'                                =>  'required|string|max:255',
+            'quotable_id'                                   =>  'required|integer',
+            'quotable_type'                                 =>  'required|string|max:255',
             'contact_id'                                    =>  'required|integer',
             'number'                                        =>  'required|string|max:255',
             'amount'                                        =>  'required|numeric|min:0',
@@ -114,7 +114,7 @@ class QuotationsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            
         ]);
 
         if ($validator->fails()) {
