@@ -35,4 +35,23 @@ class StockRepository extends Repository
                 $this->model->createPaginationUrl($request, $removePage)
             );
     }
+
+    public function paginatePerItemWithFilters(
+        $request = null,
+        $id,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->where('item_id', $id)
+            // comment out if need per location
+            // ->where('stockable_id', $request->stockable_id)
+            // ->where('stockable_type', $request->stockable_type)
+            ->orderBy('created_at', $orderBy)
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
+    }
 }

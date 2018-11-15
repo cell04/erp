@@ -182,8 +182,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'stocks/{stock}/restore', 'StocksController@restore');
     Route::delete('stocks/{stock}/force-delete', 'StocksController@forceDestroy');
     Route::get('stocks/get-all-stocks', 'StocksController@getAllStock');
-    //variable need is stockable_type and stockable_id  example stockable_type = App\Warehouse stockable_id = 1
-    Route::post('stocks/get-all-stocks-per-location', 'StocksController@getAllStocksPerLocation');
+    Route::get('stocks/{item}/get-all-stocks-of-item', 'StocksController@getAllStocksOfItem');
     Route::resource('stocks', 'StocksController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
