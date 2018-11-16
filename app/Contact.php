@@ -25,7 +25,8 @@ class Contact extends Model
      */
     protected $fillable = [
         'corporation_id', 'contact_type_id', 'company', 'company_address',
-        'person', 'email', 'mobile_number', 'credit_limit', 'account_id'
+        'person', 'email', 'mobile_number', 'credit_limit', 'account_id',
+        'mode_of_payment_id', 'bank_name', 'payment_term', 'business_type'
     ];
 
     /**
@@ -56,7 +57,7 @@ class Contact extends Model
      * @var array
      */
     protected $with = [
-        'contactType'
+        'contactType', 'modeOfPAyment'
     ];
 
     /**
@@ -77,5 +78,15 @@ class Contact extends Model
     public function contactType()
     {
         return $this->belongsTo(ContactType::class);
+    }
+
+    /**
+     * The contact belongs to a mode of payment
+     *
+     * @return object
+     */
+    public function modeOfPAyment()
+    {
+        return $this->belongsTo(ModeOfPayment::class);
     }
 }

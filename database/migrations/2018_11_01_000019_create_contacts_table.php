@@ -25,13 +25,21 @@ class CreateContactsTable extends Migration
                 ->references('id')
                 ->on('contact_types')
                 ->onDelete('cascade');
+            $table->integer('mode_of_payment_id')->unsigned();
+            $table->foreign('mode_of_payment_id')
+                ->references('id')
+                ->on('mode_of_payments')
+                ->onDelete('cascade');
             $table->string('company');
             $table->string('company_address');
             $table->string('person');
             $table->string('email')->unique();
             $table->string('mobile_number')->nullable();
             $table->decimal('credit_limit', 20, 2)->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('business_type')->nullable();
             $table->integer('account_id')->unsigned()->nullable();
+            $table->integer('payment_term');
             $table->timestamps();
             $table->softDeletes();
         });
