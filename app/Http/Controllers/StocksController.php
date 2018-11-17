@@ -47,6 +47,26 @@ class StocksController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllStocksOfItem($id)
+    {
+        $data = StockResource::collection(
+            $this->stock->paginatePerItemWithFilters(request(), $id, request()->per_page, request()->order_by)
+        );
+
+        if (! $data) {
+            return response()->json([
+                'message' => 'Failed to retrieve resource'
+            ], 400);
+        }
+
+        return $data;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

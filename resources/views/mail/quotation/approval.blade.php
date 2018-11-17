@@ -10,7 +10,9 @@ Approved By : {{ $content->approvedBy->name }}
 | {{ $quotationItem->item->name }}                                                          |    {{ $quotationItem->unitOfMeasurement->name }}              |           {{ $quotationItem->quantity }}          |             {{ number_format($quotationItem->price, 2) }}     |             {{ number_format($quotationItem->quantity * $quotationItem->price, 2) }}  |
 @endforeach             
 @endcomponent
-# Total Amount: {{ number_format($content->amount, 2) }}
+# Subtotal: {{ number_format($content->amount, 2) }}
+# Tax: {{ number_format($$content->tax, 2) }}
+# Total: {{ number_format($content->amount - $content->tax, 2) }}
 @component('mail::button', ['url' => $url . '/2', 'color' => 'success']) 
     Approved 
 @endcomponent    
