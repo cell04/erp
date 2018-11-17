@@ -40,6 +40,7 @@ class CreateQuotationsTable extends Migration
             $table->string('number');
             $table->smallInteger('status')->default(0);
             $table->decimal('amount', 20, 2);
+            $table->decimal('tax', 20, 2);
             $table->timestamps();
             $table->softDeletes();
         });
