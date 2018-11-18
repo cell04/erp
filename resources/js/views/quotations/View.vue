@@ -45,6 +45,13 @@
                                 <input type="text" class="form-control" v-model="quotations.contact.person" readonly>
                             </div>
                         </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tax</label>
+                                <input type="text" class="form-control" v-model="quotations.tax" readonly>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
 

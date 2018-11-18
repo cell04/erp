@@ -58,11 +58,11 @@
                             <label>Payment Term</label>
                             <br>
                             <div class="form-check form-check-inline">
-                                <input type="radio" name="optradio" @click="get_payment_term('Full')">
+                                <input type="radio" name="optradio" v-model="payment_term" value="2">
                                 <label class="form-check-label">&nbsp; Full</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input type="radio" name="optradio" @click="get_payment_term('Partial')">
+                                <input type="radio" name="optradio" v-model="payment_term" value="1">
                                 <label class="form-check-label">&nbsp; Partial</label>
                             </div>
                         </div>
@@ -139,10 +139,6 @@
         methods: {
             viewContact() {
                 this.$router.push({ name: 'contacts.index' });
-            },
-
-            get_payment_term (value) {
-                console.log('Value is: ' + value);
             },
 
             selectPaymentMethod() {

@@ -57,7 +57,7 @@ class Contact extends Model
      * @var array
      */
     protected $with = [
-        'contactType', 'modeOfPAyment'
+        'contactType', 'modeOfPayment'
     ];
 
     /**
@@ -85,7 +85,7 @@ class Contact extends Model
      *
      * @return object
      */
-    public function modeOfPAyment()
+    public function modeOfPayment()
     {
         return $this->belongsTo(ModeOfPayment::class);
     }

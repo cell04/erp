@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <b>Contacts / View Contacts</b>
+            <b>Contacts / Edit Contacts</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -17,21 +17,30 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="mobile_number">Mobile No.</label>
                                 <input type="text" class="form-control" v-model="mobile_number" id="mobile_number">
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" v-model="email" id="email">
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="business_type">Business Type</label>
+                                <input type="text" class="form-control" v-model="business_type" id="business_type" autocomplete="off" minlength="2" maxlength="255">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="company">Company Name</label>
                                 <input type="text" class="form-control" v-model="company" id="company" autocomplete="off" minlength="2" maxlength="255">
@@ -39,10 +48,34 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="company_address">Company Address</label>
-                        <input type="text" class="form-control" v-model="company_address" id="company_address">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Payment Method</label>
+                            <vue-select v-model="mode_of_payment" @input="selectPaymentMethod()" label="name" :options="payment_method"></vue-select>
+                        </div>
+
+                        <div class="form-group col-md-6" v-show="selectedBank">
+                            <label for="name">Bank</label>
+                            <input type="text" class="form-control" v-model="bank_name" autocomplete="off" minlength="2" maxlength="255">
+                        </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Payment Term</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="optradio" v-model="payment_term" value="2">
+                                <label class="form-check-label">&nbsp; Full</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="optradio" v-model="payment_term" value="1">
+                                <label class="form-check-label">&nbsp; Partial</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
 
                     <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewContact"><i class="fas fa-chevron-left"></i> Back</button>
                     <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContact"><i class="fas fa-edit"></i> Update Contact</button>
@@ -63,6 +96,8 @@
         data() {
             return {
                 ifReady: false,
+                paymentMethodData: null,
+                payment_method: [],
                 contactTypes: [],
                 contactType: null,
                 contact_type_id: '',
@@ -72,7 +107,13 @@
                 mobile_number: '',
                 email: '',
                 company: '',
-                company_address: ''
+                company_address: '',
+                business_type: '',
+                bank_name: '',
+                payment_term: '',
+                mode_of_payment: '',
+                mode_of_payment_id: '',
+                selectedBank: null
             };
         },
 
@@ -97,6 +138,12 @@
                     this.email = res.data.contact.email;
                     this.company = res.data.contact.company;
                     this.company_address = res.data.contact.company_address;
+
+                    this.business_type   = res.data.contact.business_type;
+                    this.bank_name       = res.data.contact.bank_name;
+                    this.mode_of_payment = res.data.contact.mode_of_payment;
+                    this.payment_term    = res.data.contact.payment_term;
+
                     console.log(this.contactType);
                     resolve();
                 }).catch(err => {
@@ -104,7 +151,18 @@
                 });
             });
 
-            Promise.all([promiseContactTypes, promiseContacts]).then(() => {
+            let promisePaymentMethod = new Promise((resolve, reject) => {
+                axios.get("/api/mode-of-payments/get-all-mode-of-payments/").then(res => {
+                    this.payment_method = res.data.mode_of_payments;
+                    // console.log('MOP: ' + JSON.stringify(res.data));
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            Promise.all([promiseContactTypes, promiseContacts, promisePaymentMethod]).then(() => {
                 this.ifReady = true;
             });
         },
@@ -116,9 +174,24 @@
                     params: { id: this.$route.params.id }
                 });
             },
+
+            selectPaymentMethod() {
+                this.mode_of_payment_id = this.mode_of_payment.id;
+                console.log('Mop id: ' + this.mode_of_payment_id);
+                if(this.mode_of_payment.id == 1){
+                    this.selectedBank = false;
+                    this.bank_name = '';
+                } else if (this.mode_of_payment.id == 2) {
+                    this.selectedBank = true;
+                } else {
+                    this.selectedBank = false;
+                }
+            },
+            
             selectContactType() {
                 this.contact_type_id = this.contactType.id;
             },
+
             updateContact() {
                 this.ifReady = false;
 

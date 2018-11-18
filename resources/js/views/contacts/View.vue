@@ -37,14 +37,40 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="company_address">Company Address</label>
                             <input type="text" class="form-control" v-model="company_address" id="company_address">
                         </div>
-                        <div class="form-group">
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="company_address">Business Type</label>
+                                <input type="text" class="form-control" v-model="business_type" id="business_type">
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="company_address">Payment Term</label>
+                                <input type="text" class="form-control" v-model="payment_term" id="payment_term">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="company_address">Payment Method</label>
+                                <input type="text" class="form-control" v-model="mode_of_payment" id="mode_of_payment">
+                            </div>
+
+                            <div class="col-md-6 form-group" v-if="mode_of_payment === 'Check'">
+                                <label for="company_address">Bank Name</label>
+                                <input type="text" class="form-control" v-model="bank_name" id="bank_name">
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group">
                             <label>Credit Limit</label>
                             <input type="number" class="form-control" v-model="credit_limit" min="0" max="99999999" required>
-                        </div>
+                        </div> -->
                     </fieldset>
 
                     <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewContact"><i class="fas fa-chevron-left"></i> Back</button>
@@ -102,6 +128,10 @@
                 email: '',
                 company: '',
                 company_address: '',
+                business_type: '',
+                bank_name: '',
+                payment_term: '',
+                mode_of_payment: '',
                 credit_limit: 0
             };
         },
@@ -109,6 +139,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/contacts/' + this.$route.params.id).then(res => {
+                    console.log('Contact: ' + JSON.stringify(res.data));
                     if (! res.data.response) { return; }
 
                     this.contact_type    = res.data.contact.contact_type.display_name;
@@ -120,6 +151,17 @@
                     this.company         = res.data.contact.company;
                     this.company_address = res.data.contact.company_address;
                     this.credit_limit    = res.data.contact.credit_limit;
+                    this.business_type   = res.data.contact.business_type;
+                    this.bank_name       = res.data.contact.bank_name;
+                    this.mode_of_payment = res.data.contact.mode_of_payment.name;
+
+                    let paymentTerm    = res.data.contact.payment_term;
+
+                    if(paymentTerm == 1){
+                        this.payment_term = 'Partial';
+                    } else {
+                        this.payment_term = 'Full';
+                    }
 
                     resolve();
                 });
