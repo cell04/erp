@@ -8,11 +8,11 @@
                     <sidebar></sidebar>
                 </div>
                 <div class="col-md-10">
-                    <div class="mt-3 px-md-5">
+                    <!-- <div class="mt-3 px-md-5"> -->
                         <transition name="fade" mode="out-in">
                             <router-view class="view"></router-view>
                         </transition>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>

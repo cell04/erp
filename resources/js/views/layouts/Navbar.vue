@@ -79,8 +79,7 @@
     .navcolor{
         background: rgb(255,255,255);
         background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(49, 156, 159,1) 99%);
-        clip-path: polygon(50% 0%, 100% 0, 100% 56%, 18% 57%, 16.6% 100%, 0 100%, 0 0);
-        z-index: 1px;
+        /* clip-path: polygon(50% 0%, 100% 0, 100% 56%, 18% 57%, 16.6% 100%, 0 100%, 0 0); */
     }
     .navTextColor{
         color: white;
@@ -94,7 +93,7 @@
     .navbar-nav .dropdown-menu {
         position: static;
         float: none;
-        margin-top: -43px;
+        margin-top: -40px;
         margin-left: -23px;
     }
 
@@ -102,5 +101,7 @@
         padding-right: 0;
         padding-left: 0;
         padding-bottom: 40px;
+    }
+    .dropdown-menu {
     }
 </style>
