@@ -238,7 +238,7 @@
             },
             total() {
                 return this.receive_order_items.reduce((total, item) => {
-                return (total + item.quantity * item.item_pricelist.price) - this.$data.taxable_value;
+                return (total + item.quantity * item.item_pricelist.price) - this.taxis;
                 }, 0);
             }
         },

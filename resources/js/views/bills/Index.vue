@@ -42,8 +42,8 @@
                         <tr v-for="bill in bills">
                             <td>{{bill.reference_number}}</td>
                             <td>{{bill.contact.person | Upper}}</td>
-                            <td>{{bill.amount}}</td>
-                            <td>{{ (bill.amount_paid == 0) ? 'Issued': ((bill.amount_paid) < (bill.amount)) ? 'Partially Paid' : 'Fully Paid'}}</td>
+                            <td>{{bill.amount - bill.tax}}</td>
+                            <td>{{ (bill.amount_paid == 0) ? 'Issued': ((bill.amount_paid) < (bill.amount - bill.tax)) ? 'Partially Paid' : 'Fully Paid'}}</td>
                             <td>{{bill.due_date | DateFormat}}</td>
                             
                             <td>
@@ -185,7 +185,7 @@
         };
 
         axios.get('/api/bills', { params }).then(res => {
-            // console.log('bills: ' + JSON.stringify(res.data));
+            console.log(res);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
