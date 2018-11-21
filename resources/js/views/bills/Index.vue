@@ -9,7 +9,7 @@
                     <b>Bills / View Bill</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'bills.create' }"><i class="fas fa-plus"></i> Create New Invoice</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'bills.create' }"><i class="fas fa-plus"></i> Create New Bill</router-link>
                 </div>
 
             </div>
