@@ -290,12 +290,12 @@
 
                 console.log(formData);
                 this.ifReady = true;
-                // axios.post("/api/bills", formData).then(res => {
-                //     this.$router.push({ name: "bills.index" });
-                // }).catch(err => {
-                //     alert(`Error! Can't create bill`);
-                //     this.ifReady = true;
-                // });
+                axios.post("/api/bills", formData).then(res => {
+                    this.$router.push({ name: "bills.index" });
+                }).catch(err => {
+                    alert(`Error! Can't create bill`);
+                    this.ifReady = true;
+                });
             }
         }
     };
