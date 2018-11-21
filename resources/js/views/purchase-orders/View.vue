@@ -27,7 +27,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Reference #</label>
+                                <label>Purchase Order #</label>
                                 <input type="text" class="form-control" v-model="purchaseOrder.reference_number" readonly>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/purchase-orders/" + this.$route.params.id).then(res => {
-                    console.log('PO details: ' + JSON.stringify(res.data.purchaseOrder.purchase_order_items));
+                    console.log(res.data);
                     this.purchaseOrder = res.data.purchaseOrder;
 
                     this.purchaseOrder.purchase_order_items.map(purchase_order_item => {

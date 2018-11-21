@@ -16,7 +16,7 @@
                             <input type="text" class="form-control" v-model="contact" readonly>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Receive Order #</label>
+                            <label>Received Order #</label>
                             <input type="text" class="form-control" v-model="ro_number" required>
                         </div>
                     </div>
@@ -200,7 +200,7 @@
             getPoDetails(id) {
                 axios.get("/api/purchase-orders/" + id).then(res => {
                     this.purchaseOrderData = res.data.purchaseOrder;
-                    // console.log('RO: ' + JSON.stringify(res.data.purchaseOrder));
+                    console.log(res.data.purchaseOrder);
                     this.contact = res.data.purchaseOrder.contact.person;
                     this.contact_id = res.data.purchaseOrder.contact_id;
                     this.received_items = res.data.purchaseOrder.purchase_order_items;

@@ -25,7 +25,7 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">PO #</th>
+                            <th scope="col">Purchase Order #</th>
                             <th scope="col">Supplier</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Status</th>
