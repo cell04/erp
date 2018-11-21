@@ -7,7 +7,7 @@
                 <div class="col-md-2 p-md-0">
                     <sidebar></sidebar>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10 p-md-0">
                     <!-- <div class="mt-3 px-md-5"> -->
                         <transition name="fade" mode="out-in">
                             <router-view class="view"></router-view>
@@ -58,6 +58,7 @@
     margin-left: 16%;
     margin-top: -2%;
 } */
+
 
     
 </style>
