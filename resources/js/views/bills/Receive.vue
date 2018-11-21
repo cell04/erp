@@ -91,7 +91,7 @@
                                 <td>
                                     <b>Tax</b>
                                 </td>
-                                <td align="right">{{taxis | Decimal}}</td>
+                                <td align="right">{{taxis ? (taxis.toFixed(2)) : 0 }}</td>
                             </tr>
                             <tr>
                                 <td colspan="5"></td>
@@ -290,12 +290,12 @@
 
                 console.log(formData);
                 this.ifReady = true;
-                axios.post("/api/bills", formData).then(res => {
-                    this.$router.push({ name: "bills.index" });
-                }).catch(err => {
-                    alert(`Error! Can't create bill`);
-                    this.ifReady = true;
-                });
+                // axios.post("/api/bills", formData).then(res => {
+                //     this.$router.push({ name: "bills.index" });
+                // }).catch(err => {
+                //     alert(`Error! Can't create bill`);
+                //     this.ifReady = true;
+                // });
             }
         }
     };
@@ -307,89 +307,90 @@
     }
 
     .switch {
-    position: relative;
-    display: inline-block;
-    width: 90px;
-    height: 34px;
-  }
+        position: relative;
+        display: inline-block;
+        width: 90px;
+        height: 34px;
+    }
   
-  .switch input {display:none;}
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #FF586B;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: #0CC27E;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(55px);
-    -ms-transform: translateX(55px);
-    transform: translateX(55px);
-  }
-  
-  /*------ ADDED CSS ---------*/
-  .on
-  {
-    display: none;
-  }
-  
-  .on, .off
-  {
-    color: white;
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 50%;
-  }
-  
-  .on 
-  {
-    left: 45%;
-  }
-  
-  .off 
-  {
-    left: 55%;
-  }
-  
-  input:checked+ .slider .on
-  {display: block;}
-  
-  input:checked + .slider .off
-  {display: none;}
-  
-  /*--------- END --------*/
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;}
+    .switch input {display:none;}
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #FF586B;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    input:checked + .slider {
+        background-color: #0CC27E;
+    }
+    
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+    
+    input:checked + .slider:before {
+        -webkit-transform: translateX(55px);
+        -ms-transform: translateX(55px);
+        transform: translateX(55px);
+    }
+    
+    /*------ ADDED CSS ---------*/
+    .on
+    {
+        display: none;
+    }
+    
+    .on, .off
+    {
+        color: white;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+    }
+    
+    .on 
+    {
+        left: 45%;
+    }
+    
+    .off 
+    {
+        left: 55%;
+    }
+    
+    input:checked+ .slider .on
+    {display: block;}
+    
+    input:checked + .slider .off
+    {display: none;}
+    
+    /*--------- END --------*/
+    
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+    
+    .slider.round:before {
+        border-radius: 50%;
+    }
 </style>

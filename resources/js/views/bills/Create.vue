@@ -33,6 +33,22 @@
                                 <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
                             </div>
                         </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>Taxable</label><br />
+                            <label class="switch">
+                                <input type="checkbox" v-model="taxable" @change="onTaxable()">
+                                <span class="slider round">
+                                    <span class="on">{{'Yes'}}</span>
+                                    <span class="off">{{'No'}}</span>
+                                </span>
+                            </label>
+                        </div>
+
+                        <div class="col-md-6 form-group" v-if="this.$data.taxable === true">
+                            <label>Tax %</label>  
+                            <input type="number" class="form-control" v-model="taxable_value">
+                        </div>
                     </div>
 
                     <br>
@@ -66,10 +82,24 @@
                             <tr>
                                 <td colspan="5"></td>
                                 <td>
+                                    <b>Subtotal</b>
+                                </td>
+                                <td align="right">{{subtotal | Decimal}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td>
+                                    <b>Tax</b>
+                                </td>
+                                <td align="right">{{taxis ? (taxis.toFixed(2)) : 0 }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td>
                                     <b>Total</b>
                                 </td>
                                 <td align="right">{{total | Decimal}}</td>
-                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -101,6 +131,9 @@
                 receive_order_items: [],
                 receiveOrders: [],
                 receiveOrdersId: null,
+                taxable: 0,
+                tax: 0,
+                taxable_value: 0,
                 bills: [],
                 billsContact: [],
                 billsId: null,
@@ -190,14 +223,26 @@
                 return Number(item.quantity * item.item_pricelist.price)
                 });
             },
-            total() {
+            subtotal() {
                 return this.receive_order_items.reduce((total, item) => {
                 return total + item.quantity * item.item_pricelist.price;
+                }, 0);
+            },
+            taxis() {
+                return this.subtotal * (this.$data.taxable_value / 100);
+         
+            },
+            total() {
+                return this.receive_order_items.reduce((total, item) => {
+                return (total + item.quantity * item.item_pricelist.price) - this.$data.taxable_value;
                 }, 0);
             }
         },
 
         methods: {
+            onTaxable() {
+                return this.taxable_value = 0;
+            },
             viewBills() {
                 this.$router.push({ name: 'bills.index' });
             },
@@ -249,6 +294,9 @@
                 });
 
                 let formData = {
+                    taxable: this.$data.taxable === true ? 1 : 0,
+                    tax: this.taxis,
+                    taxable_value: +this.$data.taxable_value,
                     bill_items: this.receive_order_items,
                     receive_order_id: this.$data.receive_order_id,
                     contact_id: this.$data.ro_contact_id,
@@ -259,13 +307,13 @@
                 };
 
                 console.log(formData);
-
-                axios.post("/api/bills", formData).then(res => {
-                    this.$router.push({ name: "bills.index" });
-                }).catch(err => {
-                    alert(`Error! Can't create bill`);
-                    this.ifReady = true;
-                });
+                this.ifReady = true;
+                // axios.post("/api/bills", formData).then(res => {
+                //     this.$router.push({ name: "bills.index" });
+                // }).catch(err => {
+                //     alert(`Error! Can't create bill`);
+                //     this.ifReady = true;
+                // });
             }
         }
     };
@@ -274,5 +322,93 @@
 <style>
     .dateStyle input:read-only {
         background-color: #ffffff !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 90px;
+        height: 34px;
+    }
+  
+    .switch input {display:none;}
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #FF586B;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    input:checked + .slider {
+        background-color: #0CC27E;
+    }
+    
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+    
+    input:checked + .slider:before {
+        -webkit-transform: translateX(55px);
+        -ms-transform: translateX(55px);
+        transform: translateX(55px);
+    }
+    
+    /*------ ADDED CSS ---------*/
+    .on
+    {
+        display: none;
+    }
+    
+    .on, .off
+    {
+        color: white;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+    }
+    
+    .on 
+    {
+        left: 45%;
+    }
+    
+    .off 
+    {
+        left: 55%;
+    }
+    
+    input:checked+ .slider .on
+    {display: block;}
+    
+    input:checked + .slider .off
+    {display: none;}
+    
+    /*--------- END --------*/
+    
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+    
+    .slider.round:before {
+        border-radius: 50%;
     }
 </style>
