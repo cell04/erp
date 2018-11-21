@@ -25,7 +25,7 @@ class Bill extends Model
     protected $fillable = [
         'corporation_id', 'receive_order_id', 'contact_id', 'user_id', 
         'reference_number', 'due_date', 'amount','amount_paid', 'status', 
-        // 'taxable', 'taxable_option', 'tax', 
+        'taxable', 'taxable_value', 'tax'
     ];
 
     /**
