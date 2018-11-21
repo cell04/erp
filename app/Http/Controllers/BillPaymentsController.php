@@ -42,7 +42,7 @@ class BillPaymentsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'bill_id'               =>  'required|integer',
+            'bill_id'               => 'required|integer',
             'amount'                => 'required|numeric',
             'mode_of_payment_id'    => 'required|integer',
             'cr_number'             => 'string|max:255|nullable',

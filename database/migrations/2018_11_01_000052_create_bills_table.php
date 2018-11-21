@@ -36,8 +36,11 @@ class CreateBillsTable extends Migration
                 ->on('users')
                 ->onDelete('cascade');
             $table->string('reference_number')->unique();
+            $table->integer('taxable')->default(0); //0 = yes, 1 = no
+            $table->integer('taxable_option')->default(0); //0 = no, 1 - %
             $table->date('due_date');
             $table->decimal('amount', 20, 2);
+            $table->decimal('tax', 20, 2)->default(0);
             $table->decimal('amount_paid', 20, 2)->default(0);
             $table->smallInteger('status')->default(0);
             $table->timestamps();

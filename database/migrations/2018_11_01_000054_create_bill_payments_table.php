@@ -31,9 +31,11 @@ class CreateBillPaymentsTable extends Migration
                 ->on('mode_of_payments')
                 ->onDelete('cascade');
             $table->string('cr_number')->nullable();
+            $table->string('bills_payment_number');
             $table->string('bank_name')->nullable();
             $table->string('check')->nullable();
             $table->decimal('amount', 20, 2);
+            $table->dateTime('bills_payment_date');
             $table->timestamps();
             $table->softDeletes();
         });
