@@ -18,7 +18,7 @@
                             <input type="text" class="form-control" v-model="contactData.person" readonly>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Receive Order #</label>
+                            <label>Received Order #</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
                         </div>
                     </div>
@@ -34,8 +34,8 @@
                                 <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
-                                <th scope="col">Amount</th>
                                 <th scope="col">Expiration</th>
+                                <th scope="col">Amount</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>

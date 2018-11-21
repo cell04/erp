@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Reference #</label>
+                                    <label>Received Order #</label>
                                     <input type="text" class="form-control" v-model="order.reference_number" id="name" readonly>
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Contact</label>
+                                    <label>Supplier</label>
                                     <input type="text" class="form-control" v-model="contacts.person" id="name" readonly>
                                 </div>
                             </div>

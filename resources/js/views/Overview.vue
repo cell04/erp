@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="content-title">
-        <h4>Dashboard</h4>
+        <h4 class="module-title">DASHBOARD</h4>
         <hr class="title-border">
     </div>
     <div class="mx-md-4 px-0">
@@ -844,19 +844,24 @@
     }
 
     .content-title {
-        margin-top: -28px;
-        margin-left: -23px;
-        border-bottom: 29px solid #f5f8fa;
+        margin-top: -27px;
+        border-bottom: 28px solid #f5f8fa;
         border-left: 25px solid transparent;
         height: 0;
-        width: 103.1%;
+        width: 100%;
+    }
+
+    .module-title {
+        padding-top: 5px;
+        font-weight: bold;
+        font-size: 14px;
     }
 
     .title-border {
-        width: 101.5%;
-        margin-top: -4px;
-        margin-left: -19px;
+        width: 103%;
+        margin-top: 0px;
+        margin-left: -3%;
         border: 0;
-        border-top: 3px solid #abb0b0;
+        border-top: 2px solid #abb0b0;
     }
 </style>

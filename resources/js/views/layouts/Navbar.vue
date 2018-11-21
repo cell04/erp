@@ -93,15 +93,12 @@
     .navbar-nav .dropdown-menu {
         position: static;
         float: none;
-        margin-top: -40px;
-        margin-left: -23px;
+        margin-top: -20px;
     }
 
     .navbar-nav .nav-link {
         padding-right: 0;
         padding-left: 0;
-        padding-bottom: 40px;
-    }
-    .dropdown-menu {
+        padding-bottom: 20px;
     }
 </style>
