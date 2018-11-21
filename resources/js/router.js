@@ -75,6 +75,7 @@ const Overview = () => import('./views/Overview');
  const BillsIndex = () => import('./views/bills/Index');
  const BillsCreate = () => import('./views/bills/Create');
  const BillsView = () => import('./views/bills/View');
+ const BillsReceive = () => import('./views/bills/Receive');
 
 /**
  * Bills Payment
@@ -265,6 +266,7 @@ const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelist
         { path: '/bills', name: 'bills.index', component: BillsIndex },
         { path: '/bills/create', name: 'bills.create', component: BillsCreate },
         { path: '/bills/:id', name: 'bills.view', component: BillsView },
+        { path: '/bills/receive/:id', name: 'bills.receive', component: BillsReceive },
 
         // Bill Payments
         { path: '/bill-payments', name: 'bill-payments.index', component: BillPaymentsIndex },

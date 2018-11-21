@@ -250,6 +250,7 @@
 }
 .nav-sub-menu .nav-item .nav-link {
     margin-left: -15px;
+    font-size: 13px;
 }
 .sub-content{
     margin-left: 45px;
@@ -276,4 +277,5 @@
 .selected .nav-link {
     background-color: #287e80;
 }
+
 </style>

@@ -9,9 +9,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <!-- <li v-if="corporation">
-                        <a class="nav-link" href="#" v-on:click.stop.prevent="">{{ corporation.name }}</a>
-                    </li> -->
+                    <li v-if="corporation">
+                        <a class="nav-link navTextColor" href="#" v-on:click.stop.prevent="">{{ corporation.name }}</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle navTextColor" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user px-2"></i>
@@ -77,13 +77,31 @@
 
 <style>
     .navcolor{
-       background: rgb(255,255,255);
+        background: rgb(255,255,255);
         background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(49, 156, 159,1) 99%);
+        /* clip-path: polygon(50% 0%, 100% 0, 100% 56%, 18% 57%, 16.6% 100%, 0 100%, 0 0); */
     }
     .navTextColor{
         color: white;
     }
+    .navTextColor:hover{
+        color: rgb(218, 218, 218)
+    }
     .fas .fa-user .px-1{
         color: white !important;
+    }
+    .navbar-nav .dropdown-menu {
+        position: static;
+        float: none;
+        margin-top: -40px;
+        margin-left: -23px;
+    }
+
+    .navbar-nav .nav-link {
+        padding-right: 0;
+        padding-left: 0;
+        padding-bottom: 40px;
+    }
+    .dropdown-menu {
     }
 </style>

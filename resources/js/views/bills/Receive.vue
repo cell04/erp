@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Receive Order #</label>
-                            <vue-select v-model="receiveOrdersId" @input="selectRO()" label="reference_number" :options="receiveOrders" required></vue-select>
+                            <input type="text" class="form-control" v-model="receiveOrdersId" readonly>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -76,7 +76,7 @@
                     
                     <br>
                     <div class="pt-3">
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBills"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewRo"><i class="fas fa-chevron-left"></i> Back</button>
                         <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Bill</button>
                         <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
                     </div>
@@ -168,10 +168,15 @@
             });
 
             let getAllRo = new Promise((resolve, reject) => {
-                axios.get("/api/receive-orders/get-all-receive-orders/").then(res => {
-                    this.receiveOrders = res.data.receive_orders;
-                    this.billsContact = res.data.receive_orders.contact;
+                axios.get("/api/receive-orders/" + this.$route.params.id).then(res => {
+                    this.receiveOrdersId = res.data.receiveOrder.reference_number;
+                    this.receive_order_id = res.data.receiveOrder.id;
+                    this.ro_contact_id = res.data.receiveOrder.contact_id;
+                    this.ro_contact_name = res.data.receiveOrder.contact.person;
+                    this.amount = res.data.receiveOrder.amount;
+                    this.receive_order_items = res.data.receiveOrder.receive_order_items;
                     // console.log('RO: ' + JSON.stringify(res.data));
+                    this.getBillAmount();
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -198,8 +203,8 @@
         },
 
         methods: {
-            viewBills() {
-                this.$router.push({ name: 'bills.index' });
+            viewRo() {
+                this.$router.push({ name: 'receive-orders.index' });
             },
 
             getBillAmount() {
@@ -210,28 +215,6 @@
                 });
                 this.amount = totalAmount;
                 console.log('total: ' + this.amount);
-            },
-
-            getBillsData(id) {
-                axios.get("/api/receive-orders/" + id).then(res => {
-                    // console.log('Quote: ' + JSON.stringify(res.data));
-                    this.ro_contact_id = res.data.receiveOrder.contact_id;
-                    this.ro_contact_name = res.data.receiveOrder.contact.person;
-                    this.amount = res.data.receiveOrder.amount;
-                    this.receive_order_items = res.data.receiveOrder.receive_order_items;
-                    this.getBillAmount();
-                    resolve();
-                }).catch(err => {
-                    console.log(err);
-                    reject();
-                });
-
-            },
-
-            selectRO() {
-                this.receive_order_id = this.receiveOrdersId.id;
-                console.log('Date: ' + this.due_date);
-                this.getBillsData(this.receiveOrdersId.id);
             },
 
             createNewBill() {

@@ -1,11 +1,15 @@
 <template>
+<div>
+    <div class="content-title">
+        <h4>Dashboard</h4>
+        <hr class="title-border">
+    </div>
     <div class="mx-md-4 px-0">
-
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-12 my-3">
                     <span class="h3">Dashboard</span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Sales Report by Branch -->
             <!-- <div class="row">
@@ -356,6 +360,7 @@
                 </div>
             </div>
         </div>
+</div>
 </template>
 
 <script>
@@ -836,5 +841,22 @@
     }
     .card-mod{
         padding-top:10px;
+    }
+
+    .content-title {
+        margin-top: -28px;
+        margin-left: -23px;
+        border-bottom: 29px solid #f5f8fa;
+        border-left: 25px solid transparent;
+        height: 0;
+        width: 103.1%;
+    }
+
+    .title-border {
+        width: 101.5%;
+        margin-top: -4px;
+        margin-left: -19px;
+        border: 0;
+        border-top: 3px solid #abb0b0;
     }
 </style>

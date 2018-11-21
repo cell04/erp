@@ -57,13 +57,13 @@
                                         <td align="left">
                                         <strong>Subtotal</strong>
                                         </td>
-                                        <td align="right">{{total - (total * .12) | Decimal }}</td>
+                                        <td align="right">{{total - (total * taxPercent) | Decimal }}</td>
                                     </tr>
                                     <tr>
                                         <td align="left">
-                                        <strong>VAT (12%)</strong>
+                                        <strong>VAT ({{tax}})</strong>
                                         </td>
-                                        <td align="right">{{(total * .12) | Decimal}}</td>
+                                        <td align="right">{{taxPercent === 0? '0.00' : ((total * taxPercent) | Decimal)}}</td>
                                     </tr>
                                     <tr>
                                         <td align="left">
@@ -102,7 +102,9 @@ export default {
       contacts: [],
       roRefNum: [],
       invoiceItems: [],
-      corpData: []
+      corpData: [],
+      tax: "",
+      taxPercent: "",
     };
   },
 
@@ -128,6 +130,9 @@ export default {
           this.contacts = res.data.invoice.contact;
           this.invoiceItems = res.data.invoice.invoice_items;
           this.roRefNum = res.data.invoice.quotation;
+          this.tax = res.data.invoice.quotation.tax;
+          this.taxPercent = this.tax / 100;
+
           if (!res.data.response) {
             return;
           }

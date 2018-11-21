@@ -21,6 +21,27 @@
                             <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
                         </div>
 
+                        <!-- <div class="col-md-6 form-group">
+                            <label>Tax Percentage</label>
+                            <input type="number" class="form-control" v-model="tax" required placeholder="Tax %">
+                        </div> -->
+
+                        <div class="col-md-6 form-group">
+                            <label>Do you want to add Tax Percentage?</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" v-model="tax_value" v-on:click="selectTax('yes')" value="Yes">
+                                <label class="form-check-label">&nbsp; Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" v-model="tax_value" v-on:click="selectTax('no')" value="No">
+                                <label class="form-check-label">&nbsp; No</label>
+                            </div>
+                            <input type="number" class="form-control" v-model="tax" placeholder="Tax %" v-show="tax_value === 'Yes'">
+                        </div>
+
+                        <div class="col-md-6 form-group"></div>
+
                         <div class="col-md-6 form-group">
                             <label>From</label>
                             <br>
@@ -128,6 +149,7 @@
                 contact_id: "",
                 items: [],
                 number: "",
+                tax: "",
                 quotation_items: [
                     {
                         item: '',
@@ -141,7 +163,8 @@
                     }
                 ],
                 amount: 0,
-                isDisabled: true
+                isDisabled: true,
+                tax_value: ""
             };
         },
 
@@ -216,6 +239,13 @@
         methods: {
             viewQuotations() {
                 this.$router.push({ name: 'quotations.index' });
+            },
+
+            selectTax(value) {
+                console.log('Value: ' + value);
+                if(value == 'no') {
+                    this.tax = 0;
+                }
             },
 
             selectContact() {
@@ -310,6 +340,7 @@
                     quotable_type: this.stock_receivable_from_type,
                     number: 'Q' + this.number,
                     amount: this.amount,
+                    tax: this.tax,
                     quotation_items: quotationItems
                 };
 
