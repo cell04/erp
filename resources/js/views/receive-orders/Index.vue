@@ -44,7 +44,7 @@
                                 </router-link>
                                 |
                                 <router-link class="text-secondary" :to="{ name: 'bills.receive', params: { id: item.id }}">
-                                    <i class="fas fa-receipt"></i> Bill Receive Order
+                                    <i class="fas fa-receipt"></i> Create Purchase Invoice
                                 </router-link>
                             </td>
                         </tr>

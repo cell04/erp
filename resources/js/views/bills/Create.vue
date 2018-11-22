@@ -1,19 +1,19 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <b>Bills / Create New Bill</b>
+            <b>Purchase Invoices / Create New Purchase Invoice</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
                 <form v-on:submit.prevent="createNewBill">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Receive Order #</label>
+                            <label>Received Order #</label>
                             <vue-select v-model="receiveOrdersId" @input="selectRO()" label="reference_number" :options="receiveOrders" required></vue-select>
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label>Bill #</label>
+                            <label>Purchase Invoice #</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
                         </div>
 
@@ -52,7 +52,7 @@
                     </div>
 
                     <br>
-                    <h6><b><u>Invoice Items</u></b></h6>
+                    <h6><b><u>Purchase Invoice Items</u></b></h6>
                     <br>
 
                     <br>
@@ -66,7 +66,7 @@
                                 <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
-                                <th class="text-right">Sub Total</th>
+                                <th class="text-right">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,7 +106,7 @@
                     <br>
                     <div class="pt-3">
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBills"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Bill</button>
+                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Purchase Invoice</button>
                         <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
                     </div>
                 </form>

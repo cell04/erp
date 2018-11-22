@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <b>Bills / Create New Bill</b>
+            <b>Purchase Invoices / Create New Purchase Invoice</b>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -13,7 +13,7 @@
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label>Bill #</label>
+                            <label>Purchase Invoice #</label>
                             <input type="text" class="form-control" v-model="reference_number" required>
                         </div>
 
@@ -52,7 +52,7 @@
                     </div>
 
                     <br>
-                    <h6><b><u>Invoice Items</u></b></h6>
+                    <h6><b><u>Purchase Invoice Items</u></b></h6>
                     <br>
 
                     <br>
@@ -66,7 +66,7 @@
                                 <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
-                                <th class="text-right">Sub Total</th>
+                                <th class="text-right">Amount</th>
                             </tr>
                         </thead>
                         <tbody>

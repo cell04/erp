@@ -25,8 +25,8 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Purchase Order #</th>
-                            <th scope="col">Supplier</th>
+                            <th scope="col">PO #</th>
+                            <!-- <th scope="col">Supplier</th> -->
                             <th scope="col">Amount</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date</th>
@@ -36,7 +36,7 @@
                     <tbody v-if="purchaseOrders">
                         <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
                             <td>{{ purchaseOrder.reference_number }}</td>
-                            <td>{{ purchaseOrder.contact.person | Upper }}</td>
+                            <!-- <td>{{ purchaseOrder.contact.person | Upper }}</td> -->
                             <td>{{ purchaseOrder.amount }}</td>
                             <td>{{ purchaseOrder.status }}</td>
                             <td>{{ purchaseOrder.created_at | DateFormat}}</td>

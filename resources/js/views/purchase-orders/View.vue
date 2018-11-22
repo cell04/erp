@@ -31,12 +31,18 @@
                                 <input type="text" class="form-control" v-model="purchaseOrder.reference_number" readonly>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="text" class="form-control" v-model="purchaseOrder.date" readonly>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Contact</label>
-                                <input type="text" class="form-control" v-model="purchaseOrder.contact.person"readonly>
+                                <label>Supplier</label>
+                                <input type="text" class="form-control" v-model="purchaseOrder.contact.person" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -55,7 +61,7 @@
                     <thead>
                         <tr>
                             <th scope="col">SKU</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">Item Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Qty</th>
                             <th scope="col">Received Qty</th>

@@ -38,11 +38,11 @@
                         <thead>
                             <tr>
                                 <th scope="col">SKU</th>
-                                <th scope="col">Item</th>
+                                <th scope="col">Item Name</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Sub Total</th>
+                                <th scope="col">Amount</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>

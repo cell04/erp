@@ -162,7 +162,7 @@
                         <router-link class="nav-link link" :to="{ name: 'bills.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                Bills
+                                Purchase Invoices
                             </span>
                         </router-link>
                     </li>
