@@ -11,8 +11,8 @@ Approved By : {{ $content->approvedBy->name }}
 @endforeach             
 @endcomponent
 # Subtotal: {{ number_format($content->amount, 2) }}
-# Tax: {{ number_format($$content->tax, 2) }}
-# Total: {{ number_format($content->amount - $content->tax, 2) }}
+# Tax: {{ number_format((($content->tax / 100) * $content->amount), 2) }}
+# Total: {{ number_format($content->amount - (($content->tax / 100) * $content->amount), 2) }}
 @component('mail::button', ['url' => $url . '/2', 'color' => 'success']) 
     Approved 
 @endcomponent    

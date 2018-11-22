@@ -75,39 +75,37 @@
                             <tr>
                                 <th scope="col">SKU</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Description</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">UOM</th>
                                 <th scope="col">Unit Price</th>
-                                <th scope="col">Sub Total</th>
+                                <th scope="col">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr :key="item.id" v-for="(item, index) in billsItems">
                                 <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
                                 <td>{{ item.item_pricelist.price }}</td>
                                 <td>{{ subtotalRow[index] | Decimal}}</td>
                             </tr>
                             <tr>
-                                <td colspan="5"></td>
+                                <td colspan="4"></td>
                                 <td>
                                     <b>Subtotal</b>
                                 </td>
                                 <td>{{ +(this.bills.amount) | Decimal }}</td>
                             </tr>
                             <tr>
-                                <td colspan="5"></td>
+                                <td colspan="4"></td>
                                 <td>
                                     <b>Tax</b>
                                 </td>
                                 <td>{{ this.bills.tax ? ((+this.bills.tax).toFixed(2)) : 0 }}</td>
                             </tr>
                             <tr>
-                                <td colspan="5"></td>
+                                <td colspan="4"></td>
                                 <td>
                                     <b>Total</b>
                                 </td>

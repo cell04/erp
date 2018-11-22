@@ -30,11 +30,10 @@
                     <thead>
                         <tr>
                             
-                            <th scope="col">Bill #</th>
+                            <th scope="col">Invoice #</th>
                             <th scope="col">Supplier</th>
-                            <th scope="col">Amount</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Date</th>
+                            <th scope="col">Date Created</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -42,7 +41,6 @@
                         <tr v-for="bill in bills">
                             <td>{{bill.reference_number}}</td>
                             <td>{{bill.contact.person | Upper}}</td>
-                            <td>{{bill.amount - bill.tax}}</td>
                             <td>{{ (bill.amount_paid == 0) ? 'Issued': ((bill.amount_paid) < (bill.amount - bill.tax)) ? 'Partially Paid' : 'Fully Paid'}}</td>
                             <td>{{bill.due_date | DateFormat}}</td>
                             
