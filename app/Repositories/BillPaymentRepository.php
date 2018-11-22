@@ -106,4 +106,19 @@ class BillPaymentRepository extends Repository
         //Store Voucher Entries
         return $voucher->voucherEntries()->createMany($journalEntries->toArray());
     }
+
+    // public function paginateWithFilters(
+    //     $request = null,
+    //     $length = 10,
+    //     $orderBy = 'desc',
+    //     $removePage = true
+    // ) {
+    //     return $this->model->filter($request)
+    //         ->orderBy('created_at', $orderBy)
+    //         ->with('bill:id,amount,amount_paid')
+    //         ->paginate($length)
+    //         ->withPath(
+    //             $this->model->createPaginationUrl($request, $removePage)
+    //         );
+    // }
 }
