@@ -7,6 +7,7 @@ use App\Contact;
 use App\Journal;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\CreateInvoice;
 
 class BillRepository extends Repository
 {
@@ -32,7 +33,8 @@ class BillRepository extends Repository
             $bill->billItems()->createMany($request->bill_items);
             $contact = $this->contact->findOrFail($bill->contact_id);
             $journal = $this->generateBillEntries($bill);
-            // $contact->notify(new CreateInvoice($bill));
+            $bill->receiveOrder->update(['status' => 1]);
+            $contact->notify(new CreateInvoice($bill));
 
             return $bill;
         });
