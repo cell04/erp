@@ -2,20 +2,35 @@
     <div>
         <div class="card">
             <div class="card-header">
-                <b>Bill Payments / View Bill Payment</b>
+                <b>Purchase Invoice Payments / View Purchase Invoice Payments</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
                     <fieldset disabled>
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label for="name">Bill #</label>
+                                <label for="name">Purchase Invoice #</label>
                                 <input type="text" class="form-control" v-model="billId.reference_number" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">Purchase Invoice Payment #</label>
+                                <input type="text" class="form-control" v-model="billPayment.bills_payment_number" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">Purchase Invoice Payment Date</label>
+                                <input type="text" class="form-control" v-model="billPayment.bills_payment_date" required>
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label for="name">Amount</label>
                                 <input type="text" class="form-control" v-model="billPayment.amount" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="name">Remaining Balance</label>
+                                <input type="text" class="form-control" v-model="remaining_balance" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
                             <div class="col-md-6 form-group">
@@ -36,6 +51,13 @@
                             <div class="col-md-6 form-group" v-if="billPayment.mode_of_payment_id == 2">
                                 <label for="name">Check #</label>
                                 <input type="text" class="form-control" v-model="billPayment.check" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="col-sm-6 form-group">
+                                <div><label for="name"><strong>Supplier</strong></label>: {{contacts.company}}</div>
+                                <div><label for="name"><strong>Address</strong></label>: {{contacts.company_address}}</div>
+                                <div><label for="name"><strong>Email</strong></label>: {{contacts.email}}</div>
+                                <div><label for="name"><strong>Phone</strong></label>: {{contacts.mobile_number}}</div>
                             </div>
                         </div>
                         
@@ -84,7 +106,9 @@
             return {
                 ifReady: false,
                 billId: '',
-                billPayment: []
+                billPayment: [],
+                remaining_balance: null,
+                contacts: []
             };
         },
 
@@ -93,7 +117,9 @@
                 axios.get("/api/bill-payments/" + this.$route.params.id).then(res => {
                     this.billPayment = res.data.billPayment;
                     this.billId = res.data.billPayment.bill;
-                    // console.log('IP: ' + JSON.stringify(res.data));
+                    this.contacts = res.data.billPayment.bill.contact;
+                    this.remaining_balance = (+res.data.billPayment.bill.amount) - (+res.data.billPayment.bill.amount_paid)
+                    console.log((res.data));
                     this.ifReady = true;
                 if (!res.data.response) {
                     return;

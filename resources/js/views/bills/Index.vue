@@ -29,7 +29,7 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Invoice #</th>
+                            <th scope="col">Purchase Invoice #</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date Created</th>
                             <th scope="col">Action</th>

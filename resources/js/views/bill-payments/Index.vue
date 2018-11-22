@@ -29,6 +29,7 @@
                             <th scope="col">CR #</th>
                             <th scope="col">Mode of Payment</th>
                             <th scope="col">Amount</th>
+                            <th scope="col">Remaining Balance</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -38,6 +39,7 @@
                             <td>{{ cr_number }}</td>
                             <td>{{ mode_of_payment.name }}</td>
                             <td>{{ amount }}</td>
+                            <td>{{ (+bill.amount) - (+bill.amount_paid) }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'bill-payments.view', params: { id: id }}">
                                     <i class="fas fa-envelope-open-text"></i> View

@@ -15,7 +15,7 @@
                             </div>
 
                             <div class="col-md-6 form-group">
-                                <label>Purchase Invoice Payment Number</label>
+                                <label>Purchase Invoice Payment #</label>
                                 <input type="text" class="form-control" v-model="bills_payment_number" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
@@ -59,15 +59,15 @@
                             </div>
 
                             <div class="col-sm-6 form-group" v-if="billsData !== null">
-                                <div><label for="name">Supplier</label>: {{contacts.company}}</div>
-                                <div><label for="name">Address</label>: {{contacts.company_address}}</div>
-                                <div><label for="name">Email</label>: {{contacts.email}}</div>
-                                <div><label for="name">Phone</label>: {{contacts.mobile_number}}</div>
+                                <div><label for="name"><strong>Supplier</strong></label>: {{contacts.company}}</div>
+                                <div><label for="name"><strong>Address</strong></label>: {{contacts.company_address}}</div>
+                                <div><label for="name"><strong>Email</strong></label>: {{contacts.email}}</div>
+                                <div><label for="name"><strong>Phone</strong></label>: {{contacts.mobile_number}}</div>
                             </div>
                         </div>
                         <br>
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBillPayment"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Bill Payment</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create Purchase Invoice Payment</button>
                     </form>
                 </div>
 
@@ -86,7 +86,7 @@
         data() {
             return {
                 ifReady: false,
-                bills: [],
+                // bills: [],
                 billsData: null,
                 bill_id: '',
                 amount: '',
@@ -111,7 +111,6 @@
             let promiseBills = new Promise((resolve, reject) => {
                 axios.get("/api/bills/get-all-bills/").then(res => {
                     this.bills = res.data.bills;
-                    // console.log('IP: ' + JSON.stringify(res.data));
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -145,12 +144,6 @@
                     console.log((res.data));
                     this.remaining_balance = res.data.bill.amount - res.data.bill.amount_paid;
                     this.contacts = res.data.bill.contact;
-                    // this.ro_contact_id = res.data.receiveOrder.contact_id;
-                    // this.ro_contact_name = res.data.receiveOrder.contact.person;
-                    // this.amount = res.data.receiveOrder.amount;
-                    // this.receive_order_items = res.data.receiveOrder.receive_order_items;
-                    // this.getBillAmount();
-                    // resolve();
                 }).catch(err => {
                     console.log(err);
                     reject();
