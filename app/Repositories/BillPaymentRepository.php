@@ -80,8 +80,8 @@ class BillPaymentRepository extends Repository
         $journal = Journal::create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  $billPayment->bill->user_id,
-            'reference_number'  =>  $billPayment->bill->reference_number,
-            'memo'              =>  'Bills Payments',
+            'reference_number'  =>  $billPayment->bills_payment_number,
+            'memo'              =>  'Bills Payment',
             'amount'            =>  $billPayment->amount,
             'contact_id'        =>  $billPayment->bill->contact_id,
             'posting_period'    =>  Carbon::parse($billPayment->created_at)
@@ -94,9 +94,9 @@ class BillPaymentRepository extends Repository
         $voucher = $journal->voucher()->create([
             'verified_by'       =>  $billPayment->bill->user_id,
             'user_id'           =>  $billPayment->bill->user_id,
-            'reference_number'  =>  $billPayment->bill->reference_number,
+            'reference_number'  =>  $billPayment->bills_payment_number,
             'number'            =>  $billPayment->cr_number,
-            'memo'              =>  'Bills Payments',
+            'memo'              =>  'Bills Payment',
             'amount'            =>  $billPayment->amount,
             'contact_id'        =>  $billPayment->bill->contact_id,
             'posting_period'    =>  Carbon::parse($billPayment->created_at),
@@ -107,18 +107,18 @@ class BillPaymentRepository extends Repository
         return $voucher->voucherEntries()->createMany($journalEntries->toArray());
     }
 
-    // public function paginateWithFilters(
-    //     $request = null,
-    //     $length = 10,
-    //     $orderBy = 'desc',
-    //     $removePage = true
-    // ) {
-    //     return $this->model->filter($request)
-    //         ->orderBy('created_at', $orderBy)
-    //         ->with('bill:id,amount,amount_paid')
-    //         ->paginate($length)
-    //         ->withPath(
-    //             $this->model->createPaginationUrl($request, $removePage)
-    //         );
-    // }
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->with('bill:id,amount,amount_paid', 'bill:id,reference_number')
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
+    }
 }
