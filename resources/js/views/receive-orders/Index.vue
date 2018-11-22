@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    <b>Received Orders / View Received Orders</b>
+                    <b>Received Orders / Received Orders List</b>
                 </div>
                 <div class="float-right">
                     <router-link class="btn-primary btn-sm" :to="{ name: 'receive-orders.create' }"><i class="fas fa-plus"></i> Create New Received Order</router-link>

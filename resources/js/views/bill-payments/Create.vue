@@ -2,28 +2,46 @@
     <div>
         <div class="card">
             <div class="card-header">
-                <b>Bill Payments / Create New Bill Payment</b>
+                <b>Purchase Invoice Payments / Create New Purchase Invoice Payment</b>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
                     <form v-on:submit.prevent="createNewInvoicePayment">
                         <div class="row">
+
                             <div class="col-md-6 form-group">
-                                <label>Bill #</label>
+                                <label>Purchase Invoice #</label>
                                 <vue-select v-model="billsData" @input="selectBills()" label="reference_number" :options="bills"></vue-select>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>Purchase Invoice Payment Number</label>
+                                <input type="text" class="form-control" v-model="bills_payment_number" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="name">Purchase Invoice Payment Date</label>
+                                <input type="date" class="form-control" v-model="bills_payment_date" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="name">Amount</label>
                                 <input type="number" class="form-control" v-model="amount" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-                        </div>
 
-                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Remaining Balance</label>
+                                <input type="number" class="form-control" v-model="remaining_balance" autocomplete="off" minlength="2" maxlength="255" readonly>
+                            </div>
+
                             <div class="col-md-6 form-group">
                                 <label>Mode of Payment</label>
                                 <vue-select v-model="mopData" @input="selectModeOfPayment()" label="name" :options="mop"></vue-select>
                             </div>
+                            
+                        </div>
+
+                        <div class="row">
 
                             <div class="form-group col-md-6" v-show="selectedCash">
                                 <label for="name">CR #</label>
@@ -38,6 +56,13 @@
                             <div class="form-group col-md-6" v-show="selectedCheck">
                                 <label for="name">Check #</label>
                                 <input type="text" class="form-control" v-model="check" autocomplete="off" minlength="2" maxlength="255">
+                            </div>
+
+                            <div class="col-sm-6 form-group" v-if="billsData !== null">
+                                <div><label for="name">Supplier</label>: {{contacts.company}}</div>
+                                <div><label for="name">Address</label>: {{contacts.company_address}}</div>
+                                <div><label for="name">Email</label>: {{contacts.email}}</div>
+                                <div><label for="name">Phone</label>: {{contacts.mobile_number}}</div>
                             </div>
                         </div>
                         <br>
@@ -65,6 +90,9 @@
                 billsData: null,
                 bill_id: '',
                 amount: '',
+                bills_payment_number: '',
+                bills_payment_date: '',
+                remaining_balance: null,
                 mop: [],
                 mopData: null,
                 mode_of_payment_id: '',
@@ -74,7 +102,8 @@
                 check: '',
                 name: '',
                 selectedCash: false,
-                selectedCheck: false
+                selectedCheck: false,
+                contacts: []
             };
         },
 
@@ -110,10 +139,29 @@
             viewBillPayment() {
                 this.$router.push({ name: 'bill-payments.index' });
             },
+
+            getInvoiceData(id) {
+                axios.get("/api/bills/" + id).then(res => {
+                    console.log((res.data));
+                    this.remaining_balance = res.data.bill.amount - res.data.bill.amount_paid;
+                    this.contacts = res.data.bill.contact;
+                    // this.ro_contact_id = res.data.receiveOrder.contact_id;
+                    // this.ro_contact_name = res.data.receiveOrder.contact.person;
+                    // this.amount = res.data.receiveOrder.amount;
+                    // this.receive_order_items = res.data.receiveOrder.receive_order_items;
+                    // this.getBillAmount();
+                    // resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+
+            },
             
             selectBills() {
                 this.bill_id = this.billsData.id;
                 console.log('IV id: ' + this.bill_id);
+                this.getInvoiceData(this.billsData.id);
             },
 
             selectModeOfPayment() {
@@ -133,7 +181,7 @@
 
             createNewInvoicePayment() {
                 this.ifReady = false;
-
+                console.log(this.$data);
                 axios.post("/api/bill-payments", this.$data).then(res => {
                     this.$router.push({ name: 'bill-payments.index' });
                 }).catch(err => {

@@ -154,7 +154,7 @@
                         <router-link class="nav-link link" :to="{ name: 'receive-orders.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                Receive Orders
+                                Received Orders
                             </span>
                         </router-link>
                     </li>
@@ -169,8 +169,8 @@
                     <li class="nav-item">
                         <router-link class="nav-link link" :to="{ name: 'bill-payments.index' }">
                             <span class="sub-content">
-                                <i class="fas fa-caret-right pr-2 "></i>
-                                Bills Payment
+                                <i class="fas fa-caret-right pr-1"></i>
+                                Purchase Invoice Payments</span>
                             </span>
                         </router-link>
                     </li>

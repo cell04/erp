@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    <b>Bill Payment / Bill Payment List</b>
+                    <b>Purchase Invoice Payment / Purchase Invoice Payments List</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'bill-payments.create' }"><i class="fas fa-plus"></i> Create New Item Bill Payment</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'bill-payments.create' }"><i class="fas fa-plus"></i> Create New Purchase Invoice Payment</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -14,7 +14,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Bill Payment - Total Bill Payment {{ this.meta.total }}
+                                List of Purchase Invoice Payments - Total Purchase Invoice Payments {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -25,7 +25,7 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Bill #</th>
+                            <th scope="col">Purchase Invoice Payment #</th>
                             <th scope="col">CR #</th>
                             <th scope="col">Mode of Payment</th>
                             <th scope="col">Amount</th>
@@ -276,7 +276,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'bill-payments.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
@@ -286,7 +286,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'bill-payments.index',
                     query: {
                         page,
                         per_page: this.meta.per_page
@@ -296,7 +296,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'bill-payments.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page
@@ -306,7 +306,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'bill-payments.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page
@@ -316,7 +316,7 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'bill-payments.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page
@@ -389,7 +389,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'bill-payments.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page
@@ -400,7 +400,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'item-classifications.index',
+                    name: 'bill-payments.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,

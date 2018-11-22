@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    <b>Purchase Orders / View Purchase Orders</b>
+                    <b>Purchase Orders / Purchase Orders List</b>
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'purchase-orders.create' }"><i class="fas fa-plus"></i> Create New Purchase Orders</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'purchase-orders.create' }"><i class="fas fa-plus"></i> Create New Purchase Order</router-link>
                 </div>
             </div>
             <div class="card-body">

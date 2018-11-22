@@ -6,7 +6,7 @@
                     <button class="btn btn-primary float-right">Add New Bill</button>
                 </router-link> -->
                 <div class="float-left">
-                    <b>Purchase Invoices / View Purchase Invoice</b>
+                    <b>Purchase Invoices / Purchase Invoices List</b>
                 </div>
                 <div class="float-right">
                     <router-link class="btn-primary btn-sm" :to="{ name: 'bills.create' }"><i class="fas fa-plus"></i> Create New Purchase Invoice</router-link>
@@ -101,7 +101,7 @@
                     <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoices</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">bills per page</div>
+                            <div class="input-group-text">Items per page</div>
                         </div>
                         <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
                             <option value="10">10</option>
