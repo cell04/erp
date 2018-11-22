@@ -31,6 +31,10 @@
                         <tr>
                             
                             <th scope="col">Invoice #</th>
+<<<<<<< HEAD
+=======
+                            <th scope="col">Supplier</th>
+>>>>>>> 6e9ce2a35d1a303cb425d7e80bbea2d73da03cc4
                             <th scope="col">Status</th>
                             <th scope="col">Date Created</th>
                             <th scope="col">Action</th>
@@ -39,6 +43,10 @@
                     <tbody v-if="bills">
                         <tr v-for="bill in bills">
                             <td>{{bill.reference_number}}</td>
+<<<<<<< HEAD
+=======
+                            <td>{{bill.contact.person | Upper}}</td>
+>>>>>>> 6e9ce2a35d1a303cb425d7e80bbea2d73da03cc4
                             <td>{{ (bill.amount_paid == 0) ? 'Issued': ((bill.amount_paid) < (bill.amount - bill.tax)) ? 'Partially Paid' : 'Fully Paid'}}</td>
                             <td>{{bill.created_at | DateFormat}}</td>
                             

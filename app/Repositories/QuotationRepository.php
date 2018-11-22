@@ -61,6 +61,7 @@ class QuotationRepository extends Repository
             if ($quotation->status == 0) {
                 if ($request->status) {
                     $request->request->add(['approved_by' => auth('api')->user()->id]);
+                    // $request->request->add(['approved_by' => session('user-id')]);
                 }
                 //update stock request
                 $quotation->fill($request->all());

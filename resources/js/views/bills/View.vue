@@ -28,6 +28,7 @@
                     </div>
                     
 
+<<<<<<< HEAD
                     <div class="table-responsive-sm">
                         <table class="table table-striped">
                             <thead>
@@ -43,13 +44,53 @@
                             </thead>
                             <tbody>
                                 <tr :key="item.id" v-for="(item, index) in billsItems">
+=======
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">SKU</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">UOM</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr :key="item.id" v-for="(item, index) in billsItems">
+>>>>>>> 6e9ce2a35d1a303cb425d7e80bbea2d73da03cc4
                                 <td>{{ item.item.stock_keeping_unit }}</td>
                                 <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.unit_of_measurement.name }}</td>
+<<<<<<< HEAD
                                 <td align="right">{{ item.item_pricelist.price }}</td>
                                 <td align="right">{{ subtotalRow[index] | Decimal}}</td>
+=======
+                                <td>{{ item.item_pricelist.price }}</td>
+                                <td>{{ subtotalRow[index] | Decimal}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Subtotal</b>
+                                </td>
+                                <td>{{ +(this.bills.amount) | Decimal }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Tax</b>
+                                </td>
+                                <td>{{ this.bills.tax ? ((+this.bills.tax).toFixed(2)) : 0 }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Total</b>
+                                </td>
+                                <td>{{ +(this.bills.amount - this.bills.tax) | Decimal }}</td>
+>>>>>>> 6e9ce2a35d1a303cb425d7e80bbea2d73da03cc4
                             </tr>
                             </tbody>
                         </table>
