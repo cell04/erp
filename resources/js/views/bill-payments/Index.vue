@@ -25,7 +25,7 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Purchase Invoice Payment #</th>
+                            <th scope="col">Purchase Invoice #</th>
                             <th scope="col">CR #</th>
                             <th scope="col">Mode of Payment</th>
                             <th scope="col">Amount</th>
