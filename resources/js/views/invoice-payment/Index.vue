@@ -180,7 +180,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Item Classification',
+                componentVal: ' Item Subtype',
                 invoicePayment: null,
                 searchColumnName: null,
                 searchColumnDescription: null,

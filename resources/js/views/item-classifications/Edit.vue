@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Classifications / Edit Item Classification
+                Item Classifications / Edit  Item Subtype
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

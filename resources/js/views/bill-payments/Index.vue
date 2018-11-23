@@ -182,7 +182,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Item Classification',
+                componentVal: ' Item Subtype',
                 billPayment: null,
                 searchColumnName: null,
                 searchColumnDescription: null,

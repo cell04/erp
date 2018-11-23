@@ -39,7 +39,7 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Item Classification</label>
+                                        <label> Item Subtype</label>
                                         <vue-select v-model="itemClassId" @input="selectClassType()" label="name" :options="itemClassList"></vue-select>
                                     </div>
                                 </div>

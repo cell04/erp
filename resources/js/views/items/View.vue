@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Item Classification</label>
+                                        <label> Item Subtype</label>
                                         <input type="text" class="form-control" v-model="item.item_classification.name" id="class" readonly>
                                     </div>
                                 </div>

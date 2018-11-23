@@ -6,7 +6,7 @@
                     Settings / {{ componentVal }}
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'item-classifications.create' }"><i class="fas fa-plus"></i> Create New Item Classification</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'item-classifications.create' }"><i class="fas fa-plus"></i> Create New  Item Subtype</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -171,7 +171,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Item Classification',
+                componentVal: ' Item Subtype',
                 itemClassification: null,
                 searchColumnName: null,
                 searchColumnDescription: null,
