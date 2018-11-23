@@ -1,174 +1,181 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header clearfix">
-                <div class="float-left">
-                    <b>Warehouses / View Warehouses</b>
+        <div class="content-title">
+            <h4 class="module-title">WAREHOUSE</h4>
+            <hr class="title-border">
+        </div>
+
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header clearfix">
+                    <div class="float-left">
+                        Warehouses
+                    </div>
+                    <div class="float-right">
+                        <router-link class="btn-primary btn-sm" :to="{ name: 'warehouses.create' }"><i class="fas fa-plus"></i> Create New Warehouse</router-link>
+                    </div>
                 </div>
-                <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'warehouses.create' }"><i class="fas fa-plus"></i> Create New Warehouse</router-link>
-                </div>
-            </div>
-            <div class="card-body">
-                <table class="table table-hover table-sm">
-                    <caption>
-                        <div class="row">
-                            <div class="col-md-9">
-                                List of Warehouses - Total Items {{ this.meta.total }}
-                            </div>
-                            <div class="col-md-3">
-                                <div class="progress" height="30px;" v-if="showProgress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                <div class="card-body">
+                    <table class="table table-hover table-sm">
+                        <caption>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    List of Warehouses - Total Items {{ this.meta.total }}
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="progress" height="30px;" v-if="showProgress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Country</th>
-                            <th scope="col">Zip Code</th>
-                            <th scope="col">Telephone Number</th>
-                            <th scope="col">Options</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="warehouses">
-                        <tr v-for="{ id, name, city, country, zip_code, telephone_number } in warehouses">
-                            <td>{{ name }}</td>
-                            <td>{{ city }}</td>
-                            <td>{{ country }}</td>
-                            <td>{{ zip_code }}</td>
-                            <td>{{ telephone_number }}</td>
-                            <td>
-                                <router-link class="text-secondary" :to="{ name: 'warehouses.view', params: { id: id }}">
-                                    <i class="fas fa-envelope-open-text"></i> View
-                                </router-link>
-                                |
-                                <router-link class="text-secondary" :to="{ name: 'warehouses.edit', params: { id: id }}">
-                                    <i class="fas fa-edit"></i> Edit
-                                </router-link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <br>
-
-        <div class="clearfix">
-            <div v-if="pageCount">
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div v-else>
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Country</th>
+                                <th scope="col">Zip Code</th>
+                                <th scope="col">Telephone Number</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="warehouses">
+                            <tr v-for="{ id, name, city, country, zip_code, telephone_number } in warehouses">
+                                <td>{{ name }}</td>
+                                <td>{{ city }}</td>
+                                <td>{{ country }}</td>
+                                <td>{{ zip_code }}</td>
+                                <td>{{ telephone_number }}</td>
+                                <td>
+                                    <router-link class="text-secondary" :to="{ name: 'warehouses.view', params: { id: id }}">
+                                        <i class="fas fa-envelope-open-text"></i> View
+                                    </router-link>
+                                    |
+                                    <router-link class="text-secondary" :to="{ name: 'warehouses.edit', params: { id: id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </router-link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="float-right">
-                <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Warehouses</button>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Items per page</div>
-                        </div>
-                        <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-        </div>
+            <br>
 
-        <!-- Modal -->
-        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchWarehouses" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Search Warehouses</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Address</label>
-                            <textarea class="form-control" v-model="searchColumnAddress" required></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3 form-group">
-                                <label for="city">City</label>
-                                <input type="text" class="form-control" v-model="searchColumnCity" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="country">Country</label>
-                                <input type="text" class="form-control" v-model="searchColumnCountry" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="zip_code">Zip Code</label>
-                                <input type="text" class="form-control" v-model="searchColumnZipCode" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="telephone_number">Telephone Number</label>
-                                <input type="text" class="form-control" v-model="searchColumnTelephoneNumber" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                        </div>
+            <div class="clearfix">
+                <div v-if="pageCount">
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div v-else>
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 
-                        <div class="form-group">
-                            <label>Order By</label>
-                            <select class="form-control" v-model="order_by">
-                                <option value="desc">Newest</option>
-                                <option value="asc">Oldest</option>
+                <div class="float-right">
+                    <form class="form-inline">
+                        <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Warehouses</button>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Items per page</div>
+                            </div>
+                            <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="modal-footer clearfix">
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchWarehouses" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Search Warehouses</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea class="form-control" v-model="searchColumnAddress" required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" v-model="searchColumnCity" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" class="form-control" v-model="searchColumnCountry" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="zip_code">Zip Code</label>
+                                    <input type="text" class="form-control" v-model="searchColumnZipCode" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="telephone_number">Telephone Number</label>
+                                    <input type="text" class="form-control" v-model="searchColumnTelephoneNumber" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Order By</label>
+                                <select class="form-control" v-model="order_by">
+                                    <option value="desc">Newest</option>
+                                    <option value="asc">Oldest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer clearfix">
+                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
+                            <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
