@@ -6,7 +6,7 @@
                     Settings / {{componentVal}}s
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'unit-of-measurements.create' }"><i class="fas fa-plus"></i> Create New Unit of Measurement</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'unit-of-measurements.create' }"><i class="fas fa-plus"></i> Create New UOM</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -192,7 +192,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Unit of Measurement',
+                componentVal: 'UOM',
                 unit_of_measurements: null,
                 searchColumnName: '',
                 searchColumnAbbreviation: '',

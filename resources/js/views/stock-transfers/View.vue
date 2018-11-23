@@ -49,7 +49,7 @@
                             <th scope="col">Stock Keeping Unit</th>
                             <th scope="col">Name</th>
                             <th scope="col">Quantity</th>
-                            <th scope="col">Unit Of Measurement</th>
+                            <th scope="col">UOM</th>
                         </tr>
                     </thead>
                     <tbody>

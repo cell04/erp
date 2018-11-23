@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Unit of Measurements / Create New Unit of Measurement
+                Unit of Measurements / Create New UOM
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -18,7 +18,7 @@
                         </div>
                         
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewUOM"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Unit of Measurement</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New UOM</button>
                     </form>
                 </div>
 

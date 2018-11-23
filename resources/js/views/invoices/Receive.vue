@@ -50,7 +50,7 @@
                                         <th scope="col">SKU</th>
                                         <th scope="col">Item</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">Unit of Measurement</th>
+                                        <th scope="col">UOM</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Sub Total</th>
                                         <th scope="col">Action</th>

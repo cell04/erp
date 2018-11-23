@@ -46,7 +46,7 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Unit of Measurement</label>
+                                        <label>UOM</label>
                                         <vue-select v-model="itemUnitId" @input="selectUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>

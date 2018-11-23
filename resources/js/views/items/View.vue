@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Unit of Measurement</label>
+                                        <label>UOM</label>
                                         <input type="text" class="form-control" v-model="item.default_unit_of_measurement.name" id="class" readonly>
                                     </div>
                                 </div>

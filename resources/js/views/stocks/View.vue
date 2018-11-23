@@ -21,7 +21,7 @@
                                 <input type="text" class="form-control" v-model="stocks.quantity" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
                             <div class="col-md-6 form-group">
-                                <label for="country">Unit of Measurement</label>
+                                <label for="country">UOM</label>
                                 <input type="text" class="form-control" v-model="uom.name" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
                         </div>

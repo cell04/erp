@@ -20,8 +20,8 @@
                     </fieldset>
 
                     <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUnitOfMeasurements"><i class="fas fa-chevron-left"></i> Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUnitOfMeasurements"><i class="fas fa-edit"></i>  Edit Unit of Measurement</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUnitOfMeasurementModal"><i class="fas fa-trash-alt"></i> Delete Unit of Measurement</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUnitOfMeasurements"><i class="fas fa-edit"></i>  Edit UOM</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUnitOfMeasurementModal"><i class="fas fa-trash-alt"></i> Delete UOM</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -36,13 +36,13 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Unit of Measurement?</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this UOM?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this Unit of Measurement? <br><br>
+                        Are you sure you want to delete this UOM? <br><br>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteCorporation">Confirm Delete</button>
@@ -58,7 +58,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Unit of Measurement',
+                componentVal: 'UOM',
                 ifReady: false,
                 unit_of_measurements: ''
             };
