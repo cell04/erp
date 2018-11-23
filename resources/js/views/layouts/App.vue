@@ -43,7 +43,7 @@
     }
 </script>
 
-<style scoped>
+<style>
 .sidebarTheme {
     background: #fff;
     height: 900px;
@@ -58,6 +58,28 @@
     margin-left: 16%;
     margin-top: -2%;
 } */
+
+.content-title {
+    margin-top: -27px;
+    border-bottom: 28px solid #f5f8fa;
+    border-left: 25px solid transparent;
+    height: 0;
+    width: 100%;
+}
+
+.module-title {
+    padding-top: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.title-border {
+    width: 103%;
+    margin-top: 0px;
+    margin-left: -3%;
+    border: 0;
+    border-top: 2px solid #abb0b0;
+}
 
 
     

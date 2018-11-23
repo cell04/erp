@@ -1,95 +1,105 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <b>Invoices / Create New Invoice</b>
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">INVOICE</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="createNewInvoice">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Quotation #</label>
-                            <vue-select v-model="quotationData" @input="selectQuotation()" label="number" :options="quotation"></vue-select>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Invoice #</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text" id="btnGroupAddon">I</div>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewInvoices">Invoices</a>
+                    <a class="text-secondary"> / Create New Invoice</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewInvoice">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Quotation #</label>
+                                    <vue-select v-model="quotationData" @input="selectQuotation()" label="number" :options="quotation"></vue-select>
                                 </div>
-                                <input type="text" class="form-control" v-model="reference_number" readonly placeholder="Invoice #" aria-label="Input group example" aria-describedby="btnGroupAddon">
+
+                                <div class="col-md-6 form-group">
+                                    <label>Invoice #</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" id="btnGroupAddon">I</div>
+                                        </div>
+                                        <input type="text" class="form-control" v-model="reference_number" readonly placeholder="Invoice #" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <!-- <label>Due Date</label>
+                                    <input type="date" class="form-control" v-model="due_date" required> -->
+                                    <div class="dateStyle">
+                                        <label>Due Date</label>
+                                        <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Customer</label>
+                                    <input type="text" class="form-control" v-model="contact" readonly>
+                                </div>
+
                             </div>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <!-- <label>Due Date</label>
-                            <input type="date" class="form-control" v-model="due_date" required> -->
-                            <div class="dateStyle">
-                                <label>Due Date</label>
-                                <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                            <br>
+                            <h6>
+                                <b><u>Invoice Items</u></b>
+                            </h6>
+                            <br>
+
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item, index) in quotation_items">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td><input type="text" class="form-control" v-model="item.quantity" required></td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td align="right">{{ subtotalRow[index] | Decimal }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td align="right">{{total | Decimal}}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewInvoices"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>
                             </div>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Customer</label>
-                            <input type="text" class="form-control" v-model="contact" readonly>
-                        </div>
-
+                        </form>
                     </div>
 
-                    <br>
-                    <h6>
-                        <b><u>Invoice Items</u></b>
-                    </h6>
-                    <br>
-
-                    <table class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">UOM</th>
-                                <th scope="col">Unit Price</th>
-                                <th class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr :key="item.id" v-for="(item, index) in quotation_items">
-                                <td>{{ item.item.stock_keeping_unit }}</td>
-                                <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
-                                <td><input type="text" class="form-control" v-model="item.quantity" required></td>
-                                <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.price }}</td>
-                                <td align="right">{{ subtotalRow[index] | Decimal }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td align="right">{{total | Decimal}}</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="pt-3">
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewInvoices"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
                     </div>
-                </form>
-            </div>
 
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>

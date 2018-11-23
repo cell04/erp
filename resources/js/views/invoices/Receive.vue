@@ -1,135 +1,145 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            Receive Orders / Create New Invoice
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">INVOICE</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="createNewInvoice">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Receive Order</label>
-                            <input type="text" class="form-control" v-model="receiveOrderId" readonly>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Contact</label>
-                            <input type="text" class="form-control" v-model="contact_person" readonly>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Invoice #</label>
-                            <input type="text" class="form-control" v-model="reference_number" required>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Due Date</label>
-                            <input type="date" class="form-control" v-model="due_date" required>
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <!-- <table class="table table-hover table-sm">
-                        <caption>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewQuotations">Invoices</a>
+                    <a class="text-secondary"> / Receive Invoice</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewInvoice">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-6 form-group">
+                                    <label>Receive Order</label>
+                                    <input type="text" class="form-control" v-model="receiveOrderId" readonly>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Contact</label>
+                                    <input type="text" class="form-control" v-model="contact_person" readonly>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Invoice #</label>
+                                    <input type="text" class="form-control" v-model="reference_number" required>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Due Date</label>
+                                    <input type="date" class="form-control" v-model="due_date" required>
                                 </div>
                             </div>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Unit of Measurement</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Sub Total</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(invoice_item, index) in invoice_items" :key="index">
-                                <td>{{ invoice_item.item.stock_keeping_unit }}</td>
-                                <td>
-                                    <vue-select v-model="invoice_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                                </td>
-                                <td>
-                                    <input class="form-control" v-model.number="invoice_item.quantity" required>
-                                </td>
-                                <td>
-                                    {{ invoice_item.unitOfMeasurement }}
-                                </td>
-                                <td>
-                                    <vue-select v-model="invoice_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="invoice_item.itemPricelists"></vue-select>
-                                </td>
-                                <td>{{ isNaN(invoice_item.subTotal) ? '0.00' : invoice_item.subTotal }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td>{{ isNaN(amounts)  ? '0.00': amounts }}</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table> -->
 
-                    <table class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">UOM</th>
-                                <th scope="col">Unit Price</th>
-                                <th scope="col">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr :key="item.id" v-for="(item, index) in receive_order_items">
-                                <td>{{ item.item.stock_keeping_unit }}</td>
-                                <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.item_pricelist.price }}</td>
-                                <td>{{ subtotalRow[index] }}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td>{{ total }}</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            <br>
 
-                    <div class="pt-3">
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewROs"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>
-                        <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
+                            <!-- <table class="table table-hover table-sm">
+                                <caption>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                        </div>
+                                    </div>
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Item</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Unit of Measurement</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Sub Total</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(invoice_item, index) in invoice_items" :key="index">
+                                        <td>{{ invoice_item.item.stock_keeping_unit }}</td>
+                                        <td>
+                                            <vue-select v-model="invoice_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" v-model.number="invoice_item.quantity" required>
+                                        </td>
+                                        <td>
+                                            {{ invoice_item.unitOfMeasurement }}
+                                        </td>
+                                        <td>
+                                            <vue-select v-model="invoice_item.itemPricelist" @input="selectItemPricelist(index)" label="price" :options="invoice_item.itemPricelists"></vue-select>
+                                        </td>
+                                        <td>{{ isNaN(invoice_item.subTotal) ? '0.00' : invoice_item.subTotal }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)">Remove</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td>{{ isNaN(amounts)  ? '0.00': amounts }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table> -->
+
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th scope="col">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item, index) in receive_order_items">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                        <td>{{ item.item_pricelist.price }}</td>
+                                        <td>{{ subtotalRow[index] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td>{{ total }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>
+                                <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </div>
 
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -265,8 +275,8 @@
         // },
 
         methods: {
-            viewROs() {
-                this.$router.push({ name: 'receive-orders.index' });
+            viewQuotations() {
+                this.$router.push({ name: 'quotations.index' });
             },
             // selectItem(index) {
             //     this.invoice_items[index].item_id = this.invoice_items[index].item.id;
