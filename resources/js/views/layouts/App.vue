@@ -4,10 +4,11 @@
         <!-- <div class="headerTop"></div> -->
         <div class="container-fluid mb-5 ">
             <div class="row">
-                <div class="col-md-2 p-md-0">
-                    <sidebar></sidebar>
+                <div v-bind:class="this.$store.state.showSidebar ? 'col-md-2 p-md-0':'col-md-0 p-md-0'">
+                    <sidebar v-if="this.$store.state.showSidebar"></sidebar>
                 </div>
-                <div class="col-md-10 p-md-0">
+
+                <div v-bind:class="this.$store.state.showSidebar ? 'col-md-10 p-md-0':'col-md-12 p-md-0'">
                     <!-- <div class="mt-3 px-md-5"> -->
                         <transition name="fade" mode="out-in">
                             <router-view class="view"></router-view>
@@ -82,5 +83,5 @@
 }
 
 
-    
+
 </style>

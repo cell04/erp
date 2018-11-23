@@ -1,6 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-md navcolor">
         <div class="container-fluid">
+            <i @click="clickSidebar()" class="fas fa-bars menu-button"></i>
             <router-link class="navTextColor" :to="{ name: 'overview' }">
                 <img src="../../assets/tradesoft_logo.png" style="width:115px; height:60px; margin-top:-5px; margin-bottom: -10px; margin-left:25   px;" alt="Tradesoft Business"/>
             </router-link>
@@ -60,7 +61,6 @@
                 this.corporation = event.corporation;
             });
         },
-
         methods: {
             logout() {
                 axios.post('/logout').then(res => {
@@ -70,6 +70,9 @@
                     localStorage.clear();
                     location.reload();
                 });
+            },
+            clickSidebar(){
+                this.$store.commit('toggleSidebar')
             }
         }
     }
@@ -95,10 +98,15 @@
         float: none;
         margin-top: -20px;
     }
-
     .navbar-nav .nav-link {
         padding-right: 0;
         padding-left: 0;
         padding-bottom: 20px;
+    }
+    .menu-button{
+       font-size: 1.5em;
+       margin-right: 20px;
+       cursor: pointer;
+       color: #1c6c6e;
     }
 </style>
