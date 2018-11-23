@@ -10,7 +10,7 @@ export default new Vuex.Store({
         user: null,
         selectedCorporation: null,
         corporation_id: localStorage.getItem('selectedCorporation'),
-        showSidebar: false,
+        showSidebar: true,
     },
     getters: {
         accessToken (state) {
