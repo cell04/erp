@@ -1,123 +1,128 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <b>Purchase Invoices / Create New Purchase Invoice</b>
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">PURCHASE INVOICE</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="createNewBill">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Received Order #</label>
-                            <vue-select v-model="receiveOrdersId" @input="selectRO()" label="reference_number" :options="receiveOrders" required></vue-select>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Purchase Invoice #</label>
-                            <input type="text" class="form-control" v-model="reference_number" required>
-                        </div>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewBills">Purchase Invoices</a>
+                    <a class="text-secondary"> / Create New Purchase Invoice</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewBill">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Received Order #</label>
+                                    <vue-select v-model="receiveOrdersId" @input="selectRO()" label="reference_number" :options="receiveOrders" required></vue-select>
+                                </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Supplier</label>
-                            <input type="text" class="form-control" v-model="ro_contact_name" readonly>
-                        </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Purchase Invoice #</label>
+                                    <input type="text" class="form-control" v-model="reference_number" required>
+                                </div>
 
-                        <!-- <div class="col-md-6 form-group">
-                            <label>Amount</label>
-                            <input type="number" class="form-control" v-model="amount" readonly>
-                        </div> -->
+                                <div class="col-md-6 form-group">
+                                    <label>Supplier</label>
+                                    <input type="text" class="form-control" v-model="ro_contact_name" readonly>
+                                </div>
 
-                        <div class="col-md-6 form-group">
-                            <div class="dateStyle">
-                                <label>Due Date</label>
-                                <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                                <div class="col-md-6 form-group">
+                                    <div class="dateStyle">
+                                        <label>Due Date</label>
+                                        <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Taxable</label><br />
+                                    <label class="switch">
+                                        <input type="checkbox" v-model="taxable" @change="onTaxable()">
+                                        <span class="slider round">
+                                            <span class="on">{{'Yes'}}</span>
+                                            <span class="off">{{'No'}}</span>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-md-6 form-group" v-if="this.$data.taxable === true">
+                                    <label>Tax %</label>  
+                                    <input type="number" class="form-control" v-model="taxable_value">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Taxable</label><br />
-                            <label class="switch">
-                                <input type="checkbox" v-model="taxable" @change="onTaxable()">
-                                <span class="slider round">
-                                    <span class="on">{{'Yes'}}</span>
-                                    <span class="off">{{'No'}}</span>
-                                </span>
-                            </label>
-                        </div>
+                            <br>
+                            <h6><b><u>Purchase Invoice Items</u></b></h6>
+                            <br>
 
-                        <div class="col-md-6 form-group" v-if="this.$data.taxable === true">
-                            <label>Tax %</label>  
-                            <input type="number" class="form-control" v-model="taxable_value">
+                            <br>
+
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item, index) in receive_order_items">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                        <td>{{ item.item_pricelist.price }}</td>
+                                        <td align="right">{{ subtotalRow[index] | Decimal }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>
+                                            <b>Subtotal</b>
+                                        </td>
+                                        <td align="right">{{subtotal | Decimal}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>
+                                            <b>Tax</b>
+                                        </td>
+                                        <td align="right">{{taxis ? (taxis.toFixed(2)) : 0 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td align="right">{{total | Decimal}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <br>
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBills"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Purchase Invoice</button>
+                                <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
+                            </div>
+                        </form>
+                    </div>
+
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                         </div>
                     </div>
 
-                    <br>
-                    <h6><b><u>Purchase Invoice Items</u></b></h6>
-                    <br>
-
-                    <br>
-
-                    <table class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">UOM</th>
-                                <th scope="col">Unit Price</th>
-                                <th class="text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr :key="item.id" v-for="(item, index) in receive_order_items">
-                                <td>{{ item.item.stock_keeping_unit }}</td>
-                                <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.item_pricelist.price }}</td>
-                                <td align="right">{{ subtotalRow[index] | Decimal }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5"></td>
-                                <td>
-                                    <b>Subtotal</b>
-                                </td>
-                                <td align="right">{{subtotal | Decimal}}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5"></td>
-                                <td>
-                                    <b>Tax</b>
-                                </td>
-                                <td align="right">{{taxis ? (taxis.toFixed(2)) : 0 }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td align="right">{{total | Decimal}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <br>
-                    <div class="pt-3">
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBills"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Purchase Invoice</button>
-                        <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
-                    </div>
-                </form>
-            </div>
-
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -339,7 +344,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #FF586B;
+        background-color: #8E8E8E;
         -webkit-transition: .4s;
         transition: .4s;
     }
