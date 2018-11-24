@@ -1,107 +1,116 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <b>Stock Receive / Create New Stock Receive</b>
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">STOCK RECEIVE</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="createNewStockRequest">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Stock Transfer</label>
-                            <vue-select v-model="stockTransfersData" @input="selectStockTransfers()" label="number" :options="stockTransfers" required></vue-select>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Stock Receive #</label>
-                            <input type="text" class="form-control" v-model="number" required>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>From</label>
-                            <input type="text" class="form-control" v-model="st_stock_transferable_from_name" readonly>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>To</label>
-                            <input type="text" class="form-control" v-model="st_stock_transferable_to_name" readonly>
-                        </div>
-                        
-
-                    </div>
-
-                    <br />
-                    <!-- <table class="table table-hover table-sm">
-                        <caption>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewSRec">Stock Receives</a>
+                    <a class="text-secondary"> / Create New Stock Receive</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewStockRequest">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Transfer</label>
+                                    <vue-select v-model="stockTransfersData" @input="selectStockTransfers()" label="number" :options="stockTransfers" required></vue-select>
                                 </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Receive #</label>
+                                    <input type="text" class="form-control" v-model="number" required>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>From</label>
+                                    <input type="text" class="form-control" v-model="st_stock_transferable_from_name" readonly>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>To</label>
+                                    <input type="text" class="form-control" v-model="st_stock_transferable_to_name" readonly>
+                                </div>
+                                
+
                             </div>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">UOM</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr :key="index" v-for="(stock_receive_item, index) in stock_receive_items">
-                                <td>{{ stock_receive_item.item.stock_keeping_unit }}</td>
-                                <td>
-                                 <vue-select v-model="stock_receive_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                             </td>
-                             <td><input class="form-control" v-model.number="stock_receive_item.quantity"> </td>
-                             <td>{{ stock_receive_item.unitOfMeasurement }}</td>
-                             <td>
-                                <button type="button" class="btn btn-danger btn-sm" @click="removeItem">Remove</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
-                    </table> -->
 
-                    <table class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">UOM</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr :key="item.id" v-for="(item) in stockReceiveData">
-                                <td>{{ item.item.stock_keeping_unit }}</td>
-                                <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.unit_of_measurement.name }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                
-                    <br>
+                            <br />
+                            <!-- <table class="table table-hover table-sm">
+                                <caption>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                        </div>
+                                    </div>
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="index" v-for="(stock_receive_item, index) in stock_receive_items">
+                                        <td>{{ stock_receive_item.item.stock_keeping_unit }}</td>
+                                        <td>
+                                        <vue-select v-model="stock_receive_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                    </td>
+                                    <td><input class="form-control" v-model.number="stock_receive_item.quantity"> </td>
+                                    <td>{{ stock_receive_item.unitOfMeasurement }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="removeItem">Remove</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
+                            </table> -->
 
-                    <div class="pt-3">
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewSRec"><i class="fas fa-chevron-left"></i> Back</button>
-                        <!-- <button type="button" class="btn btn-outline-success btn-sm" @click="addItem"><i class="fas fa-plus-circle"></i> Add Item</button> -->
-                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Stock Receive</button>
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item) in stockReceiveData">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        
+                            <br>
+
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewSRec"><i class="fas fa-chevron-left"></i> Back</button>
+                                <!-- <button type="button" class="btn btn-outline-success btn-sm" @click="addItem"><i class="fas fa-plus-circle"></i> Add Item</button> -->
+                                <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Stock Receive</button>
+                            </div>
+                    </form>
                     </div>
-            </form>
-        </div>
 
-        <div v-else>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
-</div>
 </template>
 
 <script>
