@@ -423,7 +423,7 @@
                     this.searchColumnTelephoneNumber,
                     this.order_by,
                     (err, data) => {
-                        next(vm => vm.setData(err, data));
+                       this.setData(err, data)
                     },
                     tab
                 );
