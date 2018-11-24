@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Settings / View Users
+                    Settings / Users
                 </div>
                 <div class="float-right">
                     <router-link class="btn-primary btn-sm" :to="{ name: 'users.create' }"><i class="fas fa-plus"></i> Create New User</router-link>

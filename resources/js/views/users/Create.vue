@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Users / Create New User
+                <a class="text-success" href="" @click.prevent="viewUser">Users</a>
+                <a class="text-secondary"> / Create New User</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

@@ -9,7 +9,8 @@ export default new Vuex.Store({
         access_token: localStorage.getItem('access_token') || null,
         user: null,
         selectedCorporation: null,
-        corporation_id: localStorage.getItem('selectedCorporation')
+        corporation_id: localStorage.getItem('selectedCorporation'),
+        showSidebar: true,
     },
     getters: {
         accessToken (state) {
@@ -27,7 +28,10 @@ export default new Vuex.Store({
         },
         addAxiosCorporationHeader(state) {
             axios.defaults.headers.common['CORPORATION-ID'] = JSON.parse(localStorage.getItem('selectedCorporation')).id;
-        }
+        },
+        toggleSidebar(state){
+            state.showSidebar = !state.showSidebar
+        },
     },
     actions: {
         SetCorporationId ({commit}, corporation_id) {

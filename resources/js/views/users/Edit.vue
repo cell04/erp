@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Users / Edit User
+                <a class="text-success" href="" @click.prevent="viewUsers">Users</a>
+                <a class="text-secondary"> / Edit User</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

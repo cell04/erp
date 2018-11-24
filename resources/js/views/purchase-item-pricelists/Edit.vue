@@ -1,28 +1,38 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <b>Purchase Item Price List / Edit Purchase Item Price List</b>
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">PURCHASE ITEM PRICE LIST</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="editItemClassification">
-                    <div class="form-group">
-                        <label for="name">Item</label>
-                        <input type="text" class="form-control" v-model="item.name" autocomplete="off" minlength="2" maxlength="255" required readonly>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="name">Price</label>
-                        <input type="text" class="form-control" v-model="price" autocomplete="off" minlength="2" maxlength="255" required>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewItemPricelists">Purchase Item Price Lists</a>
+                    <a class="text-secondary"> / Edit Purchase Item Price List</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="editItemClassification">
+                            <div class="form-group">
+                                <label for="name">Item</label>
+                                <input type="text" class="form-control" v-model="item.name" autocomplete="off" minlength="2" maxlength="255" required readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Price</label>
+                                <input type="text" class="form-control" v-model="price" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemPricelists"><i class="fas fa-chevron-left"></i>Back</button>
+                            <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItemPricelist"><i class="fas fa-edit"></i> Update Purchase Item Price List</button>
+                        </form>
                     </div>
-                    <br>
-                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemPricelists"><i class="fas fa-chevron-left"></i>Back</button>
-                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateItemPricelist"><i class="fas fa-edit"></i> Update Purchase Item Price List</button>
-                </form>
-            </div>
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

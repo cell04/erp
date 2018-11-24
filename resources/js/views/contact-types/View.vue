@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Contact Types / View Contact Types
+                <a class="text-success" href="" @click.prevent="viewContactTypes">Contact Typess</a>
+                <a class="text-secondary"> / View Contact Types</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

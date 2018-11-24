@@ -1,54 +1,62 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                Invoice Payments / Create New Invoice Payment
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <form v-on:submit.prevent="createNewInvoicePayment">
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Invoices #</label>
-                                <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
-                            </div>
+        <div class="content-title">
+            <h4 class="module-title">INVOICE PAYMENT</h4>
+            <hr class="title-border">
+        </div>
 
-                            <div class="form-group col-md-6">
-                                <label for="name">Amount</label>
-                                <input type="number" class="form-control" v-model="amount" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Mode of Payment</label>
-                                <vue-select v-model="mopData" @input="selectModeOfPayment()" label="name" :options="mop"></vue-select>
-                            </div>
-
-                            <div class="form-group col-md-6" v-show="selectedCash">
-                                <label for="name">CR #</label>
-                                <input type="text" class="form-control" v-model="cr_number" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group col-md-6" v-show="selectedCheck">
-                                <label for="name">Bank</label>
-                                <input type="text" class="form-control" v-model="bank_name" autocomplete="off" minlength="2" maxlength="255">
-                            </div>
-
-                            <div class="form-group col-md-6" v-show="selectedCheck">
-                                <label for="name">Check #</label>
-                                <input type="text" class="form-control" v-model="check" autocomplete="off" minlength="2" maxlength="255">
-                            </div>
-                        </div>
-                        <br>
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewInvoicePayment"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-chevron-left"></i> Create New Item Class</button>
-                    </form>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewInvoicePayment">Invoice Payments</a>
+                    <a class="text-secondary"> / Create New Invoice Payment</a>
                 </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewInvoicePayment">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Invoices #</label>
+                                    <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
+                                </div>
 
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                <div class="form-group col-md-6">
+                                    <label for="name">Amount</label>
+                                    <input type="number" class="form-control" v-model="amount" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Mode of Payment</label>
+                                    <vue-select v-model="mopData" @input="selectModeOfPayment()" label="name" :options="mop"></vue-select>
+                                </div>
+
+                                <div class="form-group col-md-6" v-show="selectedCash">
+                                    <label for="name">CR #</label>
+                                    <input type="text" class="form-control" v-model="cr_number" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group col-md-6" v-show="selectedCheck">
+                                    <label for="name">Bank</label>
+                                    <input type="text" class="form-control" v-model="bank_name" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+
+                                <div class="form-group col-md-6" v-show="selectedCheck">
+                                    <label for="name">Check #</label>
+                                    <input type="text" class="form-control" v-model="check" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewInvoicePayment"><i class="fas fa-chevron-left"></i> Back</button>
+                            <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-chevron-left"></i> Create New Item Class</button>
+                        </form>
+                    </div>
+
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,7 +115,7 @@
 
         methods: {
             viewInvoicePayment() {
-                this.$router.push({ name: 'bill-payments.index' });
+                this.$router.push({ name: 'invoice-payments.index' });
             },
 
             selectInvoices() {

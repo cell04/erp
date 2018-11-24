@@ -1,7 +1,8 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Item Types / Edit Item Type
+            <a class="text-success" href="" @click.prevent="viewItemTypes">Item Types</a>
+            <a class="text-secondary"> / Edit Item Type</a>
         </div>
         <div class="card-body">
             <div v-if="ifReady">

@@ -1,90 +1,100 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <b>Contacts / Edit Contacts</b>
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">CONTACT</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form ref="editContactForm" role="form" method="POST" accept-charset="utf-8" v-on:submit.prevent="editContact">
-                    <div class="form-group">
-                        <label>Contact Type</label>
-                        <vue-select v-model="contactType" @input="selectContactType()" label="display_name" :options="contactTypes"></vue-select>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="person">Full Name</label>
-                        <input type="text" class="form-control" v-model="person" id="person" required></input>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewContact">Contacts</a>
+                    <a class="text-secondary"> / Edit Contact</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form ref="editContactForm" role="form" method="POST" accept-charset="utf-8" v-on:submit.prevent="editContact">
                             <div class="form-group">
-                                <label for="mobile_number">Mobile No.</label>
-                                <input type="text" class="form-control" v-model="mobile_number" id="mobile_number">
+                                <label>Contact Type</label>
+                                <vue-select v-model="contactType" @input="selectContactType()" label="display_name" :options="contactTypes"></vue-select>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" v-model="email" id="email">
+                                <label for="person">Full Name</label>
+                                <input type="text" class="form-control" v-model="person" id="person" required></input>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="business_type">Business Type</label>
-                                <input type="text" class="form-control" v-model="business_type" id="business_type" autocomplete="off" minlength="2" maxlength="255">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="mobile_number">Mobile No.</label>
+                                        <input type="text" class="form-control" v-model="mobile_number" id="mobile_number">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" v-model="email" id="email">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="company">Company Name</label>
-                                <input type="text" class="form-control" v-model="company" id="company" autocomplete="off" minlength="2" maxlength="255">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="business_type">Business Type</label>
+                                        <input type="text" class="form-control" v-model="business_type" id="business_type" autocomplete="off" minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="company">Company Name</label>
+                                        <input type="text" class="form-control" v-model="company" id="company" autocomplete="off" minlength="2" maxlength="255">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Payment Method</label>
-                            <vue-select v-model="mode_of_payment" @input="selectPaymentMethod()" label="name" :options="payment_method"></vue-select>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Payment Method</label>
+                                    <vue-select v-model="mode_of_payment" @input="selectPaymentMethod()" label="name" :options="payment_method"></vue-select>
+                                </div>
 
-                        <div class="form-group col-md-6" v-show="selectedBank">
-                            <label for="name">Bank</label>
-                            <input type="text" class="form-control" v-model="bank_name" autocomplete="off" minlength="2" maxlength="255">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Payment Term</label>
+                                <div class="form-group col-md-6" v-show="selectedBank">
+                                    <label for="name">Bank</label>
+                                    <input type="text" class="form-control" v-model="bank_name" autocomplete="off" minlength="2" maxlength="255">
+                                </div>
+                            </div>
                             <br>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" name="optradio" v-model="payment_term" value="2">
-                                <label class="form-check-label">&nbsp; Full</label>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Payment Term</label>
+                                    <br>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" name="optradio" v-model="payment_term" value="2">
+                                        <label class="form-check-label">&nbsp; Full</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" name="optradio" v-model="payment_term" value="1">
+                                        <label class="form-check-label">&nbsp; Partial</label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" name="optradio" v-model="payment_term" value="1">
-                                <label class="form-check-label">&nbsp; Partial</label>
-                            </div>
-                        </div>
+
+                            <br>
+
+                            <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewContact"><i class="fas fa-chevron-left"></i> Back</button>
+                            <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContact"><i class="fas fa-edit"></i> Update Contact</button>
+                        </form>
                     </div>
 
-                    <br>
-
-                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewContact"><i class="fas fa-chevron-left"></i> Back</button>
-                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateContact"><i class="fas fa-edit"></i> Update Contact</button>
-                </form>
-            </div>
-
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Types / View Item Type
+                <a class="text-success" href="" @click.prevent="viewItemTypes">Item Types</a>
+                <a class="text-secondary"> / View Item Type</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

@@ -1,74 +1,81 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                <b>Warehouses / View Warehouse</b>
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <fieldset disabled>
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="warehouse.name" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="adress">Address</label>
-                            <textarea class="form-control" v-model="warehouse.address" required></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3 form-group">
-                                <label for="city">City</label>
-                                <input type="text" class="form-control" v-model="warehouse.city" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="country">Country</label>
-                                <input type="text" class="form-control" v-model="warehouse.country" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="zip_code">Zip Code</label>
-                                <input type="text" class="form-control" v-model="warehouse.zip_code" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="telephone_number">Telephone Number</label>
-                                <input type="text" class="form-control" v-model="warehouse.telephone_number" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <br>
-                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewWarehouses"><i class="fas fa-chevron-left"></i> Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editWarehouse"><i class="fas fa-edit"></i> Edit</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteWarehouseModal"><i class="fas fa-trash-alt"></i> Delete</button>
-                    <button type="button" class="btn btn-success btn-sm" @click.prevent.default="createNewStockRequest"><i class="fas fa-plus"></i> Create New Stock Request</button>
+        <div class="content-title">
+            <h4 class="module-title">WAREHOUSE</h4>
+            <hr class="title-border">
+        </div>
+
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewWarehouses">Warehouses</a>
+                    <a class="text-secondary"> / View Warehouse</a>
                 </div>
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <fieldset disabled>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" v-model="warehouse.name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adress">Address</label>
+                                <textarea class="form-control" v-model="warehouse.address" required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" v-model="warehouse.city" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" class="form-control" v-model="warehouse.country" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="zip_code">Zip Code</label>
+                                    <input type="text" class="form-control" v-model="warehouse.zip_code" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="telephone_number">Telephone Number</label>
+                                    <input type="text" class="form-control" v-model="warehouse.telephone_number" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <br>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewWarehouses"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editWarehouse"><i class="fas fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteWarehouseModal"><i class="fas fa-trash-alt"></i> Delete</button>
+                        <!-- <button type="button" class="btn btn-success btn-sm" @click.prevent.default="createNewStockRequest"><i class="fas fa-plus"></i> Create New Stock Request</button> -->
+                    </div>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="deleteWarehouseModal" tabindex="-1" role="dialog" aria-labelledby="deleteWarehouseTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Warehouse?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this Warehouse?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteWarehouse">Confirm Delete</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="deleteWarehouseModal" tabindex="-1" role="dialog" aria-labelledby="deleteWarehouseTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Warehouse?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this Warehouse?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteWarehouse">Confirm Delete</button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </template>
 
