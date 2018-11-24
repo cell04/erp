@@ -28,11 +28,11 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="form-group">
+
+                            <!-- <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea class="form-control" v-model="item.description" id="description" readonly></textarea>
-                            </div>
+                            </div> -->
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -117,10 +117,9 @@
             getItem() {
                 new Promise((resolve, reject) => {
                     axios.get("/api/items/" + this.$route.params.id).then(res => {
-                        // console.log(JSON.stringify(res.data.item));
+                        console.log(JSON.stringify(res.data.item));
                         this.item = res.data.item;
                         this.ifReady = true;
-
                         if (!res.data.response) {
                             return;
                         }

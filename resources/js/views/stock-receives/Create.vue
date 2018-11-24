@@ -34,7 +34,7 @@
                                     <label>To</label>
                                     <input type="text" class="form-control" v-model="st_stock_transferable_to_name" readonly>
                                 </div>
-                                
+
 
                             </div>
 
@@ -91,7 +91,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        
+
                             <br>
 
                             <div class="pt-3">
@@ -211,7 +211,6 @@
                     resolve();
                 }).catch(err => {
                     console.log(err);
-                    reject();
                 });
             },
 
@@ -254,7 +253,7 @@
                         unit_of_measurement_id: stock_request_item.unit_of_measurement_id,
                     });
                 });
-                
+
                 const formData = {
                     number: this.number,
                     stock_receivable_from_id: this.st_stock_transferable_from_id,

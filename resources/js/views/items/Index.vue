@@ -33,7 +33,7 @@
                             <tr>
                                 <th scope="col">SKU</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Description</th>
+                                <!-- <th scope="col">Description</th> -->
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -41,7 +41,7 @@
                             <tr :key="item.id" v-for="item in items">
                                 <td>{{ item.stock_keeping_unit }}</td>
                                 <td>{{ item.name }}</td>
-                                <td>{{ item.description }}</td>
+                                <!-- <td>{{ item.description }}</td> -->
                                 <td>
                                     <router-link class="text-secondary" :to="{ name: 'items.view', params: { id: item.id }}">
                                         <i class="fas fa-envelope-open-text"></i> View

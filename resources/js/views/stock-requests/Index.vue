@@ -40,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody v-if="stockRequests">
-                            <tr v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, approve_by } in stockRequests">
+                            <tr v-bind:key="id" v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, approve_by } in stockRequests">
                                 <td>{{ number }}</td>
                                 <td>{{ stock_requestable_from.name }}</td>
                                 <td>{{ stock_requestable_to.name }}</td>

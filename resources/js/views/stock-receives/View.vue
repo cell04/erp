@@ -35,6 +35,18 @@
                                     <input type="text" class="form-control" v-model="stTo.name" readonly>
                                 </div>
 
+                                <!-- TODO: Replace with created by data -->
+                                <div class="col-md-6 form-group">
+                                    <label>Created By</label>
+                                    <input type="text" class="form-control" readonly>
+                                </div>
+
+                                <!-- TODO: Replace with approved by -->
+                                <div class="col-md-6 form-group">
+                                    <label>Approved By</label>
+                                    <input type="text" class="form-control" readonly>
+                                </div>
+
                             </div>
                         </fieldset>
 
@@ -96,7 +108,8 @@ export default {
     getItem() {
       new Promise((resolve, reject) => {
         axios.get("/api/stock-receives/" + this.$route.params.id).then(res => {
-        //   console.log('SR: ' + JSON.stringify(res.data.stockReceive));
+            const {stockReceive} = res.data
+          console.log('SR: ' + console.log(JSON.parse(JSON.stringify(stockReceive))));
           this.ifReady = true;
           this.stockReceives = res.data.stockReceive;
           this.stTransfer = res.data.stockReceive.stock_transfer;

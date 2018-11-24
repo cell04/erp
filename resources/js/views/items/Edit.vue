@@ -24,10 +24,10 @@
                                 <input type="text" class="form-control" v-model="stock_keeping_unit" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea class="form-control" v-model="description" autocomplete="off" minlength="2" maxlength="255" required ></textarea>
-                            </div>
+                            </div> -->
 
                             <div class="row">
                                 <div class="col-md-4">

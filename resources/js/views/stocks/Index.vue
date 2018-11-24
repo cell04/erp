@@ -13,8 +13,8 @@
                 <div class="card-body">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-warehouse-tab" data-toggle="tab" href="#nav-warehouse" role="tab" aria-controls="nav-warehouse" aria-selected="true">Warehouse</a>
-                            <a class="nav-item nav-link" id="nav-branch-tab" data-toggle="tab" href="#nav-branch" role="tab" aria-controls="nav-branch" aria-selected="false">Branch</a>
+                            <a class="nav-item nav-link active" id="nav-warehouse-tab" data-toggle="tab" href="#nav-warehouse" role="tab" aria-controls="nav-warehouse" aria-selected="true" @click="changeTab('warehouse')">Warehouse</a>
+                            <a class="nav-item nav-link" id="nav-branch-tab" data-toggle="tab" href="#nav-branch" role="tab" aria-controls="nav-branch" aria-selected="false" @click="changeTab('branch')">Branch</a>
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
@@ -96,7 +96,7 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
             </div>
 
@@ -233,7 +233,8 @@
         searchColumnZipCode,
         searchColumnTelephoneNumber,
         order_by,
-        callback
+        callback,
+        route = 'warehouse'
     ) => {
         const params = {
             page,
@@ -247,16 +248,40 @@
             order_by
         };
 
-        axios.get('/api/stocks', { params }).then(res => {
-            callback(null, res.data);
-            // console.log('Stocks: ' + JSON.stringify(res.data));
-        }).catch(error => {
-            if (error.response.status == 401) {
-                location.reload();
-            }
+        axios.get(`/api/stocks/get-all-stocks/${route}`, { params }).then(res => {
 
-            if (error.response.status == 500) {
-                alert('Kindly report this issue to the devs.');
+            console.log('Stocks: ' , JSON.parse(JSON.stringify(res.data)));
+
+            const {path, current_page, data, first_page_url, from, last_page, last_page_url, next_page_url, per_page, prev_page_url, to, total} = res.data.stocks
+
+            const response = {
+                data:data,
+                links:{
+                    first:first_page_url,
+                    last:last_page_url,
+                    next:next_page_url,
+                    prev:prev_page_url
+                },
+                meta:{
+                    current_page:1,
+                    from:from,
+                    last_page:last_page,
+                    path:path,
+                    per_page:per_page,
+                    to:to,
+                    total:total
+                }
+            }
+            callback(null, response);
+
+        }).catch(error => {
+            switch (error.response.status) {
+                case  401 :
+                     location.reload()
+                    break;
+                case 500 :
+                    alert('Kindly report this issue to the devs.');
+                    break;
             }
         });
     };
@@ -289,7 +314,8 @@
                 },
                 error: null,
                 showProgress: false,
-                pageNumbers: []
+                pageNumbers: [],
+                stocks:''
             };
         },
 
@@ -385,6 +411,23 @@
         },
 
         methods: {
+            changeTab( tab ='warehouse') {
+                 getWarehouses(
+                    this.prevPage,
+                    this.meta.per_page,
+                    this.searchColumnName,
+                    this.searchColumnAddress,
+                    this.searchColumnCity,
+                    this.searchColumnCountry,
+                    this.searchColumnZipCode,
+                    this.searchColumnTelephoneNumber,
+                    this.order_by,
+                    (err, data) => {
+                        next(vm => vm.setData(err, data));
+                    },
+                    tab
+                );
+            },
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({

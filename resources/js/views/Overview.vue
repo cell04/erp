@@ -707,8 +707,8 @@
                 ],
                 },
             })
-            generateChart('sales-report-branch', salesBranchOptions)
-            generateChart('sales-report-type', salesTypeOptions)
+            // generateChart('sales-report-branch', salesBranchOptions)
+            // generateChart('sales-report-type', salesTypeOptions)
 
 
 

@@ -29,13 +29,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Description</label>
                                 <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
-                            </div>
+                            </div> -->
 
                             <div class="row">
-                                
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Item Type</label>
