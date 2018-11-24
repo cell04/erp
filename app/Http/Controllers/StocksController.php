@@ -233,6 +233,27 @@ class StocksController extends Controller
         ], 200);
     }
 
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllStockPerLocationType($locationType)
+    {
+        if (! $stocks = $this->stock->paginateWithFiltersPerLocationType(request(), $locationType, request()->per_page, request()->order_by)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'stocks' => $stocks
+        ], 200);
+    }
+
     public function getAllStocksPerLocation()
     {
         $data = StockResource::collection(

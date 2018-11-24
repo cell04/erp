@@ -34,6 +34,7 @@ class CreateStockTransfersTable extends Migration
             $table->string('stock_transferable_from_type');
             $table->integer('stock_transferable_to_id')->unsigned();
             $table->string('stock_transferable_to_type');
+            $table->date('stock_transfered_date');
             $table->string('number');
             $table->smallInteger('status')->default(0);
             $table->timestamps();

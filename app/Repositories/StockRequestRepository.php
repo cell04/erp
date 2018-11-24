@@ -44,6 +44,7 @@ class StockRequestRepository extends Repository
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
+            // $request->request->add(['stock_request_date' => auth('api')->user()->id]);
             $stockRequest = $this->stockRequest->create($request->all());
             $stockRequest->stockRequestItems()->createMany($request->stock_request_items);
             return $stockRequest;

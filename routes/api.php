@@ -182,6 +182,8 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'stocks/{stock}/restore', 'StocksController@restore');
     Route::delete('stocks/{stock}/force-delete', 'StocksController@forceDestroy');
     Route::get('stocks/get-all-stocks', 'StocksController@getAllStock');
+    //locationType = branch || warehouse --- get stocks item per location type
+    Route::get('stocks/get-all-stocks/{locationType}', 'StocksController@getAllStockPerLocationType');
     Route::get('stocks/{item}/get-all-stocks-of-item', 'StocksController@getAllStocksOfItem');
     Route::resource('stocks', 'StocksController', [
         'only' => [

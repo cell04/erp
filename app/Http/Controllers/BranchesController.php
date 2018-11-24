@@ -56,7 +56,7 @@ class BranchesController extends Controller
             'city'              =>  'required|string|max:255',
             'zip_code'          =>  'required|integer',
             'country'           =>  'required|string|max:255',
-            'telephone_number'  =>  'required|integer'
+            'telephone_number'  =>  'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -112,7 +112,7 @@ class BranchesController extends Controller
             'city'              =>  'required|string|max:255',
             'zip_code'          =>  'required|integer',
             'country'           =>  'required|string|max:255',
-            'telephone_number'  =>  'required|integer'
+            'telephone_number'  =>  'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
