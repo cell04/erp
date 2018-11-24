@@ -31,6 +31,14 @@
                                     <label>Transfer To</label>
                                     <input type="text" class="form-control" v-model="to" autocomplete="off" maxlength="255" required disabled>
                                 </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Transfered Date</label>
+                                    <input type="date" class="form-control" v-model="transfer_date" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Received Date</label>
+                                    <input type="date" class="form-control" v-model="receive_date" required>
+                                </div>
                             </div>
 
                             <br>
@@ -132,7 +140,9 @@
                 stock_transferable_to_id: null,
                 stock_transferable_to_type: null,
                 stock_transfer_items: [],
-                stockRequestItems: []
+                stockRequestItems: [],
+                transfer_date:'',
+                receive_date:'',
             };
         },
 
@@ -246,6 +256,8 @@
                 });
 
                 const formData = {
+                    stock_transfered_date:this.transfer_date,
+                    stock_received_date:this.receive_date,
                     stock_request_id: this.stock_request_id,
                     stock_transferable_from_id: this.stock_transferable_from_id,
                     stock_transferable_from_type: this.stock_transferable_from_type,
