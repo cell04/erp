@@ -19,7 +19,10 @@
                                     <label>Stock Request #</label>
                                     <input type="text" class="form-control" v-model="number" required>
                                 </div>
-                                <div class="col-md-6 form-group"></div>
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Request Date</label>
+                                    <input type="date" class="form-control" v-model="date" required>
+                                </div>
 
                                 <div class="col-md-6 form-group">
                                     <label>From</label>
@@ -76,7 +79,7 @@
                                             <vue-select v-model="stock_request_item.item" @input="selectItem(index)" label="name" :options="items" required></vue-select>
                                         </td>
                                         <td>
-                                            <input class="form-control" v-model.number="stock_request_item.quantity" required> 
+                                            <input class="form-control" v-model.number="stock_request_item.quantity" required>
                                         </td>
                                         <td>{{ stock_request_item.unitOfMeasurement }}</td>
                                         <td>
@@ -84,9 +87,9 @@
                                         </td>
                                 </tr>
                             </tbody>
-                            
+
                         </table>
-                        
+
                         <div class="pt-3">
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewSreq"><i class="fas fa-chevron-left"></i> Back</button>
                             <button type="button" class="btn btn-outline-success btn-sm" @click="addItem"><i class="fas fa-plus-circle"></i> Add Item</button>
@@ -123,6 +126,7 @@
                 toBranch: null,
                 items: null,
                 number: null,
+                date: '',
                 stock_requestable_from_id : null,
                 stock_requestable_from_type: null,
                 stock_requestable_to_id: null,
@@ -222,9 +226,10 @@
                         unit_of_measurement_id: stock_request_item.unit_of_measurement_id,
                     });
                 });
-                
+
                 const formData = {
                     number: this.number,
+                    stock_requested_date: this.date,
                     stock_requestable_from_id: this.stock_requestable_from_id,
                     stock_requestable_from_type: this.stock_requestable_from_type,
                     stock_requestable_to_id: this.stock_requestable_to_id,
