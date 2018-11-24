@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                {{componentVal}}s / Edit {{componentVal}}
+                <a class="text-success" href="" @click.prevent="viewUnitOfMeasurement">Unit of Measurements</a>
+                <a class="text-secondary"> / Edit Unit of Measurement</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

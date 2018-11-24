@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Unit of Measurements / Create New UOM
+                <a class="text-success" href="" @click.prevent="viewUOM">Unit of Measurementss</a>
+                <a class="text-secondary"> / Create New Unit of Measurements</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

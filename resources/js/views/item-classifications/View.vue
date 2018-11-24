@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Classifications / View  Item Subtype
+                <a class="text-success" href="" @click.prevent="viewItemClassification">Item Subtypes</a>
+                <a class="text-secondary"> / View Item Subtype</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
