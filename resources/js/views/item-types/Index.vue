@@ -26,15 +26,13 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Display Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="itemTypes">
-                        <tr :key="id" v-for="{ id, name, display_name, description } in itemTypes">
+                        <tr :key="id" v-for="{ id, name, description } in itemTypes">
                             <td>{{ name }}</td>
-                            <td>{{ display_name }}</td>
                             <td>{{ description }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'item-types.view', params: { id: id }}">

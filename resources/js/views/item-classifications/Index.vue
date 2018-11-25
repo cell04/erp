@@ -14,7 +14,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Item Types - Total Items {{ this.meta.total }}
+                                List of Item Subtypes - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -26,15 +26,13 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Display Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="itemClassification">
                         <tr :key="id" v-for="{ id, name, display_name, description } in itemClassification">
                             <td>{{ name }}</td>
-                            <td>{{ display_name }}</td>
                             <td>{{ description }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'item-classifications.view', params: { id: id }}">
