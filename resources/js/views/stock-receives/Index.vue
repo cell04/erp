@@ -31,20 +31,20 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">SR #</th>
-                                <th scope="col">SR From</th>
-                                <th scope="col">SR To</th>
-                                <th scope="col">Date</th>
+                                <th scope="col">Stock Receive #</th>
+                                <th scope="col">Received From</th>
+                                <th scope="col">Received To</th>
+                                <th scope="col">Receive Date</th>
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
                         <tbody v-if="stockReceive">
-                            <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user, created_at } in stockReceive">
+                            <tr v-for="{ id, number, stock_receivable_from, stock_receivable_to, status, user, stock_received_date, stock_request } in stockReceive">
 
                                 <td>{{ number }}</td>
                                 <td>{{ stock_receivable_from.name | Upper }}</td>
                                 <td>{{ stock_receivable_to.name | Upper }}</td>
-                                <td>{{ created_at | DateFormat }}</td>
+                                <td>{{ stock_received_date | DateFormat }}</td>
                                 <td>
                                     <router-link class="text-secondary" :to="{ name: 'stock-receives.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                                 </td>

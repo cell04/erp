@@ -35,6 +35,10 @@
                                     <input type="text" class="form-control" v-model="st_stock_transferable_to_name" readonly>
                                 </div>
 
+                                <div class="col-md-6 form-group">
+                                    <label>Receive Date</label>
+                                    <input type="date" class="form-control" v-model="receive_date" required>
+                                </div>
 
                             </div>
 
@@ -124,6 +128,7 @@
                 stockTransfers: [],
                 warehouses: [],
                 fromWarehouse: null,
+                receive_date: '',
                 toWarehouse: null,
                 branches: [],
                 fromBranch: null,
@@ -261,7 +266,8 @@
                     stock_receivable_to_id: this.st_stock_transferable_to_id,
                     stock_receivable_to_type: this.st_stock_transferable_to_type,
                     stock_receive_items: this.stockReceiveData,
-                    stock_transfer_id: this.stock_transfer_id
+                    stock_transfer_id: this.stock_transfer_id,
+                    stock_received_date: this.receive_date
                 }
 
                 axios.post("/api/stock-receives", formData).then(res => {

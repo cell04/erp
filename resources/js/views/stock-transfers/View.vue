@@ -31,9 +31,10 @@
                                     <label for="name">Stock Tranfer #</label>
                                     <input type="text" class="form-control" v-model="stockTransfer.number">
                                 </div>
-                                <div class="col-md-6"></div>
-                            </div>
-                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="name">Tranfer Date</label>
+                                    <input type="text" class="form-control" v-model="stockTransfer.stock_transfered_date">
+                                </div>
                                 <div class="col-md-6">
                                     <label for="name">Transfer From</label>
                                     <input type="text" class="form-control" v-model="stockTransfer.stock_transferable_from.name">

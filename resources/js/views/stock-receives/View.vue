@@ -38,14 +38,14 @@
                                 <!-- TODO: Replace with created by data -->
                                 <div class="col-md-6 form-group">
                                     <label>Created By</label>
-                                    <input type="text" class="form-control" readonly>
+                                    <input type="text" class="form-control" v-model="stUser.name" readonly>
                                 </div>
 
                                 <!-- TODO: Replace with approved by -->
-                                <div class="col-md-6 form-group">
+                                <!--<div class="col-md-6 form-group">
                                     <label>Approved By</label>
                                     <input type="text" class="form-control" readonly>
-                                </div>
+                                </div>-->
 
                             </div>
                         </fieldset>

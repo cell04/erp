@@ -31,19 +31,20 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">SR #</th>
-                                <th scope="col">SR From</th>
-                                <th scope="col">SR To</th>
+                                <th scope="col">Stock Request #</th>
+                                <th scope="col">Requested From</th>
+                                <th scope="col">Requested To</th>
+                                <th scope="col">Requested Date</th>
                                 <th scope="col">Status</th>
-                                <!-- <th scope="col">Approved/Cancelled By</th> -->
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
                         <tbody v-if="stockRequests">
-                            <tr v-bind:key="id" v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, approve_by } in stockRequests">
+                            <tr v-bind:key="id" v-for="{ id, number, stock_requestable_from, stock_requestable_to, status, approve_by, stock_requested_date } in stockRequests">
                                 <td>{{ number }}</td>
                                 <td>{{ stock_requestable_from.name }}</td>
                                 <td>{{ stock_requestable_to.name }}</td>
+                                <td>{{ stock_requested_date }}</td>
                                 <td>{{ status }}</td>
                                 <!-- <td>{{ approve_by ? approve_by.name : null }}</td> -->
                                 <td>

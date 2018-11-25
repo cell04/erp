@@ -35,6 +35,18 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label>Stock Request #</label>
+                                        <input type="text" class="form-control" v-model="stockRequest.number" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Created By</label>
+                                        <input type="text" class="form-control" v-model="stockRequest.user.name" id="name" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label>Requested From</label>
                                         <input type="text" class="form-control" v-model="stockRequest.stock_requestable_from.name" readonly>
                                     </div>
@@ -45,18 +57,16 @@
                                         <input type="text" class="form-control" v-model="stockRequest.stock_requestable_to.name" readonly>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Created By</label>
-                                        <input type="text" class="form-control" v-model="stockRequest.user.name" id="name" readonly>
-                                    </div>
-                                </div>
                                 <div class="col-md-6" v-if="stockRequest.status === 1">
                                     <div class="form-group">
                                         <label>Approved By</label>
                                         <input type="text" class="form-control" v-model="stockRequest.approve_by.name" id="name" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" v-if="stockRequest.status === 1">
+                                    <div class="form-group">
+                                        <label>Approved Date</label>
+                                        <input type="text" class="form-control" v-model="stockRequest.updated_at" readonly>
                                     </div>
                                 </div>
                             </div>

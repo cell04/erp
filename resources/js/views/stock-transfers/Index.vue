@@ -31,11 +31,11 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">ST #</th>
-                                <th scope="col">ST From</th>
-                                <th scope="col">ST To</th>
+                                <th scope="col">Stock Transfer #</th>
+                                <th scope="col">Transfered From</th>
+                                <th scope="col">Transfered To</th>
+                                <th scope="col">Transfer Date</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Date</th>
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
@@ -44,8 +44,8 @@
                                 <td>{{ stockTransfer.number }}</td>
                                 <td>{{ stockTransfer.stock_transferable_from.name | Upper }}</td>
                                 <td>{{ stockTransfer.stock_transferable_to.name | Upper }}</td>
+                                <td>{{ stockTransfer.stock_transfered_date | DateFormat }}</td>
                                 <td>{{ stockTransfer.status }}</td>
-                                <td>{{ stockTransfer.created_at | DateFormat }}</td>
                                 <td>
                                     <router-link class="text-secondary" :to="{ name: 'stock-transfers.view', params: { id: stockTransfer.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                                 </td>
