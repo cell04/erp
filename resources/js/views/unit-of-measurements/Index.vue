@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Settings / Unit of Measurements
+                    Settings / UOM
                 </div>
                 <div class="float-right">
                     <router-link class="btn-primary btn-sm" :to="{ name: 'unit-of-measurements.create' }"><i class="fas fa-plus"></i> Create New UOM</router-link>
@@ -27,7 +27,7 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Abbreviation</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="unit_of_measurements">

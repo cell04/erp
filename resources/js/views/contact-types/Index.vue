@@ -26,14 +26,14 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Display Name</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="contactTypes">
-                        <tr v-for="{ id, name, display_name } in contactTypes">
+                        <tr v-for="{ id, name, description } in contactTypes">
                             <td>{{ name }}</td>
-                            <td>{{ display_name }}</td>
+                            <td>{{ description }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'contact-types.view', params: { id: id }}">
                                    <i class="fas fa-envelope-open-text"></i> View

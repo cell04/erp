@@ -73,7 +73,7 @@ export default {
             });
 
             promise.then(() => {
-                this.$router.push({ name: 'overview' });
+                this.$router.push({ name: 'corporations.index' });
             });
         }
     }

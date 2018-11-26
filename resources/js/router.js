@@ -383,6 +383,19 @@ const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelist
         ]
     });
 
+    router.beforeEach((to, from, next) => {
+        if (localStorage.getItem('selectedCorporation') === null) {
+            // checking to avoid loop
+            if (to.name === 'corporations.select') return next();
+            next({
+                path: '/select-corporation'
+            });
+        }
+        else {
+           next();
+        }
+     });
+
 // router.beforeEach((to, from, next) => {
 //     if (to.matched.some(record => record.meta.requiresAuth)) {
 //         if (! auth.loggedIn()) {

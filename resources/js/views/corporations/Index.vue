@@ -27,17 +27,15 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Country</th>
-                            <th scope="col">Fax</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="corporations">
                         <tr v-for="{ id, name, description, street, zip_code, country, fax } in corporations">
                             <td>{{ name }}</td>
                             <td>{{ description }}</td>
-                            <td>{{ country }}</td>
-                            <td>{{ fax }}</td>
+                            <td>{{ street }}, {{ country}}, {{ zip_code }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'corporations.view', params: { id: id }}">
                                     <i class="fas fa-envelope-open-text"></i>  View
