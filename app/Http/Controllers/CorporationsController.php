@@ -219,14 +219,6 @@ class CorporationsController extends Controller
      */
     public function getAllCorporations()
     {
-        // if (cache()->has('corporations')) {
-        //     return response()->json([
-        //         'response'     => true,
-        //         'message'      => 'Resources successfully retrieve.',
-        //         'corporations' => cache('corporations')
-        //     ], 200);
-        // }
-
         if (! $corporations = $this->corporation->all()) {
             return response()->json([
                 'response' => false,
