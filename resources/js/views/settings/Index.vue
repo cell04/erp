@@ -39,6 +39,11 @@
                                 Users
                             </router-link>
                         </li>
+                        <li class="nav-item bg-white">
+                            <router-link class="nav-link p-3" :to="{ name: 'user-roles.index' }">
+                                User Roles
+                            </router-link>
+                        </li>
                     </ul>
                 </div>
 
