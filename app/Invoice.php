@@ -25,7 +25,7 @@ class Invoice extends Model
     protected $fillable = [
         'corporation_id', 'quotation_id', 'contact_id',
         'user_id', 'reference_number', 'due_date',
-        'amount', 'amount_paid', 'status'
+        'amount', 'amount_paid', 'status', 'bid_sheet_id'
     ];
     
     /**
@@ -41,7 +41,7 @@ class Invoice extends Model
      * @var array
      */
     protected $with = [
-        'quotation', 'invoiceItems', 'contact'
+        'quotation', 'invoiceItems', 'contact', 'bidSheet'
     ];
 
     /**
@@ -98,12 +98,22 @@ class Invoice extends Model
     }
 
     /**
-     * The invoice belongs to a receive order.
+     * The invoice belongs to a Quotation.
      *
      * @return object
      */
     public function quotation()
     {
         return $this->belongsTo(Quotation::class);
+    }
+
+    /**
+     * The invoice belongs to a Bid Sheet.
+     *
+     * @return object
+     */
+    public function bidSheet()
+    {
+        return $this->belongsTo(BidSheet::class);
     }
 }

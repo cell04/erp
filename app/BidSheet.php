@@ -23,9 +23,9 @@ class BidSheet extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'user_id', 'contact_id', 'location_id',
-        'bid_sheet_date', 'approved_bid_sheet_date', 'location_type', 
-        'bid_sheet_number', 'amount', 'status', 'approved_by'
+        'corporation_id', 'user_id', 'contact_id', 'location_id', 'bid_sheet_date', 
+        'approved_bid_sheet_date', 'location_type', 'bid_sheet_number', 'amount', 
+        'status', 'approved_by', 'project_title', 'description'
     ];
 
     /**

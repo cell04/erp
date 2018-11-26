@@ -68,4 +68,23 @@ class BidSheetRepository extends Repository
     //     return $this->bidSheet->where('status', 0)
     //     ->get();
     // }  
+
+    public function contactApproval($id, $status)
+    {
+        return DB::transaction(function () use ($id, $status) {
+            //find bidsheet
+            $bidSheet = $this->bidSheet->findOrFail($id);
+            if ($bidSheet->status == 1) {
+                $bidSheet->update(['status' => $status]);
+                if ($bidSheet->status == 2) {       
+
+                    return array('quotation' => $bidSheet, 'message' => 'BidSheet Approved');
+                }
+
+                return array('quotation' => $bidSheet, 'message' => 'BidSheet Cancelled');
+            }
+
+            return array('quotation' => $bidSheet, 'message' => 'BidSheet is already Managed');
+        });
+    }
 }

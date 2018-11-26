@@ -4,8 +4,8 @@
 Route::post('/auth/login', 'AuthController@apiLogin');
 Route::post('/auth/logout', 'AuthController@apiLogout');
 Route::get('/auth/user', 'AuthController@user');
-Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
-// Route::get('bid-sheets/{bid-sheet}/contact-approvals/{status}', 'QuotationsController@contactApproval');
+Route::get('/quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
+Route::get('/bid-sheets/{bidSheet}/contact-approvals/{status}', 'BidSheetsController@contactApproval');
 
 Route::group(['middleware' => ['api', 'corporation.default.account']], function () {
     Route::post('test', function () {

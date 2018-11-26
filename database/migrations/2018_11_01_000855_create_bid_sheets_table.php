@@ -40,6 +40,8 @@ class CreateBidSheetsTable extends Migration
                 ->on('contacts')
                 ->onDelete('cascade');
             $table->string('bid_sheet_number');
+            $table->string('project_title');
+            $table->string('description')->nullable();
             $table->smallInteger('status')->default(0);
             $table->decimal('amount', 20, 2);
             $table->timestamps();

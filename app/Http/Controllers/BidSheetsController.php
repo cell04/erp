@@ -208,14 +208,14 @@ class BidSheetsController extends Controller
         ], 200);
     }
 
-    // public function contactApproval($id, $status) 
-    // {
-    //     if (! $quotation = $this->quotation->contactApproval($id, $status)) {
-    //         return response()->json([
-    //             'message' => 'Resource does not exist'
-    //         ], 400);
-    //     }
+    public function contactApproval($id, $status) 
+    {
+        if (! $quotation = $this->bidSheet->contactApproval($id, $status)) {
+            return response()->json([
+                'message' => 'Resource does not exist'
+            ], 400);
+        }
 
-    //     return view('contact-approvals.home')->with('quotation', (object) $quotation);
-    // }
+        return view('contact-approvals.home')->with('quotation', (object) $quotation);
+    }
 }
