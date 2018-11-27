@@ -150,19 +150,19 @@ class CorporationRepository extends Repository
             'code' => '116'
         ]);
 
-        $corporation->inventoryReceiveNotBilledAccount()->create([
+        $corporation->inventoryReceiveNotBilledAccount()->insert([
             'account_id' => $irnb->id
         ]);
         
-        $corporation->payableAccount()->create([
+        $corporation->payableAccount()->insert([
             'account_id' => $accountPayable->id
         ]);
 
-        $corporation->cashAccount()->create([
+        $corporation->cashAccount()->insert([
             'account_id' => $cash->id
         ]);
         
-        $corporation->inventoryReturnNotCreditedAccount()->create([
+        $corporation->inventoryReturnNotCreditedAccount()->insert([
             'account_id' => $irnc->id
         ]);
 
