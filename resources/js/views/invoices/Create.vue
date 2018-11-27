@@ -224,7 +224,7 @@
             autoGenerateInvoive() {
                 let date = new Date();
                 var components = [
-                    date.getYear(),
+                    date.getFullYear(),
                     date.getMonth(),
                     date.getDate(),
                     date.getHours(),
