@@ -18,7 +18,7 @@ class CorporationDefaultAccount
     {
         if (request()->headers->get('CORPORATION-ID')) {
             $corporation = Corporation::findOrFail(request()->headers->get('CORPORATION-ID'));
-
+            
             if (empty(session('irnb'))) {
                 session()->put('irnb', $corporation->inventoryReceiveNotBilledAccount->account_id);
             }
