@@ -26,14 +26,18 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Mobile No.</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="users">
-                        <tr v-for="{ id, name, email } in users">
+                        <tr v-for="{ id, name, role, email, mobile_number } in users">
                             <td>{{ name }}</td>
+                            <td>{{ role }}</td>
                             <td>{{ email }}</td>
+                            <td>{{ mobile_number }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'users.view', params: { id: id } }">
                                     <i class="fas fa-envelope-open-text"></i> View
@@ -97,7 +101,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search users</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search users</button> -->
                     <label class="sr-only" for="Number of Items">Number of Items</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
