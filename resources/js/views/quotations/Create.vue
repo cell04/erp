@@ -51,7 +51,7 @@
                                 <!-- <div class="col-md-6 form-group"></div> -->
 
                                 <div class="col-md-6 form-group">
-                                    <label>From</label>
+                                    <label>Stock Origin</label>
                                     <br>
                                     <div class="form-check form-check-inline">
                                         <input type="radio" v-model="from_selected_radio_button" value="warehouse">
@@ -65,18 +65,26 @@
                                     <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
                                 </div>
 
+                                <div class="col-md-6 form-group">
+                                    <div class="dateStyle">
+                                        <label>Validity Date</label>
+                                        <datepicker v-model="validity_date" :bootstrap-styling="true" placeholder="Validity Date" required></datepicker>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-12 form-group" v-if="contactData !== null">
+                                    <hr>
                                     <h5><u>Customer Information:</u></h5>
                                     <div><label for="name"><strong>Customer</strong></label>: {{contactData.person}}</div>
                                     <div><label for="name"><strong>Company</strong></label>: {{contactData.company}}</div>
                                     <div><label for="name"><strong>Address</strong></label>: {{contactData.company_address}}</div>
                                     <div><label for="name"><strong>Email</strong></label>: {{contactData.email}}</div>
                                     <div><label for="name"><strong>Phone</strong></label>: {{contactData.mobile_number}}</div>
+                                    <hr>
                                 </div>
 
                             </div>
 
-                            <br>
                             <h6>
                                 <b><u>Quotation Items</u></b>
                             </h6>
@@ -170,6 +178,7 @@
                 items: [],
                 number: "",
                 tax: "",
+                validity_date: "",
                 quotation_items: [
                     {
                         item: '',
@@ -266,7 +275,7 @@
             getContactData(id) {
                 axios.get("/api/contacts/" + id).then(res => {
                     this.contactData = res.data.contact;
-                    console.log("COntacts" + JSON.stringify(res.data));
+                    // console.log("COntacts" + JSON.stringify(res.data));
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -391,6 +400,7 @@
                     number: 'QN' + this.number,
                     amount: this.amount,
                     tax: this.tax,
+                    validity_date: moment(this.$data.due_date).format('YYYY-MM-DD'),
                     quotation_items: quotationItems
                 };
 
@@ -410,6 +420,10 @@
 <style>
     td {
         width: 100px !important;
+    }
+    
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
     }
 </style>
 

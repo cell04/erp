@@ -433,7 +433,9 @@
                     let status = {
                         0: "Issued",
                         1: "Admin Approved",
-                        2: "Customer Approbed"
+                        2: "Admin Cancelled",
+                        3: "Customer Approved",
+                        4: "Customer Cancelled"
                     };
 
                     quotations.map(quotation => {
