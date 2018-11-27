@@ -192,6 +192,13 @@ const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelist
  const QuotationCreate = () => import('./views/quotations/Create');
  const QuotationView = () => import('./views/quotations/View');
 
+  /**
+ * Bid Sheet
+ */
+const BidSheetIndex = () => import('./views/bid-sheets/Index');
+const BidSheetCreate = () => import('./views/bid-sheets/Create');
+const BidSheetView = () => import('./views/bid-sheets/View.vue');
+
 /**
  * Receive Orders
  *
@@ -382,6 +389,11 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
         { path: '/quotations', name: 'quotations.index', component: QuotationIndex },
         { path: '/quotations/create', name: 'quotations.create', component: QuotationCreate },
         { path: '/quotations/:id', name: 'quotations.view', component: QuotationView },
+
+        // Bid Sheets
+        { path: '/bid-sheets', name: 'bid-sheets.index', component: BidSheetIndex },
+        { path: '/bid-sheets/create', name: 'bid-sheets.create', component: BidSheetCreate },
+        { path: '/bid-sheets/:id', name: 'bid-sheets.view', component: BidSheetView },
 
         // warehouses
         { path: '/warehouses', name: 'warehouses.index', component: WarehousesIndex },

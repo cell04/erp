@@ -21,7 +21,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" id="btnGroupAddon">QN</div>
                                         </div>
-                                        <input type="text" class="form-control" v-model="number" required placeholder="Quotation #" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                                        <input type="text" class="form-control" v-model="number" required placeholder="Quotation #" aria-label="Input group example" aria-describedby="btnGroupAddon" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6 form-group">
