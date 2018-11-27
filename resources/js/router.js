@@ -217,6 +217,11 @@ const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelist
  const UsersView = () => import('./views/users/View');
  const UsersEdit = () => import('./views/users/Edit');
 
+ /**
+ * User Roles
+ */
+const UserRolesIndex = () => import('./views/user-roles/Index');
+
 /**
  * Warehouses
  */
@@ -347,6 +352,9 @@ const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelist
                 { path: 'users/create', name: 'users.create', component: UsersCreate },
                 { path: 'users/:id', name: 'users.view', component: UsersView },
                 { path: 'users/:id/edit', name: 'users.edit', component: UsersEdit },
+
+                // User Roles
+                { path: 'user-roles', name: 'user-roles.index', component: UserRolesIndex },
             ]
         },
 

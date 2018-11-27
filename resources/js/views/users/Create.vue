@@ -19,10 +19,12 @@
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" v-model="password" autocomplete="off" minlength="2" maxlength="255" required>
+                            <p v-if="$v.password_confirmation.$error">Password Does Not Match Password Confirmation</p>
                         </div>
                         <div class="form-group">
                             <label for="password_confirmation">Password Confirmation</label>
-                            <input type="password" class="form-control" v-model="password_confirmation" autocomplete="off" minlength="2" maxlength="255" required>
+                            <input type="password" @blur="$v.password_confirmation.$touch()" class="form-control" v-model="password_confirmation">
+                            <p v-if="$v.password_confirmation.$error">Password Confirmation Does Not Match Password</p>
                         </div>
 
                         <div class="form-group">
@@ -46,6 +48,7 @@
 </template>
 
 <script>
+    import { sameAs } from 'vuelidate/lib/validators'
     export default {
         data() {
             return {
@@ -57,12 +60,17 @@
                 mobile_number: ''
             };
         },
-
+        validations: {
+            password_confirmation: {
+                sameAs: sameAs(vm => {
+                    return vm.password
+                })
+            }
+        },
         methods: {
             viewUser() {
                 this.$router.push({ name: 'users.index' });
             },
-
             createNewUser() {
                 this.ifReady = false;
 
@@ -71,8 +79,18 @@
                     this.ifReady = true;
                 }).catch(err => {
                     console.log(err);
+                    this.ifReady = true;
+
                 });
             }
         }
     }
 </script>
+
+<style>
+
+  p {
+      color: red !important;
+  }
+
+</style>
