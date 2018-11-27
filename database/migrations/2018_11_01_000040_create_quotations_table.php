@@ -16,7 +16,7 @@ class CreateQuotationsTable extends Migration
         Schema::create('quotations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
-            $table->date('validity_date');
+            $table->date('validity_date')->nullable();
             $table->foreign('corporation_id')
                 ->references('id')
                 ->on('corporations')

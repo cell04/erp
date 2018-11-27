@@ -35,7 +35,9 @@ class CashAccount extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (request()->headers->get('CORPORATION-ID')) {
+            if (session('new-corporation-id')) {
+                $model->corporation_id = session('new-corporation-id');
+            } else {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
