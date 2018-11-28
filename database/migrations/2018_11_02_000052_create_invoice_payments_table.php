@@ -31,6 +31,8 @@ class CreateInvoicePaymentsTable extends Migration
                 ->references('id')
                 ->on('mode_of_payments')
                 ->onDelete('cascade');
+            $table->string('invoice_payment_number')->nullable();
+            $table->date('invoice_payment_date');
             $table->string('cr_number')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('check')->nullable();
