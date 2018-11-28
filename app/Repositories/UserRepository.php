@@ -35,9 +35,32 @@ class UserRepository extends Repository
             ]);
 
             $user->userRole()->create($request->all());
-            $user->images()->create($request->all());
+            $user->image()->create($request->all());
 
             return $user;
+        });
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return boolean
+     */
+    public function update($request, $id)
+    {
+        return DB::transaction(function () use ($request, $id) {
+            $user = $this->user->findOrFail($id);
+            $user->fill($request->all());
+            $user->userRole()->delete();
+            $user->userRole()->create($request->all());
+            if ($request->hasFile('image')) {
+                $user->image()->update([
+                    'image' => $request->image
+                ]);
+            }
+            return $user->save();
         });
     }
 }
