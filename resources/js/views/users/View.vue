@@ -10,8 +10,10 @@
                     <fieldset disabled>
                         <div class="form-group">
                             <label>Name</label>
-                            <div v-if="article.image" class="offset-md-3 col-md-6">
-                            <img class="img-fluid" :src="'/storage/images/' + user.image">
+                            <div v-for="image in images">
+                                <div v-if="article.image" class="offset-md-3 col-md-6">
+                                <img class="img-fluid" :src="'/storage/images/' + image.image">
+                            </div>
                         </div>
                         </div>
                         <div class="form-group">
