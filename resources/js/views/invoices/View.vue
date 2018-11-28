@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content-title">
-            <h4 class="module-title">INVOICE</h4>
+            <h4 class="module-title">SALES INVOICE</h4>
             <hr class="title-border">
         </div>
 
@@ -9,9 +9,9 @@
             <div class="container p-md-0">          
                 <div class="card">
                     <div class="card-header">
-                        <a class="text-success" href="" @click.prevent="viewItems">Invoices</a>
-                        <a class="text-secondary"> / View Invoice</a>
-                        <span class="float-right"> <strong>Invoice #:</strong> {{invoices.reference_number}}</span>
+                        <a class="text-success" href="" @click.prevent="viewItems">Sales Invoices</a>
+                        <a class="text-secondary"> / View Sales Invoice</a>
+                        <span class="float-right"> <strong>Sales Invoice #:</strong> {{invoices.reference_number}}</span>
                     </div>
                     <div class="card-body">
                         <div v-if="ifReady">

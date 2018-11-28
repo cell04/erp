@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="content-title">
-            <h4 class="module-title">INVOICE</h4>
+            <h4 class="module-title">SALES INVOICE</h4>
             <hr class="title-border">
         </div>
 
         <div class="p-md-4">
             <div class="card">
                 <div class="card-header">
-                    <a class="text-success" href="" @click.prevent="viewQuotations">Invoices</a>
-                    <a class="text-secondary"> / Receive Invoice</a>
+                    <a class="text-success" href="" @click.prevent="viewQuotations">Sales Invoices</a>
+                    <a class="text-secondary"> / Receive Sales Invoice</a>
                 </div>
                 <div class="card-body">
                     <div v-if="ifReady">
@@ -26,7 +26,7 @@
                                 </div>
 
                                 <div class="col-md-6 form-group">
-                                    <label>Invoice #</label>
+                                    <label>Sales Invoice #</label>
                                     <input type="text" class="form-control" v-model="reference_number" required>
                                 </div>
 

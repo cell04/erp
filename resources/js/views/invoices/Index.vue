@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content-title">
-            <h4 class="module-title">INVOICE</h4>
+            <h4 class="module-title"> SALES INVOICE</h4>
             <hr class="title-border">
         </div>
 
@@ -9,10 +9,10 @@
             <div class="card">
                 <div class="card-header clearfix">
                     <div class="float-left">
-                        Invoices
+                        Sales Invoices
                     </div>
                     <div class="float-right">
-                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'invoices.create' }"><i class="fas fa-plus"></i> Create New Invoice</router-link>
+                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'invoices.create' }"><i class="fas fa-plus"></i> Create New Service Invoice</router-link>
                     </div>
                 </div>
                 <div class="card-body">
@@ -20,7 +20,7 @@
                         <caption>
                             <div class="row">
                                 <div class="col-md-9">
-                                    List of Invoices - Total Invoices {{ this.meta.total }}
+                                    List of Sales Invoices - Total Sales Invoices {{ this.meta.total }}
                                 </div>
                                 <div class="col-md-3">
                                     <div class="progress" height="30px;" v-if="showProgress">
@@ -31,7 +31,7 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">Invoice #</th>
+                                <th scope="col">Sales Invoice #</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Date</th>

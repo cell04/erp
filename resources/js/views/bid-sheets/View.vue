@@ -197,8 +197,7 @@
             return {
                 ifReady: false,
                 bidsheet: [],
-                contactData: [],
-                total: 0
+                contactData: []
             };
         },
 
@@ -226,6 +225,7 @@
             promise.then(() => {
                 this.ifReady = true;
             });
+            // console.log("Approved By: " + JSON.parse(localStorage.getItem('user')));
         },
 
         methods: {
@@ -279,7 +279,8 @@
                 $('#approveBidSheetModal').modal('hide');
 
                 let params = {
-                    status: 1
+                    status: 1,
+                    approved_bid_sheet_date: moment(new Date()).format('YYYY-MM-DD')
                 };
                 axios.patch('/api/bid-sheets/' + this.$route.params.id, params).then(res => {
                     this.bidsheet.status = 1;

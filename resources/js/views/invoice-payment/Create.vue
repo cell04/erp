@@ -16,8 +16,20 @@
                         <form v-on:submit.prevent="createNewInvoicePayment">
                             <div class="row">
                                 <div class="col-md-6 form-group">
-                                    <label>Invoices #</label>
-                                    <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
+                                    <label>Payment For</label>
+                                    <vue-select v-model="invoiceTypeData" @input="selectInvoiceType()" label="name" :options="invoiceType"></vue-select>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-12" v-show="selectedSales">
+                                        <label>Sales Invoices #</label>
+                                        <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
+                                    </div>
+
+                                    <div class="col-md-12" v-show="selectedService">
+                                        <label>Service Invoices #</label>
+                                        <vue-select v-model="serviceInvoicesData" @input="selectServiceInvoices()" label="reference_number" :options="serviceInvoices" required></vue-select>
+                                    </div>
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -69,10 +81,14 @@
         data() {
             return {
                 ifReady: false,
+                invoiceType: [],
                 invoices: [],
+                serviceInvoices: [],
                 mop: [],
                 mopData: null,
                 invoicesData: null,
+                serviceInvoicesData: null,
+                invoiceTypeData: null,
                 invoice_id: '',
                 mode_of_payment_id: '',
                 amount: '',
@@ -80,16 +96,35 @@
                 bank_name: '',
                 check: '',
                 name: '',
+                payment_for: '',
                 selectedCash: false,
-                selectedCheck: false
+                selectedCheck: false,
+                selectedSales: false,
+                selectedService: false
             };
         },
 
         mounted() {
+            this.invoiceType = [
+                {"id": "1", "name": "Sales Invoice"},
+                {"id": "2", "name": "Service Invoice"}
+            ]
+
             let promiseIv = new Promise((resolve, reject) => {
                 axios.get("/api/invoices/get-all-invoices/").then(res => {
                     this.invoices = res.data.invoices;
                     // console.log('IP: ' + JSON.stringify(res.data));
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            let promiseServiceIv = new Promise((resolve, reject) => {
+                axios.get("/api/service-invoices/get-all-service-invoices/").then(res => {
+                    this.serviceInvoices = res.data.service_invoices;
+                    // console.log('SRI: ' + JSON.stringify(res.data));
                     resolve();
                 }).catch(err => {
                     console.log(err);
@@ -108,7 +143,7 @@
                 });
             });
 
-            Promise.all([promiseIv, promiseIvp]).then(() => {
+            Promise.all([promiseIv, promiseIvp, promiseServiceIv]).then(() => {
                 this.ifReady = true;
             });
         },
@@ -118,9 +153,29 @@
                 this.$router.push({ name: 'invoice-payments.index' });
             },
 
+            selectServiceInvoices() {
+                this.invoice_id = this.serviceInvoicesData.id;
+                console.log('Service Invoice id: ' + this.invoice_id);
+            },
+
             selectInvoices() {
                 this.invoice_id = this.invoicesData.id;
-                console.log('IV id: ' + this.invoice_id);
+                console.log('Sales Invoice id: ' + this.invoice_id);
+            },
+
+            selectInvoiceType() {
+                this.payment_for = this.invoiceTypeData.id;
+                console.log('Payment For: ' + this.invoiceTypeData.id);
+                if(this.invoiceTypeData.id == 1){
+                    this.selectedSales = true;
+                    this.selectedService = false;
+                } else if (this.invoiceTypeData.id == 2) {
+                    this.selectedSales = false;
+                    this.selectedService = true;
+                } else {
+                    this.selectedCash = false;
+                    this.selectedCheck = false;
+                }
             },
 
             selectModeOfPayment() {
@@ -143,6 +198,7 @@
 
                 let formData = {
                     invoice_id: this.$data.invoice_id,
+                    payment_for: this.$data.payment_for,
                     mode_of_payment_id: this.$data.mode_of_payment_id,
                     cr_number: this.$data.cr_number,
                     bank_name: this.$data.bank_name,

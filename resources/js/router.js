@@ -60,6 +60,15 @@ const Overview = () => import('./views/Overview');
  const InvoicesReceive = () => import('./views/invoices/Receive.vue');
  const InvoicesView = () => import('./views/invoices/View');
 
+ /**
+ * Service Invoices
+ *
+ */
+const ServiceInvoicesIndex = () => import('./views/service-invoices/Index');
+const ServiceInvoicesCreate = () => import('./views/service-invoices/Create');
+const ServiceInvoicesView = () => import('./views/service-invoices/View');
+ 
+
 /**
  * Invoices Payment
  *
@@ -268,6 +277,11 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
         { path: '/invoices/create', name: 'invoices.create', component: InvoicesCreate },
         { path: '/invoices/receive/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
+
+        // Service Invoices
+        { path: '/service-invoices', name: 'service-invoices.index', component: ServiceInvoicesIndex },
+        { path: '/service-invoices/create', name: 'service-invoices.create', component: ServiceInvoicesCreate },
+        { path: '/service-invoices/:id', name: 'service-invoices.view', component: ServiceInvoicesView },
 
         // Invoices Payment
         { path: '/invoice-payments', name: 'invoice-payments.index', component: InvoicePaymentIndex },
