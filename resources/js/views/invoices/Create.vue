@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="content-title">
-            <h4 class="module-title">INVOICE</h4>
+            <h4 class="module-title">SALES INVOICE</h4>
             <hr class="title-border">
         </div>
 
         <div class="p-md-4">
             <div class="card">
                 <div class="card-header">
-                    <a class="text-success" href="" @click.prevent="viewInvoices">Invoices</a>
-                    <a class="text-secondary"> / Create New Invoice</a>
+                    <a class="text-success" href="" @click.prevent="viewInvoices">Sales Invoices</a>
+                    <a class="text-secondary"> / Create New Sales Invoice</a>
                 </div>
                 <div class="card-body">
                     <div v-if="ifReady">
@@ -20,8 +20,13 @@
                                     <vue-select v-model="quotationData" @input="selectQuotation()" label="number" :options="quotation"></vue-select>
                                 </div>
 
+                                <!-- <div class="col-md-6 form-group">
+                                    <label>Bid Sheet #</label>
+                                    <vue-select v-model="bidsheetData" @input="selectBidSheet()" label="bid_sheet_number" :options="bidsheets"></vue-select>
+                                </div> -->
+
                                 <div class="col-md-6 form-group">
-                                    <label>Invoice #</label>
+                                    <label> Sales Invoice #</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" id="btnGroupAddon">I</div>
@@ -31,24 +36,22 @@
                                 </div>
 
                                 <div class="col-md-6 form-group">
-                                    <!-- <label>Due Date</label>
-                                    <input type="date" class="form-control" v-model="due_date" required> -->
+                                    <label>Customer</label>
+                                    <input type="text" class="form-control" v-model="contact" readonly>
+                                </div>
+
+                                <div class="col-md-6 form-group">
                                     <div class="dateStyle">
                                         <label>Due Date</label>
                                         <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 form-group">
-                                    <label>Customer</label>
-                                    <input type="text" class="form-control" v-model="contact" readonly>
-                                </div>
-
                             </div>
 
                             <br>
                             <h6>
-                                <b><u>Invoice Items</u></b>
+                                <b><u>Sales Invoice Items</u></b>
                             </h6>
                             <br>
 
@@ -115,6 +118,9 @@
                 quotation: [],
                 quotationData: null,
                 contacts: [],
+                bidsheets: [],
+                bidsheetData: null,
+                bid_sheet_id: "",
                 contact: null,
                 contact_id: "",
                 due_date: "",
@@ -161,6 +167,17 @@
                 });
             });
 
+            let getAllBidSheet = new Promise((resolve, reject) => {
+                axios.get("/api/bid-sheets/get-all-bid-sheets/").then(res => {
+                    this.bidsheets = res.data.bid_sheets;
+                    // console.log('BIDSHEET: ' + JSON.stringify(res.data));
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
             let getAllItems = new Promise((resolve, reject) => {
                 axios.get("/api/items/get-all-items/").then(res => {
                     this.items = res.data.items;
@@ -182,7 +199,7 @@
                 });
             });
 
-            Promise.all([getAllContacts, getAllItems, getAllRo]).then(() => {
+            Promise.all([getAllContacts, getAllBidSheet, getAllItems, getAllRo]).then(() => {
                 this.ifReady = true;
             });
         },
@@ -239,9 +256,14 @@
 
             selectQuotation() {
                 this.quotation_id = this.quotationData.id;
-                console.log('RO: ' + this.quotationData.id);
+                // console.log('RO: ' + this.quotationData.id);
                 this.getQuotationDetails(this.quotationData.id);
             },
+
+            // selectBidSheet() {
+            //     this.bid_sheet_id = this.bidsheetData.id;
+            //     console.log('B ID: ' + this.bidsheetData.id);
+            // },
             
             addNewItem() {
                 this.invoice_items.push({
@@ -280,6 +302,7 @@
                 let formData = {
                     invoice_items: invoiceItems,
                     quotation_id: this.quotation_id,
+                    // bid_sheet_id: this.bid_sheet_id,
                     contact_id: this.$data.contact_id,
                     reference_number: 'I' + this.$data.reference_number,
                     due_date: moment(this.$data.due_date).format('YYYY-MM-DD'),

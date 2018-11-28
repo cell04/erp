@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content-title">
-            <h4 class="module-title"> SALES INVOICE</h4>
+            <h4 class="module-title">SERVICE INVOICE</h4>
             <hr class="title-border">
         </div>
 
@@ -9,10 +9,10 @@
             <div class="card">
                 <div class="card-header clearfix">
                     <div class="float-left">
-                        Sales Invoices
+                        Service Invoices
                     </div>
                     <div class="float-right">
-                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'invoices.create' }"><i class="fas fa-plus"></i> Create New Service Invoice</router-link>
+                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'service-invoices.create' }"><i class="fas fa-plus"></i> Create New Service Invoice</router-link>
                     </div>
                 </div>
                 <div class="card-body">
@@ -20,7 +20,7 @@
                         <caption>
                             <div class="row">
                                 <div class="col-md-9">
-                                    List of Sales Invoices - Total Sales Invoices {{ this.meta.total }}
+                                    List of Service Invoices - Total Service Invoices {{ this.meta.total }}
                                 </div>
                                 <div class="col-md-3">
                                     <div class="progress" height="30px;" v-if="showProgress">
@@ -31,7 +31,7 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">Sales Invoice #</th>
+                                <th scope="col">Service Invoice #</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Date</th>
@@ -45,7 +45,7 @@
                                 <td>{{ (invoice.status) == 0 ? 'Issued': 'Approved'}}</td>
                                 <td>{{invoice.due_date}}</td>
                                 <td>
-                                    <router-link class="text-secondary" :to="{ name: 'invoices.view', params: { id: invoice.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                    <router-link class="text-secondary" :to="{ name: 'service-invoices.view', params: { id: invoice.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                                 </td>
                             </tr>
                         </tbody>
@@ -183,7 +183,7 @@
             order_by,
         };
 
-        axios.get('/api/invoices', { params }).then(res => {
+        axios.get('/api/service-invoices', { params }).then(res => {
             // console.log('Invoices: ' + JSON.stringify(res.data));
             callback(null, res.data);
         }).catch(error => {

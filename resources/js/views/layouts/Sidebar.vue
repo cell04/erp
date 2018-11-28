@@ -39,7 +39,15 @@
                         <router-link class="nav-link link" :to="{ name: 'invoices.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                Invoices
+                                Sales Invoices
+                            </span>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link link" :to="{ name: 'service-invoices.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Service Invoices
                             </span>
                         </router-link>
                     </li>
@@ -200,7 +208,7 @@
                 activeClass:true,
                 currentRoute: '',
                 // Contains the the routes for the dropdown
-                salesRoute: ['quotations', 'invoices','invoice-payments'],
+                salesRoute: ['quotations', 'bid-sheets','invoices', 'service-invoices', 'invoice-payments'],
                 purchasingRoute: ['purchase-orders','receive-orders','bills','bill-payments'],
                 inventoryRoute: ['warehouses','branches','items','item-pricelists', 'purchase-item-pricelists','stocks','stock-requests','stock-transfers','stock-receives'],
                 expand: {
