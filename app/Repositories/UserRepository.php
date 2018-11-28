@@ -34,7 +34,7 @@ class UserRepository extends Repository
                 'mobile_number' => $request->mobile_number
             ]);
 
-            $user->userRole($request->all());
+            $user->userRole()->create($request->all());
             $user->images()->create($request->all());
 
             return $user;
