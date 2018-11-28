@@ -122,4 +122,55 @@ class InvoiceRepository extends Repository
 
     //     return $journal->journalEntries()->createMany($journal_entries);
     // }
+
+    /**
+     * Create pagination with filters for the resources.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  integer                   $length
+     * @param  string                    $orderBy
+     * @param  boolean                   $removePage
+     * @return array json object
+     */
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->whereNull('bid_sheet_id')
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
+    }
+
+    public function all()
+    {
+        return $this->invoice->whereNull('bid_sheet_id')
+        ->get();
+    }
+
+    public function allServiceInvoice()
+    {
+        return $this->invoice->whereNull('quotation_id')
+        ->get();
+    }
+
+    public function paginateWithFilterAllServices(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->whereNull('quotation_id')
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
+    }
 }

@@ -90,6 +90,16 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
         ]
     ]);
 
+    // Service Invoices
+    Route::match(['put', 'patch'], 'service-invoices/{serviceInvoice}/restore', 'ServiceInvoicesController@restore');
+    Route::delete('service-invoices/{serviceInvoice}/force-delete', 'ServiceInvoicesController@forceDestroy');
+    Route::get('service-invoices/get-all-service-invoices/', 'ServiceInvoicesController@getAllServiceInvoices');
+    Route::resource('service-invoices', 'ServiceInvoicesController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
     // Invoice Payments
     Route::match(['put', 'patch'], 'invoice-payments/{invoicePayment}/restore', 'InvoicePaymentsController@restore');
     Route::delete('invoice-payments/{invoicePayment}/force-delete', 'InvoicePaymentsController@forceDestroy');

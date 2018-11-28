@@ -16,6 +16,7 @@ class CreateInvoicePaymentsTable extends Migration
         Schema::create('invoice_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
+            $table->integer('payment_for'); //0 = sales invoice, 1 = service invoice 
             $table->foreign('corporation_id')
                 ->references('id')
                 ->on('corporations')
