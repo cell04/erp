@@ -38,11 +38,19 @@ class InvoicePaymentRepository extends Repository
     public function generateInvoicePaymentEntries($invoicePayment)
     {
         $i = 0;
-        $costCenters = $invoicePayment->invoice->quotation->quotable->costCenter;
+
+        if ($invoicePayment->invoice->quotation) {
+            $costCenters = $invoicePayment->invoice->quotation->quotable->costCenter;
+        }
+
+        if ($invoicePayment->invoice->bidSheet) {
+            $costCenters = $invoicePayment->invoice->bidSheet->location->costCenter;
+        }
 
         foreach ($costCenters as $costCenter) {
             $costCenterID = $costCenter->id;
         }
+        
         $journal_entries[$i++] = [
             'account_id' => $invoicePayment->invoice->contact->account_id,
             'corporation_id' => $invoicePayment->invoice->corporation_id,
