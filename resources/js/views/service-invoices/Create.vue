@@ -49,12 +49,6 @@
 
                             </div>
 
-                            <br>
-                            <h6>
-                                <b><u>Service Invoice Items</u></b>
-                            </h6>
-                            <br>
-
                             <div class="pt-3">
                                 <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewServiceInvoices"><i class="fas fa-chevron-left"></i> Back</button>
                                 <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>

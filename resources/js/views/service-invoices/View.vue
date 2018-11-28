@@ -11,13 +11,13 @@
                     <div class="card-header">
                         <a class="text-success" href="" @click.prevent="viewItems">Service Invoices</a>
                         <a class="text-secondary"> / View Service Invoice</a>
-                        <span class="float-right"> <strong>Service Invoice #:</strong> {{invoices.reference_number}}</span>
+                        <span class="float-right"> <strong>Service Invoice #:</strong> {{serviceInvoices.reference_number}}</span>
                     </div>
                     <div class="card-body">
                         <div v-if="ifReady">
                             <div class="row mb-4">
                                 <div class="col-sm-6">
-                                    <h6 class="mb-3">To:</h6>
+                                    <h5 class="mb-3">To:</h5>
                                     <div>
                                         <strong>{{contacts.person}}</strong>
                                     </div>
@@ -25,6 +25,15 @@
                                     <div>{{contacts.company_address}}</div>
                                     <div>Email: {{contacts.email}}</div>
                                     <div>Phone: {{contacts.mobile_number}}</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-sm-6">
+                                    <h5 class="mb-3">Service Invoice Details</h5>
+                                    <div><b>Amount:</b> {{serviceInvoices.amount}}</div>
+                                    <div><b>Amount Paid:</b> {{serviceInvoices.amount_paid}}</div>
+                                    <div><b>Due Date:</b> {{serviceInvoices.due_date}}</div>
                                 </div>
                             </div>
                             
@@ -49,13 +58,8 @@ export default {
   data() {
     return {
       ifReady: false,
-      invoices: [],
-      contacts: [],
-      roRefNum: [],
-      invoiceItems: [],
-      corpData: [],
-      tax: "",
-      taxPercent: "",
+      serviceInvoices: [],
+      contacts: []
     };
   },
 
@@ -80,12 +84,8 @@ export default {
         axios.get("/api/service-invoices/" + this.$route.params.id).then(res => {
         //   console.log("Service Invoices: " + JSON.stringify(res.data));
           this.ifReady = true;
-          this.invoices = res.data.serviceInvoice;
+          this.serviceInvoices = res.data.serviceInvoice;
           this.contacts = res.data.serviceInvoice.contact;
-          this.invoiceItems = res.data.serviceInvoice.invoice_items;
-          this.roRefNum = res.data.serviceInvoice.quotation;
-          this.tax = res.data.serviceInvoice.quotation.tax;
-          this.taxPercent = this.tax / 100;
 
           if (!res.data.response) {
             return;

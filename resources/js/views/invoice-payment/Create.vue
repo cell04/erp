@@ -20,14 +20,16 @@
                                     <vue-select v-model="invoiceTypeData" @input="selectInvoiceType()" label="name" :options="invoiceType"></vue-select>
                                 </div>
 
-                                <div class="col-md-6 form-group" v-show="selectedSales">
-                                    <label>Sales Invoices #</label>
-                                    <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
-                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-12" v-show="selectedSales">
+                                        <label>Sales Invoices #</label>
+                                        <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
+                                    </div>
 
-                                <div class="col-md-6 form-group" v-show="selectedService">
-                                    <label>Service Invoices #</label>
-                                    <vue-select v-model="serviceInvoicesData" @input="selectServiceInvoices()" label="reference_number" :options="serviceInvoices" required></vue-select>
+                                    <div class="col-md-12" v-show="selectedService">
+                                        <label>Service Invoices #</label>
+                                        <vue-select v-model="serviceInvoicesData" @input="selectServiceInvoices()" label="reference_number" :options="serviceInvoices" required></vue-select>
+                                    </div>
                                 </div>
 
                                 <div class="form-group col-md-6">
