@@ -19,9 +19,9 @@
                                     <label>Quotation Number</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text" id="btnGroupAddon">Q</div>
+                                            <div class="input-group-text" id="btnGroupAddon">QN</div>
                                         </div>
-                                        <input type="text" class="form-control" v-model="number" required placeholder="Quotation #" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                                        <input type="text" class="form-control" v-model="number" required placeholder="Quotation #" aria-label="Input group example" aria-describedby="btnGroupAddon" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6 form-group">
@@ -48,10 +48,10 @@
                                     <input type="number" class="form-control" v-model="tax" placeholder="Tax %" v-show="tax_value === 'Yes'">
                                 </div>
 
-                                <div class="col-md-6 form-group"></div>
+                                <!-- <div class="col-md-6 form-group"></div> -->
 
                                 <div class="col-md-6 form-group">
-                                    <label>From</label>
+                                    <label>Stock Origin</label>
                                     <br>
                                     <div class="form-check form-check-inline">
                                         <input type="radio" v-model="from_selected_radio_button" value="warehouse">
@@ -65,9 +65,26 @@
                                     <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
                                 </div>
 
+                                <div class="col-md-6 form-group">
+                                    <div class="dateStyle">
+                                        <label>Validity Date</label>
+                                        <datepicker v-model="validity_date" :bootstrap-styling="true" placeholder="Validity Date" required></datepicker>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 form-group" v-if="contactData !== null">
+                                    <hr>
+                                    <h5><u>Customer Information:</u></h5>
+                                    <div><label for="name"><strong>Customer</strong></label>: {{contactData.person}}</div>
+                                    <div><label for="name"><strong>Company</strong></label>: {{contactData.company}}</div>
+                                    <div><label for="name"><strong>Address</strong></label>: {{contactData.company_address}}</div>
+                                    <div><label for="name"><strong>Email</strong></label>: {{contactData.email}}</div>
+                                    <div><label for="name"><strong>Phone</strong></label>: {{contactData.mobile_number}}</div>
+                                    <hr>
+                                </div>
+
                             </div>
 
-                            <br>
                             <h6>
                                 <b><u>Quotation Items</u></b>
                             </h6>
@@ -147,6 +164,7 @@
         data() {
             return {
                 ifReady: false,
+                contactData: null,
                 from_selected_radio_button: "",
                 fromWarehouse: null,
                 fromBranch: null,
@@ -160,6 +178,7 @@
                 items: [],
                 number: "",
                 tax: "",
+                validity_date: "",
                 quotation_items: [
                     {
                         item: '',
@@ -231,6 +250,8 @@
             Promise.all([getAllContacts, getAllItems, promiseBranches, promiseWarehouses]).then(() => {
                 this.ifReady = true;
             });
+
+            this.autoGenerateQuotationNumber();
         },
 
         computed: {
@@ -251,6 +272,33 @@
                 this.$router.push({ name: 'quotations.index' });
             },
 
+            getContactData(id) {
+                axios.get("/api/contacts/" + id).then(res => {
+                    this.contactData = res.data.contact;
+                    // console.log("COntacts" + JSON.stringify(res.data));
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            },
+
+            autoGenerateQuotationNumber() {
+                let date = new Date();
+                var components = [
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate(),
+                    date.getHours(),
+                    date.getMinutes(),
+                    date.getSeconds(),
+                    date.getMilliseconds()
+                ];
+                let id = components.join("");
+                this.number = id;
+                console.log('Code: ' + id);
+            },
+
             selectTax(value) {
                 console.log('Value: ' + value);
                 if(value == 'no') {
@@ -260,6 +308,7 @@
 
             selectContact() {
                 this.contact_id = this.contact.id;
+                this.getContactData(this.contact_id);
             },
 
             selectFromBranch() {
@@ -348,9 +397,10 @@
                     contact_id: this.$data.contact_id,
                     quotable_id: this.stock_receivable_from_id,
                     quotable_type: this.stock_receivable_from_type,
-                    number: 'Q' + this.number,
+                    number: 'QN' + this.number,
                     amount: this.amount,
                     tax: this.tax,
+                    validity_date: moment(this.$data.due_date).format('YYYY-MM-DD'),
                     quotation_items: quotationItems
                 };
 
@@ -370,6 +420,10 @@
 <style>
     td {
         width: 100px !important;
+    }
+    
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
     }
 </style>
 

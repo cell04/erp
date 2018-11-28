@@ -30,6 +30,11 @@
                             <span class="sub-content"> <i class="fas fa-caret-right pr-2 "></i> Quotations</span>
                         </router-link>
                     </li>
+                    <li class="nav-item" >
+                        <router-link class="nav-link link" :to="{ name: 'bid-sheets.index' }">
+                            <span class="sub-content"> <i class="fas fa-caret-right pr-2 "></i> Bid Sheets</span>
+                        </router-link>
+                    </li>
                     <li class="nav-item">
                         <router-link class="nav-link link" :to="{ name: 'invoices.index' }">
                             <span class="sub-content">

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content-title">
-            <h4 class="module-title">QUOTATION</h4>
+            <h4 class="module-title">BID SHEET</h4>
             <hr class="title-border">
         </div>
 
@@ -9,10 +9,10 @@
             <div class="card">
                 <div class="card-header clearfix">
                     <div class="float-left">
-                        Quotations
+                        Bid Sheet
                     </div>
                     <div class="float-right">
-                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'quotations.create' }"><i class="fas fa-plus"></i> Create New Quotation</router-link>
+                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'bid-sheets.create' }"><i class="fas fa-plus"></i> Create New Bid Sheet</router-link>
                     </div>
                 </div>
                 <div class="card-body">
@@ -20,7 +20,7 @@
                         <caption>
                             <div class="row">
                                 <div class="col-md-9">
-                                    List of Quotations - Total Quotations {{ this.meta.total }}
+                                    List of Bid Sheets - Total Bid Sheets {{ this.meta.total }}
                                 </div>
                                 <div class="col-md-3">
                                     <div class="progress" height="30px;" v-if="showProgress">
@@ -31,21 +31,21 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">Quotation #</th>
+                                <th scope="col">Bid Sheet #</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Date Created</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="quotations">
-                            <tr :key="index" v-for="(quotation, index) in quotations">
-                                <td>{{ quotation.number }}</td>
-                                <td>{{ quotation.contact.person | Upper }}</td>
-                                <td>{{ quotation.status }}</td>
-                                <td>{{ quotation.created_at | DateFormat}}</td>
+                        <tbody v-if="bidsheets">
+                            <tr :key="index" v-for="(bidsheet, index) in bidsheets">
+                                <td>{{ bidsheet.bid_sheet_number }}</td>
+                                <td>{{ bidsheet.contact.person | Upper }}</td>
+                                <td>{{ bidsheet.status }}</td>
+                                <td>{{ bidsheet.created_at | DateFormat}}</td>
                                 <td>
-                                    <router-link class="text-secondary" :to="{ name: 'quotations.view', params: { id: quotation.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                    <router-link class="text-secondary" :to="{ name: 'bid-sheets.view', params: { id: bidsheet.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
 
                                 </td>
                             </tr>
@@ -198,7 +198,7 @@
             order_by,
         };
 
-        axios.get('/api/quotations', { params }).then(res => {
+        axios.get('/api/bid-sheets', { params }).then(res => {
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -214,7 +214,7 @@
     export default {
         data() {
             return {
-                quotations: [],
+                bidsheets: [],
                 searchDate: '',
                 searchPurchaseOrderNumber: '',
                 searchStatus: '',
@@ -424,7 +424,7 @@
                     }
                 });
             },
-            setData(err, { data: quotations, links, meta }) {
+            setData(err, { data: bidsheets, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
@@ -438,11 +438,11 @@
                         4: "Customer Cancelled"
                     };
 
-                    quotations.map(quotation => {
+                    bidsheets.map(quotation => {
                         quotation.status = status[quotation.status];
                     });
 
-                    this.quotations = quotations;
+                    this.bidsheets = bidsheets;
                     this.links = links;
                     this.meta = meta;
                 }
