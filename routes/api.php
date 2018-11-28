@@ -21,6 +21,9 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
         ]
     ]);
 
+    //roles
+    Route::get('roles/get-all-roles', 'RolesController@getAllRoles');
+
     // Branches
     Route::match(['put', 'patch'], 'branches/{contact}/restore', 'BranchesController@restore');
     Route::delete('branches/{contact}/force-delete', 'BranchesController@forceDestroy');
