@@ -10,6 +10,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown notification">
+                        <a class="nav-link dropdown-toggle navTextColor" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-globe px-2"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item p-3" href="#" >No New Notifcation</a>
+                        </div>
+                    </li>
                     <li v-if="corporation">
                         <a class="nav-link navTextColor" href="#" v-on:click.stop.prevent="">{{ corporation.name }}</a>
                     </li>
@@ -108,5 +116,8 @@
        margin-right: 20px;
        cursor: pointer;
        color: #1c6c6e;
+    }
+    .notification .dropdown-toggle:after {
+        content: none
     }
 </style>
