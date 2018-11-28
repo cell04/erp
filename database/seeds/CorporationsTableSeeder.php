@@ -130,22 +130,22 @@ class CorporationsTableSeeder extends Seeder
         
         DB::table('accounts')->insert($account);
 
-        InventoryReturnNotCreditedAccount::create([
+        InventoryReturnNotCreditedAccount::insert([
             'account_id' => 7,
             'corporation_id' => 1
         ]);
 
-        InventoryReceiveNotBilledAccount::create([
+        InventoryReceiveNotBilledAccount::insert([
             'account_id' => 4,
             'corporation_id' => 1
         ]);
 
-        PayableAccount::create([
+        PayableAccount::insert([
             'account_id' => 14,
             'corporation_id' => 1
         ]);
 
-        CashAccount::create([
+        CashAccount::insert([
             'account_id' => 5,
             'corporation_id' => 1
         ]);

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository extends Repository
 {
@@ -25,11 +26,18 @@ class UserRepository extends Repository
      */
     public function store($request)
     {
-        return $this->user->create([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'password'      => bcrypt($request->password),
-            'mobile_number' => $request->mobile_number
-        ]);
+        return DB::transaction(function () use ($request) {
+            $user = $this->user->create([
+                'name'          => $request->name,
+                'email'         => $request->email,
+                'password'      => bcrypt($request->password),
+                'mobile_number' => $request->mobile_number
+            ]);
+
+            $user->userRole($request->all());
+            $user->images()->create($request->all());
+
+            return $user;
+        });
     }
 }
