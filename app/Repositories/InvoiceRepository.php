@@ -31,7 +31,7 @@ class InvoiceRepository extends Repository
         return DB::transaction(function () use ($request) {
 
             $invoice = $this->invoice->create($request->all());
-            $invoice->invoiceItems()->createMany($request->invoice_items);
+            // $invoice->invoiceItems()->createMany($request->invoice_items);
             //Journal Entries
             $invoiceEntries = $this->generateQuotationEntries($invoice);
 
@@ -42,21 +42,26 @@ class InvoiceRepository extends Repository
     public function generateQuotationEntries($invoice)
     {
         $i = 0;
-        $costCenters = $invoice->quotation->quotable->costCenter;
+
+        if ($invoice->quotation) {
+            $costCenters = $invoice->quotation->quotable->costCenter;
+        }
+
+        if ($invoice->bidSheet) {
+            $costCenters = $invoice->bidSheet->location->costCenter;
+        }
 
         foreach ($costCenters as $costCenter) {
             $costCenterID = $costCenter->id;
         }
 
-        foreach ($invoice->invoiceItems as $invoiceItem) {
-            $journal_entries[$i++] = [
-                'account_id' => $invoiceItem->item->sales_account_id,
-                'corporation_id' => $invoice->corporation_id,
-                'cost_center_id' => $costCenterID,
-                'amount' => $invoiceItem->price * $invoiceItem->quantity,
-                'type' => 2, //credit entries
-            ];
-        }
+        $journal_entries[$i++] = [
+            'account_id' => session('cash'),
+            'corporation_id' => $invoice->corporation_id,
+            'cost_center_id' => $costCenterID,
+            'amount' => $invoice->amount,
+            'type' => 2, //credit entries
+        ];
 
 
 
