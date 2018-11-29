@@ -33,9 +33,9 @@
                         </tr>
                     </thead>
                     <tbody v-if="users">
-                        <tr v-for="{ id, name, role, email, mobile_number } in users">
+                        <tr v-for="{ id, name, user_role, email, mobile_number } in users">
                             <td>{{ name }}</td>
-                            <td>{{ role }}</td>
+                            <td>{{ user_role }}</td>
                             <td>{{ email }}</td>
                             <td>{{ mobile_number }}</td>
                             <td>
@@ -161,6 +161,7 @@
         const params = { page, per_page, searchColumnName, searchColumnEmail, order_by };
 
         axios.get('/api/users', { params }).then(res => {
+            console.log(res);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {

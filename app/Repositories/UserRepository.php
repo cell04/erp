@@ -53,6 +53,7 @@ class UserRepository extends Repository
         return DB::transaction(function () use ($request, $id) {
             $user = $this->user->findOrFail($id);
             $user->fill($request->all());
+            $user->save();
             $user->userRole()->delete();
             $user->userRole()->create($request->all());
             if ($request->hasFile('image')) {
@@ -60,7 +61,20 @@ class UserRepository extends Repository
                     'image' => $request->image
                 ]);
             }
-            return $user->save();
+
+            return $user;
         });
+    }
+
+    /**
+     * Find the resource using the specified id or else fail.
+     *
+     * @param  int $id
+     * @return json object
+     */
+    public function findOrFail($id)
+    {
+        return $this->user->with('userRole', 'image')
+        ->findOrFail($id);
     }
 }

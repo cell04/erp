@@ -9,21 +9,19 @@
                 <div v-if="ifReady">
                     <fieldset disabled>
                         <div class="form-group">
-                            <label>Name</label>
-                            <div v-for="image in images">
-                                <div v-if="article.image" class="offset-md-3 col-md-6">
-                                <img class="img-fluid" :src="'/storage/images/' + image.image">
+                            <label>Picture</label>
+                            <div v-if="user.images[0]" class="offset-md-3 col-md-6">
+                                <img class="img-fluid" :src="'/storage/images/' + user.images[0].image">
                             </div>
-                        </div>
                         </div>
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" class="form-control" v-model="user.name">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Role</label>
-                            <input type="text" class="form-control" v-model="user.role.name">
-                        </div>
+                            <input type="text" class="form-control" v-model="user.user_role?.name">
+                        </div> -->
                         <div class="form-group">
                             <label>Email Address</label>
                             <input type="email" class="form-control" v-model="user.email">
@@ -81,6 +79,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/users/' + this.$route.params.id).then(res => {
+                    console.log(res.data.user);
                     this.user = res.data.user;
                     resolve();
                 });
