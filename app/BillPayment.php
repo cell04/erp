@@ -25,7 +25,8 @@ class BillPayment extends Model
      */
     protected $fillable = [
         'corporation_id', 'bill_id', 'amount',
-        'mode_of_payment_id', 'cr_number', 'bank_name', 'check'
+        'mode_of_payment_id', 'cr_number', 'bank_name', 'check', 
+        'bills_payment_date', 'bills_payment_number'
     ];
 
     // /**

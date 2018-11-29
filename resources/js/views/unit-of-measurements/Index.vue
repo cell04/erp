@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Settings / {{componentVal}}s
+                    Settings / UOM
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'unit-of-measurements.create' }"><i class="fas fa-plus"></i> Create New Unit of Measurement</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'unit-of-measurements.create' }"><i class="fas fa-plus"></i> Create New UOM</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -25,15 +25,13 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Abbreviation</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="unit_of_measurements">
                         <tr v-for="{ id, name, abbreviation } in unit_of_measurements">
-                            <td>{{ id }}</td>
                             <td>{{ name }}</td>
                             <td>{{ abbreviation }}</td>
                             <td>
@@ -99,7 +97,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search {{componentVal}}</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search {{componentVal}}</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -192,7 +190,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Unit of Measurement',
+                componentVal: 'UOM',
                 unit_of_measurements: null,
                 searchColumnName: '',
                 searchColumnAbbreviation: '',

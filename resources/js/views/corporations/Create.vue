@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Corporations / Create New Corporation
+                <a class="text-success" href="" @click.prevent="viewCorp">Corporations</a>
+                <a class="text-secondary"> / New Corporation</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">

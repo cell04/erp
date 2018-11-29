@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Settings / Select Corporation
+                <a class="text-secondary">Settings</a>
+                <a class="text-secondary"> / Select Corporation</a>
             </div>
             <div class="card-body">
                 <form v-on:submit.prevent="selectCorporation">
@@ -72,7 +73,7 @@ export default {
             });
 
             promise.then(() => {
-                this.$router.push({ name: 'overview' });
+                this.$router.push({ name: 'corporations.index' });
             });
         }
     }

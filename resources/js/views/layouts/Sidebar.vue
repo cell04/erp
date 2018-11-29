@@ -30,11 +30,24 @@
                             <span class="sub-content"> <i class="fas fa-caret-right pr-2 "></i> Quotations</span>
                         </router-link>
                     </li>
+                    <li class="nav-item" >
+                        <router-link class="nav-link link" :to="{ name: 'bid-sheets.index' }">
+                            <span class="sub-content"> <i class="fas fa-caret-right pr-2 "></i> Bid Sheets</span>
+                        </router-link>
+                    </li>
                     <li class="nav-item">
                         <router-link class="nav-link link" :to="{ name: 'invoices.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                Invoices
+                                Sales Invoices
+                            </span>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link link" :to="{ name: 'service-invoices.index' }">
+                            <span class="sub-content">
+                                <i class="fas fa-caret-right pr-2 "></i>
+                                Service Invoices
                             </span>
                         </router-link>
                     </li>
@@ -154,7 +167,7 @@
                         <router-link class="nav-link link" :to="{ name: 'receive-orders.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                Receive Orders
+                                Received Orders
                             </span>
                         </router-link>
                     </li>
@@ -162,15 +175,15 @@
                         <router-link class="nav-link link" :to="{ name: 'bills.index' }">
                             <span class="sub-content">
                                 <i class="fas fa-caret-right pr-2 "></i>
-                                Bills
+                                Purchase Invoices
                             </span>
                         </router-link>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link link" :to="{ name: 'bill-payments.index' }">
                             <span class="sub-content">
-                                <i class="fas fa-caret-right pr-2 "></i>
-                                Bills Payment
+                                <i class="fas fa-caret-right pr-1"></i>
+                                Purchase Invoice Payments</span>
                             </span>
                         </router-link>
                     </li>
@@ -195,7 +208,7 @@
                 activeClass:true,
                 currentRoute: '',
                 // Contains the the routes for the dropdown
-                salesRoute: ['quotations', 'invoices','invoice-payments'],
+                salesRoute: ['quotations', 'bid-sheets','invoices', 'service-invoices', 'invoice-payments'],
                 purchasingRoute: ['purchase-orders','receive-orders','bills','bill-payments'],
                 inventoryRoute: ['warehouses','branches','items','item-pricelists', 'purchase-item-pricelists','stocks','stock-requests','stock-transfers','stock-receives'],
                 expand: {
@@ -250,6 +263,7 @@
 }
 .nav-sub-menu .nav-item .nav-link {
     margin-left: -15px;
+    font-size: 13px;
 }
 .sub-content{
     margin-left: 45px;
@@ -276,4 +290,5 @@
 .selected .nav-link {
     background-color: #287e80;
 }
+
 </style>

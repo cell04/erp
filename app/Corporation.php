@@ -234,4 +234,14 @@ class Corporation extends Model
     {
         return $this->hasMany(Warehouse::class);
     }
+
+    /**
+     * The corporation has many accounts.
+     *
+     * @return array object
+     */
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
 }

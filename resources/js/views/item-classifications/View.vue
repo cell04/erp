@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Classifications / View Item Classification
+                <a class="text-success" href="" @click.prevent="viewItemClassification">Item Subtypes</a>
+                <a class="text-secondary"> / View Item Subtype</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -44,13 +45,13 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Item Classification?</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this  Item Subtype?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this Item Classification?
+                        Are you sure you want to delete this  Item Subtype?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteItemClassification">Confirm Delete</button>

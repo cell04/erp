@@ -34,6 +34,7 @@ class CreateStockReceivesTable extends Migration
             $table->string('stock_receivable_from_type');
             $table->integer('stock_receivable_to_id')->unsigned();
             $table->string('stock_receivable_to_type');
+            $table->date('stock_received_date');
             $table->string('number');
             $table->timestamps();
             $table->softDeletes();

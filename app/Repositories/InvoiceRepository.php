@@ -31,7 +31,7 @@ class InvoiceRepository extends Repository
         return DB::transaction(function () use ($request) {
 
             $invoice = $this->invoice->create($request->all());
-            $invoice->invoiceItems()->createMany($request->invoice_items);
+            // $invoice->invoiceItems()->createMany($request->invoice_items);
             //Journal Entries
             $invoiceEntries = $this->generateQuotationEntries($invoice);
 
@@ -42,21 +42,26 @@ class InvoiceRepository extends Repository
     public function generateQuotationEntries($invoice)
     {
         $i = 0;
-        $costCenters = $invoice->quotation->quotable->costCenter;
+
+        if ($invoice->quotation) {
+            $costCenters = $invoice->quotation->quotable->costCenter;
+        }
+
+        if ($invoice->bidSheet) {
+            $costCenters = $invoice->bidSheet->location->costCenter;
+        }
 
         foreach ($costCenters as $costCenter) {
             $costCenterID = $costCenter->id;
         }
 
-        foreach ($invoice->invoiceItems as $invoiceItem) {
-            $journal_entries[$i++] = [
-                'account_id' => $invoiceItem->item->sales_account_id,
-                'corporation_id' => $invoice->corporation_id,
-                'cost_center_id' => $costCenterID,
-                'amount' => $invoiceItem->price * $invoiceItem->quantity,
-                'type' => 2, //credit entries
-            ];
-        }
+        $journal_entries[$i++] = [
+            'account_id' => session('cash'),
+            'corporation_id' => $invoice->corporation_id,
+            'cost_center_id' => $costCenterID,
+            'amount' => $invoice->amount,
+            'type' => 2, //credit entries
+        ];
 
 
 
@@ -122,4 +127,55 @@ class InvoiceRepository extends Repository
 
     //     return $journal->journalEntries()->createMany($journal_entries);
     // }
+
+    /**
+     * Create pagination with filters for the resources.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  integer                   $length
+     * @param  string                    $orderBy
+     * @param  boolean                   $removePage
+     * @return array json object
+     */
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->whereNull('bid_sheet_id')
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
+    }
+
+    public function all()
+    {
+        return $this->invoice->whereNull('bid_sheet_id')
+        ->get();
+    }
+
+    public function allServiceInvoice()
+    {
+        return $this->invoice->whereNull('quotation_id')
+        ->get();
+    }
+
+    public function paginateWithFilterAllServices(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->whereNull('quotation_id')
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
+    }
 }

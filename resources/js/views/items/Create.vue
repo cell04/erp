@@ -1,68 +1,76 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                <b>Items / Create New Item</b>
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <form v-on:submit.prevent="createNewItem">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>SKU</label>
-                                    <input class="form-control" v-model="stock_keeping_unit" maxlength="1000" required></input>
-                                </div>
-                            </div>
-                        </div>
+        <div class="content-title">
+            <h4 class="module-title">ITEM</h4>
+            <hr class="title-border">
+        </div>
 
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
-                        </div>
-
-                        <div class="row">
-                            
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Item Type</label>
-                                    <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Item Classification</label>
-                                    <vue-select v-model="itemClassId" @input="selectItemClass()" label="name" :options="itemClassList"></vue-select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Unit of Measurement</label>
-                                    <vue-select v-model="itemUnitId" @input="selectItemUnit()" label="name" :options="itemUnitList"></vue-select>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Item</button>
-
-                    </form>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewItems">Items</a>
+                    <a class="text-secondary"> / Create New Item</a>
                 </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewItem">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>SKU</label>
+                                        <input class="form-control" v-model="stock_keeping_unit" maxlength="1000" required></input>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                            <!-- <div class="form-group">
+                                <label>Description</label>
+                                <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
+                            </div> -->
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Item Type</label>
+                                        <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label> Item Subtype</label>
+                                        <vue-select v-model="itemClassId" @input="selectItemClass()" label="name" :options="itemClassList"></vue-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>UOM</label>
+                                        <vue-select v-model="itemUnitId" @input="selectItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
+                            <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Item</button>
+
+                        </form>
                     </div>
-                </div>
 
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>

@@ -12,7 +12,7 @@
                             <input type="number" class="form-control" placeholder="0" v-model="from_value" minlength="2" maxlength="255" required>
                         </div>
                         <div class="form-group">
-                            <label>Select Unit of Measurement</label>
+                            <label>Select UOM</label>
                             <vue-select v-model="unitOfMeasurementFrom" @input="selectUnitFrom()" label="name" :options="units"></vue-select>
                         </div>
                         
@@ -21,7 +21,7 @@
                             <input type="number" class="form-control" placeholder="0" v-model="to_value" minlength="2" maxlength="255" required>
                         </div>
                         <div class="form-group">
-                            <label>Select Unit of Measurement</label>
+                            <label>Select UOM</label>
                             <vue-select v-model="unitOfMeasurementTo" @input="selectUnitTo()" label="name" :options="units"></vue-select>
                         </div>
 

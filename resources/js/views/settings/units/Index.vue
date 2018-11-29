@@ -34,7 +34,7 @@
             <div class="card-header clearfix">
                 {{componentVal}} / View {{componentVal}}
                 <router-link :to="{name: 'settings.units.create'}">
-                    <button type="button" class="btn btn-primary float-right">Create New Unit of Measurement</button>
+                    <button type="button" class="btn btn-primary float-right">Create New UOM</button>
                 </router-link>
             </div>
             <div class="card-body">

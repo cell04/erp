@@ -1,86 +1,96 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <b>Receive Orders / Create New Receive Order</b>
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">RECEIVE ORDER</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="createNewReceiveOrder">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Purchase Order</label>
-                            <vue-select v-model="purchaseOrder" @input="selectPurchaseOrder()" label="reference_number" :options="purchaseOrders" required></vue-select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Supplier</label>
-                            <input type="text" class="form-control" v-model="contact" readonly>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Receive Order #</label>
-                            <input type="text" class="form-control" v-model="ro_number" required>
+
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewROs">Receive Orders</a>
+                    <a class="text-secondary"> / Create New Receive Order</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewReceiveOrder">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Purchase Order</label>
+                                    <vue-select v-model="purchaseOrder" @input="selectPurchaseOrder()" label="reference_number" :options="purchaseOrders" required></vue-select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Supplier</label>
+                                    <input type="text" class="form-control" v-model="contact" readonly>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Received Order #</label>
+                                    <input type="text" class="form-control" v-model="ro_number" required>
+                                </div>
+                            </div>
+
+                            <br>
+                            <h6>
+                                <b><u>Receive Order Items</u></b>
+                            </h6>
+                            <br>
+
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th scope="col">Expiration</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item, index) in received_items">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td><input type="text" class="form-control" v-model="item.quantity" required></td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                        <td>{{ item.item_pricelist.price }}</td>
+                                        <td><div class="dateStyle"><datepicker v-model="item.expiration_date" :bootstrap-styling="true" placeholder="Expiration Date" required></datepicker></div></td>
+                                        <td>{{ subtotalRow[index] | Decimal }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6"></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td>{{total | Decimal}}</td>
+                                        <td></td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewROs"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Receive Order</button>
+                                <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
+                            </div>
+                        </form>
+                    </div>
+
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                         </div>
                     </div>
 
-                    <br>
-                    <h6>
-                        <b><u>Receive Order Items</u></b>
-                    </h6>
-                    <br>
-
-                    <table class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">UOM</th>
-                                <th scope="col">Unit Price</th>
-                                <th scope="col">Expiration</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr :key="item.id" v-for="(item, index) in received_items">
-                                <td>{{ item.item.stock_keeping_unit }}</td>
-                                <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
-                                <td><input type="text" class="form-control" v-model="item.quantity" required></td>
-                                <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.item_pricelist.price }}</td>
-                                <td><div class="dateStyle"><datepicker v-model="item.expiration_date" :bootstrap-styling="true" placeholder="Expiration Date" required></datepicker></div></td>
-                                <td>{{ subtotalRow[index] | Decimal }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="6"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td>{{total | Decimal}}</td>
-                                <td></td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-
-                    <div class="pt-3">
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewROs"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Receive Order</button>
-                        <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
-                    </div>
-                </form>
-            </div>
-
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -200,7 +210,7 @@
             getPoDetails(id) {
                 axios.get("/api/purchase-orders/" + id).then(res => {
                     this.purchaseOrderData = res.data.purchaseOrder;
-                    // console.log('RO: ' + JSON.stringify(res.data.purchaseOrder));
+                    console.log(res.data.purchaseOrder);
                     this.contact = res.data.purchaseOrder.contact.person;
                     this.contact_id = res.data.purchaseOrder.contact_id;
                     this.received_items = res.data.purchaseOrder.purchase_order_items;

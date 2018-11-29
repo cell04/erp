@@ -26,15 +26,13 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Display Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="itemTypes">
-                        <tr :key="id" v-for="{ id, name, display_name, description } in itemTypes">
+                        <tr :key="id" v-for="{ id, name, description } in itemTypes">
                             <td>{{ name }}</td>
-                            <td>{{ display_name }}</td>
                             <td>{{ description }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'item-types.view', params: { id: id }}">
@@ -99,7 +97,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>

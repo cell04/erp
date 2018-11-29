@@ -16,6 +16,7 @@ class CreateQuotationsTable extends Migration
         Schema::create('quotations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
+            $table->date('validity_date')->nullable();
             $table->foreign('corporation_id')
                 ->references('id')
                 ->on('corporations')
@@ -40,6 +41,7 @@ class CreateQuotationsTable extends Migration
             $table->string('number');
             $table->smallInteger('status')->default(0);
             $table->decimal('amount', 20, 2);
+            $table->decimal('tax', 20, 2);
             $table->timestamps();
             $table->softDeletes();
         });

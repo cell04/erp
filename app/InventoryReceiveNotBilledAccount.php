@@ -47,7 +47,11 @@ class InventoryReceiveNotBilledAccount extends Model
 
         static::creating(function ($model) {
             if (request()->headers->get('CORPORATION-ID')) {
-                $model->corporation_id = request()->headers->get('CORPORATION-ID');
+                if (session('new-corporation-id')) {
+                    $model->corporation_id = session('new-corporation-id');
+                } else {
+                    $model->corporation_id = request()->headers->get('CORPORATION-ID');
+                }
             }
         });
     }

@@ -4,7 +4,8 @@
 Route::post('/auth/login', 'AuthController@apiLogin');
 Route::post('/auth/logout', 'AuthController@apiLogout');
 Route::get('/auth/user', 'AuthController@user');
-Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
+Route::get('/quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
+Route::get('/bid-sheets/{bidSheet}/contact-approvals/{status}', 'BidSheetsController@contactApproval');
 
 Route::group(['middleware' => ['api', 'corporation.default.account']], function () {
     Route::post('test', function () {
@@ -19,6 +20,9 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
             'index', 'store', 'show', 'update', 'destroy'
         ]
     ]);
+
+    //roles
+    Route::get('roles/get-all-roles', 'RolesController@getAllRoles');
 
     // Branches
     Route::match(['put', 'patch'], 'branches/{contact}/restore', 'BranchesController@restore');
@@ -84,6 +88,16 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::delete('invoices/{invoice}/force-delete', 'InvoicesController@forceDestroy');
     Route::get('invoices/get-all-invoices/', 'InvoicesController@getAllIvoices');
     Route::resource('invoices', 'InvoicesController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Service Invoices
+    Route::match(['put', 'patch'], 'service-invoices/{serviceInvoice}/restore', 'ServiceInvoicesController@restore');
+    Route::delete('service-invoices/{serviceInvoice}/force-delete', 'ServiceInvoicesController@forceDestroy');
+    Route::get('service-invoices/get-all-service-invoices/', 'ServiceInvoicesController@getAllServiceInvoices');
+    Route::resource('service-invoices', 'ServiceInvoicesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]
@@ -182,8 +196,9 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'stocks/{stock}/restore', 'StocksController@restore');
     Route::delete('stocks/{stock}/force-delete', 'StocksController@forceDestroy');
     Route::get('stocks/get-all-stocks', 'StocksController@getAllStock');
-    //variable need is stockable_type and stockable_id  example stockable_type = App\Warehouse stockable_id = 1
-    Route::post('stocks/get-all-stocks-per-location', 'StocksController@getAllStocksPerLocation');
+    //locationType = branch || warehouse --- get stocks item per location type
+    Route::get('stocks/get-all-stocks/{locationType}', 'StocksController@getAllStockPerLocationType');
+    Route::get('stocks/{item}/get-all-stocks-of-item', 'StocksController@getAllStocksOfItem');
     Route::resource('stocks', 'StocksController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -249,6 +264,16 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
     Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
     Route::resource('quotations', 'QuotationsController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Bid Sheets
+    Route::match(['put', 'patch'], 'bid-sheets/{bid-sheet}/restore', 'BidSheetsController@restore');
+    Route::delete('bid-sheets/{bid-sheet}/force-delete', 'BidSheetsController@forceDestroy');
+    Route::get('bid-sheets/get-all-bid-sheets', 'BidSheetsController@getAllBidSheets');
+    Route::resource('bid-sheets', 'BidSheetsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]
@@ -341,6 +366,8 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
         ]
     ]);
 
+    //Dashboard
+    Route::get('dashboard', 'DashboardController@getDashboardPayload');
     //Stats
     Route::get('statistics/test-payload', 'DashboardController@testPayload');
     Route::get('statistics/settings', 'StatisticController@returnSettings');
