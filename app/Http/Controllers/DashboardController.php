@@ -23,12 +23,12 @@ class DashboardController extends Controller
         $this->dashboard = $dashboard;
     }
 
-    // public function testPayload()
-    // {
-    //     return response()->json([
-    //         'payload' => $this->dashboard->testPayload()
-    //     ], 200);
-    // }
+    public function testPayload()
+    {
+        return response()->json([
+            'payload' => $this->dashboard->testPayload()
+        ], 200);
+    }
 
     public function getDashboardPayload()
     {
