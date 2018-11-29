@@ -34,18 +34,14 @@
                     localStorage.setItem('corporations', JSON.stringify(res.data.corporations));
                 });
             });
-        },
-
-        created() {
-            //
         }
     }
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .sidebarTheme {
     background: #fff;
     height: 900px;
     width: 18em;
 }
-</style>
+</style> -->
