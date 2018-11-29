@@ -35,7 +35,7 @@
                     <tbody v-if="users">
                         <tr v-for="{ id, name, user_role, email, mobile_number } in users">
                             <td>{{ name }}</td>
-                            <td>{{ user_role }}</td>
+                            <td>{{ user_role.role.display_name }}</td>
                             <td>{{ email }}</td>
                             <td>{{ mobile_number }}</td>
                             <td>
