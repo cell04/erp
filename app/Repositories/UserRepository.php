@@ -77,4 +77,19 @@ class UserRepository extends Repository
         return $this->user->with('userRole', 'image')
         ->findOrFail($id);
     }
+
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->user->filter($request)
+            ->with('userRole', 'image')
+            ->orderBy('created_at', $orderBy)
+            ->paginate($length)
+            ->withPath(
+                $this->user->createPaginationUrl($request, $removePage)
+            );
+    }
 }
