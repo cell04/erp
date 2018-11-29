@@ -38,29 +38,18 @@ export default {
         };
     },
 
-    created() {
-        if ( localStorage.getItem('corporations') != null ) {
-            let promise = new Promise((resolve, reject) => {
-                this.corporations = JSON.parse(localStorage.getItem('corporations'));
+    mounted() {
+        let promise = new Promise((resolve, reject) => {
+            axios.get('/api/corporations/get-all-corporations').then(res => {
+                this.corporations = res.data.corporations;
+                localStorage.setItem('corporations', JSON.stringify(res.data.corporations));
                 resolve();
             });
+        });
 
-            promise.then(() => {
-                this.ifReady = true;
-            });
-        } else {
-            let promise = new Promise((resolve, reject) => {
-                axios.get('/api/corporations/get-all-corporations').then(res => {
-                    this.corporations = res.data.corporations;
-                    localStorage.setItem('corporations', JSON.stringify(res.data.corporations));
-                    resolve();
-                });
-            });
-
-            promise.then(() => {
-                this.ifReady = true;
-            });
-        }
+        promise.then(() => {
+            this.ifReady = true;
+        });
     },
 
     methods: {

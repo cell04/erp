@@ -20,7 +20,7 @@
 
                         <div class="form-group">
                             <label>Role</label>
-                            <vue-select v-model="roleId" @input="selectRole()" label="name" :options="rolesList"></vue-select>
+                            <vue-select v-model="roleId" @input="selectRole()" label="name" :options="roleList"></vue-select>
                         </div>
 
                         <div class="form-group">
@@ -34,7 +34,7 @@
                         </div>
 
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUsers"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateAdmin"><i class="fas fa-edit"></i> Update Admin</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateAdmin"><i class="fas fa-edit"></i> Update User</button>
                     </form>
                 </div>
                 <div v-else>
@@ -57,25 +57,39 @@
                 role_id: '',
                 roleId: '',
                 mobile_number: '',
-                image: null
+                image: null,
+                roleList: []
             };
         },
 
         mounted() {
             let retrieveUserPromise = new Promise((resolve, reject) => {
                 axios.get('/api/users/' + this.$route.params.id).then(res => {
+                    console.log(res);
                     this.id            = res.data.user.id;
                     this.name          = res.data.user.name;
                     this.email         = res.data.user.email;
                     this.mobile_number = res.data.user.mobile_number;
-                    this.roleId        = res.data.user.role;
+                    this.roleId        = res.data.user.user_role;
 
 
                     resolve();
                 });
             });
 
-            Promise.all([retrieveUserPromise]).then(() => {
+            let promise = new Promise((resolve, reject) => {
+                axios.get("/api/roles/get-all-roles/").then(res => {
+                    console.log(res);
+                    this.ifReady = true;
+                    this.roleList = res.data.roles;
+                    if (!res.data.response) {
+                        return;
+                    }
+                    resolve();
+                });
+            });
+
+            Promise.all([retrieveUserPromise, promise]).then(() => {
                 this.ifReady = true;
             });
         },
@@ -89,6 +103,9 @@
             },
             onFileSelected(event) {
                 this.image = event.target.files[0];
+            },
+            selectRole() {
+                this.role_id = this.roleId.id;
             },
             updateAdmin() {
                 this.ifReady = false;
