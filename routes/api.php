@@ -366,6 +366,8 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
         ]
     ]);
 
+    //Dashboard
+    Route::get('dashboard', 'DashboardController@getDashboardPayload');
     //Stats
     Route::get('statistics/test-payload', 'DashboardController@testPayload');
     Route::get('statistics/settings', 'StatisticController@returnSettings');
