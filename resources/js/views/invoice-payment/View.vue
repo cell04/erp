@@ -16,7 +16,7 @@
                         <fieldset disabled>
                             <div class="row">
                                 <div class="col-md-6 form-group">
-                                    <label for="name">Invoice #</label>
+                                    <label for="name">{{invoicePayment.payment_for == 1? 'Sales Invoice #': 'Service Invoice #'}}</label>
                                     <input type="text" class="form-control" v-model="invoiceId.reference_number" autocomplete="off" minlength="2" maxlength="255" required>
                                 </div>
 

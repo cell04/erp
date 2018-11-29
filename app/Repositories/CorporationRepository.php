@@ -150,6 +150,8 @@ class CorporationRepository extends Repository
             'code' => '116'
         ]);
 
+        session()->put('new-corporation-id', $corporation->id);
+
         $corporation->inventoryReceiveNotBilledAccount()->create([
             'account_id' => $irnb->id
         ]);
@@ -166,13 +168,14 @@ class CorporationRepository extends Repository
             'account_id' => $irnc->id
         ]);
 
-        // $contactTypes = array(
-        //     array('name' => 'customer', 'display_name' => 'Customer', 'description' => 'Customer description'),
-        //     array('name' => 'supplier', 'display_name' => 'Supplier', 'description' => 'Supplier description'),
-        //     array('name' => 'employee', 'display_name' => 'Employee', 'description' => 'Employee description')
-        // );
+        $contactTypes = array(
+            array('name' => 'customer', 'corporation_id' => session('new-corporation-id'),'display_name' => 'Customer', 'description' => 'Customer description'),
+            array('name' => 'supplier', 'corporation_id' => session('new-corporation-id'),'display_name' => 'Supplier', 'description' => 'Supplier description'),
+            array('name' => 'employee', 'corporation_id' => session('new-corporation-id'),'display_name' => 'Employee', 'description' => 'Employee description')
+        );
 
-        // $corporation->contactTypes()->createMany($contactTypes);
+        $corporation->contactTypes()->insert($contactTypes);
+        session()->forget('new-corporation-id');
 
         return true;
     }

@@ -29,4 +29,11 @@ class DashboardController extends Controller
             'payload' => $this->dashboard->testPayload()
         ], 200);
     }
+
+    // public function ()
+    // {
+    //     return response()->json([
+    //         'payload' => $this->dashboard->()
+    //     ], 200);
+    // }    
 }

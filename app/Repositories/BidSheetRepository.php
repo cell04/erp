@@ -24,7 +24,7 @@ class BidSheetRepository extends Repository
             if ($bidSheet->status == 0) {
                 if ($request->status) {
                     // $request->request->add(['approved_by' => auth('api')->user()->id]);
-                    $request->request->add(['approved_by' => request()->headers->get('user-id')]);
+                    $request->request->add(['approved_by' => auth('api')->user()->id]);
                 }
                 //update stock request
                 $bidSheet->fill($request->all());

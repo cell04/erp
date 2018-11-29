@@ -38,4 +38,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $with = [
+        'image', 'userRole'
+    ];
+
+    public function image()
+    {
+        return  $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function userRole()
+    {
+        return $this->hasOne(UserRole::class)
+        ->latest();
+    }
 }

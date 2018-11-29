@@ -32,6 +32,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Invoice #</th>
+                                <th scope="col">Invoice Type</th>
                                 <th scope="col">CR #</th>
                                 <th scope="col">Mode of Payment</th>
                                 <th scope="col">Amount</th>
@@ -39,8 +40,9 @@
                             </tr>
                         </thead>
                         <tbody v-if="invoicePayment">
-                            <tr :key="id" v-for="{ id, invoice, amount, mode_of_payment, cr_number } in invoicePayment">
+                            <tr :key="id" v-for="{ id, invoice, payment_for, amount, mode_of_payment, cr_number } in invoicePayment">
                                 <td>{{ invoice.reference_number }}</td>
+                                <td>{{ payment_for == 1? 'Sales Invoice' : 'Service Invoice' }}</td>
                                 <td>{{ cr_number }}</td>
                                 <td>{{ mode_of_payment.name }}</td>
                                 <td>{{ amount }}</td>

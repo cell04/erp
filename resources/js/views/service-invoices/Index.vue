@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content-title">
-            <h4 class="module-title">QUOTATION</h4>
+            <h4 class="module-title">SERVICE INVOICE</h4>
             <hr class="title-border">
         </div>
 
@@ -9,10 +9,10 @@
             <div class="card">
                 <div class="card-header clearfix">
                     <div class="float-left">
-                        Quotations
+                        Service Invoices
                     </div>
                     <div class="float-right">
-                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'quotations.create' }"><i class="fas fa-plus"></i> Create New Quotation</router-link>
+                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'service-invoices.create' }"><i class="fas fa-plus"></i> Create New Service Invoice</router-link>
                     </div>
                 </div>
                 <div class="card-body">
@@ -20,7 +20,7 @@
                         <caption>
                             <div class="row">
                                 <div class="col-md-9">
-                                    List of Quotations - Total Quotations {{ this.meta.total }}
+                                    List of Service Invoices - Total Service Invoices {{ this.meta.total }}
                                 </div>
                                 <div class="col-md-3">
                                     <div class="progress" height="30px;" v-if="showProgress">
@@ -31,22 +31,21 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th scope="col">Quotation #</th>
+                                <th scope="col">Service Invoice #</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Date Created</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="quotations">
-                            <tr :key="index" v-for="(quotation, index) in quotations">
-                                <td>{{ quotation.number }}</td>
-                                <td>{{ quotation.contact.person | Upper }}</td>
-                                <td>{{ quotation.status }}</td>
-                                <td>{{ quotation.created_at | DateFormat}}</td>
+                        <tbody v-if="invoices">
+                            <tr v-for="invoice in invoices">
+                                <td>{{invoice.reference_number}}</td>
+                                <td>{{invoice.contact.person | Upper}}</td>
+                                <td>{{ (invoice.status) == 0 ? 'Issued': 'Approved'}}</td>
+                                <td>{{invoice.due_date}}</td>
                                 <td>
-                                    <router-link class="text-secondary" :to="{ name: 'quotations.view', params: { id: quotation.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
-
+                                    <router-link class="text-secondary" :to="{ name: 'service-invoices.view', params: { id: invoice.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
                                 </td>
                             </tr>
                         </tbody>
@@ -60,19 +59,19 @@
                 <div v-if="pageCount">
                     <nav class="float-left">
                         <ul class="pagination">
-                            <li class="page-item" v-bind:class="isPrevDisabled">
+                            <li class="page-bill" v-bind:class="isPrevDisabled">
                                 <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
                             </li>
-                            <li class="page-item">
+                            <li class="page-bill">
                                 <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                             </li>
-                            <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                            <li class="page-bill" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                                 <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                             </li>
-                            <li class="page-item" v-bind:class="isNextDisabled">
+                            <li class="page-bill" v-bind:class="isNextDisabled">
                                 <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
                             </li>
-                            <li class="page-item" v-bind:class="isNextDisabled">
+                            <li class="page-bill" v-bind:class="isNextDisabled">
                                 <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
                             </li>
                         </ul>
@@ -81,19 +80,19 @@
                 <div v-else>
                     <nav class="float-left">
                         <ul class="pagination">
-                            <li class="page-item" v-bind:class="isPrevDisabled">
+                            <li class="page-bill" v-bind:class="isPrevDisabled">
                                 <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
                             </li>
-                            <li class="page-item">
+                            <li class="page-bill">
                                 <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                             </li>
-                            <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                            <li class="page-bill" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                                 <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                             </li>
-                            <li class="page-item" v-bind:class="isNextDisabled">
+                            <li class="page-bill" v-bind:class="isNextDisabled">
                                 <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
                             </li>
-                            <li class="page-item" v-bind:class="isNextDisabled">
+                            <li class="page-bill" v-bind:class="isNextDisabled">
                                 <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
                             </li>
                         </ul>
@@ -102,7 +101,7 @@
 
                 <div class="float-right">
                     <form class="form-inline">
-                        <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Quotations</button> -->
+                        <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoice</button> -->
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">Items per page</div>
@@ -122,35 +121,25 @@
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Search For Orders</h5>
+                                <h5 class="modal-title">Search For Bills</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label>Date</label>
-                                    <input type="text" class="form-control" v-model="searchDate" autocomplete="off" minlength="2" maxlength="255" required>
+                                    <label>SKU</label>
+                                    <input type="text" class="form-control" v-model="searchColumnSKU" autocomplete="off" minlength="2" maxlength="255" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Purchase Order #</label>
-                                    <textarea class="form-control" v-model="searchPurchaseOrderNumber" maxlength="1000" required></textarea>
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Status</label>
-                                    <input type="text" class="form-control" v-model="searchStatus" autocomplete="off" minlength="2" maxlength="255" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Reference #</label>
-                                    <input type="text" class="form-control" v-model="searchReferenceNumber" autocomplete="off" minlength="2" maxlength="255" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Total</label>
-                                    <input type="text" class="form-control" v-model="searchTotal" autocomplete="off" minlength="2" maxlength="255" required>
+                                    <label>Description</label>
+                                    <textarea class="form-control" v-model="searchColumnDescription" maxlength="1000" required></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -176,29 +165,26 @@
 </template>
 
 <script>
-    const getPurchaseOrders = (
+    const getItems = (
         page,
         per_page,
-        searchDate,
-        searchPurchaseOrderNumber,
-        searchStatus,
-        searchReferenceNumber,
-        searchTotal,
+        searchColumnSKU,
+        searchColumnName,
+        searchColumnDescription,
         order_by,
         callback
         ) => {
         const params = {
             page,
             per_page,
-            searchDate,
-            searchPurchaseOrderNumber,
-            searchStatus,
-            searchReferenceNumber,
-            searchTotal,
+            searchColumnSKU,
+            searchColumnName,
+            searchColumnDescription,
             order_by,
         };
 
-        axios.get('/api/quotations', { params }).then(res => {
+        axios.get('/api/service-invoices', { params }).then(res => {
+            // console.log('Invoices: ' + JSON.stringify(res.data));
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -214,12 +200,10 @@
     export default {
         data() {
             return {
-                quotations: [],
-                searchDate: '',
-                searchPurchaseOrderNumber: '',
-                searchStatus: '',
-                searchReferenceNumber: '',
-                searchTotal: '',
+                invoices: null,
+                searchColumnSKU: '',
+                searchColumnName: '',
+                searchColumnDescription: '',
                 order_by: 'desc',
                 meta: {
                     current_page: null,
@@ -245,62 +229,50 @@
         filters: {
             Upper(value) {
                 return value.toUpperCase();
-            },
-
-            DateFormat: function (value) {
-                if (value) {
-                    return moment(value).format('M/DD/YYYY');
-                }
             }
         },
 
         beforeRouteEnter (to, from, next) {
             if (to.query.per_page == null) {
-                getPurchaseOrders(
+                getItems(
                     to.query.page,
                     10,
-                    to.query.searchDate,
-                    to.query.searchPurchaseOrderNumber,
-                    to.query.searchStatus,
-                    to.query.searchReferenceNumber,
-                    to.query.searchTotal,
+                    to.query.searchColumnSKU,
+                    to.query.searchColumnName,
+                    to.query.searchColumnDescription,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                );
+                    );
             } else {
-                getPurchaseOrders(
+                getItems(
                     to.query.page,
                     to.query.per_page,
-                    to.query.searchDate,
-                    to.query.searchPurchaseOrderNumber,
-                    to.query.searchStatus,
-                    to.query.searchReferenceNumber,
-                    to.query.searchTotal,
+                    to.query.searchColumnSKU,
+                    to.query.searchColumnName,
+                    to.query.searchColumnDescription,
                     to.query.order_by,
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                );
+                    );
             }
         },
 
         beforeRouteUpdate (to, from, next) {
-            getPurchaseOrders(
+            getItems(
                 to.query.page,
                 this.meta.per_page,
-                this.searchDate,
-                this.searchPurchaseOrderNumber,
-                this.searchStatus,
-                this.searchReferenceNumber,
-                this.searchTotal,
+                this.searchColumnSKU,
+                this.searchColumnName,
+                this.searchColumnDescription,
                 this.order_by,
                 (err, data) => {
                     this.setData(err, data);
                     next();
                 }
-            );
+                );
         },
 
         computed: {
@@ -330,33 +302,16 @@
         },
 
         methods: {
-            closePO(id, po_number) {
-                const formData = {
-                    purchase_order_id: id
-                };
-                if (confirm(`Are you sure you want to close ${po_number}`)) {
-                    axios.post("/api/purchase-orders/close", formData).then(res => {
-                        console.log(JSON.stringify(res.data));
-                        alert(`Success! ${po_number} is now closed`);
-                        location.reload();
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! Can't close purchase order`);
-                    });
-                }
-            },
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnSKU: this.searchColumnSKU,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
                     },
                 });
@@ -364,15 +319,13 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'invoices.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnSKU: this.searchColumnSKU,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
                     },
                 });
@@ -380,15 +333,13 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnSKU: this.searchColumnSKU,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
                     },
                 });
@@ -396,14 +347,13 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.nextPage,
-                        per_page: this.meta.per_page,searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        per_page: this.meta.per_page,
+                        searchColumnSKU: this.searchColumnSKU,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
                     },
                 });
@@ -411,38 +361,24 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnSKU: this.searchColumnSKU,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
                     }
                 });
             },
-            setData(err, { data: quotations, links, meta }) {
+            setData(err, { data: invoices, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    let status = {
-                        0: "Issued",
-                        1: "Admin Approved",
-                        2: "Admin Cancelled",
-                        3: "Customer Approved",
-                        4: "Customer Cancelled"
-                    };
-
-                    quotations.map(quotation => {
-                        quotation.status = status[quotation.status];
-                    });
-
-                    this.quotations = quotations;
+                    this.invoices = invoices;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -503,15 +439,13 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnSKU: this.searchColumnSKU,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
                     }
                 });
@@ -520,26 +454,22 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'purchase-orders.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
-                        searchDate: this.searchDate,
-                        searchPurchaseOrderNumber: this.searchPurchaseOrderNumber,
-                        searchStatus: this.searchStatus,
-                        searchReferenceNumber: this.searchReferenceNumber,
-                        searchTotal: this.searchTotal,
+                        searchColumnSKU: this.searchColumnSKU,
+                        searchColumnName: this.searchColumnName,
+                        searchColumnDescription: this.searchColumnDescription,
                         order_by: this.order_by
                     }
                 });
             },
             clear() {
-                this.searchDate                   = '';
-                this.searchPurchaseOrderNumber    = '';
-                this.searchStatus                 = '';
-                this.searchReferenceNumber        = '';
-                this.searchTotal                  = '';
-                this.order_by                     = 'desc';
+                this.searchColumnSKU         = '';
+                this.searchColumnName        = '';
+                this.searchColumnDescription = '';
+                this.order_by                = 'desc';
             },
             openSearchModal() {
                 $('#searchModal').modal('show');

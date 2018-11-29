@@ -60,6 +60,15 @@ const Overview = () => import('./views/Overview');
  const InvoicesReceive = () => import('./views/invoices/Receive.vue');
  const InvoicesView = () => import('./views/invoices/View');
 
+ /**
+ * Service Invoices
+ *
+ */
+const ServiceInvoicesIndex = () => import('./views/service-invoices/Index');
+const ServiceInvoicesCreate = () => import('./views/service-invoices/Create');
+const ServiceInvoicesView = () => import('./views/service-invoices/View');
+ 
+
 /**
  * Invoices Payment
  *
@@ -192,6 +201,13 @@ const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelist
  const QuotationCreate = () => import('./views/quotations/Create');
  const QuotationView = () => import('./views/quotations/View');
 
+  /**
+ * Bid Sheet
+ */
+const BidSheetIndex = () => import('./views/bid-sheets/Index');
+const BidSheetCreate = () => import('./views/bid-sheets/Create');
+const BidSheetView = () => import('./views/bid-sheets/View.vue');
+
 /**
  * Receive Orders
  *
@@ -261,6 +277,11 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
         { path: '/invoices/create', name: 'invoices.create', component: InvoicesCreate },
         { path: '/invoices/receive/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
+
+        // Service Invoices
+        { path: '/service-invoices', name: 'service-invoices.index', component: ServiceInvoicesIndex },
+        { path: '/service-invoices/create', name: 'service-invoices.create', component: ServiceInvoicesCreate },
+        { path: '/service-invoices/:id', name: 'service-invoices.view', component: ServiceInvoicesView },
 
         // Invoices Payment
         { path: '/invoice-payments', name: 'invoice-payments.index', component: InvoicePaymentIndex },
@@ -382,6 +403,11 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
         { path: '/quotations', name: 'quotations.index', component: QuotationIndex },
         { path: '/quotations/create', name: 'quotations.create', component: QuotationCreate },
         { path: '/quotations/:id', name: 'quotations.view', component: QuotationView },
+
+        // Bid Sheets
+        { path: '/bid-sheets', name: 'bid-sheets.index', component: BidSheetIndex },
+        { path: '/bid-sheets/create', name: 'bid-sheets.create', component: BidSheetCreate },
+        { path: '/bid-sheets/:id', name: 'bid-sheets.view', component: BidSheetView },
 
         // warehouses
         { path: '/warehouses', name: 'warehouses.index', component: WarehousesIndex },

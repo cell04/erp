@@ -21,6 +21,9 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
         ]
     ]);
 
+    //roles
+    Route::get('roles/get-all-roles', 'RolesController@getAllRoles');
+
     // Branches
     Route::match(['put', 'patch'], 'branches/{contact}/restore', 'BranchesController@restore');
     Route::delete('branches/{contact}/force-delete', 'BranchesController@forceDestroy');
@@ -85,6 +88,16 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::delete('invoices/{invoice}/force-delete', 'InvoicesController@forceDestroy');
     Route::get('invoices/get-all-invoices/', 'InvoicesController@getAllIvoices');
     Route::resource('invoices', 'InvoicesController', [
+        'only' => [
+            'index', 'store', 'show', 'update', 'destroy'
+        ]
+    ]);
+
+    // Service Invoices
+    Route::match(['put', 'patch'], 'service-invoices/{serviceInvoice}/restore', 'ServiceInvoicesController@restore');
+    Route::delete('service-invoices/{serviceInvoice}/force-delete', 'ServiceInvoicesController@forceDestroy');
+    Route::get('service-invoices/get-all-service-invoices/', 'ServiceInvoicesController@getAllServiceInvoices');
+    Route::resource('service-invoices', 'ServiceInvoicesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
         ]

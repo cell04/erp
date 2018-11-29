@@ -25,10 +25,22 @@
                                 <span class="badge badge-primary">Admin Approved</span>
                             </h5>
                         </div>
+                        <div v-else-if="quotations.status === 2">
+                            <h5>
+                                Quotation
+                                <span class="badge badge-danger">Admin Cancelled</span>
+                            </h5>
+                        </div>
+                        <div v-else-if="quotations.status === 3">
+                            <h5>
+                                Quotation
+                                <span class="badge badge-danger">Customer Approved</span>
+                            </h5>
+                        </div>
                         <div v-else>
                             <h5>
                                 Quotation
-                                <span class="badge badge-success">Customer Approved</span>
+                                <span class="badge badge-success">Customer Cancelled</span>
                             </h5>
                         </div>
                         <fieldset>
@@ -54,12 +66,31 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Tax</label>
                                         <input type="text" class="form-control" v-model="quotations.tax" readonly>
                                     </div>
                                 </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Validity Date</label>
+                                        <input type="text" class="form-control" v-model="quotations.validity_date" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 form-group">
+                                    <hr>
+                                    <h5><u>Customer Information:</u></h5>
+                                    <div><label for="name"><strong>Customer</strong></label>: {{contactData.person}}</div>
+                                    <div><label for="name"><strong>Company</strong></label>: {{contactData.company}}</div>
+                                    <div><label for="name"><strong>Address</strong></label>: {{contactData.company_address}}</div>
+                                    <div><label for="name"><strong>Email</strong></label>: {{contactData.email}}</div>
+                                    <div><label for="name"><strong>Phone</strong></label>: {{contactData.mobile_number}}</div>
+                                    <hr>
+                                </div>
+
                             </div>
                         </fieldset>
 
@@ -99,9 +130,20 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <br>
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button class="btn btn-success btn-sm" v-if="quotations.status == 0" @click.prevent="approveQuotation"><i class="fas fa-thumbs-up"></i> Approve Quotation</button>
+                        
+                        <br><br>
+
+                        <div class="clearfix">
+                            <div class="float-left">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="button" class="btn btn-danger btn-sm" v-if="quotations.status === 0" @click.prevent.default="openDeleteQuotationModal"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </div>
+                            <div class="float-right">
+                                <button class="btn btn-success btn-sm" v-if="quotations.status == 0" @click.prevent="openApproveQuotationModal"><i class="fas fa-thumbs-up"></i> Approve Quotation</button>
+                                <button class="btn btn-danger btn-sm" v-if="quotations.status === 0" @click.prevent.default="openCancelQuotationModal"><i class="fas fa-thumbs-down"></i> Cancel</button>
+                            </div>
+                        </div>
+
                     </div>
                     <div v-else>
                         <div class="progress">
@@ -109,6 +151,70 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteQuotationModal" tabindex="-1" role="dialog" aria-labelledby="deleteQuotationTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Quotation?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this {{quotations.number}}? <br><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteQuotation">Confirm Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approve Modal -->
+                <div class="modal fade" id="approveQuotationModal" tabindex="-1" role="dialog" aria-labelledby="approveQuotationTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">You're about to approve this Quotation?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to approve this {{quotations.number}}? <br><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success btn-sm" @click.prevent.default="openApproveQuotation">Confirm Approve</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancel Modal -->
+                <div class="modal fade" id="cancelQuotationModal" tabindex="-1" role="dialog" aria-labelledby="cancelQuotationTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">You're about to cancel this Quotation?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to cancel this {{quotations.number}}? <br><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openCancelQuotation">Confirm Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -120,6 +226,7 @@
             return {
                 ifReady: false,
                 quotations: [],
+                contactData: [],
                 total: 0
             };
         },
@@ -136,6 +243,8 @@
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/quotations/" + this.$route.params.id).then(res => {
                     this.quotations = res.data.quotation;
+                    this.contactData = res.data.quotation.contact;
+                    // console.log("Quotations" + JSON.stringify(res.data.quotation));
                     this.quotations.quotation_items.map(quotation_item => {
                         quotation_item.subTotal = quotation_item.quantity * quotation_item.price;
                         this.total += quotation_item.subTotal;
@@ -157,13 +266,55 @@
             viewQuotations() {
                 this.$router.push({ name: 'quotations.index' });
             },
-            approveQuotation() {
+
+            openDeleteQuotationModal() {
+                $('#deleteQuotationModal').modal('show');
+            },
+            deleteQuotation() {
+                $('#deleteQuotationModal').modal('hide');
+
+                axios.delete('/api/quotations/' + this.$route.params.id).then(res => {
+                    this.$router.push({ name: 'quotations.index' });
+                }).catch(err => {
+                    alert("Error!");
+                    console.log(err);
+                });
+            },
+
+            openCancelQuotationModal() {
+                $('#cancelQuotationModal').modal('show');
+            },
+
+            openCancelQuotation() {
                 this.ifReady = false;
+
+                $('#cancelQuotationModal').modal('hide');
+
+                let params = {
+                    status: 2
+                };
+                axios.patch('/api/quotations/' + this.$route.params.id, params).then(res => {
+                    this.quotations.status = 2;
+                    this.ifReady = true;
+                }).catch(err => {
+                    alert('Please report to the devs');
+                    this.ifReady = true;
+                    console.log(err);
+                });
+            },
+
+            openApproveQuotationModal() {
+                $('#approveQuotationModal').modal('show');
+            },
+
+            openApproveQuotation() {
+                this.ifReady = false;
+
+                $('#approveQuotationModal').modal('hide');
 
                 let params = {
                     status: 1
                 };
-
                 axios.patch('/api/quotations/' + this.$route.params.id, params).then(res => {
                     this.quotations.status = 1;
                     this.ifReady = true;

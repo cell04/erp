@@ -16,6 +16,7 @@ class CreateInvoicePaymentsTable extends Migration
         Schema::create('invoice_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corporation_id')->unsigned();
+            $table->integer('payment_for'); //0 = sales invoice, 1 = service invoice 
             $table->foreign('corporation_id')
                 ->references('id')
                 ->on('corporations')
@@ -30,6 +31,8 @@ class CreateInvoicePaymentsTable extends Migration
                 ->references('id')
                 ->on('mode_of_payments')
                 ->onDelete('cascade');
+            $table->string('invoice_payment_number')->nullable();
+            $table->date('invoice_payment_date');
             $table->string('cr_number')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('check')->nullable();

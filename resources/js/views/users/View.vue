@@ -10,14 +10,26 @@
                     <fieldset disabled>
                         <div class="form-group">
                             <label>Name</label>
+                            <div v-for="image in images">
+                                <div v-if="article.image" class="offset-md-3 col-md-6">
+                                <img class="img-fluid" :src="'/storage/images/' + image.image">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Name</label>
                             <input type="text" class="form-control" v-model="user.name">
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" class="form-control" v-model="user.role.name">
                         </div>
                         <div class="form-group">
                             <label>Email Address</label>
                             <input type="email" class="form-control" v-model="user.email">
                         </div>
                         <div class="form-group">
-                            <label>Mobile Number</label>
+                            <label>Mobile No.</label>
                             <input type="text" class="form-control" v-model="user.mobile_number">
                         </div>
                     </fieldset>

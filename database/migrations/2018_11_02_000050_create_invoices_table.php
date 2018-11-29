@@ -20,13 +20,12 @@ class CreateInvoicesTable extends Migration
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
-            $table->integer('quotation_id')->unsigned();
+            $table->integer('quotation_id')->unsigned()->nullable();
             $table->foreign('quotation_id')
                 ->references('id')
                 ->on('quotations')
                 ->onDelete('cascade');
-                ->onDelete('cascade');
-            $table->integer('bid_sheet_id')->unsigned();
+            $table->integer('bid_sheet_id')->unsigned()->nullable();
             $table->foreign('bid_sheet_id')
                 ->references('id')
                 ->on('bid_sheets')
