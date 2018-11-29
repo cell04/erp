@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Contact Types / Create New Contact Type
+                <a class="text-success" href="" @click.prevent="viewContactType">Contact Types</a>
+                <a class="text-secondary"> / Create New Contact Type</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -21,8 +22,9 @@
                             <label for="description">Desciption</label>
                             <textarea class="form-control" v-model="description" rows="3" maxlength="500" required></textarea>
                         </div>
-
-                        <button type="submit" class="btn btn-success btn-sm">Create New Contact Type</button>
+                        <br>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewContactType"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Contact Type</button>
                     </form>
                 </div>
 
@@ -48,6 +50,10 @@
         },
 
         methods: {
+            viewContactType() {
+                this.$router.push({ name: 'contact-types.index' });
+            },
+
             createNewContactType() {
                 this.ifReady = false;
                 axios.post('/api/contact-types', this.$data).then(res => {

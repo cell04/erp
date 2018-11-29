@@ -110,7 +110,7 @@ class CorporationsTableSeeder extends Seeder
         factory(App\Corporation::class, 1)->create();
         $now = Carbon::now();
 
-        $account[0]  =  ['id' => 1,      'account_type_id' => 14,    'name' => 'Gift Check Discount',                    'description' => 'Gift Check Discount',             'code' => '101',  'created_at' => $now, 'updated_at' => $now,   'corporation_id' => 1 ];
+        $account[0]  =  ['id' => 1,      'account_type_id' => 14,    'name' => 'Gift Check Discount',                    'description' => 'Gift Check Discount',             'code' => '100',  'created_at' => $now, 'updated_at' => $now,   'corporation_id' => 1 ];
         $account[1]  =  ['id' => 2,      'account_type_id' => 14,    'name' => 'SC/PWD Discount',                        'description' => 'SC/PWD Discount',                 'code' => '101',  'created_at' => $now, 'updated_at' => $now,   'corporation_id' => 1 ];
         $account[2]  =  ['id' => 3,      'account_type_id' => 13,    'name' => 'Expense',                                'description' => 'Expense',                         'code' => '102',  'created_at' => $now, 'updated_at' => $now,   'corporation_id' => 1 ];
         $account[3]  =  ['id' => 4,      'account_type_id' => 6,     'name' => 'Inventory Received Not Billed',          'description' => 'Inventory Received Not Billed',   'code' => '103',  'created_at' => $now, 'updated_at' => $now,   'corporation_id' => 1 ];
@@ -130,22 +130,22 @@ class CorporationsTableSeeder extends Seeder
         
         DB::table('accounts')->insert($account);
 
-        InventoryReturnNotCreditedAccount::create([
+        InventoryReturnNotCreditedAccount::insert([
             'account_id' => 7,
             'corporation_id' => 1
         ]);
 
-        InventoryReceiveNotBilledAccount::create([
+        InventoryReceiveNotBilledAccount::insert([
             'account_id' => 4,
             'corporation_id' => 1
         ]);
 
-        PayableAccount::create([
+        PayableAccount::insert([
             'account_id' => 14,
             'corporation_id' => 1
         ]);
 
-        CashAccount::create([
+        CashAccount::insert([
             'account_id' => 5,
             'corporation_id' => 1
         ]);

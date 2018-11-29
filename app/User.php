@@ -30,6 +30,7 @@ class User extends Authenticatable
     //     'name', 'email', 'password',
     // ];
 
+    protected $dates = ['deleted_at'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -38,4 +39,18 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    // protected $with = [
+    //     'userRole'
+    // ];
+
+    public function image()
+    {
+        return  $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function userRole()
+    {
+        return $this->hasOne(UserRole::class);
+    }
 }

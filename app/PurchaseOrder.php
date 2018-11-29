@@ -46,6 +46,15 @@ class PurchaseOrder extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'contact'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */

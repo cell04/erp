@@ -60,6 +60,15 @@ const Overview = () => import('./views/Overview');
  const InvoicesReceive = () => import('./views/invoices/Receive.vue');
  const InvoicesView = () => import('./views/invoices/View');
 
+ /**
+ * Service Invoices
+ *
+ */
+const ServiceInvoicesIndex = () => import('./views/service-invoices/Index');
+const ServiceInvoicesCreate = () => import('./views/service-invoices/Create');
+const ServiceInvoicesView = () => import('./views/service-invoices/View');
+ 
+
 /**
  * Invoices Payment
  *
@@ -75,6 +84,7 @@ const Overview = () => import('./views/Overview');
  const BillsIndex = () => import('./views/bills/Index');
  const BillsCreate = () => import('./views/bills/Create');
  const BillsView = () => import('./views/bills/View');
+ const BillsReceive = () => import('./views/bills/Receive');
 
 /**
  * Bills Payment
@@ -110,6 +120,24 @@ const Overview = () => import('./views/Overview');
  const ItemPricelistsCreate = () => import('./views/item-price-lists/Create');
  const ItemPricelistsView = () => import('./views/item-price-lists/View');
  const ItemPricelistsEdit = () => import('./views/item-price-lists/Edit');
+
+ /**
+ * Default Account
+ *
+ */
+const DefaultAccountsIndex = () => import('./views/default-accounts/Index');
+const DefaultAccountsCreate = () => import('./views/default-accounts/Create');
+const DefaultAccountsView = () => import('./views/default-accounts/View');
+const DefaultAccountsEdit = () => import('./views/default-accounts/Edit');
+
+ /**
+ * Purchase Item Pricelist
+ *
+ */
+const PurchaseItemPricelistsIndex = () => import('./views/purchase-item-pricelists/Index');
+const PurchaseItemPricelistsCreate = () => import('./views/purchase-item-pricelists/Create');
+const PurchaseItemPricelistsView = () => import('./views/purchase-item-pricelists/View');
+const PurchaseItemPricelistsEdit = () => import('./views/purchase-item-pricelists/Edit');
 
 /**
  * Item Types
@@ -173,6 +201,13 @@ const Overview = () => import('./views/Overview');
  const QuotationCreate = () => import('./views/quotations/Create');
  const QuotationView = () => import('./views/quotations/View');
 
+  /**
+ * Bid Sheet
+ */
+const BidSheetIndex = () => import('./views/bid-sheets/Index');
+const BidSheetCreate = () => import('./views/bid-sheets/Create');
+const BidSheetView = () => import('./views/bid-sheets/View.vue');
+
 /**
  * Receive Orders
  *
@@ -197,6 +232,11 @@ const Overview = () => import('./views/Overview');
  const UsersCreate = () => import('./views/users/Create');
  const UsersView = () => import('./views/users/View');
  const UsersEdit = () => import('./views/users/Edit');
+
+ /**
+ * User Roles
+ */
+const UserRolesIndex = () => import('./views/user-roles/Index');
 
 /**
  * Warehouses
@@ -238,6 +278,11 @@ const Overview = () => import('./views/Overview');
         { path: '/invoices/receive/:id', name: 'invoices.receive', component: InvoicesReceive },
         { path: '/invoices/:id', name: 'invoices.view', component: InvoicesView },
 
+        // Service Invoices
+        { path: '/service-invoices', name: 'service-invoices.index', component: ServiceInvoicesIndex },
+        { path: '/service-invoices/create', name: 'service-invoices.create', component: ServiceInvoicesCreate },
+        { path: '/service-invoices/:id', name: 'service-invoices.view', component: ServiceInvoicesView },
+
         // Invoices Payment
         { path: '/invoice-payments', name: 'invoice-payments.index', component: InvoicePaymentIndex },
         { path: '/invoice-payments/create', name: 'invoice-payments.create', component: InvoicePaymentCreate },
@@ -247,6 +292,7 @@ const Overview = () => import('./views/Overview');
         { path: '/bills', name: 'bills.index', component: BillsIndex },
         { path: '/bills/create', name: 'bills.create', component: BillsCreate },
         { path: '/bills/:id', name: 'bills.view', component: BillsView },
+        { path: '/bills/receive/:id', name: 'bills.receive', component: BillsReceive },
 
         // Bill Payments
         { path: '/bill-payments', name: 'bill-payments.index', component: BillPaymentsIndex },
@@ -264,6 +310,18 @@ const Overview = () => import('./views/Overview');
         { path: '/item-pricelists/create', name: 'item-pricelists.create', component: ItemPricelistsCreate },
         { path: '/item-pricelists/:id', name: 'item-pricelists.view', component: ItemPricelistsView },
         { path: '/item-pricelists/:id/edit', name: 'item-pricelists.edit', component: ItemPricelistsEdit },
+
+        // Default Accounts
+        { path: '/default-accounts', name: 'default-accounts.index', component: DefaultAccountsIndex },
+        { path: '/default-accounts/create', name: 'default-accounts.create', component: DefaultAccountsCreate },
+        { path: '/default-accounts/:id', name: 'default-accounts.view', component: DefaultAccountsView },
+        { path: '/default-accounts/:id/edit', name: 'default-accounts.edit', component: DefaultAccountsEdit },
+
+        // Purchase Item Pricelists
+        { path: '/purchase-item-pricelists', name: 'purchase-item-pricelists.index', component: PurchaseItemPricelistsIndex },
+        { path: '/purchase-item-pricelists/create', name: 'purchase-item-pricelists.create', component: PurchaseItemPricelistsCreate },
+        { path: '/purchase-item-pricelists/:id', name: 'purchase-item-pricelists.view', component: PurchaseItemPricelistsView },
+        { path: '/purchase-item-pricelists/:id/edit', name: 'purchase-item-pricelists.edit', component: PurchaseItemPricelistsEdit },
 
         // Purchase Orders
         { path: '/purchase-orders', name: 'purchase-orders.index', component: PurchaseOrdersIndex },
@@ -315,6 +373,9 @@ const Overview = () => import('./views/Overview');
                 { path: 'users/create', name: 'users.create', component: UsersCreate },
                 { path: 'users/:id', name: 'users.view', component: UsersView },
                 { path: 'users/:id/edit', name: 'users.edit', component: UsersEdit },
+
+                // User Roles
+                { path: 'user-roles', name: 'user-roles.index', component: UserRolesIndex },
             ]
         },
 
@@ -343,6 +404,11 @@ const Overview = () => import('./views/Overview');
         { path: '/quotations/create', name: 'quotations.create', component: QuotationCreate },
         { path: '/quotations/:id', name: 'quotations.view', component: QuotationView },
 
+        // Bid Sheets
+        { path: '/bid-sheets', name: 'bid-sheets.index', component: BidSheetIndex },
+        { path: '/bid-sheets/create', name: 'bid-sheets.create', component: BidSheetCreate },
+        { path: '/bid-sheets/:id', name: 'bid-sheets.view', component: BidSheetView },
+
         // warehouses
         { path: '/warehouses', name: 'warehouses.index', component: WarehousesIndex },
         { path: '/warehouses/create', name: 'warehouses.create', component: WarehousesCreate },
@@ -350,6 +416,19 @@ const Overview = () => import('./views/Overview');
         { path: '/warehouses/:id/edit', name: 'warehouses.edit', component: WarehousesEdit }
         ]
     });
+
+    router.beforeEach((to, from, next) => {
+        if (localStorage.getItem('selectedCorporation') === null) {
+            // checking to avoid loop
+            if (to.name === 'corporations.select') return next();
+            next({
+                path: '/select-corporation'
+            });
+        }
+        else {
+           next();
+        }
+     });
 
 // router.beforeEach((to, from, next) => {
 //     if (to.matched.some(record => record.meta.requiresAuth)) {

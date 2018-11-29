@@ -43,7 +43,7 @@ class CreateInvoice extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->subject('Invoice')
+        return (new MailMessage)->subject('Purchase Invoice')
         ->markdown('mail.invoices.create', array('content' => $this->invoice));
     }
 

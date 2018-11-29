@@ -46,6 +46,15 @@ class ReceiveOrder extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'contact'
+    ];
+
+    /**
      * Run functions on boot.
      *
      */
@@ -110,5 +119,15 @@ class ReceiveOrder extends Model
     public function receiveOrderItems()
     {
         return $this->hasMany(ReceiveOrderItem::class);
+    }
+
+    /**
+     * The receive order has many receive order items.
+     *
+     * @return object
+     */
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
     }
 }

@@ -1,47 +1,55 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                <b>Branches / Create New Branch</b>
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <form v-on:submit.prevent="createNewBranch">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Address</label>
-                            <textarea class="form-control" v-model="address" required></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3 form-group">
-                                <label for="city">City</label>
-                                <input type="text" class="form-control" v-model="city" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="country">Country</label>
-                                <input type="text" class="form-control" v-model="country" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="zip_code">Zip Code</label>
-                                <input type="text" class="form-control" v-model="zip_code" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="telephone_number">Telephone Number</label>
-                                <input type="text" class="form-control" v-model="telephone_number" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                        </div>
-                        <br>
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBranches"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Branch</button>
-                    </form>
-                </div>
+        <div class="content-title">
+            <h4 class="module-title">BRANCH</h4>
+            <hr class="title-border">
+        </div>
 
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewBranches">Branchs</a>
+                    <a class="text-secondary"> / Create New Branch</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewBranch">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea class="form-control" v-model="address" required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" v-model="city" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" class="form-control" v-model="country" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="zip_code">Zip Code</label>
+                                    <input type="text" class="form-control" v-model="zip_code" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="telephone_number">Telephone Number</label>
+                                    <input type="text" class="form-control" v-model="telephone_number" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewBranches"><i class="fas fa-chevron-left"></i> Back</button>
+                            <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Branch</button>
+                        </form>
+                    </div>
+
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>

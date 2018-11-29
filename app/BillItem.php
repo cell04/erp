@@ -21,7 +21,7 @@ class BillItem extends Model
      */
     protected $fillable = [
         'bill_id', 'item_id', 'unit_of_measurement_id',
-        'quantity', 'price'
+        'quantity', 'item_pricelist_id'
     ];
 
     // /**
@@ -47,7 +47,7 @@ class BillItem extends Model
      * @var array
      */
     protected $with = [
-        'item', 'unitOfMeasurement'
+        'item', 'unitOfMeasurement', 'itemPricelist'
     ];
 
     /**
@@ -68,6 +68,16 @@ class BillItem extends Model
     public function item()
     {
         return $this->belongsTo(Item::class);
+    }
+
+    /**
+     * The invoice item belongs to an item.
+     *
+     * @return object
+     */
+    public function itemPricelist()
+    {
+        return $this->belongsTo(ItemPricelist::class);
     }
 
     /**

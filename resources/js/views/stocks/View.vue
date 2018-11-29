@@ -1,43 +1,49 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                Stocks / View Stock
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <fieldset disabled>
-                        <div class="form-group">
-                            <label for="name">Stock From</label>
-                            <input type="text" class="form-control" v-model="stockable.name" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="adress">Item Name</label>
-                            <input type="text" class="form-control" v-model="item.name" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label for="city">Quantity</label>
-                                <input type="text" class="form-control" v-model="stocks.quantity" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label for="country">Unit of Measurement</label>
-                                <input type="text" class="form-control" v-model="uom.name" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-                        </div>
-                    </fieldset>
+        <div class="content-title">
+            <h4 class="module-title">STOCK</h4>
+            <hr class="title-border">
+        </div>
 
-                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewStocks"><i class="fas fa-chevron-left"></i> Back</button>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewStocks">Stocks</a>
+                    <a class="text-secondary"> / View Stock</a>
                 </div>
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <fieldset disabled>
+                            <div class="form-group">
+                                <label for="name">Stock From</label>
+                                <input type="text" class="form-control" v-model="stockable.name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adress">Item Name</label>
+                                <input type="text" class="form-control" v-model="item.name" autocomplete="off" minlength="2" maxlength="255" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="city">Quantity</label>
+                                    <input type="text" class="form-control" v-model="stocks.quantity" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="country">UOM</label>
+                                    <input type="text" class="form-control" v-model="uom.name" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewStocks"><i class="fas fa-chevron-left"></i> Back</button>
+                    </div>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
 

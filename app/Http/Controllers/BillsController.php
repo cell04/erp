@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Resources\BillResource;
 use App\Repositories\BillRepository;
 use Illuminate\Support\Facades\Validator;
@@ -45,7 +46,15 @@ class BillsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'amount'                              =>  'required|numeric',
+            'receive_order_id'                    =>  'required|integer',
+            'contact_id'                          =>  'required|integer',
+            'due_date'                            =>  'required|date',
+            'reference_number'                    =>  'required|string|max:255',
+            'bill_items.*.item_id'                =>  'required|integer',
+            'bill_items.*.unit_of_measurement_id' =>  'required|integer',
+            'bill_items.*.quantity'               =>  'required|numeric',
+            'bill_items.*.item_pricelist_id'      =>  'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -96,7 +105,15 @@ class BillsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'amount'                              =>  'required|numeric',
+            'receive_order_id'                    =>  'required|integer',
+            'contact_id'                          =>  'required|integer',
+            'due_date'                            =>  'required|date',
+            'reference_number'                    =>  'required|string|max:255',
+            'bill_items.*.item_id'                =>  'required|integer',
+            'bill_items.*.unit_of_measurement_id' =>  'required|integer',
+            'bill_items.*.quantity'               =>  'required|numeric',
+            'bill_items.*.item_pricelist_id'      =>  'required|integer'
         ]);
 
         if ($validator->fails()) {

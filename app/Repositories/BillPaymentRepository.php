@@ -6,6 +6,8 @@ use App\Bill;
 use App\BillPayment;
 use App\Journal;
 use App\Repositories\Repository;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BillPaymentRepository extends Repository
 {
@@ -25,60 +27,98 @@ class BillPaymentRepository extends Repository
      */
     public function store($request)
     {
-        $billPayment = $this->billPayment->create($request->all());
-        $this->generateInvoicePaymentEntries($billPayment);
-        $bill = Bill::find($request->bill_id);
-        $oldAmountPaid = $bill->amount_paid;
+        return DB::transaction(function () use ($request) { 
+            $billPayment = $this->billPayment->create($request->all());
+            $this->generateBillPaymentEntries($billPayment);
+            $bill = Bill::find($request->bill_id);
+            $oldAmountPaid = $bill->amount_paid;
 
-        $newAmountPaid = $bill->amount_paid + $request->amount;
+            $newAmountPaid = $bill->amount_paid + $request->amount;
 
-        if ($oldAmountPaid < $newAmountPaid) {
-            $bill->status = 1;
-        }
+            if ($oldAmountPaid < $newAmountPaid) {
+                $bill->status = 1;
+            }
 
-        if ($newAmountPaid >= $oldAmountPaid) {
-            $bill->status = 2;
-        }
+            if ($newAmountPaid >= $oldAmountPaid) {
+                $bill->status = 2;
+            }
 
-        $bill->amount_paid = $newAmountPaid;
+            $bill->amount_paid = $newAmountPaid;
 
-        $bill->save();
+            $bill->save();
 
-        return true;
+            return true;
+        });
     }
 
-    public function generateInvoicePaymentEntries($billPayment)
+    public function generateBillPaymentEntries($billPayment)
     {
         $i = 0;
+        $costCenters = $billPayment->bill->receiveOrder->purchaseOrder->warehouse->costCenter;
+
+        foreach ($costCenters as $costCenter) {
+            $costCenterID = $costCenter->id;
+        }
 
         $journal_entries[$i++] = [
+            'account_id' => session('account-payable'),
+            'corporation_id' => request()->headers->get('CORPORATION-ID'),
+            'cost_center_id' => $costCenterID,
+            'amount' => $billPayment->amount,
+            'type' => 1, //debit entries
+        ];
+
+         $journal_entries[$i++] = [
             'account_id' => $billPayment->bill->contact->account_id,
-            'corporation_id' => $billPayment->bill->corporation_id,
-            'cost_center_id' => $billPayment->bill->billable_id,
+            'corporation_id' => request()->headers->get('CORPORATION-ID'),
+            'cost_center_id' => $costCenterID,
             'amount' => $billPayment->amount,
-            'type' => 1, //credit entries
+            'type' => 2, //credit entries
         ];
 
-        $journal_entries[$i++] = [
-            'account_id' => session('cash'),
-            'corporation_id' => $billPayment->bill->corporation_id,
-            'cost_center_id' => $billPayment->bill->billable_id,
-            'amount' => $billPayment->amount,
-            'type' => 2, //debit entries
-        ];
-
-        // return $journal_entries;
-
+        //store Journal
         $journal = Journal::create([
-            'corporation_id'    =>  $billPayment->bill->corporation_id,
+            'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  $billPayment->bill->user_id,
-            'reference_number'  =>  $billPayment->bill->reference_number,
-            'memo'              =>  'Invoice Payments',
+            'reference_number'  =>  $billPayment->bills_payment_number,
+            'memo'              =>  'Bills Payment',
             'amount'            =>  $billPayment->amount,
-            'posting_period'    =>  $billPayment->updated_at,
-            'contact_id'        =>  $billPayment->bill->contact_id
+            'contact_id'        =>  $billPayment->bill->contact_id,
+            'posting_period'    =>  Carbon::parse($billPayment->created_at)
         ]);
 
-        return $journal->journalEntries()->createMany($journal_entries);
+        // Store Journal Entries
+        $journalEntries = $journal->journalEntries()->createMany($journal_entries);
+
+        //Store Voucher
+        $voucher = $journal->voucher()->create([
+            'verified_by'       =>  $billPayment->bill->user_id,
+            'user_id'           =>  $billPayment->bill->user_id,
+            'reference_number'  =>  $billPayment->bills_payment_number,
+            'number'            =>  $billPayment->cr_number,
+            'memo'              =>  'Bills Payment',
+            'amount'            =>  $billPayment->amount,
+            'contact_id'        =>  $billPayment->bill->contact_id,
+            'posting_period'    =>  Carbon::parse($billPayment->created_at),
+            'status'            =>  1
+        ]);
+
+        //Store Voucher Entries
+        return $voucher->voucherEntries()->createMany($journalEntries->toArray());
+    }
+
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->model->filter($request)
+            ->orderBy('created_at', $orderBy)
+            ->with('bill:id,amount,amount_paid', 'bill:id,reference_number')
+            ->paginate($length)
+            ->withPath(
+                $this->model->createPaginationUrl($request, $removePage)
+            );
     }
 }

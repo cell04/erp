@@ -1,157 +1,162 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header clearfix">
-                <div class="float-left">
-                    <b>Stock Transfers / View Stock Transfers</b>
+        <div class="content-title">
+            <h4 class="module-title">STOCK TRANSFER</h4>
+            <hr class="title-border">
+        </div>
+
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header clearfix">
+                    <div class="float-left">
+                        Stock Transfers
+                    </div>
+                    <div class="float-right">
+                        <router-link class="btn-primary btn-sm" :to="{ name: 'stock-transfers.create' }"><i class="fas fa-plus"></i> Create New Stock Transfer</router-link>
+                    </div>
                 </div>
-                <div class="float-right">
-                    <router-link class="btn-primary btn-sm" :to="{ name: 'stock-transfers.create' }"><i class="fas fa-plus"></i> Create New Stock Transfer</router-link>
+                <div class="card-body">
+                    <table class="table table-hover table-sm">
+                        <caption>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    List of Stock Tranfers - Total Items {{ this.meta.total }}
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="progress" height="30px;" v-if="showProgress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Stock Transfer #</th>
+                                <th scope="col">Transfered From</th>
+                                <th scope="col">Transfered To</th>
+                                <th scope="col">Transfer Date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="stockTransfers">
+                            <tr v-for="stockTransfer in stockTransfers">
+                                <td>{{ stockTransfer.number }}</td>
+                                <td>{{ stockTransfer.stock_transferable_from.name | Upper }}</td>
+                                <td>{{ stockTransfer.stock_transferable_to.name | Upper }}</td>
+                                <td>{{ stockTransfer.stock_transfered_date | DateFormat }}</td>
+                                <td>{{ stockTransfer.status }}</td>
+                                <td>
+                                    <router-link class="text-secondary" :to="{ name: 'stock-transfers.view', params: { id: stockTransfer.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-         <div class="card-body">
-            <table class="table table-hover table-sm">
-                <caption>
-                    <div class="row">
-                        <div class="col-md-9">
-                            List of Stock Tranfers - Total Items {{ this.meta.total }}
+            <br>
+            <div class="clearfix">
+                <div v-if="pageCount">
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div v-else>
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="float-right">
+                    <form class="form-inline">
+                        <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Transfers</button> -->
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Items per page</div>
+                            </div>
+                            <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select>
                         </div>
-                        <div class="col-md-3">
-                            <div class="progress" height="30px;" v-if="showProgress">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    </form>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Search Stock Transfers</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Abbreviation</label>
+                                    <input type="text" class="form-control" v-model="searchColumnAbbreviation" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Order By</label>
+                                    <select class="form-control" v-model="order_by">
+                                        <option value="desc">Newest</option>
+                                        <option value="asc">Oldest</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer clearfix">
+                                <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
+                                <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
-                </caption>
-                <thead>
-                    <tr>
-                        <th scope="col">ST #</th>
-                        <th scope="col">ST From</th>
-                        <th scope="col">ST To</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Options</th>
-                    </tr>
-                </thead>
-                <tbody v-if="stockTransfers">
-                    <tr v-for="stockTransfer in stockTransfers">
-                        <td>{{ stockTransfer.number }}</td>
-                        <td>{{ stockTransfer.stock_transferable_from.name }}</td>
-                        <td>{{ stockTransfer.stock_transferable_to.name }}</td>
-                        <td>{{ stockTransfer.status }}</td>
-                        <td>{{ stockTransfer.created_at }}</td>
-                        <td>
-                            <router-link class="text-secondary" :to="{ name: 'stock-transfers.view', params: { id: stockTransfer.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <br>
-
-    <div class="clearfix">
-        <div v-if="pageCount">
-            <nav class="float-left">
-                <ul class="pagination">
-                    <li class="page-item" v-bind:class="isPrevDisabled">
-                        <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                    </li>
-                    <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                        <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                    </li>
-                    <li class="page-item" v-bind:class="isNextDisabled">
-                        <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                    </li>
-                    <li class="page-item" v-bind:class="isNextDisabled">
-                        <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div v-else>
-            <nav class="float-left">
-                <ul class="pagination">
-                    <li class="page-item" v-bind:class="isPrevDisabled">
-                        <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                    </li>
-                    <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                        <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                    </li>
-                    <li class="page-item" v-bind:class="isNextDisabled">
-                        <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                    </li>
-                    <li class="page-item" v-bind:class="isNextDisabled">
-                        <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-
-        <div class="float-right">
-            <form class="form-inline">
-                <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Stock Transfers</button> -->
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Items per page</div>
-                    </div>
-                    <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Search Stock Transfers</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Abbreviation</label>
-                            <input type="text" class="form-control" v-model="searchColumnAbbreviation" autocomplete="off" minlength="2" maxlength="255" required>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label>Order By</label>
-                            <select class="form-control" v-model="order_by">
-                                <option value="desc">Newest</option>
-                                <option value="asc">Oldest</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer clearfix">
-                        <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="clear">Clear</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="search">Search</button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                    </div>
                 </div>
             </div>
         </div>
 
-    </div>
 </div>
 </template>
 
@@ -173,7 +178,7 @@
         };
 
         axios.get('/api/stock-transfers', { params }).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -212,6 +217,18 @@
                 showProgress: false,
                 pageNumbers: []
             };
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
         },
 
         beforeRouteEnter (to, from, next) {

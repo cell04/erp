@@ -1,112 +1,160 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            Quotations / Create New Quotation
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">QUOTATION</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="createNewQuotation">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Quotation Number</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text" id="btnGroupAddon">Q</div>
-                                </div>
-                                <input type="text" class="form-control" v-model="number" required placeholder="Quotation #" aria-label="Input group example" aria-describedby="btnGroupAddon">
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Customer</label>
-                            <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>From</label>
-                            <br>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" v-model="from_selected_radio_button" value="warehouse">
-                                <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" v-model="from_selected_radio_button" value="branch">
-                                <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
-                            </div>
-                            <vue-select v-model="fromWarehouse" @input="selectFromWarehouse()" label="name" :options="warehouses" v-show="from_selected_radio_button === 'warehouse'"></vue-select>
-                            <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
-                        </div>
-
-                    </div>
-
-                    <br>
-                    <h6>
-                        <b><u>Quotation Items</u></b>
-                    </h6>
-                    <br>
-                    
-                    <table class="table table-hover table-sm">
-                        <caption>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewQuotations">Quotations</a>
+                    <a class="text-secondary"> / Create New Quotation</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewQuotation">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-6 form-group">
+                                    <label>Quotation Number</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" id="btnGroupAddon">QN</div>
+                                        </div>
+                                        <input type="text" class="form-control" v-model="number" required placeholder="Quotation #" aria-label="Input group example" aria-describedby="btnGroupAddon" readonly>
+                                    </div>
                                 </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Customer</label>
+                                    <vue-select v-model="contact" @input="selectContact()" label="person" :options="contacts"></vue-select>
+                                </div>
+
+                                <!-- <div class="col-md-6 form-group">
+                                    <label>Tax Percentage</label>
+                                    <input type="number" class="form-control" v-model="tax" required placeholder="Tax %">
+                                </div> -->
+
+                                <div class="col-md-6 form-group">
+                                    <label>Do you want to add Tax Percentage?</label>
+                                    <br>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" v-model="tax_value" v-on:click="selectTax('yes')" value="Yes">
+                                        <label class="form-check-label">&nbsp; Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" v-model="tax_value" v-on:click="selectTax('no')" value="No">
+                                        <label class="form-check-label">&nbsp; No</label>
+                                    </div>
+                                    <input type="number" class="form-control" v-model="tax" placeholder="Tax %" v-show="tax_value === 'Yes'">
+                                </div>
+
+                                <!-- <div class="col-md-6 form-group"></div> -->
+
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Origin</label>
+                                    <br>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" v-model="from_selected_radio_button" value="warehouse">
+                                        <label class="form-check-label" for="inlineRadio1">&nbsp; Warehouse</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" v-model="from_selected_radio_button" value="branch">
+                                        <label class="form-check-label" for="inlineRadio2">&nbsp; Branch</label>
+                                    </div>
+                                    <vue-select v-model="fromWarehouse" @input="selectFromWarehouse()" label="name" :options="warehouses" v-show="from_selected_radio_button === 'warehouse'"></vue-select>
+                                    <vue-select v-model="fromBranch" @input="selectFromBranch()" label="name" :options="branches" v-show="from_selected_radio_button === 'branch'"></vue-select>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <div class="dateStyle">
+                                        <label>Validity Date</label>
+                                        <datepicker v-model="validity_date" :bootstrap-styling="true" placeholder="Validity Date" required></datepicker>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 form-group" v-if="contactData !== null">
+                                    <hr>
+                                    <h5><u>Customer Information:</u></h5>
+                                    <div><label for="name"><strong>Customer</strong></label>: {{contactData.person}}</div>
+                                    <div><label for="name"><strong>Company</strong></label>: {{contactData.company}}</div>
+                                    <div><label for="name"><strong>Address</strong></label>: {{contactData.company_address}}</div>
+                                    <div><label for="name"><strong>Email</strong></label>: {{contactData.email}}</div>
+                                    <div><label for="name"><strong>Phone</strong></label>: {{contactData.mobile_number}}</div>
+                                    <hr>
+                                </div>
+
                             </div>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">SKU</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">UOM</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Sub Total</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(quotation_item, index) in quotation_items" :key="index">
-                                <td>{{ quotation_item.item.stock_keeping_unit }}</td>
-                                <td>
-                                    <vue-select v-model="quotation_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                                </td>
-                                <td>
-                                    <input class="form-control" v-model.number="quotation_item.quantity" required>
-                                </td>
-                                <td>
-                                    {{ quotation_item.unitOfMeasurement }}
-                                </td>
-                                <td>
-                                    <input class="form-control" @input="calculate(index)" v-model.number="quotation_item.price" required>
-                                </td>
-                                <td>{{ quotation_item.subTotal }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"></td>
-                                <td>
-                                    <b>Total</b>
-                                </td>
-                                <td>{{ amount }}</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
 
-                    <div class="pt-3">
-                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
-                        <button type="button" class="btn btn-outline-success btn-sm" @click="addNewItem"><i class="fas fa-plus-circle"></i> Add New Item</button>
-                        <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Quotation</button>
+                            <h6>
+                                <b><u>Quotation Items</u></b>
+                            </h6>
+                            <br>
+                            
+                            <table class="table table-hover table-sm">
+                                <caption>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                        </div>
+                                    </div>
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Item</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Sub Total</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(quotation_item, index) in quotation_items" :key="index">
+                                        <td>{{ quotation_item.item.stock_keeping_unit }}</td>
+                                        <td>
+                                            <vue-select v-model="quotation_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" v-model.number="quotation_item.quantity" required>
+                                        </td>
+                                        <td>
+                                            {{ quotation_item.unitOfMeasurement }}
+                                        </td>
+                                        <td>
+                                            <input class="form-control" @input="calculate(index)" v-model.number="quotation_item.price" required>
+                                        </td>
+                                        <td>{{ quotation_item.subTotal | Decimal }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td><b>{{ amount | Decimal }}</b></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewQuotations"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="button" class="btn btn-outline-success btn-sm" @click="addNewItem"><i class="fas fa-plus-circle"></i> Add New Item</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Quotation</button>
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </div>
 
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -116,6 +164,7 @@
         data() {
             return {
                 ifReady: false,
+                contactData: null,
                 from_selected_radio_button: "",
                 fromWarehouse: null,
                 fromBranch: null,
@@ -128,6 +177,8 @@
                 contact_id: "",
                 items: [],
                 number: "",
+                tax: "",
+                validity_date: "",
                 quotation_items: [
                     {
                         item: '',
@@ -140,9 +191,18 @@
                         subTotal: 0
                     }
                 ],
-                amount: "",
-                isDisabled: true
+                amount: 0,
+                isDisabled: true,
+                tax_value: ""
             };
+        },
+
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
         },
 
         mounted() {
@@ -190,6 +250,8 @@
             Promise.all([getAllContacts, getAllItems, promiseBranches, promiseWarehouses]).then(() => {
                 this.ifReady = true;
             });
+
+            this.autoGenerateQuotationNumber();
         },
 
         computed: {
@@ -210,8 +272,43 @@
                 this.$router.push({ name: 'quotations.index' });
             },
 
+            getContactData(id) {
+                axios.get("/api/contacts/" + id).then(res => {
+                    this.contactData = res.data.contact;
+                    // console.log("COntacts" + JSON.stringify(res.data));
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            },
+
+            autoGenerateQuotationNumber() {
+                let date = new Date();
+                var components = [
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate(),
+                    date.getHours(),
+                    date.getMinutes(),
+                    date.getSeconds(),
+                    date.getMilliseconds()
+                ];
+                let id = components.join("");
+                this.number = id;
+                console.log('Code: ' + id);
+            },
+
+            selectTax(value) {
+                console.log('Value: ' + value);
+                if(value == 'no') {
+                    this.tax = 0;
+                }
+            },
+
             selectContact() {
                 this.contact_id = this.contact.id;
+                this.getContactData(this.contact_id);
             },
 
             selectFromBranch() {
@@ -300,8 +397,10 @@
                     contact_id: this.$data.contact_id,
                     quotable_id: this.stock_receivable_from_id,
                     quotable_type: this.stock_receivable_from_type,
-                    number: 'Q' + this.number,
+                    number: 'QN' + this.number,
                     amount: this.amount,
+                    tax: this.tax,
+                    validity_date: moment(this.$data.due_date).format('YYYY-MM-DD'),
                     quotation_items: quotationItems
                 };
 
@@ -321,6 +420,10 @@
 <style>
     td {
         width: 100px !important;
+    }
+    
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
     }
 </style>
 

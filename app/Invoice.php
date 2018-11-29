@@ -5,7 +5,6 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Invoice extends Model
 {
@@ -24,21 +23,10 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'receive_order_id', 'contact_id',
+        'corporation_id', 'quotation_id', 'contact_id',
         'user_id', 'reference_number', 'due_date',
-        'amount', 'amount_paid', 'status'
+        'amount', 'amount_paid', 'status', 'bid_sheet_id'
     ];
-
-    // /**
-    //  * The Log attributes that are mass assignable.
-    //  *
-    //  * @var array
-    //  */
-    // protected static $logAttributes = [
-    //     'corporation_id', 'receive_order_id', 'contact_id',
-    //     'user_id', 'reference_number', 'due_date',
-    //     'amount', 'amount_paid', 'status'
-    // ];
     
     /**
      * The attributes that should be mutated to dates.
@@ -53,7 +41,7 @@ class Invoice extends Model
      * @var array
      */
     protected $with = [
-        'receiveOrder', 'invoiceItems', 'contact'
+        'quotation', 'invoiceItems', 'contact', 'bidSheet'
     ];
 
     /**
@@ -69,7 +57,13 @@ class Invoice extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
 
-            $model->user_id = auth('api')->user()->id;
+            if (auth('api')->user()) {
+                $model->user_id = auth('api')->user()->id;
+            }
+
+            if (request()->headers->get('USER-ID')) {
+                $model->user_id = request()->headers->get('USER-ID');
+            }
         });
     }
 
@@ -104,12 +98,22 @@ class Invoice extends Model
     }
 
     /**
-     * The invoice belongs to a receive order.
+     * The invoice belongs to a Quotation.
      *
      * @return object
      */
-    public function receiveOrder()
+    public function quotation()
     {
-        return $this->belongsTo(ReceiveOrder::class);
+        return $this->belongsTo(Quotation::class);
+    }
+
+    /**
+     * The invoice belongs to a Bid Sheet.
+     *
+     * @return object
+     */
+    public function bidSheet()
+    {
+        return $this->belongsTo(BidSheet::class);
     }
 }

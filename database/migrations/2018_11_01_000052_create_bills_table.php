@@ -20,12 +20,10 @@ class CreateBillsTable extends Migration
                 ->references('id')
                 ->on('corporations')
                 ->onDelete('cascade');
-            $table->integer('billable_id')->unsigned();
-            $table->string('billable_type');
-            $table->integer('quotation_id')->unsigned();
-            $table->foreign('quotation_id')
+            $table->integer('receive_order_id')->unsigned();
+            $table->foreign('receive_order_id')
                 ->references('id')
-                ->on('quotations')
+                ->on('receive_orders')
                 ->onDelete('cascade');
             $table->integer('contact_id')->unsigned();
             $table->foreign('contact_id')
@@ -38,8 +36,11 @@ class CreateBillsTable extends Migration
                 ->on('users')
                 ->onDelete('cascade');
             $table->string('reference_number')->unique();
+            $table->integer('taxable')->default(0); //0 = no, 1 = yes
+            $table->integer('taxable_value');
             $table->date('due_date');
             $table->decimal('amount', 20, 2);
+            $table->decimal('tax', 20, 2)->default(0);
             $table->decimal('amount_paid', 20, 2)->default(0);
             $table->smallInteger('status')->default(0);
             $table->timestamps();

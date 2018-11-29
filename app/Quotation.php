@@ -25,8 +25,9 @@ class Quotation extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'user_id', 'contact_id', 'quotable_id',
-        'quotable_type', 'number', 'amount', 'status', 'approved_by'
+        'corporation_id', 'user_id', 'contact_id', 'quotable_id', 
+        'tax', 'quotable_type', 'number', 'amount', 'status', 
+        'approved_by', 'validity_date'
     ];
 
     // /**

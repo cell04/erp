@@ -91,7 +91,7 @@ export default {
     getStockRequest() {
       new Promise((resolve, reject) => {
         axios.get("/api/stock-requests/" + this.$route.params.id).then(res => {
-          console.log(res);
+        //   console.log(res);
           this.ifReady = true;
           this.stock_request = res.data.stockRequest;
           this.stock_request_items = res.data.stockRequest.stock_request_items;

@@ -5,50 +5,100 @@ namespace App\Repositories;
 use App\Journal;
 use App\PurchaseOrder;
 use App\ReceiveOrder;
-use App\Stock;
+use App\Warehouse;
 use Illuminate\Support\Facades\DB;
 
 class ReceiveOrderRepository extends Repository
 {
     protected $purchaseOrder;
+    private $journal;
 
     /**
      * Create new instance of receive order repository.
      *
      * @param ReceiveOrder $receiveOrder ReceiveOrder repository.
      */
-    public function __construct(ReceiveOrder $receiveOrder, PurchaseOrder $purchaseOrder)
+    public function __construct(ReceiveOrder $receiveOrder, PurchaseOrder $purchaseOrder, Journal $journal)
     {
         parent::__construct($receiveOrder);
         $this->receiveOrder = $receiveOrder;
         $this->purchaseOrder = $purchaseOrder;
+        $this->journal = $journal;
     }
 
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
-            $receiveOrder = $this->receiveOrder->create($request->all());
-            $receiveOrderItems = $receiveOrder->receiveOrderItems()->createMany($request->receive_order_items);
+            //Receive Order Item Quantity Checker
+            if ($this->validRequest($request)) {
+                //Store Receive Order
+                $receiveOrder = $this->receiveOrder->create($request->all());
+                $receiveOrderItems = $receiveOrder->receiveOrderItems()->createMany($request->receive_order_items);
+                //Store stocks
+                $receiveOrder->purchaseOrder->warehouse->stocks()->createMany($receiveOrderItems->toArray());
+                //Store journal entries
+                $receiveOrderEntries = $this->generateReceiveOrderEntries($receiveOrder, $receiveOrderItems);
+                //Update Purchase Order Status
+                $this->purchaseOrderUpdateStatus($receiveOrder);
 
-            $purchaseOrder = PurchaseOrder::find($request->purchase_order_id);
-
-            foreach ($request->receive_order_items as $receiveOrderItem) {
-                $data = [
-                    'stockable_id' => $purchaseOrder->warehouse_id,
-                    'stockable_type' => 'App\\Warehouse',
-                    'item_id' => $receiveOrderItem['item_id'],
-                    'quantity' => $receiveOrderItem['quantity'],
-                    'unit_of_measurement_id' => $receiveOrderItem['unit_of_measurement_id']
-                ];
-
-                Stock::create($data);
+                return $receiveOrder;
             }
 
-            //journal entries
-            $receiveOrderEntries = $this->generateReceiveOrderEntries($receiveOrder, $receiveOrderItems);
-
-            return $receiveOrder;
+            return false;
         });
+    }
+
+    public function validRequest($request)
+    {
+        $i = 0;
+        $purchaseOrder = $this->purchaseOrder->find($request->purchase_order_id);
+        foreach ($purchaseOrder->purchaseOrderItems as $purchaseOrderItem) {
+            if ($purchaseOrder->has('receiveOrders')) {
+                $quantity = 0;
+                foreach ($purchaseOrder->receiveOrders as $receiveOrder) {
+                    foreach ($receiveOrder->receiveOrderItems as $receiveOrderItem) {
+                        if ($purchaseOrderItem->item_id == $receiveOrderItem->item_id) {
+                            $quantity += $receiveOrderItem->quantity;
+                        }
+                    }
+                }
+            }
+
+            foreach ($request->receive_order_items as $receive_order_item) {
+                if ($purchaseOrderItem->item_id == $receive_order_item['item_id']) {
+                    $quantity += $receive_order_item['quantity'];
+                }
+            }
+
+            if ($purchaseOrderItem->quantity < $quantity) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function purchaseOrderUpdateStatus($receiveOrder)
+    {
+        $i = 0;
+        foreach ($receiveOrder->purchaseOrder->purchaseOrderItems as $purchaseOrderItem) {
+            $quantity = 0;
+            foreach ($receiveOrder->purchaseOrder->receiveOrders as $receiveOrder) {
+                foreach ($receiveOrder->receiveOrderItems as $receiveOrderItem) {
+                    if ($receiveOrderItem->item_id == $purchaseOrderItem->item_id) {
+                        $quantity += $receiveOrderItem->quantity;
+                    }
+                }
+            }
+
+            if ($purchaseOrderItem->quantity == $quantity) {
+                
+            } else {
+                return $receiveOrder;
+            }
+        }
+
+        return $receiveOrder->purchaseOrder()->update(['status' => 1]);
     }
 
     public function generateReceiveOrderEntries($receiveOrder, $receiveOrderItems)
@@ -84,7 +134,7 @@ class ReceiveOrderRepository extends Repository
             'type'           => 2
         ];
 
-        $journal = Journal::create([
+        $journal = $this->journal->create([
             'corporation_id'    =>  request()->headers->get('CORPORATION-ID'),
             'user_id'           =>  auth('api')->user()->id,
             'reference_number'  =>  $purchaseOrder->reference_number,
