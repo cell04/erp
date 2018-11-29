@@ -19,7 +19,7 @@
         "laravel-mix": "^3.0.0",
         "lodash": "^4.17.5",
         "moment": "^2.22.2",
-        "popper.js": "^1.14.5",
+        "popper.js": "^1.14.6",
         "vue": "^2.5.7",
         "vue-router": "^3.0.2",
         "vue-select": "^2.5.1",
