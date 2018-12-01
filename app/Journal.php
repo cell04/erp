@@ -57,6 +57,10 @@ class Journal extends Model
                 }
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     // /**

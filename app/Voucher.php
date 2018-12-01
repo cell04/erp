@@ -58,6 +58,10 @@ class Voucher extends Model
             //     $model->approved_by = auth('api')->user()->id;
             // }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**
