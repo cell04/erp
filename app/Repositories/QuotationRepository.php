@@ -2,13 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Quotation;
 use App\Contact;
+use App\Contracts\RepositoryInterface;
+use App\Journal;
+use App\Notifications\QuotationApproval;
+use App\Quotation;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\QuotationApproval;
 
 class QuotationRepository extends Repository
 {
@@ -60,6 +61,7 @@ class QuotationRepository extends Repository
             if ($quotation->status == 0) {
                 if ($request->status) {
                     $request->request->add(['approved_by' => auth('api')->user()->id]);
+                    // $request->request->add(['approved_by' => session('user-id')]);
                 }
                 //update stock request
                 $quotation->fill($request->all());
@@ -107,7 +109,9 @@ class QuotationRepository extends Repository
             $quotation = $this->quotation->findOrFail($id);
             if ($quotation->status == 1) {
                 $quotation->update(['status' => $status]);
-                if ($quotation->status == 2) {
+                if ($quotation->status == 2) {                  
+                    $this->deductStocksQuantity($quotation);
+                    
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
 
@@ -116,5 +120,30 @@ class QuotationRepository extends Repository
 
             return array('quotation' => $quotation, 'message' => 'Quotation is already Managed');
         });
+    }
+
+    public function deductStocksQuantity($quotation)
+    {
+        foreach ($quotation->quotationItems as $quotationItem) {
+            $stocks = $quotation->quotable->stocks()->where('item_id', $quotationItem->item_id)->get();
+            $itemQuantity = $quotationItem->quantity;
+            foreach ($stocks as $stock) {
+                if ($stock->item_id == $quotationItem->item_id) {
+                    if ($stock->quantity > 0) {
+                        if ($stock->quantity >= $itemQuantity) {
+                            $stock->decrement('quantity', $itemQuantity);
+                            $itemQuantity = 0;
+                        } else {
+                            if ($itemQuantity > $stock->quantity) {
+                                $stock->decrement('quantity', $stock->quantity);
+                                $itemQuantity = $itemQuantity - $stock->quantity;
+                            }
+                        }
+                    }
+                }
+            }   
+        }
+
+        return true;   
     }
 }

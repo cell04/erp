@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class UnitOfMeasurement extends Model
 {
@@ -27,6 +28,15 @@ class UnitOfMeasurement extends Model
     ];
 
     /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'name', 'abbreviation'
+    // ];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
@@ -45,6 +55,10 @@ class UnitOfMeasurement extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 

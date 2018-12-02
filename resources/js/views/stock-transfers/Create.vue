@@ -1,73 +1,116 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            Stock Transfers / Create New Stock Transfer
+    <div>
+        <div class="content-title">
+            <h4 class="module-title">STOCK TRANSFER</h4>
+            <hr class="title-border">
         </div>
-        <div class="card-body">
-            <div v-if="ifReady">
-                <form v-on:submit.prevent="createNewStockRequest">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Stock Request Number</label>
-                            <vue-select v-model="stockRequest" @input="selectStockRequest()" label="number" :options="stockRequests"></vue-select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Stock Transfer Number</label>
-                            <input type="text" class="form-control" v-model="number" autocomplete="off" maxlength="255" required>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Transfer From</label>
-                            <input type="text" class="form-control" v-model="from" autocomplete="off" maxlength="255" required disabled>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Transfer To</label>
-                            <input type="text" class="form-control" v-model="to" autocomplete="off" maxlength="255" required disabled>
-                        </div>
-                    </div>
 
-                    <br>
-
-                    <table class="table table-hover table-sm">
-                        <caption>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewSTrans">Stock Transfers</a>
+                    <a class="text-secondary"> / Create New Stock Transfer</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewStockRequest">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Request Number</label>
+                                    <vue-select v-model="stockRequest" @input="selectStockRequest()" label="number" :options="stockRequests" required></vue-select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Stock Transfer #</label>
+                                    <input type="text" class="form-control" v-model="number" autocomplete="off" maxlength="255" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Transfer From</label>
+                                    <input type="text" class="form-control" v-model="from" autocomplete="off" maxlength="255" required disabled>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Transfer To</label>
+                                    <input type="text" class="form-control" v-model="to" autocomplete="off" maxlength="255" required disabled>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Transfer Date</label>
+                                    <input type="date" class="form-control" v-model="transfer_date" required>
                                 </div>
                             </div>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">Stock Keeping Unit</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Unit Of Measurement</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(stock_transfer_item, index) in stock_transfer_items">
-                                <td>{{ stock_transfer_item.stock_keeping_unit }}</td>
-                                <td>
-                                    <vue-select v-model="stock_transfer_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
-                                </td>
-                                <td><input class="form-control" v-model.number="stock_transfer_item.quantity"> </td>
-                                <td>
-                                    {{ stock_transfer_item.unitOfMeasurement }}
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteRow">Remove</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <button type="button" class="btn btn-primary btn-sm" @click="addItem">Add Item</button>
-                    </table>
 
-                    <button type="submit" class="btn btn-success btn-sm mt-5">Create New Stock Transfer</button>
-                </form>
-            </div>
+                            <br>
+                            <h6><u>Stock Transfer Items</u></h6>
+                            <br>
 
-            <div v-else>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                            <!-- <table class="table table-hover table-sm">
+                                <caption>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                        </div>
+                                    </div>
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Stock Keeping Unit</th>
+                                        <th scope="col">Item</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(stock_transfer_item, index) in stock_transfer_items">
+                                        <td>{{ stock_transfer_item.stock_keeping_unit }}</td>
+                                        <td>
+                                            <vue-select v-model="stock_transfer_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
+                                        </td>
+                                        <td><input class="form-control" v-model.number="stock_transfer_item.quantity"> </td>
+                                        <td>
+                                            {{ stock_transfer_item.unitOfMeasurement }}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteRow">Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> -->
+
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item) in stockRequestItems">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <br>
+
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewSTrans"><i class="fas fa-chevron-left"></i> Back</button>
+                                <!-- <button type="button" class="btn btn-outline-success btn-sm" @click="addItem"><i class="fas fa-plus-circle"></i> Add Item</button> -->
+                                <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Stock Transfer</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,13 +135,16 @@
                 stock_transferable_from_type: null,
                 stock_transferable_to_id: null,
                 stock_transferable_to_type: null,
-                stock_transfer_items: []
+                stock_transfer_items: [],
+                stockRequestItems: [],
+                transfer_date:''
             };
         },
 
         mounted() {
             let promiseStockRequests = new Promise((resolve, reject) => {
                 axios.get("/api/stock-requests/get-all-stock-requests").then(res => {
+                    // console.log('SR: ' + JSON.stringify(res.data.stock_requests));
                     this.stockRequests = res.data.stock_requests;
                     resolve();
                 }).catch(err => {
@@ -134,6 +180,10 @@
         },
 
         methods: {
+            viewSTrans() {
+                this.$router.push({ name: 'stock-transfers.index' });
+            },
+
             selectStockRequest() {
                 this.stock_request_id = this.stockRequest.id;
 
@@ -149,7 +199,7 @@
                 let promiseStockRequest = new Promise((resolve, reject) => {
                     axios.get("/api/stock-requests/" + this.stockRequest.id).then(res => {
                         this.items = res.data.stockRequest.stock_request_items;
-
+                        this.stockRequestItems =  res.data.stockRequest.stock_request_items;
                         this.items.map(item => {
                             item.name = item.item.name;
                         });
@@ -201,13 +251,14 @@
                 });
 
                 const formData = {
+                    stock_transfered_date:this.transfer_date,
                     stock_request_id: this.stock_request_id,
                     stock_transferable_from_id: this.stock_transferable_from_id,
                     stock_transferable_from_type: this.stock_transferable_from_type,
                     stock_transferable_to_id: this.stock_transferable_to_id,
                     stock_transferable_to_type: this.stock_transferable_to_type,
                     number: this.number,
-                    stock_transfer_items: stockTransferItems
+                    stock_transfer_items: this.stockRequestItems
                 };
 
                 axios.post("/api/stock-transfers", formData).then(res => {

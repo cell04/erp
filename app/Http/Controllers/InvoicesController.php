@@ -55,7 +55,15 @@ class InvoicesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'quotation_id'                              =>  'required|integer',
+            'contact_id'                                =>  'required|integer',
+            'reference_number'                          =>  'required|string|max:255',
+            'due_date'                                  =>  'required|date',
+            'amount'                                    =>  'required|numeric|min:0',
+            'invoice_payments.*.item_id'                =>  'required|integer',
+            'invoice_payments.*.unit_of_measurement_id' =>  'required|integer',
+            'invoice_payments.*.quantity'               =>  'required|numeric|min:0',
+            'invoice_payments.*.price'                  =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +114,15 @@ class InvoicesController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'quotation_id'                              =>  'required|integer',
+            'contact_id'                                =>  'required|integer',
+            'reference_number'                          =>  'required|string|max:255',
+            'due_date'                                  =>  'required|date',
+            'amount'                                    =>  'required|numeric|min:0',
+            'invoice_payments.*.item_id'                =>  'required|integer',
+            'invoice_payments.*.unit_of_measurement_id' =>  'required|integer',
+            'invoice_payments.*.quantity'               =>  'required|numeric|min:0',
+            'invoice_payments.*.price'                  =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {

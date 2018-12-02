@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    {{ componentVal }} / View {{ componentVal }}
+                    Settings / {{ componentVal }}
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'item-classifications.create' }">Create New Item Classification</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'item-classifications.create' }"><i class="fas fa-plus"></i> Create New  Item Subtype</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -14,7 +14,7 @@
                     <caption>
                         <div class="row">
                             <div class="col-md-9">
-                                List of Item Types - Total Items {{ this.meta.total }}
+                                List of Item Subtypes - Total Items {{ this.meta.total }}
                             </div>
                             <div class="col-md-3">
                                 <div class="progress" height="30px;" v-if="showProgress">
@@ -26,23 +26,21 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Display Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="itemClassification">
                         <tr :key="id" v-for="{ id, name, display_name, description } in itemClassification">
                             <td>{{ name }}</td>
-                            <td>{{ display_name }}</td>
                             <td>{{ description }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'item-classifications.view', params: { id: id }}">
-                                    View
+                                <router-link class="text-secondary" :to="{ name: 'item-classifications.view', params: { id: id }}">
+                                   <i class="fas fa-envelope-open-text"></i> View
                                 </router-link>
                                 |
-                                <router-link class="text-info" :to="{ name: 'item-classifications.edit', params: { id: id }}">
-                                    Edit
+                                <router-link class="text-secondary" :to="{ name: 'item-classifications.edit', params: { id: id }}">
+                                    <i class="fas fa-edit"></i> Edit
                                 </router-link>
                             </td>
                         </tr>
@@ -99,7 +97,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search Item Types</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -171,7 +169,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Item Classification',
+                componentVal: ' Item Subtype',
                 itemClassification: null,
                 searchColumnName: null,
                 searchColumnDescription: null,

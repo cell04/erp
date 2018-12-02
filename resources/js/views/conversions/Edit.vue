@@ -13,13 +13,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Select Unit of Measurement</label>
+                            <label>Select UOM</label>
                             <vue-select v-model="unitOfMeasurementFrom" @input="selectUnitFrom()" label="name" :options="unit_of_measurements"></vue-select>
                         </div>
 
                         <!-- <div class="form-group">
                             <select class="form-control" v-model="conversion.unit_of_measurement_from_id" required>
-                                <option value="" disabled hidden>Select Unit of Measurement</option>
+                                <option value="" disabled hidden>Select UOM</option>
                                 <option v-for="unit in unit_of_measurements" v-bind:value="unit.id">{{ unit.name }}</option>
                             </select>
                         </div> -->
@@ -30,13 +30,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Select Unit of Measurement</label>
+                            <label>Select UOM</label>
                             <vue-select v-model="unitOfMeasurementTo" @input="selectUnitTo()" label="name" :options="unit_of_measurements"></vue-select>
                         </div>
 
                         <!-- <div class="form-group">
                             <select class="form-control" v-model="conversion.unit_of_measurement_to_id" required>
-                                <option value="" disabled hidden>Select Unit of Measurement</option>
+                                <option value="" disabled hidden>Select UOM</option>
                                 <option v-for="unit in unit_of_measurements" v-bind:value="unit.id">{{ unit.name }}</option>
                             </select>
                         </div> -->

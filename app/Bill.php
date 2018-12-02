@@ -10,6 +10,11 @@ class Bill extends Model
 {
     use SoftDeletes, Filtering;
 
+    /**
+     * Bills table.
+     *
+     * @var string
+     */
     protected $table = 'bills';
 
     /**
@@ -18,9 +23,9 @@ class Bill extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'quotation_id', 'contact_id',
-        'user_id', 'reference_number', 'due_date',
-        'amount', 'amount_paid', 'status'
+        'corporation_id', 'receive_order_id', 'contact_id', 'user_id', 
+        'reference_number', 'due_date', 'amount','amount_paid', 'status', 
+        'taxable', 'taxable_value', 'tax'
     ];
 
     /**
@@ -36,7 +41,7 @@ class Bill extends Model
      * @var array
      */
     protected $with = [
-        'quotation', 'billItems', 'contact', 'user'
+        'receiveOrder', 'billItems', 'contact', 'user'
     ];
 
     /**
@@ -52,7 +57,17 @@ class Bill extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
 
-            $model->user_id = auth('api')->user()->id;
+            if (request()->headers->get('USER-ID')) {
+                $model->user_id = request()->headers->get('USER-ID');
+            }
+
+            if (auth('api')->user()) {
+                $model->user_id = auth('api')->user()->id;
+            }
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 
@@ -87,13 +102,13 @@ class Bill extends Model
     }
 
     /**
-     * The invoice belongs to a quotation.
+     * The invoice belongs to a receiveOrder.
      *
      * @return object
      */
-    public function quotation()
+    public function receiveOrder()
     {
-        return $this->belongsTo(Quotation::class);
+        return $this->belongsTo(ReceiveOrder::class);
     }
 
     /**

@@ -47,6 +47,10 @@ class Branch extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**
@@ -59,6 +63,21 @@ class Branch extends Model
         return $this->belongsTo(Corporation::class);
     }
 
+    public function bills()
+    {
+        return $this->morphMany(Bill::class, 'billable');
+    }
+
+    /**
+     * The branch is a cost center.
+     *
+     * @return object
+     */
+    public function costCenter()
+    {
+        return $this->morphMany(CostCenter::class, 'cost_centable');
+    }
+
     /**
      * The branch has many stocks.
      *
@@ -69,11 +88,21 @@ class Branch extends Model
         return $this->morphMany(Stock::class, 'stockable');
     }
 
+    /**
+     * The branch has many stock request from.
+     *
+     * @return array object
+     */
     public function stockRequestFrom()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_from');
     }
 
+    /**
+     * The branch has many stock request to.
+     *
+     * @return array object
+     */
     public function stockRequestTo()
     {
         return $this->morphMany(StockRequest::class, 'stock_requestable_to');

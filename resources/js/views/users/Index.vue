@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Users / View Users
+                    Settings / Users
                 </div>
                 <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'users.create' }">Create New User</router-link>
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'users.create' }"><i class="fas fa-plus"></i> Create New User</router-link>
                 </div>
             </div>
             <div class="card-body">
@@ -26,16 +26,26 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Mobile No.</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="users">
-                        <tr v-for="{ id, name, email } in users">
+                        <tr v-for="{ id, name, user_role, email, mobile_number } in users">
                             <td>{{ name }}</td>
+                            <td>{{ user_role.role.display_name }}</td>
                             <td>{{ email }}</td>
+                            <td>{{ mobile_number }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'users.view', params: { id: id } }">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'users.view', params: { id: id } }">
+                                    <i class="fas fa-envelope-open-text"></i> View
+                                </router-link>
+                                |
+                                <router-link class="text-secondary" :to="{ name: 'users.edit', params: { id: id }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -91,7 +101,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search users</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search users</button> -->
                     <label class="sr-only" for="Number of Items">Number of Items</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -151,6 +161,7 @@
         const params = { page, per_page, searchColumnName, searchColumnEmail, order_by };
 
         axios.get('/api/users', { params }).then(res => {
+            console.log(res);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {

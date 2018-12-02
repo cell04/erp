@@ -6,6 +6,8 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+// use Spatie\Activitylog\Traits\LogsActivity;
+
 class BillItem extends Model
 {
     use SoftDeletes, Filtering;
@@ -19,8 +21,18 @@ class BillItem extends Model
      */
     protected $fillable = [
         'bill_id', 'item_id', 'unit_of_measurement_id',
-        'quantity', 'price'
+        'quantity', 'item_pricelist_id'
     ];
+
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'bill_id', 'item_id', 'unit_of_measurement_id',
+    //     'quantity', 'price'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -35,7 +47,7 @@ class BillItem extends Model
      * @var array
      */
     protected $with = [
-        'item', 'unitOfMeasurement'
+        'item', 'unitOfMeasurement', 'itemPricelist'
     ];
 
     /**
@@ -56,6 +68,16 @@ class BillItem extends Model
     public function item()
     {
         return $this->belongsTo(Item::class);
+    }
+
+    /**
+     * The invoice item belongs to an item.
+     *
+     * @return object
+     */
+    public function itemPricelist()
+    {
+        return $this->belongsTo(ItemPricelist::class);
     }
 
     /**

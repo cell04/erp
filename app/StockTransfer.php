@@ -6,6 +6,7 @@ use App\StockTransferItem;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class StockTransfer extends Model
 {
@@ -24,9 +25,20 @@ class StockTransfer extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
-        'stock_transferable_to_id', 'stock_transferable_to_type', 'number', 'status'
+        'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 
+        'stock_transferable_from_type', 'user_id', 'stock_transferable_to_id', 
+        'stock_transferable_to_type', 'number', 'status', 'stock_transfered_date'
     ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'stock_request_id', 'stock_transferable_from_id', 'stock_transferable_from_type', 'user_id',
+    //     'stock_transferable_to_id', 'stock_transferable_to_type', 'number', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -48,6 +60,10 @@ class StockTransfer extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
                 $model->user_id = auth('api')->user()->id;
             }
+        });
+        
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 

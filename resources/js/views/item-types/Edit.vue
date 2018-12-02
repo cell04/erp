@@ -1,7 +1,8 @@
 <template>
     <div class="card">
         <div class="card-header">
-            Item Types / Edit Item Type
+            <a class="text-success" href="" @click.prevent="viewItemTypes">Item Types</a>
+            <a class="text-secondary"> / Edit Item Type</a>
         </div>
         <div class="card-body">
             <div v-if="ifReady">
@@ -22,8 +23,8 @@
                     </div>
                 </fieldset>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm" @click.prevent="viewItemTypes">Back</button>
-                <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType">Update Item Type</button>
+                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes"><i class="fas fa-chevron-left"></i> Back</button>
+                <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType"><i class="fas fa-edit"></i> Update Item Type</button>
             </div>
             <div v-else>
                 <div class="progress">

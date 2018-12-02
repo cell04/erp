@@ -44,6 +44,7 @@ class StockRequestRepository extends Repository
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
+            // $request->request->add(['stock_request_date' => auth('api')->user()->id]);
             $stockRequest = $this->stockRequest->create($request->all());
             $stockRequest->stockRequestItems()->createMany($request->stock_request_items);
             return $stockRequest;
@@ -58,6 +59,16 @@ class StockRequestRepository extends Repository
     public function all()
     {
         return $this->stockRequest->where('status', 1)->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')->get();
+    }
+
+    /**
+     * Get all resources in the storage with the status of 0.
+     *
+     * @return array json object
+     */
+    public function getAllUnapprovedStockReuests()
+    {
+        return $this->stockRequest->where('status', 0)->with('stockRequestableFrom', 'stockRequestableTo', 'approveBy', 'user')->get();
     }
 
     public function paginateWithFilters(

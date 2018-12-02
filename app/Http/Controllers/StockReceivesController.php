@@ -55,7 +55,15 @@ class StockReceivesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'stock_transfer_id'                             =>  'required|integer',
+            'stock_receivable_from_id'                      =>  'required|integer',
+            'stock_receivable_from_type'                    =>  'required|string|max:255',
+            'stock_receivable_to_id'                        =>  'required|integer',
+            'stock_receivable_to_type'                      =>  'required|string|max:255',
+            'number'                                        =>  'required|string|max:255',
+            'stock_receive_items.*.item_id'                 =>  'required|integer',
+            'stock_receive_items.*.unit_of_measurement_id'  =>  'required|integer',
+            'stock_receive_items.*.quantity'                =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +114,15 @@ class StockReceivesController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'stock_transfer_id'                             =>  'required|integer',
+            'stock_receivable_from_id'                      =>  'required|integer',
+            'stock_receivable_from_type'                    =>  'required|string|max:255',
+            'stock_receivable_to_id'                        =>  'required|integer',
+            'stock_receivable_to_type'                      =>  'required|string|max:255',
+            'number'                                        =>  'required|string|max:255',
+            'stock_receive_items.*.item_id'                 =>  'required|integer',
+            'stock_receive_items.*.unit_of_measurement_id'  =>  'required|integer',
+            'stock_receive_items.*.quantity'                =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {

@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Conversion extends Model
 {
@@ -26,6 +27,16 @@ class Conversion extends Model
         'corporation_id', 'unit_of_measurement_from_id', 'from_value',
         'unit_of_measurement_to_id', 'to_value'
     ];
+
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'unit_of_measurement_from_id', 'from_value',
+    //     'unit_of_measurement_to_id', 'to_value'
+    // ];
     
     /**
      * The attributes that should be mutated to dates.
@@ -55,6 +66,10 @@ class Conversion extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 

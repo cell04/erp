@@ -1,111 +1,122 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header clearfix">
-                <div class="float-left">
-                    Item Price Lists / View Item Price List
-                </div>
-                <div class="float-right">
-                    <router-link class="btn-success btn-sm" :to="{ name: 'item-pricelists.create' }">Create New Item Price List</router-link>
-                </div>
-            </div>
-            <div class="card-body">
-                <table class="table table-hover table-sm">
-                    <caption>
-                        <div class="row">
-                            <div class="col-md-9">
-                                List of Item Prices - Total Items {{ this.meta.total }}
-                            </div>
-                            <div class="col-md-3">
-                                <div class="progress" height="30px;" v-if="showProgress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Item Name</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="itemPriceLists">
-                        <tr v-for="itemPriceList in itemPriceLists">
-                            <td>{{ itemPriceList.id }}</td>
-                            <td>{{ itemPriceList.item.name }}</td>
-                            <td>{{ itemPriceList.price }}</td>
-                            <td>
-                                <router-link class="text-info" :to="{ name: 'item-pricelists.view', params: { id: itemPriceList.id }}">View</router-link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="content-title">
+            <h4 class="module-title">ITEM PRICE LIST</h4>
+            <hr class="title-border">
         </div>
 
-        <br>
-
-        <div class="clearfix">
-            <div v-if="pageCount">
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div v-else>
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="float-right">
-                <form class="form-inline">
-                    <label class="sr-only" for="Number of Items">Number of Items</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Items per page</div>
-                        </div>
-                        <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header clearfix">
+                    <div class="float-left">
+                        Item Price Lists
                     </div>
-                </form>
+                    <div class="float-right">
+                        <router-link class="btn-primary btn-sm" :to="{ name: 'item-pricelists.create' }">Create New Item Price List</router-link>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-sm">
+                        <caption>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    List of Item Prices - Total Items {{ this.meta.total }}
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="progress" height="30px;" v-if="showProgress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Item Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="itemPriceLists">
+                            <tr v-for="itemPriceList in itemPriceLists">
+                                <td>{{ itemPriceList.item.name }}</td>
+                                <td>{{ itemPriceList.price }}</td>
+                                <td>
+                                    <router-link class="text-secondary" :to="{ name: 'item-pricelists.view', params: { id: itemPriceList.id }}">
+                                        <i class="fas fa-envelope-open-text"></i> View
+                                    </router-link>
+                                    |
+                                    <router-link class="text-secondary" :to="{ name: 'item-pricelists.edit', params: { id: itemPriceList.id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </router-link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="clearfix">
+                <div v-if="pageCount">
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div v-else>
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="float-right">
+                    <form class="form-inline">
+                        <label class="sr-only" for="Number of Items">Number of Items</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Items per page</div>
+                            </div>
+                            <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

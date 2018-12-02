@@ -21,7 +21,8 @@
                         <textarea class="form-control" v-model="description" maxlength="1000" required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-success btn-sm">Create New Item Type</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemType"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Item Type</button>
                 </form>
             </div>
             <div v-else>
@@ -45,6 +46,10 @@
         },
 
         methods: {
+            viewItemType() {
+                this.$router.push({ name: 'item-types.index' });
+            },
+
             createNewItemType () {
                 axios.post('/api/item-types', this.$data).then(res => {
                     console.log(res.data);

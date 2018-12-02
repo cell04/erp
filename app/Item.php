@@ -24,7 +24,8 @@ class Item extends Model
      */
     protected $fillable = [
         'corporation_id', 'item_type_id', 'item_classification_id','name',
-        'description', 'stock_keeping_unit', 'default_unit_of_measurement_id'
+        'description', 'stock_keeping_unit', 'default_unit_of_measurement_id',
+        'sales_account_id', 'cogs_account_id', 'expense_account_id', 'asset_account_id'
     ];
 
     /**
@@ -55,6 +56,10 @@ class Item extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 

@@ -6,6 +6,8 @@ use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+// use Spatie\Activitylog\Traits\LogsActivity;
+
 class Quotation extends Model
 {
     use SoftDeletes, Filtering;
@@ -23,9 +25,20 @@ class Quotation extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'user_id', 'contact_id', 'quotable_id',
-        'quotable_type', 'number', 'amount', 'status', 'approved_by'
+        'corporation_id', 'user_id', 'contact_id', 'quotable_id', 
+        'tax', 'quotable_type', 'number', 'amount', 'status', 
+        'approved_by', 'validity_date'
     ];
+
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'user_id', 'contact_id', 'quotable_id',
+    //     'quotable_type', 'number', 'amount', 'status', 'approved_by'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -57,6 +70,10 @@ class Quotation extends Model
             }
 
             $model->user_id = auth('api')->user()->id;
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class QuotationApproval extends Notification
 {
-    private $quotation;
+    public $quotation;
 
     use Queueable;
 
@@ -45,8 +45,7 @@ class QuotationApproval extends Notification
     {
         $url = url('/api/quotations/' . $this->quotation->id . '/contact-approvals');
 
-        return (new MailMessage)->subject('Quotation Approval')
-        ->markdown('mail.quotation.approval', array('content' => $this->quotation, 'url' => $url));
+        return (new MailMessage)->subject('Quotation Approval')->markdown('mail.quotation.approval', array('content' => $this->quotation, 'url' => $url));
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Branch;
+use App\Stock;
 use App\StockReceive;
 use App\Warehouse;
 use Illuminate\Support\Facades\DB;
@@ -45,9 +46,19 @@ class StockReceiveRepository extends Repository
     {
         return DB::transaction(function () use ($request) {
             $stockReceive = $this->stockReceive->create($request->all());
-            $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
-            $stockReceive->stocks()->createMany($request->stock_receive_items);
+            $stockReceiveItems = $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
 
+            foreach ($stockReceiveItems as $stockReceiveItem){
+                $data = [
+                    'stockable_id' => $stockReceive->stock_receivable_to_id,
+                    'stockable_type' => $stockReceive->stock_receivable_to_type,
+                    'item_id' => $stockReceiveItem->item_id,
+                    'quantity' => $stockReceiveItem->quantity,
+                    'unit_of_measurement_id' => $stockReceiveItem->unit_of_measurement_id
+                ];
+
+                Stock::create($data);
+            }
             return $stockReceive;
         });
     }

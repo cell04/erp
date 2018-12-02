@@ -26,6 +26,15 @@ class AuditTrail extends Model
         'corporation_id', 'user_id', 'module', 'description'
     ];
 
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'user_id', 'module', 'description'
+    // ];
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -45,6 +54,10 @@ class AuditTrail extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 

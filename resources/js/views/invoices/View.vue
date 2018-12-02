@@ -1,91 +1,102 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                Invoices / View Invoice
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <fieldset>
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Receive Order</label>
-                                <input type="text" class="form-control" v-model="roRefNum.reference_number" readonly>
+        <div class="content-title">
+            <h4 class="module-title">SALES INVOICE</h4>
+            <hr class="title-border">
+        </div>
+
+        <div class="p-md-4">
+            <div class="container p-md-0">          
+                <div class="card">
+                    <div class="card-header">
+                        <a class="text-success" href="" @click.prevent="viewItems">Sales Invoices</a>
+                        <a class="text-secondary"> / View Sales Invoice</a>
+                        <span class="float-right"> <strong>Sales Invoice #:</strong> {{invoices.reference_number}}</span>
+                    </div>
+                    <div class="card-body">
+                        <div v-if="ifReady">
+                            <div class="row mb-4">
+                                <div class="col-sm-6">
+                                    <h6 class="mb-3">To:</h6>
+                                    <div>
+                                        <strong>{{contacts.person}}</strong>
+                                    </div>
+                                    <div>Company: {{contacts.company}}</div>
+                                    <div>{{contacts.company_address}}</div>
+                                    <div>Email: {{contacts.email}}</div>
+                                    <div>Phone: {{contacts.mobile_number}}</div>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 form-group">
-                                <label>Contact</label>
-                                <input type="text" class="form-control" v-model="contacts.person" readonly>
+                            <div class="table-responsive-sm">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="center">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">UOM</th>
+                                            <th scope="col">Qty</th>
+                                            <th class="text-right">Unit Price</th>
+                                            <th class="text-right">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr :key="item.id" v-for="(item, index) in invoiceItems">
+                                            <td>{{ index + 1 }}</td>
+                                            <td>{{ item.item.name }}</td>
+                                            <td>{{ item.item.description }}</td>
+                                            <td>{{ item.unit_of_measurement.name }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td align="right">{{ item.price }}</td>
+                                            <td align="right">{{ subtotalRow[index] | Decimal }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-5"></div>
+                                <div class="col-lg-4 col-sm-5 ml-auto">
+                                    <table class="table table-clear">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left">
+                                                <strong>Subtotal</strong>
+                                                </td>
+                                                <td align="right">{{total - (total * taxPercent) | Decimal }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left">
+                                                <strong>VAT ({{tax}})</strong>
+                                                </td>
+                                                <td align="right">{{(total * taxPercent) | Decimal}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left">
+                                                <strong>Total</strong>
+                                                </td>
+                                                <td align="right">
+                                                <strong>{{total  | Decimal }}</strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                            <div class="col-md-6 form-group">
-                                <label>Reference #</label>
-                                <input type="text" class="form-control" v-model="invoices.reference_number" readonly>
                             </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Amount</label>
-                                <input type="number" class="form-control" v-model="invoices.amount" readonly>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Amount Paid</label>
-                                <input type="number" class="form-control" v-model="invoices.amount_paid" readonly>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Due Date</label>
-                                <input type="date" class="form-control" v-model="invoices.due_date" readonly>
+                            <br>
+                            <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
+                        </div>
+                        <div v-else>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                             </div>
                         </div>
-                    </fieldset>
-
-                    <br />
-
-                    <table class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Received Qty</th>
-                                <th scope="col">UOM</th>
-                                <th scope="col">Unit Price</th>
-                                <th scope="col">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr :key="item.id" v-for="(item, index) in invoiceItems">
-                                <td>{{ item.item.name }}</td>
-                                <td>{{ item.item.description }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.unit_of_measurement.name }}</td>
-                                <td>{{ item.item_pricelist.price }}</td>
-                                <td>{{ subtotalRow[index] }}</td>
-                            </tr>
-                            <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent="viewItems">Back</button>
-                </div>
-
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <br>
     </div>
 </template>
 
@@ -97,9 +108,23 @@ export default {
       invoices: [],
       contacts: [],
       roRefNum: [],
-      invoiceItems: []
+      invoiceItems: [],
+      corpData: [],
+      tax: "",
+      taxPercent: "",
     };
   },
+
+    filters: {
+        Decimal: function (value) {
+            if (value != 0) {
+                return value.toFixed(2);
+            }
+            else {
+                return '0.00'
+            }
+        }
+    },
 
   mounted() {
     this.getItem();
@@ -109,12 +134,15 @@ export default {
     getItem() {
       new Promise((resolve, reject) => {
         axios.get("/api/invoices/" + this.$route.params.id).then(res => {
-          console.log('Invoices: ' + JSON.stringify(res.data.invoice));
+        //   console.log("Invoices: " + JSON.stringify(res.data.invoice));
           this.ifReady = true;
           this.invoices = res.data.invoice;
           this.contacts = res.data.invoice.contact;
           this.invoiceItems = res.data.invoice.invoice_items;
-          this.roRefNum = res.data.invoice.receive_order;
+          this.roRefNum = res.data.invoice.quotation;
+          this.tax = res.data.invoice.quotation.tax;
+          this.taxPercent = this.tax / 100;
+
           if (!res.data.response) {
             return;
           }
@@ -131,16 +159,16 @@ export default {
 
   computed: {
     subtotalRow() {
-        return this.invoiceItems.map((item) => {
-        return Number(item.quantity * item.item_pricelist.price)
-        });
+      return this.invoiceItems.map(item => {
+        return Number(item.quantity * item.price);
+      });
     },
     total() {
-        return this.invoiceItems.reduce((total, item) => {
-        return total + item.quantity * item.item_pricelist.price;
-        }, 0);
+      return this.invoiceItems.reduce((total, item) => {
+        return total + item.quantity * item.price;
+      }, 0);
     }
   }
-
 };
 </script>
+

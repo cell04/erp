@@ -42,7 +42,12 @@ class BillPaymentsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            
+            'bill_id'               => 'required|integer',
+            'amount'                => 'required|numeric',
+            'mode_of_payment_id'    => 'required|integer',
+            'cr_number'             => 'string|max:255|nullable',
+            'bank_name'             => 'string|max:255|nullable',
+            'check'                 => 'string|max:255|nullable'
         ]);
     
         if ($validator->fails()) {
@@ -93,7 +98,12 @@ class BillPaymentsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            
+            'bill_id'               =>  'required|integer',
+            'amount'                => 'required|numeric',
+            'mode_of_payment_id'    => 'required|integer',
+            'cr_number'             => 'string|max:255|nullable',
+            'bank_name'             => 'string|max:255|nullable',
+            'check'                 => 'string|max:255|nullable'
         ]);
     
         if ($validator->fails()) {
