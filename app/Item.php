@@ -24,7 +24,8 @@ class Item extends Model
      */
     protected $fillable = [
         'corporation_id', 'item_type_id', 'item_classification_id','name',
-        'description', 'stock_keeping_unit', 'default_unit_of_measurement_id'
+        'description', 'stock_keeping_unit', 'default_unit_of_measurement_id',
+        'sales_account_id', 'cogs_account_id', 'expense_account_id', 'asset_account_id'
     ];
 
     /**
@@ -33,6 +34,15 @@ class Item extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
+    ];
 
     /**
      * Run functions on boot.
@@ -47,16 +57,11 @@ class Item extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
-    }
 
-    /**
-     * Eager load relationships.
-     *
-     * @var array
-     */
-    protected $with = [
-        'itemType', 'itemClassification', 'defaultUnitOfMeasurement'
-    ];
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
+    }
 
     /**
      * The item belongs to a corporation.

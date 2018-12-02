@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Corporations / Edit Corporation
+                <a class="text-success" href="" @click.prevent="viewCorporation">Corporations</a>
+                <a class="text-secondary"> / Edit Corporation</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -63,8 +64,8 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewCorporation">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateCorporation">Update Corporation</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewCorporation"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateCorporation"><i class="fas fa-edit"></i> Update Corporation</button>
                     </form>
                 </div>
                 <div v-else>

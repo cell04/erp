@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvoiceItem extends Model
 {
@@ -24,15 +25,34 @@ class InvoiceItem extends Model
      */
     protected $fillable = [
         'invoice_id', 'item_id', 'unit_of_measurement_id',
-        'quantity', 'pricelist_id'
+        'quantity', 'price'
     ];
 
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'invoice_id', 'item_id', 'unit_of_measurement_id',
+    //     'quantity', 'item_pricelist_id'
+    // ];
+    
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'item', 'unitOfMeasurement'
+    ];
 
     /**
      * The invoice item belongs to an invoice.
@@ -62,15 +82,5 @@ class InvoiceItem extends Model
     public function unitOfMeasurement()
     {
         return $this->belongsTo(UnitOfMeasurement::class);
-    }
-
-    /**
-     * The invoice item belongs to an item pricelist
-     *
-     * @return object
-     */
-    public function itemPricelist()
-    {
-        return $this->belongsTo(ItemPricelist::class);
     }
 }

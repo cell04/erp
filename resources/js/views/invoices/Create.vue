@@ -1,113 +1,107 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                Bills / Create New Bill
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <form v-on:submit.prevent="createNewPurchaseOrder">
-                        <div class="row">
-                            <div class="col-md-12 form-group">
-                                <label>Received Orders</label>
-                                <vue-select v-model="receivedOrder" @input="selectReceivedOrder()" label="reference_number" :options="receivedOrders" required></vue-select>
-                            </div>
+        <div class="content-title">
+            <h4 class="module-title">SALES INVOICE</h4>
+            <hr class="title-border">
+        </div>
 
-                            <div class="col-md-6 form-group">
-                                <label>Date</label>
-                                <input type="date" class="form-control" v-model="order_date" required>
-                            </div>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewInvoices">Sales Invoices</a>
+                    <a class="text-secondary"> / Create New Sales Invoice</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewInvoice">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Quotation #</label>
+                                    <vue-select v-model="quotationData" @input="selectQuotation()" label="number" :options="quotation"></vue-select>
+                                </div>
 
-                            <div class="col-md-6 form-group">
-                                <label>Contact</label>
-                                <select class="form-control" v-model="contact_id" required>
-                                    <option value="" disabled hidden>Select Contact</option>
-                                    <option v-for="contact in contacts" v-bind:value="contact.id">{{ contact.person }}</option>
-                                </select>
-                            </div>
+                                <!-- <div class="col-md-6 form-group">
+                                    <label>Bid Sheet #</label>
+                                    <vue-select v-model="bidsheetData" @input="selectBidSheet()" label="bid_sheet_number" :options="bidsheets"></vue-select>
+                                </div> -->
 
-                            <div class="col-md-6 form-group">
-                                <label>Warehouse</label>
-                                <select class="form-control" v-model="sub_department_id" required>
-                                    <option value="" disabled hidden>Select Warehouse</option>
-                                    <option v-for="department in sub_departments" v-bind:value="department.id">{{ department.name }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Payment Term</label>
-                                <select class="form-control" v-model="paymentTerm_id" required>
-                                    <option value="" disabled hidden>Select Payment Term</option>
-                                    <option v-for="payment in paymentTerm" v-bind:value="payment.id">{{ payment.name }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Reference #</label>
-                                <input type="text" class="form-control" v-model="reference_number" required>
-                            </div>
-                        </div>
-                        <br />
-                        <table class="table table-hover table-sm">
-                            <caption>
-                                <div class="row">
-                                    <div class="col-md-3">
+                                <div class="col-md-6 form-group">
+                                    <label> Sales Invoice #</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" id="btnGroupAddon">I</div>
+                                        </div>
+                                        <input type="text" class="form-control" v-model="reference_number" readonly placeholder="Invoice #" aria-label="Input group example" aria-describedby="btnGroupAddon">
                                     </div>
                                 </div>
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">SKU</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">UOM</th>
-                                    <th scope="col">Unit Price</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item) in items">
-                                    <td>{{ item.item.sku }}</td>
-                                    <td>
-                                        <select class="form-control" v-model="item.item.item_id" required v-on:change="onSelectItem(item.item.item_id, key)">
-                                            <option value="" disabled hidden>Select Item</option>
-                                            <option v-for="item in itemsList" v-bind:value="item.item.id">{{ item.item.name }}</option>
-                                        </select>
-                                    </td>
-                                    <td><input class="form-control" v-model.number="item.item.quantity" required></td>
-                                    <td>{{ item.item.unit_name }}</td>
-                                    <td><input class="form-control" v-model.number="item.item.unit_price"></td>
-                                    <td>{{subtotalRow[key]}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteRow">Remove</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                            <button type="button" class="btn btn-primary btn-sm" @click="addRow">Add Row</button>
-                        </table>
 
-                        <button type="submit" class="btn btn-success btn-sm">Create New Bill</button>
-                    </form>
-                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Customer</label>
+                                    <input type="text" class="form-control" v-model="contact" readonly>
+                                </div>
 
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                <div class="col-md-6 form-group">
+                                    <div class="dateStyle">
+                                        <label>Due Date</label>
+                                        <datepicker v-model="due_date" :bootstrap-styling="true" required></datepicker>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <br>
+                            <h6>
+                                <b><u>Sales Invoice Items</u></b>
+                            </h6>
+                            <br>
+
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item, index) in quotation_items">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td><input type="text" class="form-control" v-model="item.quantity" required></td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td align="right">{{ subtotalRow[index] | Decimal }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td align="right">{{total | Decimal}}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewInvoices"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>
+                            </div>
+                        </form>
                     </div>
-                </div>
 
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -117,145 +111,220 @@
     export default {
         data() {
             return {
-                ifReady: true,
-                receivedOrders: [],
-                receivedOrder: null,
-                received_order_id: "",
-                contacts: "",
-                sub_departments: "",
-                itemsList: "",
-                reference_number: "",
+                ifReady: false,
+                quotation_items: [],
+                receiveOrder: [],
+                receiveOrderData: [],
+                quotation: [],
+                quotationData: null,
+                contacts: [],
+                bidsheets: [],
+                bidsheetData: null,
+                bid_sheet_id: "",
+                contact: null,
                 contact_id: "",
-                order_date: "",
-                sub_department_id: "",
-                items: [],
+                due_date: "",
                 amount: "",
-                paymentTerm: [],
-                paymentTerm_id:"",
-                receivedOrderItems: []
+                amount_paid: "",
+                items: [],
+                reference_number: "",
+                quotation_id: "",
+                invoice_items: [
+                    {
+                        item: '',
+                        item_id: '',
+                        quantity: 0,
+                        unitOfMeasurements: [],
+                        unitOfMeasurement: '',
+                        unit_of_measurement_id: '',
+                        itemPricelists: [],
+                        itemPricelist: 0,
+                        price: '',
+                        subTotal: 0
+                    }
+                ],
+                amounts: "",
+                isDisabled: false
             };
         },
 
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
+        },
+
         mounted() {
-            new Promise((resolve, reject) => {
-                axios.get("/api/receive-orders/retrieve-all-receive-orders").then(res => {
-                    console.log(res.data.receive_orders);
-                    this.receivedOrders = res.data.receive_orders;
-                    if (!res.data.response) {
-                        return;
-                    }
-                    resolve();
-                });
-            });
-
-            new Promise((resolve, reject) => {
-                axios.get("/api/contacts/retrieve-all-contacts").then(res => {
+            let getAllContacts = new Promise((resolve, reject) => {
+                axios.get("/api/contacts/get-all-contacts/").then(res => {
                     this.contacts = res.data.contacts;
-                    if (!res.data.response) {
-                        return;
-                    }
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            new Promise((resolve, reject) => {
-                axios.get("/api/sub-departments/retrieve-all-sub-departments/").then(res2 => {
-                    this.sub_departments = res2.data.sub_departments;
-                    if (!res2.data.response) {
-                        return;
-                    }
+            let getAllBidSheet = new Promise((resolve, reject) => {
+                axios.get("/api/bid-sheets/get-all-bid-sheets/").then(res => {
+                    this.bidsheets = res.data.bid_sheets;
+                    // console.log('BIDSHEET: ' + JSON.stringify(res.data));
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            new Promise((resolve, reject) => {
-                axios.get("/api/payment-terms/retrieve-all-payment-terms").then(res4 => {
-                    this.paymentTerm = res4.data.payment_terms;
-                    if (!res4.data.response) {
-                        return;
-                    }
+            let getAllItems = new Promise((resolve, reject) => {
+                axios.get("/api/items/get-all-items/").then(res => {
+                    this.items = res.data.items;
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             });
 
-            this.addRow();
+            let getAllRo = new Promise((resolve, reject) => {
+                axios.get("/api/quotations/get-all-quotations/").then(res => {
+                    this.quotation = res.data.quotations;
+                    // console.log('RO: ' + JSON.stringify(res.data));
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            Promise.all([getAllContacts, getAllBidSheet, getAllItems, getAllRo]).then(() => {
+                this.ifReady = true;
+            });
         },
 
         computed: {
             subtotalRow() {
-                return this.items.map((item) => {
-                    return Number(item.quantity * item.unit_price)
+                return this.quotation_items.map((item) => {
+                return Number(item.quantity * item.price)
                 });
             },
             total() {
-                return this.items.reduce((total, item) => {
-                    return total + item.quantity * item.unit_price;
+                return this.quotation_items.reduce((total, item) => {
+                return total + item.quantity * item.price;
                 }, 0);
             }
         },
 
-        methods: {
-            selectReceivedOrder() {
-                this.received_order_id = this.receivedOrder.id;
-                axios.get("/api/receive-orders/" + this.receivedOrder.id).then(res => {
-                    this.items = res.data.purchase_order.receive_items;
-                    if (! res.data.response) { return; }
+        methods: {  
+            viewInvoices() {
+                this.$router.push({ name: 'invoices.index' });
+            },
+            
+            getQuotationDetails(id) {
+                console.log('Take id: ' + id);
+
+                axios.get("/api/quotations/" + id).then(res => {
+                    // console.log('Quote: ' + JSON.stringify(res.data.quotation));
+                    this.contact = res.data.quotation.contact.person;
+                    this.contact_id = res.data.quotation.contact_id;
+                    this.quotation_items = res.data.quotation.quotation_items;
+                    this.autoGenerateInvoive();
                     resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
                 });
             },
-            onSelectItem(id, index) {
-                const Index = index
-                const selectedItem = this.itemsList.find(y => y.id === id);
-                this.items[Index].sku = selectedItem.SKU,
-                this.items[Index].item_id = selectedItem.id,
-                this.items[Index].unit_id = selectedItem.purchase_unit_id,
-                this.items[Index].unit_name = selectedItem.purchase_uom.name,
-                this.items[Index].unit_price = selectedItem.purchase_price
+
+            autoGenerateInvoive() {
+                let date = new Date();
+                var components = [
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate(),
+                    date.getHours(),
+                    date.getMinutes(),
+                    date.getSeconds(),
+                    date.getMilliseconds()
+                ];
+                let id = components.join("");
+                this.reference_number = id;
+                console.log('Code: ' + id);
             },
-            addRow() {
-                this.items.push({
-                    sku: '',
+
+            selectQuotation() {
+                this.quotation_id = this.quotationData.id;
+                // console.log('RO: ' + this.quotationData.id);
+                this.getQuotationDetails(this.quotationData.id);
+            },
+
+            // selectBidSheet() {
+            //     this.bid_sheet_id = this.bidsheetData.id;
+            //     console.log('B ID: ' + this.bidsheetData.id);
+            // },
+            
+            addNewItem() {
+                this.invoice_items.push({
+                    item: '',
                     item_id: '',
                     quantity: '',
-                    unit_id: '',
-                    unit_name: '',
-                    unit_price: ''
-                })
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: '',
+                    price: '',
+                    subTotal: 0
+                });
+
+                this.updateTotalAmount();
             },
             deleteRow(index) {
-                this.items.splice(index,1)
+                this.invoice_items.splice(index, 1);
+                this.updateTotalAmount();
             },
-            createNewPurchaseOrder() {
-                const newItems = [];
+            createNewInvoice() {
+                this.ifReady = false;
 
-                this.$data.items.forEach(element => {
-                    newItems.push({
-                        item_id: element.item_id,
-                        quantity: element.quantity,
-                        unit_id: element.unit_id,
-                        unit_price: element.unit_price,
-                        receive_order_id: this.$data.received_order_id
+                let invoiceItems = [];
+
+                this.$data.quotation_items.forEach(quotation_item => {
+                    invoiceItems.push({
+                        item_id: quotation_item.item_id,
+                        quantity: quotation_item.quantity,
+                        unit_of_measurement_id: quotation_item.unit_of_measurement_id,
+                        price: quotation_item.price
                     });
                 });
 
-                const formData = {
-                    reference_number: this.$data.reference_number,
+                let formData = {
+                    invoice_items: invoiceItems,
+                    quotation_id: this.quotation_id,
+                    // bid_sheet_id: this.bid_sheet_id,
                     contact_id: this.$data.contact_id,
-                    order_date: this.$data.order_date,
-                    sub_department_id: this.$data.sub_department_id,
-                    payment_term_id: this.$data.paymentTerm_id,
+                    reference_number: 'I' + this.$data.reference_number,
+                    due_date: moment(this.$data.due_date).format('YYYY-MM-DD'),
                     amount: this.total,
-                    items: newItems,
-                    receive_order_id: this.$data.received_order_id
-                }
+                    amount_paid: 0
+                };
 
-                axios.post("/api/bills", formData).then(res => {
-                    this.$router.push({ name: "bills.index" });
+                console.log(formData);
+
+                axios.post("/api/invoices", formData).then(res => {
+                    this.$router.push({ name: "invoices.index" });
                 }).catch(err => {
-                    console.log(err);
-                    alert(`Error! Can't create Bill`);
+                    alert(`Error! Can't create invoice`);
+                    this.ifReady = true;
                 });
             }
         }
     };
 </script>
+
+<style>
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
+    }
+</style>

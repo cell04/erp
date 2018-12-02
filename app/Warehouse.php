@@ -23,8 +23,8 @@ class Warehouse extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'name', 'address', 'city', 'zip_code',
-        'country', 'telephone_number', 'status'
+        'corporation_id', 'name', 'address', 'city',
+        'zip_code', 'country', 'telephone_number', 'status'
     ];
 
     /**
@@ -47,6 +47,10 @@ class Warehouse extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**
@@ -60,12 +64,48 @@ class Warehouse extends Model
     }
 
     /**
-     * The branch has many stocks.
+     * The warehoouse is a cost center.
+     *
+     * @return array object
+     */
+    public function costCenter()
+    {
+        return $this->morphMany(CostCenter::class, 'cost_centable');
+    }
+
+    /**
+     * The warehouse has many stocks.
      *
      * @return object
      */
     public function stocks()
     {
         return $this->morphMany(Stock::class, 'stockable');
+    }
+
+    /**
+     * The warehouse has many stock request from.
+     *
+     * @return array object
+     */
+    public function stockRequestFrom()
+    {
+        return $this->morphMany(StockRequest::class, 'stock_requestable_from');
+    }
+
+    public function bills()
+    {
+        return $this->morphMany(Bill::class, 'billable');
+    }
+
+
+    /**
+     * The warehouse has many stock request to.
+     *
+     * @return array object
+     */
+    public function stockRequestTo()
+    {
+        return $this->morphMany(StockRequest::class, 'stock_requestable_to');
     }
 }

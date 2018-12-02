@@ -55,7 +55,15 @@ class InvoicesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'quotation_id'                              =>  'required|integer',
+            'contact_id'                                =>  'required|integer',
+            'reference_number'                          =>  'required|string|max:255',
+            'due_date'                                  =>  'required|date',
+            'amount'                                    =>  'required|numeric|min:0',
+            'invoice_payments.*.item_id'                =>  'required|integer',
+            'invoice_payments.*.unit_of_measurement_id' =>  'required|integer',
+            'invoice_payments.*.quantity'               =>  'required|numeric|min:0',
+            'invoice_payments.*.price'                  =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +114,15 @@ class InvoicesController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'quotation_id'                              =>  'required|integer',
+            'contact_id'                                =>  'required|integer',
+            'reference_number'                          =>  'required|string|max:255',
+            'due_date'                                  =>  'required|date',
+            'amount'                                    =>  'required|numeric|min:0',
+            'invoice_payments.*.item_id'                =>  'required|integer',
+            'invoice_payments.*.unit_of_measurement_id' =>  'required|integer',
+            'invoice_payments.*.quantity'               =>  'required|numeric|min:0',
+            'invoice_payments.*.price'                  =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -181,6 +197,35 @@ class InvoicesController extends Controller
 
         return response()->json([
             'message' => 'Resource successfully deleted permanently'
+        ], 200);
+    }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllIvoices()
+    {
+        if (cache()->has('invoices')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'invoices' => cache('invoices', 5)
+            ], 200);
+        }
+
+        if (! $invoices = $this->invoice->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'invoices' => $invoices
         ], 200);
     }
 }

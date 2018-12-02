@@ -55,7 +55,15 @@ class ReceiveOrdersController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'purchase_order_id'                            =>  'required|integer',
+            'reference_number'                             =>  'required|string|max:255',
+            'contact_id'                                   =>  'required|integer',
+            'receive_order_items.*.item_id'                =>  'required|integer',
+            'receive_order_items.*.unit_of_measurement_id' =>  'required|integer',
+            'receive_order_items.*.quantity'               =>  'required|numeric|min:0',
+            'receive_order_items.*.tracking_number'        =>  'required|string|max:255',
+            'receive_order_items.*.expiration_date'        =>  'date|nullable',
+            'receive_order_items.*.item_pricelist_id'      =>  'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -106,8 +114,16 @@ class ReceiveOrdersController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
-        ]);
+            'purchase_order_id'                            =>  'required|integer',
+            'reference_number'                             =>  'required|string|max:255',
+            'contact_id'                                   =>  'required|integer',
+            'receive_order_items.*.item_id'                =>  'required|integer',
+            'receive_order_items.*.unit_of_measurement_id' =>  'required|integer',
+            'receive_order_items.*.quantity'               =>  'required|numeric|min:0',
+            'receive_order_items.*.tracking_number'        =>  'required|string|max:255',
+            'receive_order_items.*.expiration_date'        =>  'date|nullable',
+            'receive_order_items.*.item_pricelist_id'      =>  'required|integer'
+        ]); 
 
         if ($validator->fails()) {
             return response()->json([
@@ -181,6 +197,35 @@ class ReceiveOrdersController extends Controller
 
         return response()->json([
             'message' => 'Resource successfully deleted permanently'
+        ], 200);
+    }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllReceiveOrder()
+    {
+        if (cache()->has('receive-orders')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'receive_orders' => cache('receive-orders', 5)
+            ], 200);
+        }
+
+        if (! $receiveOrders = $this->receiveOrder->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'receive_orders' => $receiveOrders
         ], 200);
     }
 }

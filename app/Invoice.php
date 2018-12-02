@@ -23,17 +23,26 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'receive_order_id', 'contact_id',
-        'user_id', 'number', 'reference_number', 'date_issued',
-        'due_date', 'amount', 'amount_paid', 'status'
+        'corporation_id', 'quotation_id', 'contact_id',
+        'user_id', 'reference_number', 'due_date',
+        'amount', 'amount_paid', 'status', 'bid_sheet_id'
     ];
-
+    
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'quotation', 'invoiceItems', 'contact', 'bidSheet'
+    ];
 
     /**
      * Run functions on boot.
@@ -47,6 +56,18 @@ class Invoice extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            if (auth('api')->user()) {
+                $model->user_id = auth('api')->user()->id;
+            }
+
+            if (request()->headers->get('USER-ID')) {
+                $model->user_id = request()->headers->get('USER-ID');
+            }
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 
@@ -81,12 +102,22 @@ class Invoice extends Model
     }
 
     /**
-     * The invoice belongs to a receive order.
+     * The invoice belongs to a Quotation.
      *
      * @return object
      */
-    public function receiveOrders()
+    public function quotation()
     {
-        return $this->belongsTo(ReceiveOrder::class);
+        return $this->belongsTo(Quotation::class);
+    }
+
+    /**
+     * The invoice belongs to a Bid Sheet.
+     *
+     * @return object
+     */
+    public function bidSheet()
+    {
+        return $this->belongsTo(BidSheet::class);
     }
 }

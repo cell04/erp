@@ -51,7 +51,12 @@ class BranchesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'name'              =>  'required|string|max:255',
+            'address'           =>  'required|string|max:255',
+            'city'              =>  'required|string|max:255',
+            'zip_code'          =>  'required|integer',
+            'country'           =>  'required|string|max:255',
+            'telephone_number'  =>  'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -102,7 +107,12 @@ class BranchesController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'name'              =>  'required|string|max:255',
+            'address'           =>  'required|string|max:255',
+            'city'              =>  'required|string|max:255',
+            'zip_code'          =>  'required|integer',
+            'country'           =>  'required|string|max:255',
+            'telephone_number'  =>  'required|string|max:255'
         ]);
 
         if ($validator->fails()) {

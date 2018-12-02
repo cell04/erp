@@ -1,174 +1,179 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header clearfix">
-                Purchase Orders / View Purchase Orders
-            </div>
-            <div class="card-body">
-                <table class="table table-hover table-sm">
-                    <caption>
-                        <div class="row">
-                            <div class="col-md-9">
-                                List of Purchase Orders - Total Purchase Orders {{ this.meta.total }}
-                            </div>
-                            <div class="col-md-3">
-                                <div class="progress" height="30px;" v-if="showProgress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Purchase Order #</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Reference #</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="orders">
-                        <tr :key="order.id" v-for="order in orders">
-                            <td>{{ order.order_date }}</td>
-                            <td>{{ order.purchase_order_number }}</td>
-                            <td>{{ order.status }}</td>
-                            <td>{{ order.reference_number }}</td>
-                            <td>{{ order.amount }}</td>
-                            <td>
-                                <router-link class="text-info" :to="{ name: 'purchase-orders.view', params: { id: order.id }}">
-                                    View
-                                </router-link>
-
-                                <router-link v-if="order.status === 'Issued'" :to="{ name: 'receive-orders.create', params: { po_id: order.id }}">
-                                    <button class="btn btn-success">Receive PO</button>
-                                </router-link>
-
-                                <button v-if="order.status === 'Issued'" @click="closePO(order.id, order.purchase_order_number)" class="btn btn-danger">Close PO</button>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="content-title">
+            <h4 class="module-title">PURCHASE ORDER</h4>
+            <hr class="title-border">
         </div>
 
-        <br>
-
-        <div class="clearfix">
-            <div v-if="pageCount">
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div v-else>
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-item" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-item" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="float-right">
-                <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Orders</button>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">Items per page</div>
-                        </div>
-                        <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header clearfix">
+                    <div class="float-left">
+                        Purchase Orders
                     </div>
-                </form>
-            </div>
-
-            <!-- Modal -->
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Search For Orders</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label>Date</label>
-                                <input type="text" class="form-control" v-model="searchDate" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Purchase Order #</label>
-                                <textarea class="form-control" v-model="searchPurchaseOrderNumber" maxlength="1000" required></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Status</label>
-                                <input type="text" class="form-control" v-model="searchStatus" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Reference #</label>
-                                <input type="text" class="form-control" v-model="searchReferenceNumber" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Total</label>
-                                <input type="text" class="form-control" v-model="searchTotal" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Order By</label>
-                                <select class="form-control" v-model="order_by">
-                                    <option value="desc">Newest</option>
-                                    <option value="asc">Oldest</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer clearfix">
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
-                            <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                        </div>
+                    <div class="float-right">
+                        <router-link class="btn-primary btn-sm" :to="{ name: 'purchase-orders.create' }"><i class="fas fa-plus"></i> Create New Purchase Order</router-link>
                     </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-sm">
+                        <caption>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    List of Purchase Orders - Total Purchase Orders {{ this.meta.total }}
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="progress" height="30px;" v-if="showProgress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">PO #</th>
+                                <!-- <th scope="col">Supplier</th> -->
+                                <th scope="col">Amount</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="purchaseOrders">
+                            <tr :key="index" v-for="(purchaseOrder, index) in purchaseOrders">
+                                <td>{{ purchaseOrder.reference_number }}</td>
+                                <!-- <td>{{ purchaseOrder.contact.person | Upper }}</td> -->
+                                <td>{{ purchaseOrder.amount }}</td>
+                                <td>{{ purchaseOrder.status }}</td>
+                                <td>{{ purchaseOrder.created_at | DateFormat}}</td>
+                                <td>
+                                    <router-link class="text-secondary" :to="{ name: 'purchase-orders.view', params: { id: purchaseOrder.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link> |
+                                    <router-link class="text-secondary" v-if="purchaseOrder.status === 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}"><i class="fas fa-receipt"></i> Receive PO</router-link>
+                                    <router-link class="text-secondary isDisabled" v-if="purchaseOrder.status !== 'Issued'" :to="{ name: 'receive-orders.receive', params: { id: purchaseOrder.id }}"><i class="fas fa-receipt"></i> Receive PO</router-link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+            <br>
+
+            <div class="clearfix">
+                <div v-if="pageCount">
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div v-else>
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-item" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-item" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-item" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="float-right">
+                    <form class="form-inline">
+                        <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Purchase Orders</button> -->
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Items per page</div>
+                            </div>
+                            <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Search For Orders</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="text" class="form-control" v-model="searchDate" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Purchase Order #</label>
+                                    <textarea class="form-control" v-model="searchPurchaseOrderNumber" maxlength="1000" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <input type="text" class="form-control" v-model="searchStatus" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Reference #</label>
+                                    <input type="text" class="form-control" v-model="searchReferenceNumber" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Total</label>
+                                    <input type="text" class="form-control" v-model="searchTotal" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Order By</label>
+                                    <select class="form-control" v-model="order_by">
+                                        <option value="desc">Newest</option>
+                                        <option value="asc">Oldest</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer clearfix">
+                                <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
+                                <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </template>
@@ -197,7 +202,6 @@
         };
 
         axios.get('/api/purchase-orders', { params }).then(res => {
-            console.log(res.data);
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -213,7 +217,7 @@
     export default {
         data() {
             return {
-                orders: null,
+                purchaseOrders: [],
                 searchDate: '',
                 searchPurchaseOrderNumber: '',
                 searchStatus: '',
@@ -255,7 +259,7 @@
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             } else {
                 getPurchaseOrders(
                     to.query.page,
@@ -269,7 +273,7 @@
                     (err, data) => {
                         next(vm => vm.setData(err, data));
                     }
-                    );
+                );
             }
         },
 
@@ -287,7 +291,7 @@
                     this.setData(err, data);
                     next();
                 }
-                );
+            );
         },
 
         computed: {
@@ -314,6 +318,27 @@
                 if (this.links.next == null) { return 'disabled'; }
                 return;
             }
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            },
+
+            DateFormat: function (value) {
+                if (value) {
+                    return moment(value).format('M/DD/YYYY');
+                }
+            }
+        },
+
+        mounted() {
+            let promise = new Promise((resolve, reject) => {
+                axios.get('/api/purchase-orders/').then(res => {
+                    // console.log('PO: ' + JSON.stringify(res.data));
+                    resolve();
+                });
+            });
         },
 
         methods: {
@@ -411,13 +436,22 @@
                     }
                 });
             },
-            setData(err, { data: orders, links, meta }) {
+            setData(err, { data: purchaseOrders, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.orders = orders;
+                    let purchaseOrderStatus = {
+                        0: "Issued",
+                        1: "Closed",
+                    };
+
+                    purchaseOrders.map(purchaseOrder => {
+                        purchaseOrder.status = purchaseOrderStatus[purchaseOrder.status];
+                    });
+
+                    this.purchaseOrders = purchaseOrders;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -522,3 +556,13 @@
         }
     }
 </script>
+
+<style>
+    .isDisabled {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+    }
+</style>

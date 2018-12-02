@@ -55,7 +55,14 @@ class PurchaseOrdersController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'warehouse_id'                                  =>  'required|integer',
+            'contact_id'                                    =>  'required|integer',
+            'reference_number'                              =>  'required|string|max:255',
+            'amount'                                        =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_id'                =>  'required|integer',
+            'purchase_order_items.*.unit_of_measurement_id' =>  'required|integer',
+            'purchase_order_items.*.quantity'               =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_pricelist_id'      =>  'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -84,7 +91,7 @@ class PurchaseOrdersController extends Controller
      */
     public function show($id)
     {
-        if (! $purchaseOrders = $this->purchaseOrders->findOrFail($id)) {
+        if (! $purchaseOrder = $this->purchaseOrders->findOrFail($id)) {
             return response()->json([
                 'message' => 'Resource does not exist'
             ], 400);
@@ -92,7 +99,7 @@ class PurchaseOrdersController extends Controller
 
         return response()->json([
             'message' => 'Resource successfully retrieve',
-            'purchaseOrders' => $purchaseOrders
+            'purchaseOrder' => $purchaseOrder
         ], 200);
     }
 
@@ -106,7 +113,14 @@ class PurchaseOrdersController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'warehouse_id'                                  =>  'required|integer',
+            'contact_id'                                    =>  'required|integer',
+            'reference_number'                              =>  'required|string|max:255',
+            'amount'                                        =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_id'                =>  'required|integer',
+            'purchase_order_items.*.unit_of_measurement_id' =>  'required|integer',
+            'purchase_order_items.*.quantity'               =>  'required|numeric|min:0',
+            'purchase_order_items.*.item_pricelist_id'      =>  'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -183,4 +197,53 @@ class PurchaseOrdersController extends Controller
             'message' => 'Resource successfully deleted permanently'
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllPurchaseOrder()
+    {
+        if (cache()->has('purchase-orders')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'purchase_orders' => cache('purchase-orders', 5)
+            ], 200);
+        }
+
+        if (! $purchaseOrder = $this->purchaseOrders->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'purchase_orders' => $purchaseOrder
+        ], 200);
+    }
+
+    // /**
+    //  * Display the specified resource.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function getAvailableItemQuantity($id)
+    // {
+    //     if (! $purchaseOrder = $this->purchaseOrders->getAvailableItemQuantity($id)) {
+    //         return response()->json([
+    //             'message' => 'Resource does not exist'
+    //         ], 400);
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Resource successfully retrieve',
+    //         'purchaseOrder' => $purchaseOrder
+    //     ], 200);
+    // }
 }

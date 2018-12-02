@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Corporations / View Corporations
+                <div class="float-left">
+                    Settings / Corporations
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'corporations.create' }"><i class="fas fa-plus"></i> Create New Corporation</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -22,19 +27,23 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Country</th>
-                            <th scope="col">Fax</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="corporations">
                         <tr v-for="{ id, name, description, street, zip_code, country, fax } in corporations">
                             <td>{{ name }}</td>
                             <td>{{ description }}</td>
-                            <td>{{ country }}</td>
-                            <td>{{ fax }}</td>
+                            <td>{{ street }}, {{ country}}, {{ zip_code }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'corporations.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'corporations.view', params: { id: id }}">
+                                    <i class="fas fa-envelope-open-text"></i>  View
+                                </router-link>
+                                |
+                                <router-link class="text-secondary" :to="{ name: 'corporations.edit', params: { id: id }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -90,7 +99,7 @@
 
             <div class="float-right">
                 <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Corporations</button>
+                    <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent.default="openSearchModal">Search Corporations</button> -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Items per page</div>
@@ -224,7 +233,6 @@
 
         axios.get('/api/corporations', { params }).then(res => {
             console.log(res);
-            callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
                 location.reload();

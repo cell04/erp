@@ -1,44 +1,37 @@
 <template>
-    <div>
-        <div class="card">
-            <div class="card-header">
-                {{componentVal}} / Edit {{componentVal}}
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <fieldset>
-                        <div class="form-group">
+    <div class="card">
+        <div class="card-header">
+            <a class="text-success" href="" @click.prevent="viewItemTypes">Item Types</a>
+            <a class="text-secondary"> / Edit Item Type</a>
+        </div>
+        <div class="card-body">
+            <div v-if="ifReady">
+                <fieldset>
+                    <div class="row">
+                        <div class="form-group col-md-6">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" v-model="name" id="name">
                         </div>
-
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="name">Display Name</label>
                             <input type="text" class="form-control" v-model="display_name" id="name">
                         </div>
-
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" v-model="description" id="description"></textarea>
-                        </div>
-
-                        <!-- <div class="form-group">
-                            <label for="type">Type</label>
-                            <input type="text" class="form-control" v-model="accountType.type" id="type">
-                        </div> -->
-                    </fieldset>
-
-                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes">Back</button>
-                    <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType">Update {{componentVal}}</button>
-                </div>
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                     </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" v-model="description" id="description"></textarea>
+                    </div>
+                </fieldset>
+
+                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItemTypes"><i class="fas fa-chevron-left"></i> Back</button>
+                <button type="button" class="btn btn-success btn-sm" :disabled="isDisabled" @click.prevent="updateItemType"><i class="fas fa-edit"></i> Update Item Type</button>
+            </div>
+            <div v-else>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -46,12 +39,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Item Type',
-                ifReady: true,
-                accountType: '',
-                itemTypes: [],
-                isDisabled: false,
-                id: '',
+                ifReady: false,
                 name: '',
                 display_name:'',
                 description: ''
@@ -60,18 +48,17 @@
 
         mounted() {
             let promise = new Promise((resolve, reject) => {
-                axios.get('/api/item-types/' + this.$route.params.id).then((res) => {
-                    this.itemTypes = res.data.itemType;
+                axios.get('/api/item-types/' + this.$route.params.id).then(res => {
+                    this.name         = res.data.itemType.name;
+                    this.display_name = res.data.itemType.display_name;
+                    this.description  = res.data.itemType.description;
 
-                     this.id = res.data.itemType.id;
-                     this.name = res.data.itemType.name;
-                     this.display_name = res.data.itemType.display_name;
-                     this.description = res.data.itemType.description;
-
-                    if (! res.data.response) { return; }
                     resolve();
+                }).catch(err => {
+                    console.log(err);
                 });
             });
+
             promise.then(() => {
                 this.ifReady = true;
             });
@@ -86,7 +73,8 @@
             },
             updateItemType() {
                 this.ifReady = false;
-                axios.put('/api/item-types/' + this.$route.params.id, this.$data).then((res)=>{
+
+                axios.put('/api/item-types/' + this.$route.params.id, this.$data).then(res => {
                     this.$router.push({
                         name: 'item-types.view',
                         params: { id: this.$route.params.id }
@@ -95,8 +83,6 @@
                     this.ifReady = true;
                     console.log(err);
                 });
-
-
             }
         }
     }

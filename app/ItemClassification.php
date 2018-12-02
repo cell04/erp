@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class ItemClassification extends Model
 {
@@ -26,6 +27,15 @@ class ItemClassification extends Model
         'corporation_id', 'item_type_id', 'name', 'display_name', 'description'
     ];
 
+    // /**
+    //  * The Log attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'item_type_id', 'name', 'display_name', 'description'
+    // ];
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -45,6 +55,10 @@ class ItemClassification extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
     protected $with = ['itemType'];

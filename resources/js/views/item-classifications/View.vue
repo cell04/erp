@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Item Classifications / View Item Classification
+                <a class="text-success" href="" @click.prevent="viewItemClassification">Item Subtypes</a>
+                <a class="text-secondary"> / View Item Subtype</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -27,9 +28,9 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent.default="viewItemClassification">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification">Edit Item Class</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal">Delete Item Class</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItemClassification"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editItemClassification"><i class="fas fa-edit"></i> Edit Item Class</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteItemClassificationModal"><i class="fas fa-trash-alt"></i> Delete Item Class</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -44,13 +45,13 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this Item Classification?</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">You're about to delete this  Item Subtype?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this Item Classification?
+                        Are you sure you want to delete this  Item Subtype?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="deleteItemClassification">Confirm Delete</button>
@@ -74,22 +75,22 @@
         },
 
         mounted() {
-            let promise = new Promise((resolve, reject) => {
-                axios.get('/api/item-classifications/' + this.$route.params.id).then(res => {
-                    const getItemTypeId = res.data.itemClassification.item_type_id;
-                    // Query Item Type
-                    let promise = new Promise((resolve, reject) => {
-                        axios.get('/api/item-types/' + getItemTypeId).then(res2 => {
-                            this.itemClass = res.data.itemClassification;
-                            this.itemTypeId = res2.data.itemType;
-                        });
+            axios.get('/api/item-classifications/' + this.$route.params.id).then(res => {
+                let promiseItemType = new Promise((resolve, reject) => {
+                    axios.get("/api/item-types/" + res.data.itemClassification.item_type_id).then(res2 => {
+                        this.itemClass = res.data.itemClassification;
+                        this.itemTypeId = res2.data.itemType;
+                        resolve();
+                    }).catch(err => {
+                        alert('Error');
+                        console.log(err);
+                        reject();
                     });
-                    resolve();
                 });
-            });
 
-            promise.then(() => {
-                this.ifReady = true;
+                promiseItemType.then(() => {
+                    this.ifReady = true;
+                });
             });
         },
 

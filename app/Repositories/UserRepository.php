@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository extends Repository
 {
@@ -25,11 +26,68 @@ class UserRepository extends Repository
      */
     public function store($request)
     {
-        return $this->user->create([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'password'      => bcrypt($request->password),
-            'mobile_number' => $request->mobile_number
-        ]);
+        return DB::transaction(function () use ($request) {
+            $user = $this->user->create([
+                'name'          => $request->name,
+                'email'         => $request->email,
+                'password'      => bcrypt($request->password),
+                'mobile_number' => $request->mobile_number
+            ]);
+
+            $user->userRole()->create($request->all());
+            $user->image()->create($request->all());
+
+            return $user;
+        });
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return boolean
+     */
+    public function update($request, $id)
+    {
+        return DB::transaction(function () use ($request, $id) {
+            $user = $this->user->findOrFail($id);
+            $user->fill($request->all());
+            $user->save();
+            $user->userRole()->update(['role_id' => $request->role_id]);
+            if ($request->hasFile('image')) {
+                $user->image()->delete();
+                $user->image()->create($request->all());
+            }
+
+            return $user;
+        });
+    }
+
+    /**
+     * Find the resource using the specified id or else fail.
+     *
+     * @param  int $id
+     * @return json object
+     */
+    public function findOrFail($id)
+    {
+        return $this->user->with('userRole', 'image')
+        ->findOrFail($id);
+    }
+
+    public function paginateWithFilters(
+        $request = null,
+        $length = 10,
+        $orderBy = 'desc',
+        $removePage = true
+    ) {
+        return $this->user->filter($request)
+            ->with('userRole', 'image')
+            ->orderBy('created_at', $orderBy)
+            ->paginate($length)
+            ->withPath(
+                $this->user->createPaginationUrl($request, $removePage)
+            );
     }
 }

@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Corporations / Create New Corporation
+                <a class="text-success" href="" @click.prevent="viewCorp">Corporations</a>
+                <a class="text-secondary"> / New Corporation</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -62,8 +63,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button type="submit" class="btn btn-success btn-sm">Create New Corporation</button>
+                        <br>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewCorp"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New Corporation</button>
                     </form>
                 </div>
 
@@ -95,6 +97,10 @@
         },
 
         methods: {
+            viewCorp() {
+                this.$router.push({ name: 'corporations.index' });
+            },
+
             createNewCorporation() {
                 this.ifReady = false;
                 axios.post('/api/corporations', this.$data).then(res => {

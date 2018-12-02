@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class ReceiveOrderItem extends Model
 {
@@ -23,9 +24,19 @@ class ReceiveOrderItem extends Model
      * @var array
      */
     protected $fillable = [
-        'receive_order_id', 'item_id', 'qunatity', 'unit_of_measurement_id',
-        'pricelist_id', 'tracking_number', 'status', 'expiration_date'
+        'receive_order_id', 'item_id', 'quantity', 'unit_of_measurement_id',
+        'item_pricelist_id', 'tracking_number', 'status', 'expiration_date'
     ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected static $logAttributes = [
+    //     'receive_order_id', 'item_id', 'quantity', 'unit_of_measurement_id',
+    //     'item_pricelist_id', 'tracking_number', 'status', 'expiration_date'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -52,5 +63,15 @@ class ReceiveOrderItem extends Model
     public function itemPricelist()
     {
         return $this->belongsTo(ItemPricelist::class);
+    }
+
+    /**
+     * The receive order item belongs to a unit of measurement.
+     *
+     * @return object
+     */
+    public function unitOfMeasurement()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class);
     }
 }

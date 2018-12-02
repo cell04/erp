@@ -55,7 +55,8 @@ class ItemPricelistsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'item_id'  =>  'required|integer',
+            'price'    =>  'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -189,17 +190,9 @@ class ItemPricelistsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllItemPricelistsUsingId($id)
+    public function getItemPricelists($id)
     {
-        if (cache()->has('item-pricelists')) {
-            return response()->json([
-                'response'        => true,
-                'message'         => 'Resources successfully retrieve.',
-                'item_pricelists' => cache('item-pricelists', 5)
-            ], 200);
-        }
-
-        if (! $itemPricelists = $this->itemPricelist->allUsingSpecifiedId($id)) {
+        if (! $itemPricelists = $this->itemPricelist->getItemPricelists($id)) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'
@@ -207,8 +200,8 @@ class ItemPricelistsController extends Controller
         }
 
         return response()->json([
-            'response'        => true,
-            'message'         => 'Resources successfully retrieve.',
+            'response'       => true,
+            'message'        => 'Resources successfully retrieve.',
             'item_pricelists' => $itemPricelists
         ], 200);
     }

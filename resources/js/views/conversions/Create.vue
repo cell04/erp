@@ -12,21 +12,19 @@
                             <input type="number" class="form-control" placeholder="0" v-model="from_value" minlength="2" maxlength="255" required>
                         </div>
                         <div class="form-group">
-                            <select class="form-control" v-model="unit_of_measurement_from_id" required>
-                                <option value="" disabled hidden>Select Unit of Measurement</option>
-                                <option v-for="unit in units" v-bind:value="unit.id">{{ unit.name }}</option>
-                            </select>
+                            <label>Select UOM</label>
+                            <vue-select v-model="unitOfMeasurementFrom" @input="selectUnitFrom()" label="name" :options="units"></vue-select>
                         </div>
+                        
                         <div class="form-group">
                             <label>To</label>
                             <input type="number" class="form-control" placeholder="0" v-model="to_value" minlength="2" maxlength="255" required>
                         </div>
                         <div class="form-group">
-                            <select class="form-control" v-model="unit_of_measurement_to_id" required>
-                                <option value="" disabled hidden>Select Unit of Measurement</option>
-                                <option v-for="unit in units" v-bind:value="unit.id">{{ unit.name }}</option>
-                            </select>
+                            <label>Select UOM</label>
+                            <vue-select v-model="unitOfMeasurementTo" @input="selectUnitTo()" label="name" :options="units"></vue-select>
                         </div>
+
                         <button type="submit" class="btn btn-success btn-sm">Create New Conversion</button>
                     </form>
                 </div>
@@ -48,7 +46,9 @@
             return {
                 componentVal: 'Conversion',
                 ifReady: true,
-                units: '',
+                unitOfMeasurementFrom: null,
+                unitOfMeasurementTo: null,
+                units: [],
                 unit_of_measurement_from_id:'',
                 from_value: '',
                 unit_of_measurement_to_id: '',
@@ -59,7 +59,7 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/unit-of-measurements/get-all-unit-of-measurements/").then(res => {
-                    console.log(res);
+                    // console.log('Units: ' + JSON.stringify(res.data));
                     this.units = res.data.unit_of_measurements;
                     if (!res.data.response) {
                     return;
@@ -70,11 +70,21 @@
         },
 
         methods: {
+            selectUnitFrom(){
+                this.unit_of_measurement_from_id = this.unitOfMeasurementFrom.id;
+                // console.log('unitMeasurementFrom: ' + this.unit_of_measurement_from_id);
+            },
+
+            selectUnitTo() {
+                this.unit_of_measurement_to_id = this.unitOfMeasurementTo.id;
+                // console.log('unitMeasurementTo: ' + this.unit_of_measurement_to_id);
+            },
+
             createNewConversion() {
                 this.ifReady = false;
                 axios.post('/api/conversions', this.$data).then(res => {
-                    this.ifReady = true;
                     this.$router.push({ name: 'conversions.index' });
+                    this.ifReady = true;
                 }).catch(err => {
                     this.ifReady = true;
                     alert("Error!");

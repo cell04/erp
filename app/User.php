@@ -3,10 +3,10 @@
 namespace App;
 
 use App\Traits\Filtering;
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -18,9 +18,19 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'mobile_number'
     ];
 
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected static $logAttributes = [
+    //     'name', 'email', 'password',
+    // ];
+
+    protected $dates = ['deleted_at'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -29,4 +39,18 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    // protected $with = [
+    //     'userRole'
+    // ];
+
+    public function image()
+    {
+        return  $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function userRole()
+    {
+        return $this->hasOne(UserRole::class);
+    }
 }

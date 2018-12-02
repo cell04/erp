@@ -1,160 +1,165 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header clearfix">
-                Bills / View Bills
-                <!-- <router-link :to="{ name: 'bills.create'}">
-                    <button class="btn btn-primary float-right">Add New Bill</button>
-                </router-link> -->
-            </div>
-            <div class="card-body">
-                <table class="table table-hover table-sm">
-                    <caption>
-                        <div class="row">
-                            <div class="col-md-9">
-                                List of Bills - Total Bills {{ this.meta.total }}
-                            </div>
-                            <div class="col-md-3">
-                                <div class="progress" height="30px;" v-if="showProgress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">No.</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Reference</th>
-                            <th scope="col">Grand Total</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="bills">
-                        <tr v-for="bill in bills">
-                            <td>{{bill.due_date}}</td>
-                            <td>{{bill.id}}</td>
-                            <td>{{bill.status}}</td>
-                            <td>{{bill.reference_number}}</td>
-                            <td>{{bill.amount_paid}}</td>
-                            <td>
-                                <router-link :to="{ name: 'bills.view', params: { id: bill.id }}">
-                                    <button class="btn btn-primary">View</button>
-                                </router-link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="content-title">
+            <h4 class="module-title"> SALES INVOICE</h4>
+            <hr class="title-border">
         </div>
 
-        <br>
-
-        <div class="clearfix">
-            <div v-if="pageCount">
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-bill" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-bill">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-bill" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-bill" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-bill" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div v-else>
-                <nav class="float-left">
-                    <ul class="pagination">
-                        <li class="page-bill" v-bind:class="isPrevDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
-                        </li>
-                        <li class="page-bill">
-                            <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
-                        </li>
-                        <li class="page-bill" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
-                            <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
-                        </li>
-                        <li class="page-bill" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
-                        </li>
-                        <li class="page-bill" v-bind:class="isNextDisabled">
-                            <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="float-right">
-                <form class="form-inline">
-                    <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For bills</button>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">bills per page</div>
-                        </div>
-                        <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header clearfix">
+                    <div class="float-left">
+                        Sales Invoices
                     </div>
-                </form>
-            </div>
-
-            <!-- Modal -->
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Search For Bills</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label>SKU</label>
-                                <input type="text" class="form-control" v-model="searchColumnSKU" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea class="form-control" v-model="searchColumnDescription" maxlength="1000" required></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Order By</label>
-                                <select class="form-control" v-model="order_by">
-                                    <option value="desc">Newest</option>
-                                    <option value="asc">Oldest</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer clearfix">
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
-                            <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                        </div>
+                    <div class="float-right">
+                        <router-link class="btn btn-primary btn-sm" :to="{ name: 'invoices.create' }"><i class="fas fa-plus"></i> Create New Service Invoice</router-link>
                     </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-sm">
+                        <caption>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    List of Sales Invoices - Total Sales Invoices {{ this.meta.total }}
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="progress" height="30px;" v-if="showProgress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Sales Invoice #</th>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="invoices">
+                            <tr v-for="invoice in invoices">
+                                <td>{{invoice.reference_number}}</td>
+                                <td>{{invoice.contact.person | Upper}}</td>
+                                <td>{{ (invoice.status) == 0 ? 'Issued': 'Approved'}}</td>
+                                <td>{{invoice.due_date}}</td>
+                                <td>
+                                    <router-link class="text-secondary" :to="{ name: 'invoices.view', params: { id: invoice.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+            <br>
+
+            <div class="clearfix">
+                <div v-if="pageCount">
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-bill" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-bill">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-bill" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-bill" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-bill" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div v-else>
+                    <nav class="float-left">
+                        <ul class="pagination">
+                            <li class="page-bill" v-bind:class="isPrevDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToPreviousPage" disabled>Previous</a>
+                            </li>
+                            <li class="page-bill">
+                                <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                            </li>
+                            <li class="page-bill" :key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                                <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
+                            </li>
+                            <li class="page-bill" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                            </li>
+                            <li class="page-bill" v-bind:class="isNextDisabled">
+                                <a class="page-link" href="#" @click.prevent="goToNextPage">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="float-right">
+                    <form class="form-inline">
+                        <!-- <button type="button" class="btn btn-primary mr-2" @click.prevent="openSearchModal">Search For Invoice</button> -->
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Items per page</div>
+                            </div>
+                            <select class="custom-select" id="number_of_items" v-model="meta.per_page" v-on:change="changePerPage">
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchArticles" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Search For Bills</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>SKU</label>
+                                    <input type="text" class="form-control" v-model="searchColumnSKU" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="searchColumnName" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control" v-model="searchColumnDescription" maxlength="1000" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Order By</label>
+                                    <select class="form-control" v-model="order_by">
+                                        <option value="desc">Newest</option>
+                                        <option value="asc">Oldest</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer clearfix">
+                                <button type="button" class="btn btn-danger btn-sm" @click.prevent="clear">Clear</button>
+                                <button type="button" class="btn btn-success btn-sm" @click.prevent="search">Search</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </template>
@@ -178,8 +183,8 @@
             order_by,
         };
 
-        axios.get('/api/bills', { params }).then(res => {
-            console.log(res);
+        axios.get('/api/invoices', { params }).then(res => {
+            // console.log('Invoices: ' + JSON.stringify(res.data));
             callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
@@ -195,7 +200,7 @@
     export default {
         data() {
             return {
-                bills: null,
+                invoices: null,
                 searchColumnSKU: '',
                 searchColumnName: '',
                 searchColumnDescription: '',
@@ -219,6 +224,12 @@
                 showProgress: false,
                 pageNumbers: []
             };
+        },
+
+        filters: {
+            Upper(value) {
+                return value.toUpperCase();
+            }
         },
 
         beforeRouteEnter (to, from, next) {
@@ -294,7 +305,7 @@
             goToFirstPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -308,7 +319,7 @@
             goToPage(page = null) {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page,
                         per_page: this.meta.per_page,
@@ -322,7 +333,7 @@
             goToLastPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.meta.last_page,
                         per_page: this.meta.per_page,
@@ -336,7 +347,7 @@
             goToNextPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.nextPage,
                         per_page: this.meta.per_page,
@@ -350,7 +361,7 @@
             goToPreviousPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: this.prevPage,
                         per_page: this.meta.per_page,
@@ -361,13 +372,13 @@
                     }
                 });
             },
-            setData(err, { data: bills, links, meta }) {
+            setData(err, { data: invoices, links, meta }) {
                 this.pageNumbers = [];
 
                 if (err) {
                     this.error = err.toString();
                 } else {
-                    this.bills = bills;
+                    this.invoices = invoices;
                     this.links = links;
                     this.meta = meta;
                 }
@@ -428,7 +439,7 @@
             changePerPage() {
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,
@@ -443,7 +454,7 @@
                 $('#searchModal').modal('hide');
                 this.showProgress = true;
                 this.$router.push({
-                    name: 'bills.index',
+                    name: 'invoices.index',
                     query: {
                         page: 1,
                         per_page: this.meta.per_page,

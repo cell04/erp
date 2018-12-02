@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Stock extends Model
 {
@@ -24,8 +25,18 @@ class Stock extends Model
      */
     protected $fillable = [
         'corporation_id', 'stockable_id', 'stockable_type',
-        'quantity', 'unit_of_measurement_id'
+        'item_id', 'quantity', 'unit_of_measurement_id'
     ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'stockable_id', 'stockable_type',
+    //     'item_id', 'quantity', 'unit_of_measurement_id'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -33,6 +44,13 @@ class Stock extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = ['stockable', 'item', 'unitOfMeasurement'];
 
     /**
      * Run functions on boot.
@@ -47,10 +65,14 @@ class Stock extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**
-     * The invoice belongs to a corporation
+     * The stock belongs to a corporation
      *
      * @return object
      */
@@ -65,5 +87,25 @@ class Stock extends Model
     public function stockable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * The classification belongs to an item type.
+     *
+     * @return object
+     */
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    /**
+     * The purchase order item belongs to a unit of measurement.
+     *
+     * @return object
+     */
+    public function unitOfMeasurement()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class);
     }
 }

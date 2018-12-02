@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                {{componentVal}}s / Edit {{componentVal}}
+                <a class="text-success" href="" @click.prevent="viewUnitOfMeasurement">Unit of Measurements</a>
+                <a class="text-secondary"> / Edit Unit of Measurement</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -17,8 +18,8 @@
                             <input type="text" class="form-control" v-model="unit_of_measurements.abbreviation" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
 
-                        <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewUnitOfMeasurement">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateUnitOfMeasurement">Update Unit of Measurement</button>
+                        <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUnitOfMeasurement"><i class="fas fa-chevron-left"></i> Back</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateUnitOfMeasurement"><i class="fas fa-edit"></i> Update UOM</button>
                     </form>
                 </div>
                 <div v-else>
@@ -35,7 +36,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Unit of Measurement',
+                componentVal: 'UOM',
                 ifReady: false,
                 unit_of_measurements: ''
             };

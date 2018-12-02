@@ -2,7 +2,12 @@
     <div>
         <div class="card">
             <div class="card-header clearfix">
-                Contact Types / View Contact Types
+                <div class="float-left">
+                    Settings / Contact Types
+                </div>
+                <div class="float-right">
+                    <router-link class="btn-primary btn-sm" :to="{ name: 'contact-types.create' }"><i class="fas fa-plus"></i> Create New Contact Type</router-link>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-sm">
@@ -21,16 +26,22 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Display Name</th>
-                            <th scope="col">Options</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="contactTypes">
-                        <tr v-for="{ id, name, display_name } in contactTypes">
+                        <tr v-for="{ id, name, description } in contactTypes">
                             <td>{{ name }}</td>
-                            <td>{{ display_name }}</td>
+                            <td>{{ description }}</td>
                             <td>
-                                <router-link class="text-info" :to="{ name: 'contact-types.view', params: { id: id }}">View</router-link>
+                                <router-link class="text-secondary" :to="{ name: 'contact-types.view', params: { id: id }}">
+                                   <i class="fas fa-envelope-open-text"></i> View
+                                </router-link>
+                                |
+                                <router-link class="text-secondary" :to="{ name: 'contact-types.edit', params: { id: id }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>

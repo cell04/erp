@@ -1,227 +1,287 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                Purchase Orders / Receivings / New
-            </div>
-            <div class="card-body">
-                <div v-if="ifReady">
-                    <form v-on:submit.prevent="createNewReceiving">         
+        <div class="content-title">
+            <h4 class="module-title">RECEIVE ORDER</h4>
+            <hr class="title-border">
+        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Date</label>
-                                <input type="date" class="form-control" v-model="receive_date" required>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Contact</label>
-                                <input type="text" class="form-control" disabled="disabled" :value="purchaseOrder.contact.company">
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Warehouse</label>
-                                <input type="text" class="form-control" disabled="disabled" :value="purchaseOrder.sub_department.name">
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>Reference #</label>
-                                <input type="text" class="form-control" v-model="reference_number" required>
-                            </div>
-                        </div>
-                        <br />
-                        <table class="table table-hover table-sm">
-                            <caption>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                    </div>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <a class="text-success" href="" @click.prevent="viewROs">Receive Orders</a>
+                    <a class="text-secondary"> / Create New Receive Order</a>
+                </div>
+                <div class="card-body">
+                    <div v-if="ifReady">
+                        <form v-on:submit.prevent="createNewReceiveOrder">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Purchase Order</label>
+                                    <vue-select v-model="purchaseOrder" @input="selectPurchaseOrder()" label="reference_number" :options="purchaseOrders" required></vue-select>
                                 </div>
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">SKU</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Ordered Qty</th>
-                                    <th scope="col">Qty Received</th>
-                                    <th scope="col">UOM</th>
-                                    <th scope="col">Unit Price</th>
-                                    <th scope="col">Tracking #</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, key, index) in items"  :key="item.item.id">
-                                    <td>{{ item.item.SKU }}</td>
-                                    <td>
-                                       {{ item.item.name }}
-                                    </td>
-                                    <td>{{ item.quantity }} </td>
-                                    <td>
-                                        <input class="form-control" v-model.number="item.qty_received">
-                                    </td>
+                                <div class="col-md-6 form-group">
+                                    <label>Supplier</label>
+                                    <input type="text" class="form-control" v-model="contact" readonly>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Received Order #</label>
+                                    <input type="text" class="form-control" v-model="ro_number" required>
+                                </div>
+                            </div>
 
-                                    <td>{{ item.unit.name }}</td>
+                            <br>
+                            <h6>
+                                <b><u>Receive Order Items</u></b>
+                            </h6>
+                            <br>
+
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SKU</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">UOM</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th scope="col">Expiration</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :key="item.id" v-for="(item, index) in received_items">
+                                        <td>{{ item.item.stock_keeping_unit }}</td>
+                                        <td>{{ item.item.name }}</td>
+                                        <td>{{ item.item.description }}</td>
+                                        <td><input type="text" class="form-control" v-model="item.quantity" required></td>
+                                        <td>{{ item.unit_of_measurement.name }}</td>
+                                        <td>{{ item.item_pricelist.price }}</td>
+                                        <td><div class="dateStyle"><datepicker v-model="item.expiration_date" :bootstrap-styling="true" placeholder="Expiration Date" required></datepicker></div></td>
+                                        <td>{{ subtotalRow[index] | Decimal }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6"></td>
+                                        <td>
+                                            <b>Total</b>
+                                        </td>
+                                        <td>{{total | Decimal}}</td>
+                                        <td></td>
+                                    </tr>
                                     
-                                    <td>{{ item.item.unit_price }} </td>
-            
-                                    <td>
-                                        <input class="form-control" placeholder="Tracking #" type="text" v-model="item.tracking_number">
-                                    </td>
-                                    <td>{{subtotalRow[key]}}</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <b>Total</b>
-                                    </td>
-                                    <td>{{total}}</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                        <button type="submit" class="btn btn-success btn-sm">Receive</button>
-                    </form>
-                </div>
-
-                <div v-else>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                            <div class="pt-3">
+                                <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewROs"><i class="fas fa-chevron-left"></i> Back</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Receive Order</button>
+                                <!-- <button type="button" class="btn btn-primary btn-sm" @click="addNewItem">Add New Item</button> -->
+                            </div>
+                        </form>
                     </div>
-                </div>
 
+                    <div v-else>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      ifReady: true,
-      purchaseOrderId : null,
-      purchaseOrder : null,
-      items: [{
-            tracking_number: null,
-            purchase_item_id: null
-      }],
-      contacts: "",
-      sub_departments: "",
-      itemsList: "",
-      reference_number: "",
-      contact_id: "",
-      receive_date: "",
-      sub_department_id: "",
-      items: [],
-      amount: ""
+    export default {
+        data() {
+            return {
+                ifReady: false,
+                received_items: [],
+                purchaseOrderData: [],
+                purchaseOrders: [],
+                purchaseOrder: null,
+                purchaseOrderId: null,
+                contacts: [],
+                contact: null,
+                contact_id: "",
+                warehouses: [],
+                warehouse: null,
+                warehouse_id: "",
+                items: [],
+                ro_number: "",
+                purchase_order_id: "",
+                receive_order_items: [
+                {
+                    item: '',
+                    item_id: '',
+                    quantity: 0,
+                    unitOfMeasurements: [],
+                    unitOfMeasurement: '',
+                    unit_of_measurement_id: '',
+                    itemPricelists: [],
+                    itemPricelist: 0,
+                    item_pricelist_id: '',
+                    tracking_number: '',
+                    expiration_date: '',
+                    subTotal: 0
+                }
+                ],
+                amount: "",
+                isDisabled: false
+            };
+        },
+
+        mounted() {
+            let getAllContacts = new Promise((resolve, reject) => {
+                axios.get("/api/contacts/get-all-contacts/").then(res => {
+                    this.contacts = res.data.contacts;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            let getAllWarehouses = new Promise((resolve, reject) => {
+                axios.get("/api/warehouses/get-all-warehouses").then(res => {
+                    this.warehouses = res.data.warehouses;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            let getAllItems = new Promise((resolve, reject) => {
+                axios.get("/api/items/get-all-items/").then(res => {
+                    this.items = res.data.items;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            let getAllPurchaseOrders = new Promise((resolve, reject) => {
+                axios.get("/api/purchase-orders/get-all-purchase-orders/").then(res => {
+                    this.purchaseOrders = res.data.purchase_orders;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            });
+
+            Promise.all([getAllContacts, getAllWarehouses, getAllItems, getAllPurchaseOrders]).then(() => {
+                this.ifReady = true;
+            });
+        },
+
+        computed: {
+            subtotalRow() {
+                return this.received_items.map((item) => {
+                return Number(item.quantity * item.item_pricelist.price)
+                });
+            },
+            total() {
+                return this.received_items.reduce((total, item) => {
+                return total + item.quantity * item.item_pricelist.price;
+                }, 0);
+            }
+        },
+
+        filters: {
+            Decimal: function (value) {
+                if (value) {
+                    return value.toFixed(2);
+                }
+            }
+        },
+
+        methods: {
+            viewROs() {
+                this.$router.push({ name: 'receive-orders.index' });
+            },
+
+            getPoDetails(id) {
+                axios.get("/api/purchase-orders/" + id).then(res => {
+                    this.purchaseOrderData = res.data.purchaseOrder;
+                    console.log(res.data.purchaseOrder);
+                    this.contact = res.data.purchaseOrder.contact.person;
+                    this.contact_id = res.data.purchaseOrder.contact_id;
+                    this.received_items = res.data.purchaseOrder.purchase_order_items;
+                    this.warehouse_id = res.data.purchaseOrder.warehouse.id;
+                    // console.log('RO: ' + JSON.stringify(res.data.purchaseOrder.purchase_order_items));
+
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            },
+
+            selectPurchaseOrder() {
+                this.purchase_order_id = this.purchaseOrder.id;
+                this.reference_number = this.purchaseOrder.reference_number;
+                this.getPoDetails(this.purchaseOrder.id)
+            },
+
+            updateTotalAmount() {
+                let total = 0;
+
+                this.received_items.forEach(receive_order_item => {
+                    total += receive_order_item.subTotal;
+                });
+            },
+            
+            deleteRow(index) {
+                this.received_items.splice(index, 1);
+                this.updateTotalAmount();
+                this.poQuantity.splice(index, 1);
+            },
+            createNewReceiveOrder() {
+                this.ifReady = false;
+
+                let receiveOrderItems = [];
+
+                this.$data.received_items.forEach(receive_order_item => {
+                    receiveOrderItems.push({
+                        item_id: receive_order_item.item_id,
+                        quantity: receive_order_item.quantity,
+                        unit_of_measurement_id: receive_order_item.unit_of_measurement_id,
+                        item_pricelist_id: receive_order_item.item_pricelist_id,
+                        tracking_number: this.$data.ro_number,
+                        expiration_date: moment(receive_order_item.expiration_date).format('YYYY-MM-DD')
+                    });
+                });
+
+                let formData = {
+                    reference_number: this.$data.ro_number,
+                    contact_id: this.$data.contact_id,
+                    receive_order_items: receiveOrderItems,
+                    purchase_order_id: this.purchase_order_id
+                };
+
+                axios.post("/api/receive-orders", formData).then(res => {
+                    console.log(res.data);
+
+                    this.$router.push({ name: "receive-orders.index" });
+                }).catch(err => {
+                    console.log(err);
+                    alert(`Error! Can't create receive order`);
+                    this.ifReady = true;
+                });
+            }
+        }
     };
-  },
-
-  mounted() {
-    
-    this.purchaseOrderId = this.$route.params.po_id
-    let promise = new Promise((resolve, reject) => {
-        axios.get("/api/contacts/retrieve-all-contacts/").then(res => {
-            console.log(res);
-            this.contacts = res.data.contacts;
-            if (!res.data.response) {
-            return;
-            }
-            resolve();
-        });
-    });
-
-    let promise2 = new Promise((resolve, reject) => {
-        axios.get("/api/sub-departments/retrieve-all-sub-departments/").then(res2 => {
-            // console.log(res2);
-            this.sub_departments = res2.body.sub_departments;
-            if (!res2.data.response) {
-            return;
-            }
-            resolve();
-        });
-    });
-
-    let promise3 = new Promise((resolve, reject) => {
-        axios.get("/api/purchase-orders/"+ this.purchaseOrderId +"/receive").then(res4 => {
-            // console.log("results : " + JSON.stringify(res4.data));
-            this.purchaseOrder = res4.data.purchase_order
-            this.items = res4.data.purchase_order.purchase_items;
-            console.log("items:" + items);
-            if (!res4.data) {
-                return;
-            }
-            resolve();
-        });
-    });
-
-  },
-
-  computed: {
-    subtotalRow() {
-        return this.items.map((item) => {
-        return Number(item.quantity * item.unit_price)
-        });
-    },
-    total() {
-        return this.items.reduce((total, item) => {
-        return total + item.quantity * item.unit_price;
-        }, 0);
-    }
-  },
-
-  methods: {
-    onSelectItem(id, index) {
-      const Index = index
-      const selectedItem = this.itemsList.find(y => y.id === id);
-      console.log(selectedItem)
-      this.items[Index].sku = selectedItem.SKU,
-      this.items[Index].item_id = selectedItem.id,
-      this.items[Index].unit_id = selectedItem.purchase_unit_id,
-      this.items[Index].unit_name = selectedItem.purchase_uom.name,
-      this.items[Index].unit_price = selectedItem.purchase_price
-    },
-    
-    createNewReceiving() {
-      console.log("purchase order: " + JSON.stringify(this.purchaseOrder));
-      const newItems = [];
-      this.$data.items.forEach(element => {
-          newItems.push({
-            tracking_number: element.tracking_number,
-            item_id: element.item_id,
-            quantity: element.quantity,
-            unit_id: element.unit_id,
-            purchase_item_id: element.id,
-            unit_price: element.unit_price
-          })
-      });
-      const formData = {
-          purchase_order_id: this.purchaseOrderId,
-          contact_id: this.purchaseOrder.contact_id,
-          sub_department_id: this.purchaseOrder.sub_department_id,
-          reference_number: this.$data.reference_number,
-          receive_date: this.$data.receive_date,
-          amount: this.total,
-          items: newItems
-      }
-      console.log(formData);
-      axios
-        .post("/api/receive-orders", formData)
-        .then(res => {
-          console.log(JSON.stringify(res.data));
-          alert("Purchase order has been received!")
-          this.$router.push({ name: "receive-orders.index" });
-        })
-        .catch(err => {
-          console.log(err);
-          alert(`Error! Can't receive order`);
-        });
-    }
-  }
-};
 </script>
+
+<style>
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
+    }
+</style>

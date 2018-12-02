@@ -52,7 +52,14 @@ class ContactsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-
+            'contact_type_id'   =>  'required|integer',
+            'company'           =>  'required|string|max:255',
+            'company_address'   =>  'required|string|max:255',
+            'person'            =>  'required|string|max:255',
+            'email'             =>  'required|string|email|max:255|unique:contacts',
+            'mobile_number'     =>  'required|numeric',
+            'credit_limit'      =>  'numeric|nullable',
+            'account_id'        =>  'integer|nullable'
         ]);
 
         if ($validator->fails()) {
@@ -108,7 +115,13 @@ class ContactsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'contact_type_id'   =>  'required|integer',
+            'company'           =>  'required|string|max:255',
+            'company_address'   =>  'required|string|max:255',
+            'person'            =>  'required|string|max:255',
+            'mobile_number'     =>  'required|integer',
+            'credit_limit'      =>  'numeric|nullable',
+            'account_id'        =>  'integer|nullable'
         ]);
 
         if ($validator->fails()) {

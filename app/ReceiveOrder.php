@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class ReceiveOrder extends Model
 {
@@ -23,9 +24,19 @@ class ReceiveOrder extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'purchase_order_id', 'contact_id', 'user_id',
-        'number', 'reference_number', 'receive_date', 'status'
+        'corporation_id', 'purchase_order_id', 'contact_id',
+        'user_id', 'reference_number', 'status'
     ];
+
+    /**
+     * The Log attributes that are mass assignable.
+     *
+     * @var array
+     */
+    // protected static $logAttributes = [
+    //     'corporation_id', 'purchase_order_id', 'contact_id',
+    //     'user_id', 'reference_number', 'status'
+    // ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -33,6 +44,15 @@ class ReceiveOrder extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'contact'
+    ];
 
     /**
      * Run functions on boot.
@@ -46,6 +66,12 @@ class ReceiveOrder extends Model
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
+
+            $model->user_id = auth('api')->user()->id;
+        });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
 
@@ -87,5 +113,25 @@ class ReceiveOrder extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The receive order has many receive order items.
+     *
+     * @return object
+     */
+    public function receiveOrderItems()
+    {
+        return $this->hasMany(ReceiveOrderItem::class);
+    }
+
+    /**
+     * The receive order has many receive order items.
+     *
+     * @return object
+     */
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
     }
 }

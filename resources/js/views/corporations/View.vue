@@ -2,7 +2,8 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Corporations / View Corporation
+                <a class="text-success" href="" @click.prevent="viewCorporations">Corporations</a>
+                <a class="text-secondary"> / View Corporation</a>
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -64,9 +65,9 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewCorporations">Back</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editCorporation">Edit Corporation</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteCorporationModal">Delete Corporation</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewCorporations"><i class="fas fa-chevron-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editCorporation"><i class="fas fa-edit"></i>  Edit Corporation</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteCorporationModal"><i class="fas fa-trash-alt"></i> Delete Corporation</button>
                 </div>
                 <div v-else>
                     <div class="progress">
@@ -115,7 +116,6 @@
     export default {
         data() {
             return {
-                componentVal: 'Corporation',
                 ifReady: false,
                 corporation: ''
             };
@@ -124,7 +124,6 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get('/api/corporations/' + this.$route.params.id).then(res => {
-                    console.log(res)
                     this.corporation = res.data.corporation;
                     resolve();
                 });
@@ -154,7 +153,6 @@
                 $('#deleteCorporationModal').modal('hide');
 
                 axios.delete('/api/corporations/' + this.$route.params.id).then(res => {
-                    if (! res.data.response) { return; }
                     this.$router.push({ name: 'corporations.index' });
                 }).catch(err => {
                     console.log(err);

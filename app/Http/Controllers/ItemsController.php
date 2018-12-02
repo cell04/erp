@@ -55,7 +55,16 @@ class ItemsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            
+            'item_type_id'                              =>  'required|integer',
+            'item_classification_id'                    =>  'required|integer',
+            'default_unit_of_measurement_id'            =>  'required|integer',
+            'sales_account_id'                          =>  'integer|nullable',
+            'cogs_account_id'                           =>  'integer|nullable',
+            'expense_account_id'                        =>  'integer|nullable',
+            'asset_account_id'                          =>  'integer|nullable',
+            'name'                                      =>  'required|string|max:255',
+            'description'                               =>  'required|string|max:255',
+            'stock_keeping_unit'                        =>  'required|string|max:255'  
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +115,16 @@ class ItemsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
+            'item_type_id'                              =>  'required|integer',
+            'item_classification_id'                    =>  'required|integer',
+            'default_unit_of_measurement_id'            =>  'required|integer',
+            'sales_account_id'                          =>  'integer|nullable',
+            'cogs_account_id'                           =>  'integer|nullable',
+            'expense_account_id'                        =>  'integer|nullable',
+            'asset_account_id'                          =>  'integer|nullable',
+            'name'                                      =>  'required|string|max:255',
+            'description'                               =>  'required|string|max:255',
+            'stock_keeping_unit'                        =>  'required|string|max:255'
         ]);
 
         if ($validator->fails()) {

@@ -46,14 +46,22 @@ table.table {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.sidenav-container {
+    height: 600px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-right: none;
+}
+
 .sidebar-nav li > span {
-    color: rgba(0, 0, 0, 0.7);
-    font-size: 90%;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 100%;
 }
 
 .sidebar-nav li > a.nav-link {
     color: rgba(0, 0, 0, 1);
-    font-size: 100%;
+    font-size: 95%;
 }
 
 .navbar-brand {
@@ -79,14 +87,14 @@ table.table {
 }
 
 .nav-sub-menu li a.nav-link {
-    padding-left: 10px;
-    font-size: 85%;
+    padding-left: 5px;
+    font-size: 70%;
     color: black;
 }
 
 .nav-sub-menu li a.nav-link.active {
-    padding-left: 25px;
-    font-size: 85%;
+    padding-left: 5px;
+    font-size: 70%;
     color: white;
 }
 
@@ -159,3 +167,22 @@ table.table {
     margin-top: -6px;
 }
 
+@media only screen and (min-width: 1920px) {
+    .sidenav-container {
+        height: auto;
+        width: 100%;
+        padding-right: none;
+    }
+
+    .nav-sub-menu li a.nav-link {
+        padding-left: 15px;
+        font-size: 85%;
+        color: black;
+    }
+
+    .nav-sub-menu li a.nav-link.active {
+        padding-left: 15px;
+        font-size: 85%;
+        color: white;
+    }
+}

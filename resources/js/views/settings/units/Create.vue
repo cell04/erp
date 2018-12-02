@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header">
-                Unit of Measurements / Create New Unit of Measurement
+                Unit of Measurements / Create New UOM
             </div>
             <div class="card-body">
                 <div v-if="ifReady">
@@ -17,7 +17,7 @@
                             <input type="text" class="form-control" v-model="abbreviation" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
 
-                        <button type="submit" class="btn btn-success btn-sm">Create New Unit of Measurement</button>
+                        <button type="submit" class="btn btn-success btn-sm">Create New UOM</button>
                     </form>
                 </div>
 

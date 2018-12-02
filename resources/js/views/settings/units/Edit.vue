@@ -18,7 +18,7 @@
                         </div>
 
                         <button type="button" class="btn btn-info btn-sm" @click.prevent.default="viewUnitOfMeasurement">Back</button>
-                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateUnitOfMeasurement">Update Unit of Measurement</button>
+                        <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateUnitOfMeasurement">Update UOM</button>
                     </form>
                 </div>
                 <div v-else>
@@ -35,7 +35,7 @@
     export default {
         data() {
             return {
-                componentVal: 'Unit of Measurement',
+                componentVal: 'UOM',
                 ifReady: false,
                 unit_of_measurements: ''
             };

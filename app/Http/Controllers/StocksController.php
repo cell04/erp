@@ -47,6 +47,26 @@ class StocksController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllStocksOfItem($id)
+    {
+        $data = StockResource::collection(
+            $this->stock->paginatePerItemWithFilters(request(), $id, request()->per_page, request()->order_by)
+        );
+
+        if (! $data) {
+            return response()->json([
+                'message' => 'Failed to retrieve resource'
+            ], 400);
+        }
+
+        return $data;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -182,5 +202,70 @@ class StocksController extends Controller
         return response()->json([
             'message' => 'Resource successfully deleted permanently'
         ], 200);
+    }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllStock()
+    {
+        if (cache()->has('stocks')) {
+            return response()->json([
+                'response'   => true,
+                'message'    => 'Resources successfully retrieve.',
+                'stocks' => cache('stocks', 5)
+            ], 200);
+        }
+
+        if (! $stocks = $this->stock->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'stocks' => $stocks
+        ], 200);
+    }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllStockPerLocationType($locationType)
+    {
+        if (! $stocks = $this->stock->paginateWithFiltersPerLocationType(request(), $locationType, request()->per_page, request()->order_by)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'stocks' => $stocks
+        ], 200);
+    }
+
+    public function getAllStocksPerLocation()
+    {
+        $data = StockResource::collection(
+            $this->stock->paginateWithFiltersPerLocation(request(), request()->per_page, request()->order_by)
+        );
+
+        if (! $data) {
+            return response()->json([
+                'message' => 'Failed to retrieve resource'
+            ], 400);
+        }
+
+        return $data;
     }
 }

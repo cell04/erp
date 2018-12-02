@@ -5,10 +5,11 @@ namespace App;
 use App\Traits\Filtering;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Contact extends Model
 {
-    use SoftDeletes, Filtering;
+    use SoftDeletes, Filtering, Notifiable;
 
     /**
      * Contacts table.
@@ -24,7 +25,8 @@ class Contact extends Model
      */
     protected $fillable = [
         'corporation_id', 'contact_type_id', 'company', 'company_address',
-        'person', 'email', 'mobile_number', 'credit_limit'
+        'person', 'email', 'mobile_number', 'credit_limit', 'account_id',
+        'mode_of_payment_id', 'bank_name', 'payment_term', 'business_type'
     ];
 
     /**
@@ -47,6 +49,10 @@ class Contact extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**
@@ -55,7 +61,7 @@ class Contact extends Model
      * @var array
      */
     protected $with = [
-        'contactType'
+        'contactType', 'modeOfPayment'
     ];
 
     /**
@@ -76,5 +82,15 @@ class Contact extends Model
     public function contactType()
     {
         return $this->belongsTo(ContactType::class);
+    }
+
+    /**
+     * The contact belongs to a mode of payment
+     *
+     * @return object
+     */
+    public function modeOfPayment()
+    {
+        return $this->belongsTo(ModeOfPayment::class);
     }
 }
