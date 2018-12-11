@@ -202,7 +202,7 @@
                       v-for="po in this.purchaseOrders"
                     >
                       <li class="list-group-item">
-                        {{po.number}}
+                        {{po.reference_number}}
                         <router-link
                           tag="button"
                           class="btn float-right btn-secondary btn-sm"
@@ -347,11 +347,11 @@
                     <strong>Latest Purchase Orders</strong>
                   </span>
                 </div>
-                <span v-if="this.purchaseOrders && this.purchaseOrders.length > 0">
+                <span v-if="this.todaysPurchaseOrders && this.todaysPurchaseOrders.length > 0">
                   <ul
                     class="list-group list-group-flush"
                     :key="po.id"
-                    v-for="po in this.purchaseOrders"
+                    v-for="po in this.todaysPurchaseOrders"
                   >
                     <li class="list-group-item">
                       {{po.reference_number}}
@@ -767,7 +767,7 @@ export default {
                 (a, b) => new Date(a.created_at) - new Date(b.created_at)
               )
             : [];
-          this.purchaseOrders = this.todaysPurchaseOrders.filter(
+          this.todaysReceiveOrders = this.todaysReceiveOrders.filter(
             (val, i) => i < 10
           );
           // console.groupEnd();
@@ -858,6 +858,7 @@ export default {
       this.quotations = pending_quotations;
       this.stocks = shelf_days_per_item;
       this.todaysQuotations = today_quotations;
+      this.todaysPurchaseOrders = today_purchase_orders;
     //   [{id:12312,number:12312}]
     };
 
