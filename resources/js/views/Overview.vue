@@ -105,9 +105,13 @@
                       v-for="quote in this.quotationsForApproval"
                     >
                       <li class="list-group-item">
+                        {{quote.number}}
                         <router-link
+                          tag="button"
                           :to="{ name: 'quotations.view', params: { id: quote.id } }"
-                        >{{quote.number}}</router-link>
+                          type="button"
+                          class="btn float-right btn-sm btn-secondary"
+                        >View</router-link>
                       </li>
                     </ul>
                   </span>
@@ -198,9 +202,12 @@
                       v-for="po in this.purchaseOrders"
                     >
                       <li class="list-group-item">
+                        {{po.number}}
                         <router-link
+                          tag="button"
+                          class="btn float-right btn-secondary btn-sm"
                           :to="{ name: 'purchase-orders.view', params: { id: po.id } }"
-                        >{{po.reference_number}}</router-link>
+                        >View</router-link>
                       </li>
                     </ul>
                   </span>
@@ -347,9 +354,13 @@
                     v-for="po in this.purchaseOrders"
                   >
                     <li class="list-group-item">
+                      {{po.reference_number}}
                       <router-link
+                        tag="button"
                         :to="{ name: 'purchase-orders.view', params: { id: po.id } }"
-                      >{{po.reference_number}}</router-link>
+                        type="button"
+                        class="btn float-right btn-sm btn-secondary"
+                      >View</router-link>
                     </li>
                   </ul>
                 </span>
@@ -532,7 +543,7 @@ export default {
       //console.log(this.selectedBranchWeek)
     },
     changeTypeWeek() {
-      console.log(this.selectedTypeWeek);
+      //   console.log(this.selectedTypeWeek);
       this.salesTypeChartData.map((data, i) => {
         if (data.label === this.selectedTypeWeek) {
           this.salesTypeTableData = this.salesTypeChartData[i].data;
@@ -590,7 +601,7 @@ export default {
     };
 
     this.salesTypeTableData = this.salesTypeChartData[0].data;
-    console.log(this.salesTypeTableData);
+    // console.log(this.salesTypeTableData);
     this.options = createOptions(this.salesTypeChartData);
 
     //console.clear();
@@ -599,7 +610,7 @@ export default {
         .get("/api/quotations/get-all-quotations")
         .then(res => {
           const allQuotations = res.data.quotations;
-          console.groupCollapsed("Quotation Request");
+          //   // console.groupCollapsed("Quotation Request");
 
           const log = JSON.stringify(allQuotations);
           //console.log('All Quotation', JSON.parse(log));
@@ -621,7 +632,7 @@ export default {
           );
 
           //console.log('Issued Quotations',issuedQuotations)
-          console.groupEnd();
+          //   // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
@@ -630,24 +641,27 @@ export default {
       axios
         .get("/api/invoices/get-all-invoices")
         .then(res => {
-          console.groupCollapsed("Invoice Request");
+          //   // console.groupCollapsed("Invoice Request");
           const allInvoices = res.data.invoices.sort(
             (a, b) => new Date(a.created_at) - new Date(b.created_at)
           );
           //console.log('All Invoices ->',allInvoices)
-          console.groupEnd();
+          //   // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
 
     const getTotalProfit = array => {
       let tempAmount = 0;
-      if (array.reduce) {
-        const finalAmount = array.reduce((prev, curr) => {
-          let prevAmount = prev.amount ? prev.amount : 0;
-          let currAmount = curr.amount ? curr.amount : 0;
-          return parseInt(prevAmount) + parseInt(currAmount);
-        });
+      const finalAmount = 0;
+      if (typeof array === "array") {
+        if (array.reduce) {
+          finalAmount = array.reduce((prev, curr) => {
+            let prevAmount = prev.amount ? prev.amount : 0;
+            let currAmount = curr.amount ? curr.amount : 0;
+            return parseInt(prevAmount) + parseInt(currAmount);
+          });
+        }
       }
       return finalAmount ? finalAmount : 0;
     };
@@ -656,7 +670,7 @@ export default {
       axios
         .get("/api/invoice-payments/get-all-invoice-payments")
         .then(res => {
-          console.groupCollapsed("Invoice Payments");
+          //   // console.groupCollapsed("Invoice Payments");
           const allInvoices = res.data.invoice_payments;
           this.invoices = allInvoices
             ? allInvoices.sort(
@@ -714,7 +728,7 @@ export default {
 
           //console.log('Week Data ->', weekData)
 
-          console.groupEnd();
+          //   // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
@@ -723,7 +737,7 @@ export default {
       axios
         .get("/api/purchase-orders/get-all-purchase-orders")
         .then(res => {
-          console.groupCollapsed("Purchase Orders");
+          //   // console.groupCollapsed("Purchase Orders");
           const allPurchaseOrders = res.data.purchase_orders;
           //console.log('All Purchase Orders ->',JSON.parse(JSON.stringify({res:res.data.purchase_orders})))
           const issuedReceiveOrders = allPurchaseOrders.filter(
@@ -736,7 +750,7 @@ export default {
           this.purchaseOrders = this.todaysPurchaseOrders.filter(
             (val, i) => i < 10
           );
-          console.groupEnd();
+          //   // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
@@ -745,7 +759,7 @@ export default {
       axios
         .get("/api/receive-orders/get-all-receive-orders")
         .then(res => {
-          console.groupCollapsed("Receive Orders");
+          // console.groupCollapsed("Receive Orders");
           const allReceiveOrders = res.data.receive_orders;
           //console.log('All receive Orders ->', allReceiveOrders)
           this.todaysReceiveOrders = allReceiveOrders
@@ -756,7 +770,7 @@ export default {
           this.purchaseOrders = this.todaysPurchaseOrders.filter(
             (val, i) => i < 10
           );
-          console.groupEnd();
+          // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
@@ -765,7 +779,7 @@ export default {
       axios
         .get("/api/stock-transfers/get-all-stock-transfers")
         .then(res => {
-          //console.group('Stock Transfer')
+          //// console.group('Stock Transfer')
           const allStockTransfer = res.data.stock_transfers;
           //console.log('All Stock Transfers ->',JSON.parse(JSON.stringify({res:allStockTransfer})))
           const stockTransferApproval = allStockTransfer.filter(
@@ -776,7 +790,7 @@ export default {
                 (a, b) => new Date(a.created_at) - new Date(b.created_at)
               )
             : [];
-          console.groupEnd();
+          // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
@@ -785,7 +799,7 @@ export default {
       axios
         .get("/api/stock-requests/get-all-unapproved-stock-requests")
         .then(res => {
-          console.groupCollapsed("Stock Requests");
+          // console.groupCollapsed("Stock Requests");
           const allStockRequests = res.data.stock_requests;
           const log = JSON.stringify({ stock_request: allStockRequests });
           //console.log('All Stock Requests ->',JSON.parse(log))
@@ -794,7 +808,7 @@ export default {
                 (a, b) => new Date(a.created_at) - new Date(b.created_at)
               )
             : [];
-          console.groupEnd();
+          // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
@@ -803,12 +817,12 @@ export default {
       axios
         .get("/api/bill-payments/get-all-bill-payments")
         .then(res => {
-          console.groupCollapsed("Bills Payment");
+          // console.groupCollapsed("Bills Payment");
           const allBills = { bills: res.data.bills_payments };
           const log = JSON.stringify(allBills);
           //console.log('All Bills ->',JSON.parse(log))
           // this.bills = allBills.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
-          console.groupEnd();
+          // console.groupEnd();
         })
         .catch(error => console.error(error));
     };
@@ -818,7 +832,6 @@ export default {
       console.groupCollapsed("Dashboard Request");
       console.log("[Dashboard]", res.data);
       console.groupEnd();
-
       const {
         pending_quotations,
         pending_stock_request,
@@ -829,6 +842,7 @@ export default {
         pending_purchase_orders
       } = res.data.dashboard_payload;
 
+      // limiter
       if (typeof shelf_days_per_item === "array") {
         shelf_days_per_item = shelf_days_per_item.map((value, i) => {
           if (i <= 10) {
@@ -838,20 +852,22 @@ export default {
       }
 
       this.quotationsForApproval = pending_quotations;
-      this.purchaseOrders = pending_purchase_orders;
       this.stockRequests = pending_stock_request;
       this.stockTransfers = pending_stock_transfer;
-      this.purchaseOrders = today_purchase_orders;
-      this.quotations = today_quotations;
+      this.purchaseOrders = pending_purchase_orders;
+      this.quotations = pending_quotations;
       this.stocks = shelf_days_per_item;
+      this.todaysQuotations = today_quotations;
+    //   [{id:12312,number:12312}]
     };
+
     getData();
     // getAllQuotations();
-    // getAllInvoices();
+    getAllInvoices();
     // getAllPurchaseOrders();
-    // getAllBills();
-    // getAllReceiveOrder();
-    // getAllInvoicePayments();
+    getAllBills();
+    getAllReceiveOrder();
+    getAllInvoicePayments();
     // getAllStockRequest();
     // getAllStockTransfer();
 
