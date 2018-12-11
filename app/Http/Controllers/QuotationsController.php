@@ -24,7 +24,6 @@ class QuotationsController extends Controller
     public function __construct(QuotationRepository $quotation)
     {
         $this->quotation = $quotation;
-        $this->middleware('auth')->except('contactApproval');
     }
 
     /**
