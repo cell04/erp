@@ -43,7 +43,7 @@ class QuotationApproval extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/api/quotations/' . $this->quotation->id . '/contact-approvals');
+        $url = url('/guest/quotations/' . $this->quotation->id . '/contact-approvals');
 
         return (new MailMessage)->subject('Quotation Approval')->markdown('mail.quotation.approval', array('content' => $this->quotation, 'url' => $url));
     }

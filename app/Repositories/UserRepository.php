@@ -54,12 +54,10 @@ class UserRepository extends Repository
             $user = $this->user->findOrFail($id);
             $user->fill($request->all());
             $user->save();
-            $user->userRole()->delete();
-            $user->userRole()->create($request->all());
+            $user->userRole()->update(['role_id' => $request->role_id]);
             if ($request->hasFile('image')) {
-                $user->image()->update([
-                    'image' => $request->image
-                ]);
+                $user->image()->delete();
+                $user->image()->create($request->all());
             }
 
             return $user;

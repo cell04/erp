@@ -43,7 +43,7 @@ class SendApprovedBidSheetToCustomer extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/api/bid-sheets/' . $this->bidSheet->id . '/contact-approvals');
+        $url = url('/bid-sheets/' . $this->bidSheet->id . '/contact-approvals');
 
         return (new MailMessage)->subject('Bid Sheet Customer Approval')->markdown('mail.bidSheet.approved', array('content' => $this->bidSheet, 'url' => $url));
     }
