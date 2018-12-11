@@ -5,21 +5,28 @@ namespace App\Repositories;
 use App\Contact;
 use App\Contracts\RepositoryInterface;
 use App\Journal;
+use App\Notifications\NewQuotationNotification;
 use App\Notifications\QuotationApproval;
 use App\Quotation;
 use App\Repositories\Repository;
+use App\Repositories\InvoiceRepository;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class QuotationRepository extends Repository
 {
-    private $contact;
+    protected $contact;
+    protected $invoice;
+    protected $user;
 
-    public function __construct(Quotation $quotation, Contact $contact)
+    public function __construct(Quotation $quotation, Contact $contact, InvoiceRepository $invoice, User $user)
     {
         parent::__construct($quotation);
         $this->quotation = $quotation;
         $this->contact = $contact;
+        $this->invoice = $invoice;
+        $this->user = $user;
     }
 
     public function store($request)
@@ -27,6 +34,14 @@ class QuotationRepository extends Repository
         return DB::transaction(function () use ($request) {
             $quotation = $this->quotation->create($request->all());
             $quotation->quotationItems()->createMany($request->quotation_items);
+            $user = $this->user->whereHas('userRole', function ($query) {
+                $query->whereHas('role', function($query) {
+                    $query->where('name', 'like', "%admin%");
+                });
+            })->get();
+
+            Notification::send($user, new NewQuotationNotification($quotation));
+
             return  $quotation;
         });
     }
@@ -111,7 +126,12 @@ class QuotationRepository extends Repository
                 $quotation->update(['status' => $status]);
                 if ($quotation->status == 2) {                  
                     $this->deductStocksQuantity($quotation);
-                    
+                    if ($quotation->contact->payment_term == 2) {
+                        $invoice = $quotation->invoices()->create($quotation->toArray());
+                        $invoice->invoiceItems()->createMany($quotation->quotationItems->toArray());
+                        $this->invoice->generateQuotationEntries($invoice);
+                    }
+
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
 

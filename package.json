@@ -26,6 +26,8 @@
         "vuex": "^3.0.1"
     },
     "dependencies": {
+        "laravel-echo": "^1.5.1",
+        "pusher-js": "^4.3.1",
         "vuejs-datepicker": "^1.5.4",
         "vuelidate": "^0.7.4"
     }

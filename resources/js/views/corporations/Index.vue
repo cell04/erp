@@ -233,7 +233,6 @@
 
         axios.get('/api/corporations', { params }).then(res => {
             console.log(res);
-            callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
                 location.reload();

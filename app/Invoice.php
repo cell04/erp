@@ -65,6 +65,10 @@ class Invoice extends Model
                 $model->user_id = request()->headers->get('USER-ID');
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**

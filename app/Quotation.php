@@ -71,6 +71,10 @@ class Quotation extends Model
 
             $model->user_id = auth('api')->user()->id;
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**
@@ -121,6 +125,16 @@ class Quotation extends Model
     public function quotationItems()
     {
         return $this->hasMany(QuotationItem::class);
+    }
+
+    /**
+     * The quotations has many quotation items.
+     *
+     * @return object
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
     }
 
     public function quotable()

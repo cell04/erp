@@ -67,7 +67,6 @@ class DashboardRepository
     public function pendingQuotations()
     {
         return $this->quotation->where('status', 0)
-        ->where('corporation_id', request()->headers->get('CORPORATION-ID'))
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }
@@ -75,7 +74,6 @@ class DashboardRepository
     public function pendingStockRequests()
     {
         return $this->stockRequest->where('status', 0)
-        ->where('corporation_id', request()->headers->get('CORPORATION-ID'))
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }
@@ -83,7 +81,6 @@ class DashboardRepository
     public function pendingStockTransfers()
     {
         return $this->stockTransfer->where('status', 0)
-        ->where('corporation_id', request()->headers->get('CORPORATION-ID'))
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }
@@ -91,7 +88,6 @@ class DashboardRepository
     public function pendingPurchaseOrders()
     {
         return $this->purchaseOrder->where('status', 0)
-        ->where('corporation_id', request()->headers->get('CORPORATION-ID'))
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }
@@ -99,7 +95,6 @@ class DashboardRepository
     public function todayPurchaseOrders()
     {
         return $this->purchaseOrder->whereDate('created_at', $this->today)
-        ->where('corporation_id', request()->headers->get('CORPORATION-ID'))
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }
@@ -107,15 +102,13 @@ class DashboardRepository
     public function todayQuotations()
     {
         return $this->quotation->whereDate('created_at', $this->today)
-        ->where('corporation_id', request()->headers->get('CORPORATION-ID'))
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }
 
     public function shelfDaysPerItem()
     {
-        return $this->stock->where('corporation_id', request()->headers->get('CORPORATION-ID'))
-        ->orderBy('created_at')
+        return $this->stock->orderBy('created_at')
         ->limit($this->limit)
         ->get();
     }

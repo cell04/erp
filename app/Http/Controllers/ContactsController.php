@@ -57,7 +57,7 @@ class ContactsController extends Controller
             'company_address'   =>  'required|string|max:255',
             'person'            =>  'required|string|max:255',
             'email'             =>  'required|string|email|max:255|unique:contacts',
-            'mobile_number'     =>  'required|integer',
+            'mobile_number'     =>  'required|numeric',
             'credit_limit'      =>  'numeric|nullable',
             'account_id'        =>  'integer|nullable'
         ]);
