@@ -8,18 +8,21 @@ use App\Journal;
 use App\Notifications\QuotationApproval;
 use App\Quotation;
 use App\Repositories\Repository;
+use App\Repositories\InvoiceRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class QuotationRepository extends Repository
 {
-    private $contact;
+    protected $contact;
+    protected $invoice;
 
-    public function __construct(Quotation $quotation, Contact $contact)
+    public function __construct(Quotation $quotation, Contact $contact, InvoiceRepository $invoice)
     {
         parent::__construct($quotation);
         $this->quotation = $quotation;
         $this->contact = $contact;
+        $this->invoice = $invoice;
     }
 
     public function store($request)
@@ -111,7 +114,12 @@ class QuotationRepository extends Repository
                 $quotation->update(['status' => $status]);
                 if ($quotation->status == 2) {                  
                     $this->deductStocksQuantity($quotation);
-                    
+                    if ($quotation->contact->payment_term == 2) {
+                        $invoice = $quotation->invoices()->create($quotation->toArray());
+                        $invoice->invoiceItems()->createMany($quotation->quotationItems->toArray());
+                        $this->invoice->generateQuotationEntries($invoice);
+                    }
+
                     return array('quotation' => $quotation, 'message' => 'Quotation Approved');
                 }
 

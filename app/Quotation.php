@@ -127,6 +127,16 @@ class Quotation extends Model
         return $this->hasMany(QuotationItem::class);
     }
 
+    /**
+     * The quotations has many quotation items.
+     *
+     * @return object
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function quotable()
     {
         return $this->morphTo();

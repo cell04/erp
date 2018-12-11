@@ -4,8 +4,6 @@
 Route::post('/auth/login', 'AuthController@apiLogin');
 Route::post('/auth/logout', 'AuthController@apiLogout');
 Route::get('/auth/user', 'AuthController@user');
-Route::get('/quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
-Route::get('/bid-sheets/{bidSheet}/contact-approvals/{status}', 'BidSheetsController@contactApproval');
 
 Route::group(['middleware' => ['api', 'corporation.default.account']], function () {
     Route::post('test', function () {
@@ -263,6 +261,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'quotations/{quotation}/restore', 'QuotationsController@restore');
     Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
     Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
+    Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
     Route::resource('quotations', 'QuotationsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -273,6 +272,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'bid-sheets/{bid-sheet}/restore', 'BidSheetsController@restore');
     Route::delete('bid-sheets/{bid-sheet}/force-delete', 'BidSheetsController@forceDestroy');
     Route::get('bid-sheets/get-all-bid-sheets', 'BidSheetsController@getAllBidSheets');
+    Route::get('bid-sheets/{bidSheet}/contact-approvals/{status}', 'BidSheetsController@contactApproval');
     Route::resource('bid-sheets', 'BidSheetsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
