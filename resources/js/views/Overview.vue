@@ -403,7 +403,7 @@
               <div class="card">
                 <div class="card-header">
                   <span class="subcontent-header">
-                    <strong>Latest Stocks</strong>
+                    <strong>Shelf Days Per Item</strong>
                   </span>
                 </div>
                 <span v-if="this.stocks && this.stocks.length > 0">
@@ -469,7 +469,7 @@ export default {
       salesComparisonChart: "",
       purchaseComparisonChart: "",
       dateToday: new Date(),
-      stocks:[],
+      stocks: [],
       quotations: [],
       quotationsForApproval: [],
       todaysQuotations: [],
@@ -826,8 +826,16 @@ export default {
         today_purchase_orders,
         today_quotations,
         shelf_days_per_item,
-        pending_purchase_orders,
+        pending_purchase_orders
       } = res.data.dashboard_payload;
+
+      if (typeof shelf_days_per_item === "array") {
+        shelf_days_per_item = shelf_days_per_item.map((value, i) => {
+          if (i <= 10) {
+            return value;
+          }
+        });
+      }
 
       this.quotationsForApproval = pending_quotations;
       this.purchaseOrders = pending_purchase_orders;
@@ -835,8 +843,8 @@ export default {
       this.stockTransfers = pending_stock_transfer;
       this.purchaseOrders = today_purchase_orders;
       this.quotations = today_quotations;
-      this.stocks = shelf_days_per_item
-    }
+      this.stocks = shelf_days_per_item;
+    };
     getData();
     // getAllQuotations();
     // getAllInvoices();
