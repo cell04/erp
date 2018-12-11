@@ -168,8 +168,8 @@
                       <li class="list-group-item">
                         {{stock.number}}
                         <router-link
-                        tag="button"
-                        class="btn float-right btn-secondary btn-sm"
+                          tag="button"
+                          class="btn float-right btn-secondary btn-sm"
                           :to="{ name: 'stock-transfers.view', params: { id: stock.id } }"
                         >View</router-link>
                       </li>
@@ -777,14 +777,40 @@ export default {
         .catch(error => console.error(error));
     };
 
-    getAllQuotations();
+    const getData = async () => {
+      const res = await axios.get("/api/dashboard");
+      console.groupCollapsed("Dashboard Request");
+      console.log("[Dashboard]", res.data);
+      console.groupEnd();
+
+      const {
+        pending_quotations,
+        pending_stock_request,
+        pending_stock_transfer,
+        today_purchase_orders,
+        today_quotations,
+        pending_purchase_orders
+      } = res.data;
+
+      this.quotationsForApproval = pending_quotations;
+      this.purchaseOrders = pending_purchase_orders;
+      this.stockRequests = pending_stock_request;
+      this.stockTransfers = pending_stock_transfer;
+      this.purchaseOrders = today_purchase_orders;
+      this.quotations = today_quotations;
+    };
+
+    getData()
+    // getAllQuotations();
     getAllInvoices();
-    getAllPurchaseOrders();
+    // getAllPurchaseOrders();
     getAllBills();
     getAllReceiveOrder();
     getAllInvoicePayments();
-    getAllStockRequest();
-    getAllStockTransfer();
+    // getAllStockRequest();
+    // getAllStockTransfer();
+
+    getData();
 
     //console.log('Data Today ->', this.dateToday)
 
