@@ -5,21 +5,25 @@ namespace App\Repositories;
 use App\Contact;
 use App\Contracts\RepositoryInterface;
 use App\Journal;
+use App\Notifications\NewQuotationNotification;
 use App\Notifications\QuotationApproval;
 use App\Quotation;
 use App\Repositories\Repository;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class QuotationRepository extends Repository
 {
-    private $contact;
+    protected $contact;
+    protected $user;
 
-    public function __construct(Quotation $quotation, Contact $contact)
+    public function __construct(Quotation $quotation, Contact $contact, User $user)
     {
         parent::__construct($quotation);
         $this->quotation = $quotation;
         $this->contact = $contact;
+        $this->user = $user;
     }
 
     public function store($request)
@@ -27,6 +31,14 @@ class QuotationRepository extends Repository
         return DB::transaction(function () use ($request) {
             $quotation = $this->quotation->create($request->all());
             $quotation->quotationItems()->createMany($request->quotation_items);
+            $user = $this->user->whereHas('userRole', function ($query) {
+                $query->whereHas('role', function($query) {
+                    $query->where('name', 'like', "%admin%");
+                });
+            })->get();
+
+            Notification::send($user, new NewQuotationNotification($quotation));
+
             return  $quotation;
         });
     }

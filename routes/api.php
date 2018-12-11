@@ -8,6 +8,7 @@ Route::get('/quotations/{quotation}/contact-approvals/{status}', 'QuotationsCont
 Route::get('/bid-sheets/{bidSheet}/contact-approvals/{status}', 'BidSheetsController@contactApproval');
 
 Route::group(['middleware' => ['api', 'corporation.default.account']], function () {
+    
     Route::post('test', function () {
         return cache(auth('api')->user()->id . ' accounting.auth');
     });
@@ -23,6 +24,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
 
     //roles
     Route::get('roles/get-all-roles', 'RolesController@getAllRoles');
+    Route::get('notifications', 'NotificationsController@index');
 
     // Branches
     Route::match(['put', 'patch'], 'branches/{contact}/restore', 'BranchesController@restore');
