@@ -396,6 +396,41 @@
               </div>
             </div>
           </div>
+
+          <div class="row mt-2">
+            <!-- Display Top 5 Latest Stocks -->
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <span class="subcontent-header">
+                    <strong>Latest Stocks</strong>
+                  </span>
+                </div>
+                <span v-if="this.stocks && this.stocks.length > 0">
+                  <ul
+                    class="list-group list-group-flush"
+                    :key="stock.id"
+                    v-for="stock in this.stocks"
+                  >
+                    <li class="list-group-item">
+                      {{stock.item.name}}
+                      <router-link
+                        tag="button"
+                        :to="{ name: 'items.view', params: { id: stock.id } }"
+                        type="button"
+                        class="btn float-right btn-sm btn-secondary"
+                      >View</router-link>
+                    </li>
+                  </ul>
+                </span>
+                <span v-else>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">No Stock Available</li>
+                  </ul>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -434,6 +469,7 @@ export default {
       salesComparisonChart: "",
       purchaseComparisonChart: "",
       dateToday: new Date(),
+      stocks:[],
       quotations: [],
       quotationsForApproval: [],
       todaysQuotations: [],
@@ -789,8 +825,9 @@ export default {
         pending_stock_transfer,
         today_purchase_orders,
         today_quotations,
-        pending_purchase_orders
-      } = res.data;
+        shelf_days_per_item,
+        pending_purchase_orders,
+      } = res.data.dashboard_payload;
 
       this.quotationsForApproval = pending_quotations;
       this.purchaseOrders = pending_purchase_orders;
@@ -798,19 +835,17 @@ export default {
       this.stockTransfers = pending_stock_transfer;
       this.purchaseOrders = today_purchase_orders;
       this.quotations = today_quotations;
-    };
-
-    getData()
+      this.stocks = shelf_days_per_item
+    }
+    getData();
     // getAllQuotations();
-    getAllInvoices();
+    // getAllInvoices();
     // getAllPurchaseOrders();
-    getAllBills();
-    getAllReceiveOrder();
-    getAllInvoicePayments();
+    // getAllBills();
+    // getAllReceiveOrder();
+    // getAllInvoicePayments();
     // getAllStockRequest();
     // getAllStockTransfer();
-
-    getData();
 
     //console.log('Data Today ->', this.dateToday)
 
