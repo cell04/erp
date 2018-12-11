@@ -834,8 +834,8 @@ export default {
       console.groupEnd();
       const {
         pending_quotations,
-        pending_stock_request,
-        pending_stock_transfer,
+        pending_stock_requests,
+        pending_stock_transfers,
         today_purchase_orders,
         today_quotations,
         shelf_days_per_item,
@@ -852,8 +852,8 @@ export default {
       }
 
       this.quotationsForApproval = pending_quotations;
-      this.stockRequests = pending_stock_request;
-      this.stockTransfers = pending_stock_transfer;
+      this.stockRequests = pending_stock_requests;
+      this.stockTransfers = pending_stock_transfers;
       this.purchaseOrders = pending_purchase_orders;
       this.quotations = pending_quotations;
       this.stocks = shelf_days_per_item;
