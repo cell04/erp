@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Stock;
 use App\Branch;
-use App\WArehouse;
+use App\Warehouse;
 
 class StockRepository extends Repository
 {

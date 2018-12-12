@@ -62,6 +62,10 @@ class BidSheet extends Model
                 $model->user_id = auth('api')->user()->id;
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**

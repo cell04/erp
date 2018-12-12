@@ -10,18 +10,18 @@
                     <fieldset disabled>
                         <div class="form-group">
                             <label>Picture</label>
-                            <div v-if="user.images[0]" class="offset-md-3 col-md-6">
-                                <img class="img-fluid" :src="'/storage/images/' + user.images[0].image">
+                            <div v-if="user.image" class="offset-md-3 col-md-6">
+                                <img class="img-fluid" :src="'/storage/images/' + user.image.image">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" class="form-control" v-model="user.name">
                         </div>
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                             <label>Role</label>
-                            <input type="text" class="form-control" v-model="user.user_role?.name">
-                        </div> -->
+                            <input type="text" class="form-control" v-model="user.user_role.role.display_name">
+                        </div>
                         <div class="form-group">
                             <label>Email Address</label>
                             <input type="email" class="form-control" v-model="user.email">

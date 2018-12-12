@@ -70,7 +70,7 @@
                     this.name          = res.data.user.name;
                     this.email         = res.data.user.email;
                     this.mobile_number = res.data.user.mobile_number;
-                    this.roleId        = res.data.user.user_role;
+                    this.roleId        = res.data.user.user_role.role;
 
 
                     resolve();

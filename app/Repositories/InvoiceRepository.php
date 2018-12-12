@@ -31,7 +31,9 @@ class InvoiceRepository extends Repository
         return DB::transaction(function () use ($request) {
 
             $invoice = $this->invoice->create($request->all());
-            // $invoice->invoiceItems()->createMany($request->invoice_items);
+            if ($request->invoice_items) {
+                $invoice->invoiceItems()->createMany($request->invoice_items);
+            }
             //Journal Entries
             $invoiceEntries = $this->generateQuotationEntries($invoice);
 

@@ -65,6 +65,10 @@ class Stock extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
         });
+
+        static::addGlobalScope(function ($model) {
+            $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+        });
     }
 
     /**

@@ -86,10 +86,10 @@
         },
         mounted() {
             let promise = new Promise((resolve, reject) => {
-                axios.get("/api/item-types/get-all-user-roles/").then(res => {
+                axios.get("/api/roles/get-all-roles/").then(res => {
                     console.log(res);
                     this.ifReady = true;
-                    this.roleList = res.data.user_roles;
+                    this.roleList = res.data.roles;
                     if (!res.data.response) {
                         return;
                     }
