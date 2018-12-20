@@ -5,86 +5,6 @@
       <hr class="title-border">
     </div>
     <div class="mx-md-4 px-0">
-      <!-- <div class="row">
-                <div class="col-12 my-3">
-                    <span class="h3">Dashboard</span>
-                </div>
-      </div>-->
-      <!-- Sales Report by Branch -->
-      <!-- <div class="row">
-
-                <div class="col-5 pr-0">
-                    <span class="chart-1">
-                        <div class="card card-min">
-                            <div class="card-body card-mod">
-                                <canvas id="sales-report-branch" class="chart"></canvas>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Sales by Branch</small>
-                            </div>
-                        </div>
-                    </span>
-                </div>
-
-                <div class="col-7">
-                    <div class="card card-min">
-                        <div class="card-body card-mod">
-                            <vue-select v-model="selectedBranchWeek" placeholder="Select a Branch" @input="changeBranchWeek()" label="Select Week" :options="options"></vue-select>
-                            <table class="table table-hover table-sm mt-1">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Branch</th>
-                                        <th scope="col">Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="">
-                                    <tr>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-      </div>-->
-      <!-- Sales Report by Type -->
-      <!-- <div class="row mt-3">
-                <div class="col-5 pr-0">
-                    <span class="chart-1">
-                        <div class="card">
-                            <div class="card-body">
-                                <canvas id="sales-report-type" class="chart"></canvas>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-muted">Sales by Type</small>
-                            </div>
-                        </div>
-                    </span>
-                </div>
-
-                <div class="col-7">
-                    <div class="card card-min">
-                        <div class="card-body card-mod">
-                            <vue-select v-model="selectedTypeWeek" placeholder="Select a Type" @input="changeTypeWeek()"  :options="options"></vue-select>
-                            <table class="table table-hover table-sm mt-1">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Week</th>
-                                        <th scope="col">Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="">
-                                     <tr v-bind:key="index" v-for="(data, index) in this.salesTypeTableData">
-                                        <td>Week No. {{index + 1}}</td>
-                                        <td>{{data.val}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-      </div>-->
       <div class="row">
         <div class="col-md-8 col-sm-6 pr-0">
           <!-- Main Content Grid -->
@@ -231,9 +151,6 @@
                         <div class="col-md-12 col-sm-12 text-center center">
                           <span class="display-4">{{todaysPurchaseOrders.length}}</span>
                         </div>
-                        <!-- <div class="col-md-7 col-sm-12 ">
-                                                    <canvas id="chart2" height="200"></canvas>
-                        </div>-->
                       </div>
                       <div class="card-footer text-center">
                         <strong>Today's Issued Purchase Order</strong>
@@ -248,9 +165,6 @@
                         <div class="col-md-12 col-sm-12 text-center center">
                           <span class="display-4">{{todaysReceiveOrders.length}}</span>
                         </div>
-                        <!-- <div class="col-md-7 col-sm-12 ">
-                                                    <canvas id="chart3" height="200"></canvas>
-                        </div>-->
                       </div>
                       <div class="card-footer text-center">
                         <strong>Today's Issued Received Order</strong>
@@ -265,9 +179,6 @@
                         <div class="col-md-12 col-sm-12 text-center center">
                           <span class="display-4">{{this.kFormatter(totalProfit)}}</span>
                         </div>
-                        <!-- <div class="col-md-7 col-sm-12 ">
-                                                    <canvas id="chart4" height="200"></canvas>
-                        </div>-->
                       </div>
                       <div class="card-footer text-center">
                         <strong>Today's Profit</strong>
@@ -280,64 +191,12 @@
 
             <!-- Sales Chart, Purchase Order Comparison  -->
             <div class="row mt-3">
-              <!-- Weekly, Daily or Monthly Sales Chart -->
-              <!-- <div class="col-6">
-                                <div class="p-1 mb-3">
-                                    <span class="h5"> Sales Comparison </span>
-                               </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="chart5" height="250"></canvas>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">Last updated 3 mins ago</small>
-                                    </div>
-                                </div>
-              </div>-->
-              <!-- Weekly Purchase Order Comparison -->
-              <!-- <div class="col-6">
-                                <div class="p-1 mb-3">
-                                    <span class="h5"> Purchase Comparison </span>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="chart6" height="250"></canvas>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">Last updated 3 mins ago</small>
-                                    </div>
-                                </div>
-              </div>-->
             </div>
           </div>
         </div>
 
         <!-- SubContent -->
         <div class="col-md-4 col-sm-6">
-          <!-- <div class="row mt-2"> -->
-          <!-- Display Top 5 Latest P.O -->
-          <!-- <div class="col-12">
-                            <div class="card">
-                                <ul class="list-group list-group-flush" :key="po.id" v-for="po in this.purchaseOrders">
-                                    <li class="list-group-item">
-                                        test
-                                    </li>
-                                    <li class="list-group-item">
-                                        test
-                                    </li>
-                                    <li class="list-group-item">
-                                        test
-                                    </li>
-                                    <li class="list-group-item">
-                                        test
-                                    </li>
-                                    <li class="list-group-item">
-                                        test
-                                    </li>
-                                </ul>
-                            </div>
-          </div>-->
-          <!-- </div> -->
           <div class="row mt-3">
             <!-- Display Top 5 Latest P.O -->
             <div class="col-12">
@@ -865,177 +724,9 @@ export default {
     getData();
     // getAllQuotations();
     getAllInvoices();
-    // getAllPurchaseOrders();
     getAllBills();
     getAllReceiveOrder();
     getAllInvoicePayments();
-    // getAllStockRequest();
-    // getAllStockTransfer();
-
-    //console.log('Data Today ->', this.dateToday)
-
-    if (this.$store.state.corporation_id == null || undefined) {
-      this.$router.push({ name: "corporations.select" });
-    }
-
-    const salesBranchOptions = createBasicConfig(
-      "bar",
-      this.chartLabels,
-      createWeekData(weeks),
-      {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true
-              }
-            }
-          ]
-        }
-      }
-    );
-    const salesTypeOptions = createBasicConfig(
-      "bar",
-      this.chartLabels,
-      createWeekData(this.salesTypeChartData),
-      {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true
-              }
-            }
-          ]
-        }
-      }
-    );
-    // generateChart('sales-report-branch', salesBranchOptions)
-    // generateChart('sales-report-type', salesTypeOptions)
-
-    let promise = new Promise((resolve, reject) => {
-      axios.get("/api/statistics/test-payload").then(res => {
-        const response = res.data.payload;
-        const labels = response.map(data => convertToDate(data.date));
-        const data = response.map(data => data.data);
-        const options = createBasicConfig(
-          "bar",
-          labels,
-          [
-            {
-              label: "Sales",
-              data: data,
-              backgroundColor: "rgba(54, 162, 235, 0.6)",
-              borderColor: "rgba(54, 162, 235, 1)",
-              borderWidth: 2,
-              pointRadius: 0,
-              lineTension: 0
-            }
-          ],
-          {
-            scales: {
-              yAxes: [
-                {
-                  ticks: {
-                    beginAtZero: true
-                  }
-                }
-              ]
-            }
-          }
-        );
-
-        const options2 = createBasicConfig(
-          "line",
-          labels,
-          [
-            {
-              data: data,
-              backgroundColor: "rgba(54, 162, 235, 0.6)",
-              borderColor: "rgba(54, 162, 235, 1)",
-              borderWidth: 2,
-              pointRadius: 0,
-              lineTension: 0,
-              fill: false
-            }
-          ],
-          {
-            legend: {
-              display: false
-            },
-            scales: {
-              yAxes: [
-                {
-                  display: false,
-                  gridLines: {
-                    display: false
-                  },
-                  ticks: {
-                    beginAtZero: true
-                  }
-                }
-              ],
-              xAxes: [
-                {
-                  display: false
-                }
-              ]
-            }
-          }
-        );
-
-        let chartSampleLabel = ["Week 1", "Week 2", "Week 3", "Week 4"];
-        let chartSampleData = [
-          {
-            label: "Type 1",
-            data: [3, 7, 4, 6],
-            backgroundColor: "rgba(54, 162, 235, 0.3)",
-            borderColor: "rgba(54, 162, 235, 1)"
-          },
-          {
-            label: "Type 2",
-            data: [4, 3, 5, 7],
-            backgroundColor: "rgba(54, 162, 235, 0.5)",
-            borderColor: "rgba(54, 162, 235, 1)"
-          },
-          {
-            label: "Type 3",
-            data: [7, 2, 6, 9],
-            backgroundColor: "rgba(54, 162, 235, 0.9)",
-            borderColor: "rgba(54, 162, 235, 1)"
-          }
-        ];
-
-        const options3 = createBasicConfig(
-          "bar",
-          chartSampleLabel,
-          chartSampleData,
-          {
-            scales: {
-              yAxes: [
-                {
-                  ticks: {
-                    beginAtZero: true
-                  }
-                }
-              ]
-            }
-          }
-        );
-
-        // this.salesReportChart = generateChart('chart1', options3)
-        // this.todaysPurchaseOrderChart = generateChart('chart2', options2)
-        // this.todaysReceivedOrderChart = generateChart('chart3', options2)
-        // this.todaysProfitChart = generateChart('chart4', options2)
-        // this.salesComparisonChart = generateChart('chart5', options)
-        // this.purchaseComparisonChart = generateChart('chart6', options3)
-        resolve();
-      });
-    });
-
-    promise.then(() => {
-      this.ifReady = true;
-    });
   }
 };
 </script>
