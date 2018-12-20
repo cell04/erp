@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="content-title">
+        <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
             <h4 class="module-title">PURCHASE INVOICE PAYMENT</h4>
             <hr class="title-border">
         </div>
@@ -45,7 +45,7 @@
                                     <label>Mode of Payment</label>
                                     <vue-select v-model="mopData" @input="selectModeOfPayment()" label="name" :options="mop"></vue-select>
                                 </div>
-                                
+
                             </div>
 
                             <div class="row">
@@ -158,7 +158,7 @@
                 });
 
             },
-            
+
             selectBills() {
                 this.bill_id = this.billsData.id;
                 console.log('IV id: ' + this.bill_id);

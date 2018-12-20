@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="content-title">
+        <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
             <h4 class="module-title">ITEM</h4>
             <hr class="title-border">
         </div>
@@ -24,7 +24,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>SKU</label>
-                                        <input class="form-control" v-model="stock_keeping_unit" maxlength="1000" required></input>
+                                        <input class="form-control" v-model="stock_keeping_unit" maxlength="1000" required/>
                                     </div>
                                 </div>
                             </div>

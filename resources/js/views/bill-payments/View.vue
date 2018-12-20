@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="content-title">
+        <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
             <h4 class="module-title">PURCHASE INVOICE PAYMENT</h4>
             <hr class="title-border">
         </div>

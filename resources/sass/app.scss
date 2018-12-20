@@ -186,3 +186,27 @@ table.table {
         color: white;
     }
 }
+
+// Header
+.content-title {
+  margin-top: -27.5px;
+  margin-bottom: 12px;
+  border-bottom: 28px solid #f5f8fa;
+  border-left: 25px solid transparent;
+  height: 0;
+  width: 100%;
+}
+
+.module-title {
+  padding-top: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.spacer {
+    margin-left:15.5vw;
+}
+
+.title-border {
+  width: 0;
+}
