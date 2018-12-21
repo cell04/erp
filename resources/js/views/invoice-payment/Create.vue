@@ -21,6 +21,16 @@
                                 </div>
 
                                 <div class="col-md-6 form-group">
+                                    <label>Invoice Payment #</label>
+                                    <input type="text" class="form-control" v-model="invoice_payment_number" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="name">Invoice Payment Date</label>
+                                    <input type="date" class="form-control" v-model="invoice_payment_date" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="col-md-6 form-group">
                                     <div class="col-md-12" v-show="selectedSales">
                                         <label>Sales Invoices #</label>
                                         <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
@@ -92,6 +102,8 @@
                 invoice_id: '',
                 mode_of_payment_id: '',
                 amount: '',
+                invoice_payment_number: '',
+                invoice_payment_date: '',
                 cr_number: '',
                 bank_name: '',
                 check: '',
@@ -199,6 +211,8 @@
                 let formData = {
                     invoice_id: this.$data.invoice_id,
                     payment_for: this.$data.payment_for,
+                    invoice_payment_number: this.$data.invoice_payment_number,
+                    invoice_payment_date: this.$data.invoice_payment_date,
                     mode_of_payment_id: this.$data.mode_of_payment_id,
                     cr_number: this.$data.cr_number,
                     bank_name: this.$data.bank_name,
