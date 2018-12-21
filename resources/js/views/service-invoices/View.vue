@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="content-title">
+        <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
             <h4 class="module-title">SERVICE INVOICE</h4>
             <hr class="title-border">
         </div>
 
         <div class="p-md-4">
-            <div class="container p-md-0">          
+            <div class="container p-md-0">
                 <div class="card">
                     <div class="card-header">
                         <a class="text-success" href="" @click.prevent="viewItems">Service Invoices</a>
@@ -36,7 +36,7 @@
                                     <div><b>Due Date:</b> {{serviceInvoices.due_date}}</div>
                                 </div>
                             </div>
-                            
+
                             <br>
                             <br>
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>

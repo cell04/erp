@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="content-title">
+        <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
             <h4 class="module-title">SERVICE INVOICE</h4>
             <hr class="title-border">
         </div>
@@ -39,7 +39,7 @@
                             </tr>
                         </thead>
                         <tbody v-if="invoices">
-                            <tr v-for="invoice in invoices">
+                            <tr v-bind:key="invoice.reference_number" v-for="invoice in invoices">
                                 <td>{{invoice.reference_number}}</td>
                                 <td>{{invoice.contact.person | Upper}}</td>
                                 <td>{{ (invoice.status) == 0 ? 'Issued': 'Approved'}}</td>
