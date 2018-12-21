@@ -40,7 +40,7 @@ class CreateItemsTable extends Migration
                 ->on('item_classifications')
                 ->onDelete('cascade');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('stock_keeping_unit');
             $table->timestamps();
             $table->softDeletes();

@@ -63,7 +63,7 @@ class ItemsController extends Controller
             'expense_account_id'                        =>  'integer|nullable',
             'asset_account_id'                          =>  'integer|nullable',
             'name'                                      =>  'required|string|max:255',
-            'description'                               =>  'required|string|max:255',
+            // 'description'                               =>  'required|string|max:255',
             'stock_keeping_unit'                        =>  'required|string|max:255'  
         ]);
 

@@ -16,4 +16,16 @@ class ItemRepository extends Repository
         parent::__construct($item);
         $this->item = $item;
     }
+
+    public function store($request)
+    {
+        $request->request->add([
+            'asset_account_id'    => 11,
+            'cogs_account_id'     => 9,
+            'sales_account_id'    => 6,
+            'expense_account_id'  => 8
+        ]);
+        
+        return $this->model->create($request->all());
+    }
 }
