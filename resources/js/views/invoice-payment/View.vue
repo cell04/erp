@@ -21,6 +21,16 @@
                                 </div>
 
                                 <div class="col-md-6 form-group">
+                                    <label for="name">Invoice Payment #</label>
+                                    <input type="text" class="form-control" v-model="invoicePayment.invoice_payment_number" autocomplete="off" minlength="2" maxlength="255" required>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label for="name">Invoice Payment Date</label>
+                                    <input type="text" class="form-control" v-model="invoicePayment.invoice_payment_date" required>
+                                </div>
+
+                                <div class="col-md-6 form-group">
                                     <label for="name">Amount</label>
                                     <input type="text" class="form-control" v-model="invoicePayment.amount" autocomplete="off" minlength="2" maxlength="255" required>
                                 </div>
