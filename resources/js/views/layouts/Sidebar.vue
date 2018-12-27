@@ -33,7 +33,7 @@
         </a>
       </li>
       <div class="collapse" id="sales">
-        <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.salesRoute)">
+        <ul class="nav pl-5 flex-column nav-sub-menu" v-bind:class="isActive(this.salesRoute)">
           <li class="nav-item">
             <router-link class="nav-link link" :to="{ name: 'quotations.index' }">
               <span class="sub-content">
@@ -90,7 +90,7 @@
         </a>
       </li>
       <div class="collapse" id="inventory">
-        <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.inventoryRoute)">
+        <ul class="nav pl-5 flex-column nav-sub-menu" v-bind:class="isActive(this.inventoryRoute)">
           <li class="nav-item">
             <router-link class="nav-link link" :to="{ name: 'warehouses.index' }">
               <span class="sub-content">
@@ -181,7 +181,7 @@
         </a>
       </li>
       <div class="collapse" id="purchasing">
-        <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.purchasingRoute)">
+        <ul class="nav pl-5 flex-column nav-sub-menu" v-bind:class="isActive(this.purchasingRoute)">
           <li class="nav-item">
             <router-link class="nav-link link" :to="{ name: 'purchase-orders.index' }">
               <span class="sub-content">
@@ -306,15 +306,19 @@ export default {
 .sidebar-icon {
   font-size: 1em;
 }
-.nav-link .router-link-active {
+.nav-link link .router-link-active {
   background-color: #236d6f;
 }
 .nav-sub-menu .nav-item .nav-link {
-  margin-left: -15px;
+  /* margin-left: -15px; */
   font-size: 13px;
 }
+.nav-link .router-link-active {
+  background-color: #236d6f;
+}
 .sub-content {
-  margin-left: 45px;
+  /* margin-left: 45px; */
+  /* white-space: nowrap; */
 }
 .sidebar-icon .fas .fa-dollar-sign .pr-4 {
   padding-right: 1rem !important;
@@ -329,6 +333,8 @@ export default {
 }
 .link:hover {
   background-color: #287e80;
+  margin-left: -47px;
+  padding-left: 47px !important;
 }
 .link .fa-caret-right {
   display: none;
@@ -339,8 +345,5 @@ export default {
 .selected,
 .selected .nav-link {
   background-color: #236d6f;
-}
-.selected .nav-link {
-  background-color: #287e80;
 }
 </style>
