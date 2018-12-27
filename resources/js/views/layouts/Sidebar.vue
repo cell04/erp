@@ -302,6 +302,7 @@ export default {
 .sidenav-container {
   /* margin-left: -16px; */
   overflow-y: hidden;
+  height: 100%;
 }
 .sidebar-icon {
   font-size: 1em;
