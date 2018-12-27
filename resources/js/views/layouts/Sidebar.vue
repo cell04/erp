@@ -277,7 +277,6 @@ export default {
           return data === newCurrentRoute;
         });
       }
-      // console.log('Filtered Route -> ', routeArray, filteredRoute)
       return filteredRoute && filteredRoute.length > 0 ? "selected" : "";
     }
   },
@@ -307,7 +306,7 @@ export default {
 .sidebar-icon {
   font-size: 1em;
 }
-.nav-link .router-link-exact-active {
+.nav-link .router-link-active {
   background-color: #236d6f;
 }
 .nav-sub-menu .nav-item .nav-link {
@@ -334,7 +333,7 @@ export default {
 .link .fa-caret-right {
   display: none;
 }
-.router-link-exact-active .fa-caret-right {
+.router-link-active .fa-caret-right {
   display: inline;
 }
 .selected,
