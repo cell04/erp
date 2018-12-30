@@ -40,9 +40,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    // protected $with = [
-    //     'userRole'
-    // ];
+    protected $with = [
+        'corporations'
+    ];
 
     public function image()
     {
@@ -52,5 +52,10 @@ class User extends Authenticatable
     public function userRole()
     {
         return $this->hasOne(UserRole::class);
+    }
+
+    public function corporations()
+    {
+        return $this->belongsToMany(Corporation::class);
     }
 }

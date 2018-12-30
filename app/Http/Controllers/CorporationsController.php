@@ -55,14 +55,15 @@ class CorporationsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'          => 'required|string|min:2|max:255',
-            'description'   => 'required|string|min:2|max:255',
-            'country'       => 'required|string|min:2|max:255',
-            'street'        => 'required|string|min:2|max:255',
-            'city'          => 'required|string|min:2|max:255',
-            'state'         => 'required|string|min:2|max:255',
-            'zip_code'      => 'required|integer',
-            'fax'           => 'required|string|min:0|max:255'
+            'name'              => 'required|string|min:2|max:255',
+            'description'       => 'required|string|min:2|max:255',
+            'country'           => 'required|string|min:2|max:255',
+            'street'            => 'required|string|min:2|max:255',
+            'city'              => 'required|string|min:2|max:255',
+            'state'             => 'required|string|min:2|max:255',
+            'zip_code'          => 'required|integer',
+            'fax'               => 'required|string|min:0|max:255',
+            'corporation_id'    => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
