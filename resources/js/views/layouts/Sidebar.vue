@@ -1,6 +1,6 @@
 <template>
-  <div class="sticky-top py-1 background sidenav-container bkdColor">
-    <ul class="nav flex-column sidebar-nav" style="margin-top: -4px;">
+  <div class="sidebar">
+    <ul class="nav flex-column sidebar-nav" style="margin-top: 1px;">
       <li class="nav-item">
         <span class="nav-link icon-white mainNavColor">
           <i class="sidebar-icon fas fa-briefcase" style="padding-right: 1.1rem"></i>
@@ -218,7 +218,7 @@
       </div>
 
       <li class="nav-item" v-bind:class="isActive(['contacts'])">
-        <router-link class="nav-link link" :to="{ name: 'contacts.index' }">
+        <router-link class="nav-link" :to="{ name: 'contacts.index' }">
           <i class="sidebar-icon fas fa-user-alt pr-3"></i>
           Contacts
         </router-link>
@@ -288,20 +288,25 @@ export default {
 };
 </script>
 
-<style>
-.bkdColor {
+<style scoped>
+.sidebar {
+  /* overflow-y: hidden; */
+  height: 100%;
+  transition: all .5s;
   background-color: #319c9f;
 }
+.sidebar.show {
+  width: 250px;
+}
+.sidebar.hide {
+  width: 0;
+}
+
 .icon-white {
   color: white;
 }
 .sidebar-nav li > a.nav-link {
   color: white;
-}
-.sidenav-container {
-  /* margin-left: -16px; */
-  overflow-y: hidden;
-  height: 100%;
 }
 .sidebar-icon {
   font-size: 1em;
@@ -310,15 +315,10 @@ export default {
   background-color: #236d6f;
 }
 .nav-sub-menu .nav-item .nav-link {
-  /* margin-left: -15px; */
   font-size: 13px;
 }
 .nav-link .router-link-active {
   background-color: #236d6f;
-}
-.sub-content {
-  /* margin-left: 45px; */
-  /* white-space: nowrap; */
 }
 .sidebar-icon .fas .fa-dollar-sign .pr-4 {
   padding-right: 1rem !important;
@@ -331,10 +331,14 @@ export default {
     rgba(43, 165, 169, 1) 99%
   );
 }
+.hide .mainNavColor {
+  background: none;
+}
+
 .link:hover {
   background-color: #287e80;
   margin-left: -47px;
-  padding-left: 47px !important;
+  padding-left: 50px !important;
 }
 .link .fa-caret-right {
   display: none;

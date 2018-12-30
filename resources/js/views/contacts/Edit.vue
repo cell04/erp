@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
-            <h4 class="module-title">CONTACT</h4>
+            <h4 class="module-title">CONTACTS</h4>
             <hr class="title-border">
         </div>
 
@@ -197,7 +197,7 @@
                     this.selectedBank = false;
                 }
             },
-            
+
             selectContactType() {
                 this.contact_type_id = this.contactType.id;
             },

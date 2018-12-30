@@ -205,6 +205,16 @@ table.table {
 
 .spacer {
     margin-left:15.5vw;
+    transition: all .5s;
+}
+
+/* ----------- iPad 3, 4 and Pro 9.7" ----------- */
+
+/* Portrait and Landscape */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
+    .spacer {
+        margin-left:27vw;
+    }
 }
 
 .title-border {
