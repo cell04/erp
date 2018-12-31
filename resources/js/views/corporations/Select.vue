@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
-            <h4 class="module-title">Select Corporation</h4>
+            <h4 class="module-title">Switch Group</h4>
             <hr class="title-border">
         </div>
         <div class="p-md-4">
