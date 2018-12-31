@@ -67,7 +67,7 @@ const Overview = () => import('./views/Overview');
 const ServiceInvoicesIndex = () => import('./views/service-invoices/Index');
 const ServiceInvoicesCreate = () => import('./views/service-invoices/Create');
 const ServiceInvoicesView = () => import('./views/service-invoices/View');
- 
+
 
 /**
  * Invoices Payment
@@ -334,11 +334,13 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
         { path: '/received-orders/receive/:id', name: 'receive-orders.receive', component: ReceiveOrdersReceive },
         { path: '/received-orders/:id', name: 'receive-orders.view', component: ReceiveOrdersView },
 
+        // Corporation Select
+        { path: 'corporations/select', name: 'corporations.select', component: CorporationsSelect },
+
         // Settings
         { path: '/settings', name: 'settings.index', component: SettingsIndex,
             children: [
                 // Corporations
-                { path: 'corporations/select', name: 'corporations.select', component: CorporationsSelect },
                 { path: 'corporations', name: 'corporations.index', component: CorporationsIndex },
                 { path: 'corporations/create', name: 'corporations.create', component: CorporationsCreate },
                 { path: 'corporations/:id', name: 'corporations.view', component: CorporationsView },
@@ -349,7 +351,7 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
                 { path: 'contact-types/create', name: 'contact-types.create', component: ContactTypesCreate },
                 { path: 'contact-types/:id', name: 'contact-types.view', component: ContactTypesView },
                 { path: 'contact-types/:id/edit', name: 'contact-types.edit', component: ContactTypesEdit },
-                
+
                 // Item Types
                 { path: 'item-types', name: 'item-types.index', component: ItemTypesIndex },
                 { path: 'item-types/create', name: 'item-types.create', component: ItemTypesCreate },
@@ -415,6 +417,7 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
         { path: '/warehouses/:id', name: 'warehouses.view', component: WarehousesView },
         { path: '/warehouses/:id/edit', name: 'warehouses.edit', component: WarehousesEdit }
         ]
+
     });
 
     router.beforeEach((to, from, next) => {
