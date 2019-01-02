@@ -1,6 +1,6 @@
 <template>
-  <div class="sticky-top py-1 background sidenav-container bkdColor">
-    <ul class="nav flex-column sidebar-nav" style="margin-top: -4px;">
+  <div class="sidebar">
+    <ul class="nav flex-column sidebar-nav" style="margin-top: 1px;">
       <li class="nav-item">
         <span class="nav-link icon-white mainNavColor">
           <i class="sidebar-icon fas fa-briefcase" style="padding-right: 1.1rem"></i>
@@ -33,7 +33,7 @@
         </a>
       </li>
       <div class="collapse" id="sales">
-        <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.salesRoute)">
+        <ul class="nav pl-5 flex-column nav-sub-menu" v-bind:class="isActive(this.salesRoute)">
           <li class="nav-item">
             <router-link class="nav-link link" :to="{ name: 'quotations.index' }">
               <span class="sub-content">
@@ -90,7 +90,7 @@
         </a>
       </li>
       <div class="collapse" id="inventory">
-        <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.inventoryRoute)">
+        <ul class="nav pl-5 flex-column nav-sub-menu" v-bind:class="isActive(this.inventoryRoute)">
           <li class="nav-item">
             <router-link class="nav-link link" :to="{ name: 'warehouses.index' }">
               <span class="sub-content">
@@ -181,7 +181,7 @@
         </a>
       </li>
       <div class="collapse" id="purchasing">
-        <ul class="nav ml-3 flex-column nav-sub-menu" v-bind:class="isActive(this.purchasingRoute)">
+        <ul class="nav pl-5 flex-column nav-sub-menu" v-bind:class="isActive(this.purchasingRoute)">
           <li class="nav-item">
             <router-link class="nav-link link" :to="{ name: 'purchase-orders.index' }">
               <span class="sub-content">
@@ -218,7 +218,7 @@
       </div>
 
       <li class="nav-item" v-bind:class="isActive(['contacts'])">
-        <router-link class="nav-link link" :to="{ name: 'contacts.index' }">
+        <router-link class="nav-link" :to="{ name: 'contacts.index' }">
           <i class="sidebar-icon fas fa-user-alt pr-3"></i>
           Contacts
         </router-link>
@@ -277,7 +277,6 @@ export default {
           return data === newCurrentRoute;
         });
       }
-      // console.log('Filtered Route -> ', routeArray, filteredRoute)
       return filteredRoute && filteredRoute.length > 0 ? "selected" : "";
     }
   },
@@ -289,32 +288,37 @@ export default {
 };
 </script>
 
-<style>
-.bkdColor {
+<style scoped>
+.sidebar {
+  /* overflow-y: hidden; */
+  height: 100%;
+  transition: all .5s;
   background-color: #319c9f;
 }
+.sidebar.show {
+  width: 250px;
+}
+.sidebar.hide {
+  width: 0;
+}
+
 .icon-white {
   color: white;
 }
 .sidebar-nav li > a.nav-link {
   color: white;
 }
-.sidenav-container {
-  /* margin-left: -16px; */
-  overflow-y: hidden;
-}
 .sidebar-icon {
   font-size: 1em;
 }
-.nav-link .router-link-exact-active {
+.nav-link link .router-link-active {
   background-color: #236d6f;
 }
 .nav-sub-menu .nav-item .nav-link {
-  margin-left: -15px;
   font-size: 13px;
 }
-.sub-content {
-  margin-left: 45px;
+.nav-link .router-link-active {
+  background-color: #236d6f;
 }
 .sidebar-icon .fas .fa-dollar-sign .pr-4 {
   padding-right: 1rem !important;
@@ -327,20 +331,23 @@ export default {
     rgba(43, 165, 169, 1) 99%
   );
 }
+.hide .mainNavColor {
+  background: none;
+}
+
 .link:hover {
   background-color: #287e80;
+  margin-left: -47px;
+  padding-left: 50px !important;
 }
 .link .fa-caret-right {
   display: none;
 }
-.router-link-exact-active .fa-caret-right {
+.router-link-active .fa-caret-right {
   display: inline;
 }
 .selected,
 .selected .nav-link {
   background-color: #236d6f;
-}
-.selected .nav-link {
-  background-color: #287e80;
 }
 </style>

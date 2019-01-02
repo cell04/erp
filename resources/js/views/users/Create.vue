@@ -24,6 +24,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="role">Corporation</label>
+                            <vue-select v-model="corpId" @input="selectCorporation()" label="name" :options="corpList"></vue-select>
+                        </div>
+
+                        <div class="form-group">
                             <label for="email">Email Address</label>
                             <input type="email" class="form-control" v-model="email" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
@@ -70,11 +75,14 @@
                 name: '',
                 email: '',
                 role_id: '',
+                corp_id: '',
                 password: '',
                 password_confirmation: '',
                 mobile_number: '',
                 roleId: null,
                 roleList: [],
+                corpId: null,
+                corpList: [],
             };
         },
         validations: {
@@ -87,11 +95,20 @@
         mounted() {
             let promise = new Promise((resolve, reject) => {
                 axios.get("/api/roles/get-all-roles/").then(res => {
-                    console.log(res);
                     this.ifReady = true;
                     this.roleList = res.data.roles;
                     if (!res.data.response) {
                         return;
+                    }
+                    resolve();
+                });
+            });
+
+            let fetchCorporations = new Promise((resolve, reject) => {
+                axios.get("/api/corporations/get-all-corporations").then(res => {
+                    this.corpList = res.data.corporations;
+                    if (!res.data.response) {
+                        reject()
                     }
                     resolve();
                 });
@@ -103,6 +120,9 @@
             },
             onFileSelected(event) {
                 this.image = event.target.files[0];
+            },
+            selectCorporation() {
+                this.corp_id = this.corpId.id;
             },
             selectRole() {
                 this.role_id = this.roleId.id;
@@ -122,6 +142,7 @@
                 formData.append('password', this.password);
                 formData.append('password_confirmation', this.password_confirmation);
                 formData.append('mobile_number', this.mobile_number);
+                formData.append('coporation_id', this.corp_id);
 
                 axios.post('/api/users', formData).then(res => {
                     this.$router.push({ name: 'users.index' });

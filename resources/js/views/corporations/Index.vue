@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header clearfix">
                 <div class="float-left">
-                    Settings / Corporations
+                    Corporations
                 </div>
                 <div class="float-right">
                     <router-link class="btn-primary btn-sm" :to="{ name: 'corporations.create' }"><i class="fas fa-plus"></i> Create New Corporation</router-link>
@@ -32,7 +32,7 @@
                         </tr>
                     </thead>
                     <tbody v-if="corporations">
-                        <tr v-for="{ id, name, description, street, zip_code, country, fax } in corporations">
+                        <tr v-bind:key="id" v-for="{ id, name, description, street, zip_code, country } in corporations">
                             <td>{{ name }}</td>
                             <td>{{ description }}</td>
                             <td>{{ street }}, {{ country}}, {{ zip_code }}</td>
@@ -63,7 +63,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-bind:key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -84,7 +84,7 @@
                         <li class="page-item">
                             <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
                         </li>
-                        <li class="page-item" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
+                        <li class="page-item" v-bind:key="pageNumber" v-for="pageNumber in pageNumbers" v-bind:class="isPageActive(pageNumber)">
                             <a class="page-link" href="#" @click.prevent="goToPage(pageNumber)">{{ pageNumber }}</a>
                         </li>
                         <li class="page-item" v-bind:class="isNextDisabled">
@@ -232,7 +232,8 @@
         };
 
         axios.get('/api/corporations', { params }).then(res => {
-            console.log(res);
+            // console.log(res);
+            callback(null, res.data);
         }).catch(error => {
             if (error.response.status == 401) {
                 location.reload();
@@ -241,6 +242,7 @@
             if (error.response.status == 500) {
                 alert('Kindly report this issue to the devs.');
             }
+            callback(error, error.res.data);
         });
     };
 
@@ -335,6 +337,7 @@
                 }
             );
         },
+
 
         computed: {
             nextPage() {
@@ -459,7 +462,6 @@
             },
             setData(err, { data: corporations, links, meta }) {
                 this.pageNumbers = [];
-
                 if (err) {
                     this.error = err.toString();
                 } else {
