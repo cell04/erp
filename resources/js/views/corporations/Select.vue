@@ -1,28 +1,30 @@
 <template>
     <div>
-        <div class="card">
-            <div class="card-header">
-                <a class="text-secondary">Settings</a>
-                <a class="text-secondary"> / Select Corporation</a>
-            </div>
-            <div class="card-body">
-                <form v-on:submit.prevent="selectCorporation">
-                    <div class="form-group">
-                        <label for="name">Select Corporation</label>
-                        <div v-if="ifReady">
-                            <select class="form-control" v-model="selectedCorporation" required>
-                                <option v-for="corporation in corporations" :value="corporation">{{ corporation.name }}</option>
-                            </select>
-                        </div>
-                        <div v-else>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+        <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
+            <h4 class="module-title">Switch Group</h4>
+            <hr class="title-border">
+        </div>
+        <div class="p-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <form v-on:submit.prevent="selectCorporation">
+                        <div class="form-group">
+                            <label for="name">Please Select a Corporation</label>
+                            <div v-if="ifReady">
+                                <select class="form-control" v-model="selectedCorporation" required>
+                                    <option v-for="corporation in corporations" :value="corporation">{{ corporation.name }}</option>
+                                </select>
+                            </div>
+                            <div v-else>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <button type="submit" class="btn btn-success btn-sm">Select Corporation</button>
-                </form>
+                        <button type="submit" class="btn mt-2 btn-success btn-sm">Select Corporation</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -62,7 +64,7 @@ export default {
             });
 
             promise.then(() => {
-                this.$router.push({ name: 'corporations.index' });
+                this.$router.push({ name: 'overview' });
             });
         }
     }
