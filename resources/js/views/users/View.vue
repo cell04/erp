@@ -22,6 +22,12 @@
                             <label>Role</label>
                             <input type="text" class="form-control" v-model="user.user_role.role.display_name">
                         </div>
+
+                        <div class="form-group" v-for="corporation in user.corporations">
+                            <label>Corporation</label>
+                            <input type="text" class="form-control" v-model="corporation.name">
+                        </div>
+
                         <div class="form-group">
                             <label>Email Address</label>
                             <input type="email" class="form-control" v-model="user.email">

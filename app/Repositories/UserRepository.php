@@ -36,7 +36,7 @@ class UserRepository extends Repository
 
             $user->userRole()->create($request->all());
             $user->image()->create($request->all());
-            $user->corporations()->attach($request->corporation_id);
+            $user->corporations()->attach(request()->headers->get('CORPORATION-ID'));
 
             return $user;
         });

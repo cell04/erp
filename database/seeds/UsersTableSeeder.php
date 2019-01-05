@@ -36,5 +36,10 @@ class UsersTableSeeder extends Seeder
             'created_at' => $today,
             'updated_at' => $today
         ]);
+
+        DB::table('corporation_user')->insert([
+            'corporation_id' => 1,
+            'user_id' => 1
+        ]);
     }
 }

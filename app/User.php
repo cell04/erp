@@ -58,4 +58,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Corporation::class);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(function ($model) {
+            if (request()->headers->get('CORPORATION-ID')) {
+                $model->whereHas('corporations', function($query) {
+                    $query->where('corporation_id', request()->headers->get('CORPORATION-ID'));
+                });   
+            }
+        });
+    }
 }
