@@ -63,7 +63,7 @@ class CorporationsController extends Controller
             'state'             => 'required|string|min:2|max:255',
             'zip_code'          => 'required|integer',
             'fax'               => 'required|string|min:0|max:255',
-            'corporation_id'    => 'required|numeric'
+            // 'corporation_id'    => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
