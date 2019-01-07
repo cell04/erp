@@ -197,10 +197,8 @@
                 axios.get("/api/contacts/" + id).then(res => {
                     this.contactData = res.data.contact;
                     // console.log("COntacts" + JSON.stringify(res.data));
-                    resolve();
                 }).catch(err => {
                     console.log(err);
-                    reject();
                 });
             },
 
@@ -267,7 +265,7 @@
     td {
         width: 100px !important;
     }
-    
+
     .dateStyle input:read-only {
         background-color: #ffffff !important;
     }
