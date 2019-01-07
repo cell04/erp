@@ -127,6 +127,9 @@ export default {
 </script>
 
 <style>
+.navbar {
+    z-index: -1;
+}
 .navcolor {
   background: rgb(255, 255, 255);
   background: linear-gradient(

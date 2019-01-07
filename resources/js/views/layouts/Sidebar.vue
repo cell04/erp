@@ -350,4 +350,5 @@ export default {
 .selected .nav-link {
   background-color: #236d6f;
 }
+.nav-item:focus { outline: 0; }
 </style>
