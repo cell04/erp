@@ -53,7 +53,6 @@ export default {
   grid-template-rows: 1fr;
 }
 .wrapper__container__content {
-  /* z-index: 1; */
   background-color: #f5f8fa;
 }
 
