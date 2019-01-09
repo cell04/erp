@@ -128,7 +128,7 @@ export default {
 
 <style>
 .navbar {
-    z-index: -1;
+    /* z-index: 0; */
 }
 .navcolor {
   background: rgb(255, 255, 255);
