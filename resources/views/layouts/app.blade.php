@@ -15,7 +15,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <!-- <link href="{{ asset('css/custom.css') }}" rel="stylesheet"> -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}" width="30" height="30"/>
