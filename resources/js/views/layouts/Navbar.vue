@@ -79,10 +79,23 @@ export default {
                 this.user = this.$store.state.user;
             });*/
 
-    axios.get("/api/auth/user").then(res => {
-      this.user = res.data.user;
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-    });
+    try {
+        throw ''
+      this.user = JSON.parse(localStorage.getItem("user"));
+      if (!this.user) { throw "user data not found" }
+        if(this.user.hasOwnProperty('corp_id')){
+            localStorage.setItem("selectedCorporation",0)
+        }else{
+            console.warn('corp_id not found')
+        }
+
+    } catch (e) {
+      console.error(e);
+      axios.get("/api/auth/user").then(res => {
+        this.user = res.data.user;
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      });
+    }
 
     if (
       JSON.parse(localStorage.getItem("selectedCorporation")) instanceof
@@ -128,7 +141,7 @@ export default {
 
 <style>
 .navbar {
-    /* z-index: 0; */
+  /* z-index: 0; */
 }
 .navcolor {
   background: rgb(255, 255, 255);
