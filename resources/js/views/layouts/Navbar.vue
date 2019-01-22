@@ -9,26 +9,41 @@
       >
     </router-link>
     <div class="navbar-wrapper__nav">
-        <div class="navbar-wrapper__nav__item" v-if="corporation">
-           {{ corporation.name }}
+      <div class="navbar-wrapper__nav__item--notification">
+        <span
+          class="nav-link dropdown-toggle"
+          href="#"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="true"
+        >
+          <i class="fas fa-globe px-2"></i>
+        </span>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="p-2">No Notification</div>
         </div>
-        <div class="navbar-wrapper__nav__item--cursor">
-            <span class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="true">
-            <i class="fas fa-user"></i>
-            {{ user.name }}
-            <span class="caret"></span>
-            </span>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{ name: 'corporations.select' }">Switch Group</router-link>
-                <router-link class="dropdown-item" :to="{ name: 'corporations.index' }">Settings</router-link>
-                <a class="dropdown-item" href="#" v-on:click.stop.prevent="logout">Logout</a>
-            </div>
+      </div>
+      <div class="navbar-wrapper__nav__item" v-if="corporation">{{ corporation.name }}</div>
+      <div class="navbar-wrapper__nav__item--cursor">
+        <span
+          class="nav-link dropdown-toggle"
+          href="#"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="true"
+        >
+          <i class="fas fa-user"></i>
+          {{ user.name }}
+          <span class="caret"></span>
+        </span>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <router-link class="dropdown-item" :to="{ name: 'corporations.select' }">Switch Group</router-link>
+          <router-link class="dropdown-item" :to="{ name: 'corporations.index' }">Settings</router-link>
+          <a class="dropdown-item" href="#" v-on:click.stop.prevent="logout">Logout</a>
         </div>
+      </div>
     </div>
   </nav>
 </template>
@@ -118,7 +133,7 @@ export default {
     rgba(49, 156, 159, 1) 99%
   );
   display: grid;
-  grid-template-columns: 80px 100px 40px auto 20px;
+  grid-template-columns: 80px 100px 40px auto 30px;
   grid-template-rows: 1fr;
   grid-template-areas: "button logo spacer content spacerRight";
 }
@@ -143,14 +158,23 @@ export default {
   grid-template-columns: auto;
 }
 .navbar-wrapper__nav__item {
-    padding: 10px;
-    color: white;
+  padding: 10px;
+  color: white;
 }
 
 .navbar-wrapper__nav__item--cursor {
-    padding: 10px;
-    color: white;
-    cursor: pointer;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.navbar-wrapper__nav__item--notification {
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+.navbar-wrapper__nav__item--notification .dropdown-toggle::after {
+  border: none;
 }
 
 /* Bootstrap CSS Overrides */
