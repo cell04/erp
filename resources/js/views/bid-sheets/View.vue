@@ -110,7 +110,7 @@
                                 <button type="button" class="btn btn-danger btn-sm" v-if="bidsheet.status === 0" @click.prevent.default="openDeleteBidSheetModal"><i class="fas fa-trash-alt"></i> Delete</button>
                             </div>
                             <div class="float-right">
-                                <button class="btn btn-success btn-sm" v-if="bidsheet.status == 0" @click.prevent="openApproveBidSheetModal"><i class="fas fa-thumbs-up"></i> Approve Quotation</button>
+                                <button class="btn btn-success btn-sm" v-if="bidsheet.status == 0" @click.prevent="openApproveBidSheetModal"><i class="fas fa-thumbs-up"></i> Approve Bid Sheet</button>
                                 <button class="btn btn-danger btn-sm" v-if="bidsheet.status === 0" @click.prevent.default="openCancleBidSheetModal"><i class="fas fa-thumbs-down"></i> Cancel</button>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                 </div>
 
                 <!-- Delete Modal -->
-                <div class="modal fade" id="deleteBidSheetModal" tabindex="-1" role="dialog" aria-labelledby="deleteBidSheetTitle" aria-hidden="true">
+                <div class="modal fade" id="deleteBidSheetModal" tabindex="2" role="dialog" aria-labelledby="deleteBidSheetTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -145,7 +145,7 @@
                 </div>
 
                 <!-- Approve Modal -->
-                <div class="modal fade" id="approveBidSheetModal" tabindex="-1" role="dialog" aria-labelledby="approveBidSheetTitle" aria-hidden="true">
+                <div class="modal fade" id="approveBidSheetModal" tabindex="2" role="dialog" aria-labelledby="approveBidSheetTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -166,7 +166,7 @@
                 </div>
 
                 <!-- Cancel Modal -->
-                <div class="modal fade" id="cancelBidSheetModal" tabindex="-1" role="dialog" aria-labelledby="cancelBidSheetTitle" aria-hidden="true">
+                <div class="modal fade" id="cancelBidSheetModal" tabindex="2" role="dialog" aria-labelledby="cancelBidSheetTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">

@@ -1,65 +1,48 @@
 <template>
-  <nav class="navbar navbar-expand-md navcolor">
-    <div class="container-fluid">
-      <i @click="clickSidebar()" class="fas fa-bars menu-button"></i>
-      <router-link class="navTextColor" :to="{ name: 'overview' }">
-        <img
-          src="../../assets/tradesoft_logo.png"
-          style="width:115px; height:60px; margin-top:-5px; margin-bottom: -10px; margin-left:25px;"
-          alt="Tradesoft Business"
-        >
-      </router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+  <nav class="navbar-wrapper">
+    <i @click="clickSidebar()" class="fas fa-bars navbar-wrapper__menu"></i>
+    <router-link class="navbar-wrapper__logo" :to="{ name: 'overview' }">
+      <img
+        src="../../assets/tradesoft_logo.png"
+        style="width:115px; height:60px; margin-top:-5px; margin-bottom: -10px; margin-left:25px;"
+        alt="Tradesoft Business"
       >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item dropdown notification">
-            <a
-              class="nav-link dropdown-toggle navTextColor"
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <i class="fas fa-globe px-2"></i>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item p-3" href="#">No New Notifcation</a>
-            </div>
-          </li>
-          <li v-if="corporation">
-            <a class="nav-link navTextColor" href="#" v-on:click.stop.prevent>{{ corporation.name }}</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle navTextColor"
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <i class="fas fa-user px-2"></i>
-              {{ user.name }}
-              <span class="caret"></span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <router-link class="dropdown-item" :to="{ name: 'corporations.select' }">Switch Group</router-link>
-              <router-link class="dropdown-item" :to="{ name: 'corporations.index' }">Settings</router-link>
-              <a class="dropdown-item" href="#" v-on:click.stop.prevent="logout">Logout</a>
-            </div>
-          </li>
-        </ul>
+    </router-link>
+    <div class="navbar-wrapper__nav">
+      <div class="navbar-wrapper__nav__item--notification">
+        <span
+          class="nav-link dropdown-toggle"
+          href="#"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="true"
+        >
+          <i class="fas fa-globe px-2"></i>
+        </span>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="p-2">No Notification</div>
+        </div>
+      </div>
+      <div class="navbar-wrapper__nav__item" v-if="corporation">{{ corporation.name }}</div>
+      <div class="navbar-wrapper__nav__item--cursor">
+        <span
+          class="nav-link dropdown-toggle"
+          href="#"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="true"
+        >
+          <i class="fas fa-user"></i>
+          {{ user.name }}
+          <span class="caret"></span>
+        </span>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <router-link class="dropdown-item" :to="{ name: 'corporations.select' }">Switch Group</router-link>
+          <router-link class="dropdown-item" :to="{ name: 'corporations.index' }">Settings</router-link>
+          <a class="dropdown-item" href="#" v-on:click.stop.prevent="logout">Logout</a>
+        </div>
       </div>
     </div>
   </nav>
@@ -79,10 +62,24 @@ export default {
                 this.user = this.$store.state.user;
             });*/
 
-    axios.get("/api/auth/user").then(res => {
-      this.user = res.data.user;
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-    });
+    try {
+      throw "";
+      this.user = JSON.parse(localStorage.getItem("user"));
+      if (!this.user) {
+        throw "user data not found";
+      }
+      if (this.user.hasOwnProperty("corp_id")) {
+        localStorage.setItem("selectedCorporation", 0);
+      } else {
+        console.warn("corp_id not found");
+      }
+    } catch (e) {
+      console.error(e);
+      axios.get("/api/auth/user").then(res => {
+        this.user = res.data.user;
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      });
+    }
 
     if (
       JSON.parse(localStorage.getItem("selectedCorporation")) instanceof
@@ -126,41 +123,65 @@ export default {
 };
 </script>
 
-<style>
-.navcolor {
-  background: rgb(255, 255, 255);
+<style scoped>
+.navbar-wrapper {
+  height: 70px;
+  width: 100%;
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 1) 0%,
     rgba(49, 156, 159, 1) 99%
   );
+  display: grid;
+  grid-template-columns: 80px 100px 40px auto 30px;
+  grid-template-rows: 1fr;
+  grid-template-areas: "button logo spacer content spacerRight";
 }
-.navTextColor {
+.navbar-wrapper__menu {
+  grid-area: button;
+  font-size: 24px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 60px;
+  padding-left: 20px;
+}
+.navbar-wrapper__logo {
+  grid-area: logo;
+  padding-top: 10px;
+}
+.navbar-wrapper__nav {
+  grid-area: content;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: end;
+  grid-template-rows: 40px;
+  grid-template-columns: auto;
+}
+.navbar-wrapper__nav__item {
+  padding: 10px;
   color: white;
 }
-.navTextColor:hover {
-  color: rgb(218, 218, 218);
-}
-.fas .fa-user .px-1 {
-  color: white !important;
-}
-.navbar-nav .dropdown-menu {
-  position: static;
-  float: none;
-  margin-top: -20px;
-}
-.navbar-nav .nav-link {
-  padding-right: 0;
-  padding-left: 0;
-  padding-bottom: 20px;
-}
-.menu-button {
-  font-size: 1.5em;
-  margin-right: 20px;
+
+.navbar-wrapper__nav__item--cursor {
+  padding: 10px;
+  color: white;
   cursor: pointer;
-  color: #1c6c6e;
 }
-.notification .dropdown-toggle:after {
-  content: none;
+
+.navbar-wrapper__nav__item--notification {
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+.navbar-wrapper__nav__item--notification .dropdown-toggle::after {
+  border: none;
+}
+
+/* Bootstrap CSS Overrides */
+.nav-link {
+  color: white;
+  outline: none;
+  text-decoration: none;
+  padding: 0;
 }
 </style>
