@@ -1,4 +1,4 @@
-<template>
+\<template>
     <div>
         <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
             <h4 class="module-title">ITEM</h4>
@@ -36,26 +36,70 @@
 
                             <div class="row">
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Item Type</label>
                                         <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label> Item Subtype</label>
                                         <vue-select v-model="itemClassId" @input="selectItemClass()" label="name" :options="itemClassList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>UOM</label>
-                                        <vue-select v-model="itemUnitId" @input="selectItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                        <label>Purchase UOM</label>
+                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Default UOM</label>
+                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                    </div>
+                                </div>
+
+                                <div class="col" v-if="conversionsList.length != 0">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="text-success">Conversion Section</a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <vue-select label="name" :options="conversionsList"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-success" @click.prevent="viewItems"><i class="fas fa-plus"></i> Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Conversion List</label>
+                                        <vue-select label="name" :options="conversionsList"></vue-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label></label>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-success btn-sm" @click.prevent="viewItems"><i class="fas fa-plus"></i> Add</button>
+                                    </div>
+                                </div> -->
+
                             </div>
                             <br>
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
@@ -96,13 +140,15 @@
                 },
                 itemTypeId: null,
                 itemClassId: null,
-                itemUnitId: null,
+                defaultItemUnitId: null,
+                purchaseItemUnitId: null,
                 item_type_id: '',
                 item_classification_id: '',
                 name: '',
                 description: '',
                 stock_keeping_unit: '',
                 default_unit_of_measurement_id: '',
+                purchase_unit_of_measurement_id: '',
                 itemTypesList: [],
                 itemClassList: [],
                 itemUnitList: [],
@@ -158,9 +204,34 @@
                 this.$router.push({ name: 'items.index' });
             },
 
-            selectItemUnit() {
-                this.default_unit_of_measurement_id = this.itemUnitId.id;
-                console.log('GetItemUnitId: ' + this.default_unit_of_measurement_id);
+            getConversions() {
+                let formData = {
+                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
+                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
+                };
+
+                axios.post("/api/items/conversions", formData).then(res => {
+                    console.log(res.data.conversions);
+                    this.conversionsList = res.data.conversions;
+                    // this.
+
+                    // this.$router.push({ name: "receive-orders.index" });
+                }).catch(err => {
+                    console.log(err);
+                    alert(`Error! No Result`);
+                    this.ifReady = true;
+                });
+            },
+
+            selectDefaultItemUnit() {
+                this.default_unit_of_measurement_id = this.defaultItemUnitId.id;
+                console.log('GetDefaultItemUnitId: ' + this.default_unit_of_measurement_id);
+                this.getConversions()
+            },
+
+            selectPurchaseItemUnit() {
+                this.purchase_unit_of_measurement_id = this.purchaseItemUnitId.id;
+                console.log('GetPurchaseItemUnitId: ' + this.purchase_unit_of_measurement_id);
             },
 
             selectItemType() {

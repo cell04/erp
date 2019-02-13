@@ -46,6 +46,22 @@ class ItemsController extends Controller
         return $data;
     }
 
+    public function getItemConversions(Request $request)
+    {
+        if (! $conversions = $this->item->getConversions($request->purchase_unit_of_measurement_id, $request->default_unit_of_measurement_id)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resources successfully retrieve.',
+            'conversions'    => $conversions
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -118,6 +134,7 @@ class ItemsController extends Controller
             'item_type_id'                              =>  'required|integer',
             'item_classification_id'                    =>  'required|integer',
             'default_unit_of_measurement_id'            =>  'required|integer',
+            'purchase_unit_of_measurement_id'           =>  'required|integer',
             'sales_account_id'                          =>  'integer|nullable',
             'cogs_account_id'                           =>  'integer|nullable',
             'expense_account_id'                        =>  'integer|nullable',

@@ -211,8 +211,8 @@
             selectItem(index) {
                 if (this.purchase_order_items[index].item instanceof Object) {
                     this.purchase_order_items[index].item_id = this.purchase_order_items[index].item.id;
-                    this.purchase_order_items[index].unitOfMeasurement = this.purchase_order_items[index].item.default_unit_of_measurement.name;
-                    this.purchase_order_items[index].unit_of_measurement_id = this.purchase_order_items[index].item.default_unit_of_measurement.id;
+                    this.purchase_order_items[index].unitOfMeasurement = this.purchase_order_items[index].item.purchase_unit_of_measurement.name;
+                    this.purchase_order_items[index].unit_of_measurement_id = this.purchase_order_items[index].item.purchase_unit_of_measurement.id;
 
                     let promise = new Promise((resolve, reject) => {
                         axios.get("/api/item-pricelists/get-item-pricelists/" + this.purchase_order_items[index].item_id).then(res => {

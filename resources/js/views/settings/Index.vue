@@ -35,6 +35,11 @@
                             </router-link>
                         </li>
                         <li class="nav-item bg-white">
+                            <router-link class="nav-link p-3" :to="{ name: 'conversions.index' }">
+                                Conversions
+                            </router-link>
+                        </li>
+                        <li class="nav-item bg-white">
                             <router-link class="nav-link p-3" :to="{ name: 'users.index' }">
                                 Users
                             </router-link>

@@ -138,6 +138,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'items/{item}/restore', 'ItemsController@restore');
     Route::delete('items/{item}/force-delete', 'ItemsController@forceDestroy');
     Route::get('items/get-all-items', 'ItemsController@getAllItems');
+    Route::post('items/conversions', 'ItemsController@getItemConversions');
     Route::resource('items', 'ItemsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'

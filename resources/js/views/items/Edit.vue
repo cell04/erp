@@ -30,24 +30,31 @@
                             </div> -->
 
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Item Type</label>
                                         <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label> Item Subtype</label>
                                         <vue-select v-model="itemClassId" @input="selectClassType()" label="name" :options="itemClassList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>UOM</label>
-                                        <vue-select v-model="itemUnitId" @input="selectUnit()" label="name" :options="itemUnitList"></vue-select>
+                                        <label>Purchase UOM</label>
+                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseUnit()" label="name" :options="itemUnitList"></vue-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Default UOM</label>
+                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +81,8 @@
                 ifReady: true,
                 itemTypeId: null,
                 itemClassId: null,
-                itemUnitId: null,
+                defaultItemUnitId: null,
+                purchaseItemUnitId: null,
                 itemTypesList: [],
                 itemClassList: [],
                 itemUnitList: [],
@@ -83,6 +91,7 @@
                 id: '',
                 stock_keeping_unit: '',
                 default_unit_of_measurement_id: '',
+                purchase_unit_of_measurement_id: '',
                 name: '',
                 description: '',
                 status: 1
@@ -100,10 +109,11 @@
                     this.item_type_id = res.data.item.item_type_id;
                     this.item_classification_id = res.data.item.item_classification_id;
                     this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id;
-
+                    this.purchase_unit_of_measurement_id = res.data.item.purchase_unit_of_measurement_id;
                     this.itemTypeId = res.data.item.item_type;
                     this.itemClassId = res.data.item.item_classification;
-                    this.itemUnitId = res.data.item.default_unit_of_measurement;
+                    this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
+                    this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
                     this.getItemType();
                     this.getClassType();
                     this.getUnit();
@@ -126,9 +136,14 @@
                 console.log('GetItemClassId: ' + this.item_classification_id);
             },
 
-            selectUnit() {
-                this.default_unit_of_measurement_id = this.itemUnitId.id;
-                console.log('GetUnitId: ' + this.default_unit_of_measurement_id);
+            selectDefaultUnit() {
+                this.default_unit_of_measurement_id = this.defaultItemUnitId.id;
+                console.log('GetDefaultUnitId: ' + this.default_unit_of_measurement_id);
+            },
+
+            selectPurchaseUnit() {
+                this.purchase_unit_of_measurement_id = this.purchaseItemUnitId.id;
+                console.log('GetPurchaseUnitId: ' + this.purchase_unit_of_measurement_id);
             },
 
             getItemType() {
