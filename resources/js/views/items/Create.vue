@@ -1,4 +1,4 @@
-\<template>
+<template>
     <div>
         <div v-bind:class="this.$store.state.showSidebar? 'content-title':'spacer content-title' ">
             <h4 class="module-title">ITEM</h4>
@@ -73,33 +73,51 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <vue-select label="name" :options="conversionsList"></vue-select>
+                                                        <vue-select v-model="selectedConversion" label="name" :options="conversionsList"></vue-select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <button type="button" class="btn btn-success" @click.prevent="viewItems"><i class="fas fa-plus"></i> Add</button>
+                                                        <vue-select v-model="selectedConversionModule" label="name" :options="conversionModules"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover table-sm">
+                                                <caption>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                        </div>
+                                                    </div>
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">From</th>
+                                                        <th scope="col">To</th>
+                                                        <th scope="col">Module</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item_conversion, index) in item_conversions" :key="index">
+                                                        <td>{{ item_conversion.from_value }} {{ item_conversion.convertFrom.name }}</td>
+                                                        <td>{{ item_conversion.to_value }} {{ item_conversion.convertTo.name }}</td>
+                                                        <td>{{ item_conversion.module_name }}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <!-- <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Conversion List</label>
-                                        <vue-select label="name" :options="conversionsList"></vue-select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label></label>
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-success btn-sm" @click.prevent="viewItems"><i class="fas fa-plus"></i> Add</button>
-                                    </div>
-                                </div> -->
-
                             </div>
                             <br>
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
@@ -134,7 +152,7 @@
                     default_unit_id: "",
                     purchase_unit_id: "",
                     conversion_id: "",
-                    conversions: [{
+                    item_conversions: [{
                         conversion_id: ""
                     }]
                 },
@@ -152,12 +170,24 @@
                 itemTypesList: [],
                 itemClassList: [],
                 itemUnitList: [],
-
+                selectedConversion : [],
+                selectedConversionModule : [],
                 accountsList: [],
                 itemClassificationsList: [],
                 unitsList: [],
                 defaultUnitsList: [],
-                conversionsList: []
+                conversionsList: [],
+                item_conversions: [],
+                conversionModules : [
+                    {
+                        value : 1,
+                        name : "Inventory"
+                    },
+                    {
+                        value : 2,
+                        name : "Recipe"
+                    }
+                ]
             };
         },
 
@@ -202,6 +232,38 @@
         methods: {
             viewItems() {
                 this.$router.push({ name: 'items.index' });
+            },
+
+            addNewItem() {
+
+                this.item_conversions.push({
+                    module: this.selectedConversionModule.value,
+                    module_name: this.selectedConversionModule.name,
+                    conversion_id: this.selectedConversion.id,
+                    convertFrom: this.selectedConversion.convert_from,
+                    from_value: this.selectedConversion.from_value,
+                    convertTo: this.selectedConversion.convert_to,
+                    to_value: this.selectedConversion.to_value
+                });
+            },
+
+            // selectConversion() {
+
+            //     let promise = new Promise((resolve, reject) => {
+            //         axios.get("/api/conversions/" + this.selectedConversion.id).then(res => {
+            //             this.selectedConversion = res.data.conversion;
+            //             resolve();
+            //         }).catch(err => {
+            //             console.log(err);
+            //             reject();
+            //         });
+            //     });
+
+            //     console.log(this.selectedConversion);
+            // },
+
+            deleteRow(index) {
+                this.item_conversions.splice(index, 1);
             },
 
             getConversions() {

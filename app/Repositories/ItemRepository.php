@@ -2,8 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Item;
 use App\Conversion;
+use App\Item;
+use Illuminate\Support\Facades\DB;
 
 class ItemRepository extends Repository
 {
@@ -23,14 +24,19 @@ class ItemRepository extends Repository
 
     public function store($request)
     {
-        $request->request->add([
-            'asset_account_id'    => 11,
-            'cogs_account_id'     => 9,
-            'sales_account_id'    => 6,
-            'expense_account_id'  => 8
-        ]);
-        
-        return $this->item->create($request->all());
+        return DB::transaction(function () use ($request) {
+            $request->request->add([
+                'asset_account_id'    => 11,
+                'cogs_account_id'     => 9,
+                'sales_account_id'    => 6,
+                'expense_account_id'  => 8
+            ]);
+            
+            $item = $this->item->create($request->all());
+            $item->itemConversions()->createMany($request->item_conversions);
+
+            return $item;
+        });
     }
 
     public function getConversions($from, $to)
@@ -46,7 +52,11 @@ class ItemRepository extends Repository
             foreach ($conversions as $conversion) {
                 $data[$i++] = array(
                     'id' => $conversion->id,
-                    'name' => $conversion->convertFrom->name . ' - ' . $conversion->convertTo->name
+                    'name' => $conversion->convertFrom->name . ' - ' . $conversion->convertTo->name,
+                    'convert_from' => $conversion->convertFrom,
+                    'from_value' => $conversion->from_value,
+                    'convert_to' => $conversion->convertTo,
+                    'to_value' =>   $conversion->to_value
                 );
             }
         }
