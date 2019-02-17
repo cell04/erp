@@ -47,6 +47,16 @@ class ItemType extends Model
      * Run functions on boot.
      *
      */
+
+    /**
+     * Eager load relationships.
+     *
+     * @var array
+     */
+    protected $with = [
+        'itemClassifications'
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -88,6 +98,16 @@ class ItemType extends Model
      * @return array object
      */
     public function itemClassification()
+    {
+        return $this->hasMany(ItemClassification::class);
+    }
+
+    /**
+     * The item has many item classification.
+     *
+     * @return array object
+     */
+    public function itemClassifications()
     {
         return $this->hasMany(ItemClassification::class);
     }

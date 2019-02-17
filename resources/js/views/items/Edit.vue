@@ -57,6 +57,66 @@
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
+
+                                <div class="col" v-if="conversionsList.length != 0">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="text-success">Conversion Section</a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedConversion" label="name" :options="conversionsList"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedConversionModule" label="name" :options="conversionModules"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover table-sm">
+                                                <caption>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                        </div>
+                                                    </div>
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">From</th>
+                                                        <th scope="col">To</th>
+                                                        <th scope="col">Module</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item_conversion, index) in item_conversions" :key="index">
+                                                        <td>{{ item_conversion.conversion.from_value }} {{ item_conversion.conversion.convert_from.name }}</td>
+                                                        <td>{{ item_conversion.conversion.to_value }} {{ item_conversion.conversion.convert_to.name }}</td>
+                                                        <td v-if="item_conversion.module === 1">
+                                                            Invetory
+                                                        </td>
+                                                        <td v-if="item_conversion.module === 2">
+                                                            Recipe
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <br>
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
@@ -79,10 +139,10 @@
         data() {
             return {
                 ifReady: true,
-                itemTypeId: null,
-                itemClassId: null,
-                defaultItemUnitId: null,
-                purchaseItemUnitId: null,
+                itemTypeId: {},
+                itemClassId: {},
+                defaultItemUnitId: {},
+                purchaseItemUnitId: {},
                 itemTypesList: [],
                 itemClassList: [],
                 itemUnitList: [],
@@ -94,7 +154,21 @@
                 purchase_unit_of_measurement_id: '',
                 name: '',
                 description: '',
-                status: 1
+                status: 1,
+                conversionsList: [],
+                item_conversions: [],
+                selectedConversionModule: {},
+                selectedConversion : {},
+                conversionModules : [
+                    {
+                        value : 1,
+                        name : "Inventory"
+                    },
+                    {
+                        value : 2,
+                        name : "Recipe"
+                    }
+                ]
             };
         },
 
@@ -114,9 +188,12 @@
                     this.itemClassId = res.data.item.item_classification;
                     this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
                     this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
+                    this.item_conversions = res.data.item.item_conversions;
+                    this.itemClassList = res.data.item.item_type.item_classifications;
                     this.getItemType();
                     this.getClassType();
                     this.getUnit();
+                    this.getConversions();
                     resolve();
                 });
             });
@@ -126,9 +203,54 @@
         },
 
         methods: {
+            refreshData() {
+                this.item_classifications = [];
+            },
+
             selectItemType() {
                 this.item_type_id = this.itemTypeId.id;
+                this.itemClassList = this.itemTypeId.item_classifications;
                 console.log('GetItemTypeId: ' + this.item_type_id);
+            },
+
+            addNewItem() {
+
+                // console.log(this.selectedConversion);
+                this.item_conversions.push({
+                    module: this.selectedConversionModule.value,
+                    module_name: this.selectedConversionModule.name,
+                    conversion_id: this.selectedConversion.id,
+                    conversion: 
+                    {
+                        convert_from: this.selectedConversion.convert_from,
+                        from_value: this.selectedConversion.from_value,
+                        convert_to: this.selectedConversion.convert_to,
+                        to_value: this.selectedConversion.to_value
+                    }
+                });
+
+                console.log(this.item_conversions);
+            },
+
+            getConversions() {
+                let formData = {
+                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
+                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
+                };
+
+                console.log(formData);
+
+                axios.post("/api/items/conversions", formData).then(res => {
+                    console.log(res.data.conversions);
+                    this.conversionsList = res.data.conversions;
+                    // this.
+
+                    // this.$router.push({ name: "receive-orders.index" });
+                }).catch(err => {
+                    console.log(err);
+                    alert(`Error! No Result`);
+                    this.ifReady = true;
+                });
             },
 
             selectClassType() {
@@ -138,11 +260,35 @@
 
             selectDefaultUnit() {
                 this.default_unit_of_measurement_id = this.defaultItemUnitId.id;
+                this.getConversions();
+                this.selectedConversion = {};
+                this.selectedConversionModule = {};
                 console.log('GetDefaultUnitId: ' + this.default_unit_of_measurement_id);
+            },
+
+            getConversions() {
+                let formData = {
+                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
+                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
+                };
+
+                if (this.purchase_unit_of_measurement_id && this.default_unit_of_measurement_id) {
+                    axios.post("/api/items/conversions", formData).then(res => {
+                    console.log(res.data.conversions);
+                    this.conversionsList = res.data.conversions;
+                    }).catch(err => {
+                        console.log(err);
+                        alert(`Error! No Result`);
+                        this.conversionsList = [];
+                        this.ifReady = true;
+                    });
+                }
             },
 
             selectPurchaseUnit() {
                 this.purchase_unit_of_measurement_id = this.purchaseItemUnitId.id;
+                this.selectedConversion = {};
+                this.selectedConversionModule = {};
                 console.log('GetPurchaseUnitId: ' + this.purchase_unit_of_measurement_id);
             },
 
@@ -158,9 +304,9 @@
 
             getClassType() {
                 let promise = new Promise((resolve, reject) => {
-                    axios.get('/api/item-classifications/get-all-item-classifications/').then(res3 => {
+                    axios.get('/api/item-classifications/get-all-item-classifications/').then(res => {
                         // console.log('Items: ' + JSON.stringify(res3.data));
-                        this.itemClassList = res3.data.item_classifications;
+                        this.itemClassList = res.data.item_classifications;
                         resolve();
                     });
                 });
@@ -168,9 +314,9 @@
 
             getUnit() {
                 let promise = new Promise((resolve, reject) => {
-                    axios.get('/api/unit-of-measurements/get-all-unit-of-measurements/').then(res3 => {
-                        // console.log('Items: ' + JSON.stringify(res3.data));
-                        this.itemUnitList = res3.data.unit_of_measurements;
+                    axios.get('/api/unit-of-measurements/get-all-unit-of-measurements/').then(res => {
+                        // console.log('Items: ' + JSON.stringify(res.data));
+                        this.itemUnitList = res.data.unit_of_measurements;
                         resolve();
                     });
                 });
@@ -181,6 +327,11 @@
                     name: "items.index"
                 });
             },
+
+            deleteRow(index) {
+                this.item_conversions.splice(index, 1);
+            },
+
             updateItem() {
                 this.ifReady = false;
 

@@ -61,7 +61,7 @@ class ItemClassification extends Model
             $model->where('corporation_id', request()->headers->get('CORPORATION-ID'));
         });
     }
-    protected $with = ['itemType'];
+    // protected $with = ['itemType'];
     /**
      * The classification belongs to a corporation.
      *

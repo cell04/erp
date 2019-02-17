@@ -156,10 +156,10 @@
                         conversion_id: ""
                     }]
                 },
-                itemTypeId: null,
-                itemClassId: null,
-                defaultItemUnitId: null,
-                purchaseItemUnitId: null,
+                itemTypeId: {},
+                itemClassId: {},
+                defaultItemUnitId: {},
+                purchaseItemUnitId: {},
                 item_type_id: '',
                 item_classification_id: '',
                 name: '',
@@ -170,8 +170,8 @@
                 itemTypesList: [],
                 itemClassList: [],
                 itemUnitList: [],
-                selectedConversion : [],
-                selectedConversionModule : [],
+                selectedConversion : {},
+                selectedConversionModule : {},
                 accountsList: [],
                 itemClassificationsList: [],
                 unitsList: [],
@@ -204,21 +204,8 @@
                 });
             });
 
-            let promiseItemClass = new Promise((resolve, reject) => {
-                axios.get("/api/item-classifications/get-all-item-classifications/").then(res => {
-                    // console.log('getItemClass: ' + JSON.stringify(res.data.item_classifications));
-                    this.ifReady = true;
-                    this.itemClassList = res.data.item_classifications;
-                    if (!res.data.response) {
-                        return;
-                    }
-                    resolve();
-                });
-            });
-
             let promiseUnit = new Promise((resolve, reject) => {
                 axios.get("/api/unit-of-measurements/get-all-unit-of-measurements/").then(res => {
-                    // console.log('getUnit: ' + JSON.stringify(res.data));
                     this.ifReady = true;
                     this.itemUnitList = res.data.unit_of_measurements;
                     if (!res.data.response) {
@@ -272,32 +259,42 @@
                     default_unit_of_measurement_id: this.default_unit_of_measurement_id
                 };
 
-                axios.post("/api/items/conversions", formData).then(res => {
+                if (this.purchase_unit_of_measurement_id && this.default_unit_of_measurement_id) {
+                    axios.post("/api/items/conversions", formData).then(res => {
                     console.log(res.data.conversions);
                     this.conversionsList = res.data.conversions;
-                    // this.
-
-                    // this.$router.push({ name: "receive-orders.index" });
-                }).catch(err => {
-                    console.log(err);
-                    alert(`Error! No Result`);
-                    this.ifReady = true;
-                });
+                    }).catch(err => {
+                        console.log(err);
+                        alert(`Error! No Result`);
+                        this.conversionsList = [];
+                        this.ifReady = true;
+                    });
+                }
             },
 
             selectDefaultItemUnit() {
                 this.default_unit_of_measurement_id = this.defaultItemUnitId.id;
                 console.log('GetDefaultItemUnitId: ' + this.default_unit_of_measurement_id);
-                this.getConversions()
+                this.getConversions();
+                this.item_conversions = [];
+                this.selectedConversion = {};
+                this.selectedConversionModule = {};
             },
 
             selectPurchaseItemUnit() {
                 this.purchase_unit_of_measurement_id = this.purchaseItemUnitId.id;
+                this.conversionsList = [];
+                this.defaultItemUnitId = {};
+                this.item_conversions = [];
+                this.selectedConversion = {};
+                this.selectedConversionModule = {};
                 console.log('GetPurchaseItemUnitId: ' + this.purchase_unit_of_measurement_id);
             },
 
             selectItemType() {
                 this.item_type_id = this.itemTypeId.id;
+                this.itemClassList = this.itemTypeId.item_classifications;
+                this.itemClassId = {};
                 console.log('GetItemTypeId: ' + this.item_type_id);
             },
 

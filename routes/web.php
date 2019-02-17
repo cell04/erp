@@ -106,5 +106,5 @@ Auth::routes();
 // Route::get('register/', 'Auth\RegisterController@showRegistrationForm')->name('show-registration-form');
 // Route::post('register/', 'Auth\RegisterController@register')->name('register');
 
-Route::get('/{any}', 'SpaController@index')->where('any', '.*')->name('index');
-// Route::get('/{any}', 'SpaController@index')->where('any', '([A-z\d-\/_.]+)?')->name('index');
+// Route::get('/{any}', 'SpaController@index')->where('any', '.*')->name('index');
+Route::get('/{any}', 'SpaController@index')->where('any', '([A-z\d-\/_.]+)?')->name('index');

@@ -58,6 +58,42 @@
                                         <input type="text" class="form-control" v-model="item.default_unit_of_measurement.name" id="class" readonly>
                                     </div>
                                 </div>
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="text-success">Conversion Section</a>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover table-sm">
+                                                <caption>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                        </div>
+                                                    </div>
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">From</th>
+                                                        <th scope="col">To</th>
+                                                        <th scope="col">Module</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="conversion in conversions" :key="conversion.id">
+                                                        <td>{{ conversion.conversion.from_value }} {{ conversion.conversion.convert_from.name }}</td>
+                                                        <td>{{ conversion.conversion.to_value }} {{ conversion.conversion.convert_to.name }}</td>
+                                                        <td v-if="conversion.module === 1">
+                                                            Invetory
+                                                        </td>
+                                                        <td v-if="conversion.module === 2">
+                                                            Recipe
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </fieldset>
                         <br>
@@ -125,6 +161,7 @@
                     axios.get("/api/items/" + this.$route.params.id).then(res => {
                         console.log(JSON.stringify(res.data.item));
                         this.item = res.data.item;
+                        this.conversions = res.data.item.item_conversions;
                         this.ifReady = true;
                         if (!res.data.response) {
                             return;

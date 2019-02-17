@@ -19,6 +19,10 @@ class ItemConversion extends Model
         'corporation_id', 'item_id', 'conversion_id', 'module'
     ];
 
+    protected $with = [
+        'item', 'conversion'
+    ];
+
      /**
      * The attributes that should be mutated to dates.
      *

@@ -22,6 +22,12 @@ class ItemRepository extends Repository
         $this->conversion = $conversion;
     }
 
+    public function findOrFail($id)
+    {
+        return $this->item->with('itemConversions')
+        ->findOrFail($id);
+    }
+
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
@@ -52,7 +58,7 @@ class ItemRepository extends Repository
             foreach ($conversions as $conversion) {
                 $data[$i++] = array(
                     'id' => $conversion->id,
-                    'name' => $conversion->convertFrom->name . ' - ' . $conversion->convertTo->name,
+                    'name' => $conversion->from_value .' ' . $conversion->convertFrom->name . ' - ' . $conversion->to_value . ' ' . $conversion->convertTo->name,
                     'convert_from' => $conversion->convertFrom,
                     'from_value' => $conversion->from_value,
                     'convert_to' => $conversion->convertTo,
@@ -62,5 +68,17 @@ class ItemRepository extends Repository
         }
 
         return $data;
+    }
+
+    public function update($request, $id)
+    {
+        return DB::transaction(function () use ($request, $id) {
+            $item = $this->item->findOrFail($id);
+            $item->fill($request->all());
+            $item->save();
+            $item->itemConversions()->delete();
+
+            return $item->itemConversions()->createMany($request->item_conversions);
+        });
     }
 }
