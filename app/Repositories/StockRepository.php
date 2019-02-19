@@ -31,7 +31,7 @@ class StockRepository extends Repository
         $removePage = true
     ) {
         return $this->model->filter($request)
-            ->selectRaw('id, corporation_id, stockable_id, stockable_type, item_id, SUM(quantity) as quantity, unit_of_measurement_id')
+            ->selectRaw('id, corporation_id, stockable_id, stockable_type, item_id, SUM(quantity/converter_value) as quantity, unit_of_measurement_id')
             // comment out if need per location
             // ->where('stockable_id', $request->stockable_id)
             // ->where('stockable_type', $request->stockable_type)
@@ -61,7 +61,7 @@ class StockRepository extends Repository
 
         return $this->model->filter($request)
         ->where('stockable_type', $locationClass)
-        ->selectRaw('corporation_id, stockable_id, stockable_type, item_id, SUM(quantity) as quantity, unit_of_measurement_id')
+        ->selectRaw('corporation_id, stockable_id, stockable_type, item_id, ROUND(SUM(quantity / converter_value), 2) as quantity, unit_of_measurement_id')
         ->groupBy('stockable_type', 'stockable_id', 'item_id', 'corporation_id', 'unit_of_measurement_id')
         ->orderBy('item_id')
         ->paginate($length)

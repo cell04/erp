@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Conversion;
+use App\Item;
 use App\Journal;
 use App\PurchaseOrder;
 use App\ReceiveOrder;
@@ -11,31 +13,38 @@ use Illuminate\Support\Facades\DB;
 class ReceiveOrderRepository extends Repository
 {
     protected $purchaseOrder;
-    private $journal;
+    protected $journal;
+    protected $conversion;
+    protected $item;
 
     /**
      * Create new instance of receive order repository.
      *
      * @param ReceiveOrder $receiveOrder ReceiveOrder repository.
      */
-    public function __construct(ReceiveOrder $receiveOrder, PurchaseOrder $purchaseOrder, Journal $journal)
+    public function __construct(ReceiveOrder $receiveOrder, PurchaseOrder $purchaseOrder, Journal $journal, Conversion $conversion, Item $item)
     {
         parent::__construct($receiveOrder);
         $this->receiveOrder = $receiveOrder;
         $this->purchaseOrder = $purchaseOrder;
         $this->journal = $journal;
+        $this->conversion = $conversion;
+        $this->item = $item;
     }
 
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
-            //Receive Order Item Quantity Checker
+            //Receive Order conversion Quantity Checker
             if ($this->validRequest($request)) {
                 //Store Receive Order
                 $receiveOrder = $this->receiveOrder->create($request->all());
+                //Store Receive Order Items
                 $receiveOrderItems = $receiveOrder->receiveOrderItems()->createMany($request->receive_order_items);
+                //get receive order items converted quantity and converter_value 
+                $request->request->add(['receive_order_items' => $this->getReceiveOrderTotalValueOfConversion($request)]);
                 //Store stocks
-                $receiveOrder->purchaseOrder->warehouse->stocks()->createMany($receiveOrderItems->toArray());
+                $receiveOrder->purchaseOrder->warehouse->stocks()->createMany($request->receive_order_items);
                 //Store journal entries
                 $receiveOrderEntries = $this->generateReceiveOrderEntries($receiveOrder, $receiveOrderItems);
                 //Update Purchase Order Status
@@ -46,6 +55,42 @@ class ReceiveOrderRepository extends Repository
 
             return false;
         });
+    }
+
+    public function getReceiveOrderTotalValueOfConversion($request)
+    {
+        $i = 0;
+        foreach ($request->receive_order_items as $receiveOrderItem) {
+
+            $item = $this->item->findOrFail($receiveOrderItem['item_id']);
+
+            $conversion = $this->conversion->selectRaw('sum(from_value * to_value) as total')
+            ->whereHas('itemConversions', function ($query)  use ($receiveOrderItem) {
+                $query->where([
+                    ['item_id', $receiveOrderItem['item_id']],
+                    ['module', 1]
+                ]);
+            })->where('unit_of_measurement_from_id', $item->default_unit_of_measurement_id)
+            ->get();
+
+            if ($conversion) {
+                $converterValue = $conversion->sum('total');
+            } else {
+                $converterValue = 1;
+            }
+            
+            $receiveOrderItems[$i++] = [
+                'item_id' => $receiveOrderItem['item_id'],
+                'quantity' => $receiveOrderItem['quantity'],
+                'unit_of_measurement_id' => $item->default_unit_of_measurement_id,
+                'item_pricelist_id' => $receiveOrderItem['item_pricelist_id'],
+                'tracking_number' => $receiveOrderItem['tracking_number'],
+                'expiration_date' => $receiveOrderItem['expiration_date'],
+                'converter_value' => $converterValue
+            ];
+        }
+
+        return $receiveOrderItems;
     }
 
     public function validRequest($request)

@@ -39,7 +39,7 @@
                                         <th scope="col">Item</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">UOM</th>
-                                        <th scope="col">Options</th>
+                                        <!-- <th scope="col">Options</th> -->
                                     </tr>
                                 </thead>
                                 <tbody v-if="stocks">
@@ -48,10 +48,10 @@
                                         <td>{{ item.name }}</td>
                                         <td>{{ quantity }}</td>
                                         <td>{{ unit_of_measurement.name }}</td>
-                                        <td>
-                                            <router-link class="text-secondary" :to="{ name: 'stocks.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                        <!-- <td>
+                                            <router-link class="text-secondary" :to="{ name: 'stocks.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>-->
                                             <!-- <router-link class="btn-success btn-sm" :to="{ name: '', params: { id: id }}">Convert</router-link> -->
-                                        </td>
+                                        <!-- </td> -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -77,19 +77,19 @@
                                         <th scope="col">Item</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">UOM</th>
-                                        <th scope="col">Options</th>
+                                        <!-- <th scope="col">Options</th> -->
                                     </tr>
                                 </thead>
                                 <tbody v-if="stocks">
-                                    <tr v-for="{ id, stockable_id, stockable, item, quantity, unit_of_measurement } in stocks">
+                                    <tr v-for="{ id, stockable_id, stockable, item, quantity, unit_of_measurement} in stocks">
                                         <td>{{ stockable.name }}</td>
                                         <td>{{ item.name }}</td>
                                         <td>{{ quantity }}</td>
                                         <td>{{ unit_of_measurement.name }}</td>
-                                        <td>
-                                            <router-link class="text-secondary" :to="{ name: 'stocks.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
+                                        <!-- <td>
+                                            <router-link class="text-secondary" :to="{ name: 'stocks.view', params: { id: id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>-->
                                             <!-- <router-link class="btn-success btn-sm" :to="{ name: '', params: { id: id }}">Convert</router-link> -->
-                                        </td>
+                                        <!-- </td> -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -290,6 +290,7 @@
         data() {
             return {
                 warehouses: null,
+                uom: null, 
                 searchColumnName: '',
                 searchColumnAddress: '',
                 searchColumnCity: '',

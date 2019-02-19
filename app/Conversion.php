@@ -84,6 +84,16 @@ class Conversion extends Model
     }
 
     /**
+     * The conversion has many item conversions.
+     *
+     * @return object
+     */
+    public function itemConversions()
+    {
+        return $this->hasMany(ItemConversion::class);
+    }
+
+    /**
      * The conversion from belongs to a unit of measurement.
      *
      * @return object
@@ -92,6 +102,8 @@ class Conversion extends Model
     {
         return $this->belongsTo(UnitOfMeasurement::class, 'unit_of_measurement_from_id');
     }
+
+
 
     /**
      * The conversion to belongs to a unit of measurement.
