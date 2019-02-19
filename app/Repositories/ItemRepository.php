@@ -49,10 +49,11 @@ class ItemRepository extends Repository
     {
         $i = 0;
         $data = [];
-        $conversions = $this->conversion->where([
-            ['unit_of_measurement_from_id', $from], 
-            ['unit_of_measurement_to_id', $to]
-        ])->get();
+        $conversions = $this->conversion->where('unit_of_measurement_from_id', $from)
+        ->orWhere('unit_of_measurement_from_id', $to)
+        ->orWhere('unit_of_measurement_to_id', $from)
+        ->orWhere('unit_of_measurement_to_id', $to)
+        ->get();
 
         if ($conversions) {
             foreach ($conversions as $conversion) {
