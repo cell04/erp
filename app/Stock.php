@@ -25,7 +25,7 @@ class Stock extends Model
      */
     protected $fillable = [
         'corporation_id', 'stockable_id', 'stockable_type',
-        'item_id', 'quantity', 'unit_of_measurement_id'
+        'item_id', 'quantity', 'unit_of_measurement_id', 'converter_value'
     ];
 
     /**

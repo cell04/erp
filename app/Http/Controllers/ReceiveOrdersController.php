@@ -73,11 +73,13 @@ class ReceiveOrdersController extends Controller
             ], 400);
         }
 
-        if (! $this->receiveOrder->store($request)) {
-            return response()->json([
-                'message' => 'Failed to store resource'
-            ], 500);
-        }
+        return $this->receiveOrder->store($request);
+
+        // if (! $this->receiveOrder->store($request)) {
+        //     return response()->json([
+        //         'message' => 'Failed to store resource'
+        //     ], 500);
+        // }
 
         return response()->json([
             'message' => 'Resource successfully stored'

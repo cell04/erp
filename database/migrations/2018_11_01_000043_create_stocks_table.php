@@ -28,6 +28,7 @@ class CreateStocksTable extends Migration
                 ->on('items')
                 ->onDelete('cascade');
             $table->integer('quantity');
+            $table->integer('converter_value');
             $table->integer('unit_of_measurement_id')->unsigned();
             $table->foreign('unit_of_measurement_id')
                 ->references('id')
