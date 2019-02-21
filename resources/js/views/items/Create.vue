@@ -50,16 +50,34 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 form-group">
+                                    <label>With Components</label><br />
+                                    <label class="switch">
+                                        <input type="checkbox" v-model="withComponent" @change="getWithComponentValue()">
+                                        <span class="slider round">
+                                            <span class="on">{{'Yes'}}</span>
+                                            <span class="off">{{'No'}}</span>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-md-6" v-show="!withComponent">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
                                         <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6" v-show="!withComponent">
                                     <div class="form-group">
                                         <label>Default UOM</label>
+                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" v-show="withComponent">
+                                    <div class="form-group">
+                                        <label>Selling UOM</label>
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
@@ -156,6 +174,8 @@
                         conversion_id: ""
                     }]
                 },
+                withComponent: null,
+                with_component: null,
                 itemTypeId: {},
                 itemClassId: {},
                 defaultItemUnitId: {},
@@ -219,6 +239,14 @@
         methods: {
             viewItems() {
                 this.$router.push({ name: 'items.index' });
+            },
+
+            getWithComponentValue() {
+                if (this.withComponent) {
+                    this.with_component = 'yes';
+                } else {
+                    this.with_component = 'no';
+                }
             },
 
             addNewItem() {
@@ -317,3 +345,96 @@
         }
     };
 </script>
+<style>
+    .dateStyle input:read-only {
+        background-color: #ffffff !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 90px;
+        height: 34px;
+    }
+  
+    .switch input {display:none;}
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #8E8E8E;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    input:checked + .slider {
+        background-color: #0CC27E;
+    }
+    
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+    
+    input:checked + .slider:before {
+        -webkit-transform: translateX(55px);
+        -ms-transform: translateX(55px);
+        transform: translateX(55px);
+    }
+    
+    /*------ ADDED CSS ---------*/
+    .on
+    {
+        display: none;
+    }
+    
+    .on, .off
+    {
+        color: white;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+    }
+    
+    .on 
+    {
+        left: 45%;
+    }
+    
+    .off 
+    {
+        left: 55%;
+    }
+    
+    input:checked+ .slider .on
+    {display: block;}
+    
+    input:checked + .slider .off
+    {display: none;}
+    
+    /*--------- END --------*/
+    
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+    
+    .slider.round:before {
+        border-radius: 50%;
+    }
+</style>

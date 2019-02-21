@@ -35,5 +35,21 @@ class UnitOfMeasurementsTableSeeder extends Seeder
             'name'           => 'milliliters',
             'abbreviation'   => 'ml'
         ]);
+
+        DB::table('conversions')->insert([
+            'corporation_id'                => 1,
+            'unit_of_measurement_from_id'   => 2,
+            'from_value'                    => 1,
+            'unit_of_measurement_to_id'     => 1,
+            'to_value'                      => 1000
+        ]);
+
+        DB::table('conversions')->insert([
+            'corporation_id'                => 1,
+            'unit_of_measurement_from_id'   => 3,
+            'from_value'                    => 1,
+            'unit_of_measurement_to_id'     => 4,
+            'to_value'                      => 1000
+        ]);
     }
 }
