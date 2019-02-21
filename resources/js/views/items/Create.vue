@@ -49,6 +49,8 @@
                                         <vue-select v-model="itemClassId" @input="selectItemClass()" label="name" :options="itemClassList"></vue-select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
 
                                 <div class="col-md-6 form-group">
                                     <label>With Components</label><br />
@@ -60,7 +62,8 @@
                                         </span>
                                     </label>
                                 </div>
-
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6" v-show="!withComponent">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
@@ -78,11 +81,12 @@
                                 <div class="col-md-6" v-show="withComponent">
                                     <div class="form-group">
                                         <label>Selling UOM</label>
-                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                        <vue-select v-model="sellingItemUnitId" @input="selectSellingItemUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
-
-                                <div class="col" v-if="conversionsList.length != 0">
+                            </div>
+                            <div class="row">
+                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -136,6 +140,71 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col" v-if="withComponent">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="text-success">Item Components Section</a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Item</label>
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedComponent.item" label="name" :options="items"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Quantity</label>
+                                                        <input class="form-control" v-model="selectedComponent.quantity" type="number" required/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>Unit</label>
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedComponent.unit" label="name" :options="itemUnitList"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>Action</label>
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover table-sm">
+                                                <caption>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                        </div>
+                                                    </div>
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Item</th>
+                                                        <th scope="col">Quantity</th>
+                                                        <th scope="col">UOM</th>
+                                                        <th scope="col">Price</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item_component, index) in item_components" :key="index">
+                                                        <td>{{ item_component.item.name }}</td>
+                                                        <td>{{ item_component.quantity }} </td>
+                                                        <td>{{ item_component.unit.name }}</td>
+                                                        <td>{{ item_component.price }}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteComponentRow(index)"><i class="far fa-times-circle"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <br>
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
@@ -174,18 +243,23 @@
                         conversion_id: ""
                     }]
                 },
+                items: [],
+                item_components: [],
+                selectedComponent: {},
                 withComponent: null,
                 with_component: null,
                 itemTypeId: {},
                 itemClassId: {},
                 defaultItemUnitId: {},
                 purchaseItemUnitId: {},
+                sellingItemUnitId: {},
                 item_type_id: '',
                 item_classification_id: '',
                 name: '',
                 description: '',
                 stock_keeping_unit: '',
                 default_unit_of_measurement_id: '',
+                selling_unit_of_measurement_id: null,
                 purchase_unit_of_measurement_id: '',
                 itemTypesList: [],
                 itemClassList: [],
@@ -217,6 +291,16 @@
                     console.log(res);
                     this.ifReady = true;
                     this.itemTypesList = res.data.item_types;
+                    if (!res.data.response) {
+                        return;
+                    }
+                    resolve();
+                });
+
+                axios.get("/api/items/get-all-items").then(res => {
+                    console.log(res);
+                    this.ifReady = true;
+                    this.items = res.data.items;
                     if (!res.data.response) {
                         return;
                     }
@@ -281,6 +365,10 @@
                 this.item_conversions.splice(index, 1);
             },
 
+            deleteComponentRow(index) {
+                this.item_components.splice(index, 1);
+            },
+
             getConversions() {
                 let formData = {
                     purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
@@ -307,6 +395,10 @@
                 this.item_conversions = [];
                 this.selectedConversion = {};
                 this.selectedConversionModule = {};
+            },
+
+            selectSellingItemUnit() {
+                this.selling_unit_of_measurement_id = this.sellingItemUnitId.id;
             },
 
             selectPurchaseItemUnit() {
