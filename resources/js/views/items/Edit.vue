@@ -277,17 +277,9 @@
                     this.description = res.data.item.description;
                     this.stock_keeping_unit = res.data.item.stock_keeping_unit;
                     this.item_type_id = res.data.item.item_type_id;
-                    this.item_classification_id = res.data.item.item_classification_id;
-                    this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id;
-                    this.purchase_unit_of_measurement_id = res.data.item.purchase_unit_of_measurement_id;
-                    this.selling_unit_of_measurement_id = res.data.item.selling_unit_of_measurement_id;
-                    this.itemTypeId = res.data.item.item_type;
-                    this.item_components = res.data.item.item_components;
-                    this.itemClassId = res.data.item.item_classification;
-                    this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
-                    this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
-                    this.sellingItemUnitId = res.data.item.selling_unit_of_measurement;
-                    this.item_conversions = res.data.item.item_conversions;
+                    this.item_classification_id = res.data.item.item_classification_id;                                    
+                    this.itemTypeId = res.data.item.item_type;               
+                    this.itemClassId = res.data.item.item_classification;               
                     this.itemClassList = res.data.item.item_type.item_classifications;
                     this.with_component = res.data.item.with_component;
                     this.getItemType();
@@ -296,8 +288,16 @@
                     this.getConversions();
                     if (this.with_component === 'yes') {
                         this.withComponent = true;
+                        this.sellingItemUnitId = res.data.item.selling_unit_of_measurement;
+                        this.selling_unit_of_measurement_id = res.data.item.selling_unit_of_measurement_id;
+                        this.item_components = res.data.item.item_components;
                     } else {
                         this.withComponent = false;
+                        this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id;
+                        this.purchase_unit_of_measurement_id = res.data.item.purchase_unit_of_measurement_id;
+                        this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
+                        this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
+                        this.item_conversions = res.data.item.item_conversions;   
                     }
                     resolve();
                 });
