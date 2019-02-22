@@ -56,6 +56,13 @@
                                         </span>
                                     </label>
                                 </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Selling UOM</label>
+                                        <vue-select v-model="sellingItemUnitId" @input="selectSellingUnit()" label="name" :options="itemUnitList"></vue-select>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -70,13 +77,6 @@
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="itemUnitList"></vue-select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" v-if="withComponent">
-                                    <div class="form-group">
-                                        <label>Selling UOM</label>
-                                        <vue-select v-model="sellingItemUnitId" @input="selectSellingUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
 
@@ -282,14 +282,14 @@
                     this.itemClassId = res.data.item.item_classification;               
                     this.itemClassList = res.data.item.item_type.item_classifications;
                     this.with_component = res.data.item.with_component;
+                    this.sellingItemUnitId = res.data.item.selling_unit_of_measurement;
+                    this.selling_unit_of_measurement_id = res.data.item.selling_unit_of_measurement_id;
                     this.getItemType();
                     this.getClassType();
                     this.getUnit();
                     this.getConversions();
                     if (this.with_component === 'yes') {
                         this.withComponent = true;
-                        this.sellingItemUnitId = res.data.item.selling_unit_of_measurement;
-                        this.selling_unit_of_measurement_id = res.data.item.selling_unit_of_measurement_id;
                         this.item_components = res.data.item.item_components;
                     } else {
                         this.withComponent = false;
@@ -484,7 +484,6 @@
                     this.default_unit_of_measurement_id = null;
                     this.purchase_unit_of_measurement_id = null;
                 } else {
-                    this.selling_unit_of_measurement_id = null;
                     this.item_components = [];
                 }
 
