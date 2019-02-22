@@ -27,13 +27,15 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Abbreviation</th>
+                            <th scope="col">Default</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody v-if="unit_of_measurements">
-                        <tr v-for="{ id, name, abbreviation } in unit_of_measurements">
+                        <tr v-for="{ id, name, abbreviation, default_value } in unit_of_measurements">
                             <td>{{ name }}</td>
                             <td>{{ abbreviation }}</td>
+                            <td>{{ default_value }}</td>
                             <td>
                                 <router-link class="text-secondary" :to="{ name: 'unit-of-measurements.view', params: { id: id }}">
                                     <i class="fas fa-envelope-open-text"></i> View
@@ -191,7 +193,7 @@
         data() {
             return {
                 componentVal: 'UOM',
-                unit_of_measurements: null,
+                unit_of_measurements: [],
                 searchColumnName: '',
                 searchColumnAbbreviation: '',
                 order_by: 'desc',

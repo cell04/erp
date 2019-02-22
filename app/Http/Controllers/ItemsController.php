@@ -73,7 +73,9 @@ class ItemsController extends Controller
         $validator = Validator::make($request->all(), [
             'item_type_id'                              =>  'required|integer',
             'item_classification_id'                    =>  'required|integer',
-            'default_unit_of_measurement_id'            =>  'required|integer',
+            'default_unit_of_measurement_id'            =>  'integer|nullable',
+            'purchase_unit_of_measurement_id'           =>  'integer|nullable',
+            'selling_unit_of_measurement_id'            =>  'integer|nullable',
             'sales_account_id'                          =>  'integer|nullable',
             'cogs_account_id'                           =>  'integer|nullable',
             'expense_account_id'                        =>  'integer|nullable',
@@ -133,8 +135,9 @@ class ItemsController extends Controller
         $validator = Validator::make($request->all(), [
             'item_type_id'                              =>  'required|integer',
             'item_classification_id'                    =>  'required|integer',
-            'default_unit_of_measurement_id'            =>  'required|integer',
-            'purchase_unit_of_measurement_id'           =>  'required|integer',
+            'default_unit_of_measurement_id'            =>  'integer|nullable',
+            'purchase_unit_of_measurement_id'           =>  'integer|nullable',
+            'selling_unit_of_measurement_id'            =>  'integer|nullable',
             'sales_account_id'                          =>  'integer|nullable',
             'cogs_account_id'                           =>  'integer|nullable',
             'expense_account_id'                        =>  'integer|nullable',

@@ -33,7 +33,7 @@ class ItemComponent extends Model
      * @var array
      */
     protected $with = [
-        'component', 
+        'component', 'unitOfMeasurement'
     ];
 
     /**

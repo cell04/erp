@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card">
-            <div class="card-header clearfix">
+            <div class="card-header">
                <div class="float-left">
                     {{componentVal}}s / View {{componentVal}}s
                 </div>

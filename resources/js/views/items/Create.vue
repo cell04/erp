@@ -51,7 +51,6 @@
                                 </div>
                             </div>
                             <div class="row">
-
                                 <div class="col-md-6 form-group">
                                     <label>With Components</label><br />
                                     <label class="switch">
@@ -143,7 +142,7 @@
                                 <div class="col" v-if="withComponent">
                                     <div class="card">
                                         <div class="card-header">
-                                            <a class="text-success">Item Components Section</a>
+                                            <a class="text-success">Component Section</a>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
@@ -156,7 +155,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Quantity</label>
-                                                        <input class="form-control" v-model="selectedComponent.quantity" type="number" required/>
+                                                        <input class="form-control" v-model="selectedComponent.quantity" type="number"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -168,7 +167,7 @@
                                                 <div class="col-md-3">
                                                     <label>Action</label>
                                                     <div class="form-group">
-                                                        <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
+                                                        <button type="button" class="btn btn-success" @click="addNewItemComponent"><i class="fas fa-plus"></i> Add</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -186,7 +185,7 @@
                                                         <th scope="col">Item</th>
                                                         <th scope="col">Quantity</th>
                                                         <th scope="col">UOM</th>
-                                                        <th scope="col">Price</th>
+                                                        <!-- <th scope="col">Unit Price</th> -->
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
@@ -195,7 +194,7 @@
                                                         <td>{{ item_component.item.name }}</td>
                                                         <td>{{ item_component.quantity }} </td>
                                                         <td>{{ item_component.unit.name }}</td>
-                                                        <td>{{ item_component.price }}</td>
+                                                        <!-- <td>{{ item_component.unit_price }}</td> -->
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" @click="deleteComponentRow(index)"><i class="far fa-times-circle"></i></button>
                                                         </td>
@@ -327,14 +326,18 @@
 
             getWithComponentValue() {
                 if (this.withComponent) {
+                    this.item_conversions = [];
+                    this.default_unit_of_measurement_id = null;
+                    this.purchase_unit_of_measurement_id = null;
                     this.with_component = 'yes';
                 } else {
                     this.with_component = 'no';
+                    this.selling_unit_of_measurement_id = null;
+                    this.item_components = [];
                 }
             },
 
             addNewItem() {
-
                 this.item_conversions.push({
                     module: this.selectedConversionModule.value,
                     module_name: this.selectedConversionModule.name,
@@ -344,6 +347,20 @@
                     convertTo: this.selectedConversion.convert_to,
                     to_value: this.selectedConversion.to_value
                 });
+            },
+
+            addNewItemComponent() {
+                this.item_components.push({
+                    component_id: this.selectedComponent.item.id,
+                    item: this.selectedComponent.item,
+                    unit: this.selectedComponent.unit,
+                    unit_of_measurement_id: this.selectedComponent.unit.id,
+                    quantity: this.selectedComponent.quantity,
+                    converter_value: 0
+                    // unit_price: 0
+                });
+
+                this.selectedComponent = {};
             },
 
             // selectConversion() {
@@ -414,7 +431,7 @@
             selectItemType() {
                 this.item_type_id = this.itemTypeId.id;
                 this.itemClassList = this.itemTypeId.item_classifications;
-                this.itemClassId = {};
+                // this.itemClassId = {};
                 console.log('GetItemTypeId: ' + this.item_type_id);
             },
 
@@ -437,96 +454,3 @@
         }
     };
 </script>
-<style>
-    .dateStyle input:read-only {
-        background-color: #ffffff !important;
-    }
-
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 90px;
-        height: 34px;
-    }
-  
-    .switch input {display:none;}
-    
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #8E8E8E;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-    
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-    
-    input:checked + .slider {
-        background-color: #0CC27E;
-    }
-    
-    input:focus + .slider {
-        box-shadow: 0 0 1px #2196F3;
-    }
-    
-    input:checked + .slider:before {
-        -webkit-transform: translateX(55px);
-        -ms-transform: translateX(55px);
-        transform: translateX(55px);
-    }
-    
-    /*------ ADDED CSS ---------*/
-    .on
-    {
-        display: none;
-    }
-    
-    .on, .off
-    {
-        color: white;
-        position: absolute;
-        transform: translate(-50%,-50%);
-        top: 50%;
-    }
-    
-    .on 
-    {
-        left: 45%;
-    }
-    
-    .off 
-    {
-        left: 55%;
-    }
-    
-    input:checked+ .slider .on
-    {display: block;}
-    
-    input:checked + .slider .off
-    {display: none;}
-    
-    /*--------- END --------*/
-    
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 34px;
-    }
-    
-    .slider.round:before {
-        border-radius: 50%;
-    }
-</style>

@@ -46,19 +46,41 @@
                                         <input type="text" class="form-control" v-model="item.item_classification.name" id="class" readonly>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>With Components</label><br />
+                                    <label class="switch">
+                                        <input type="checkbox" v-model="withComponent" disabled>
+                                        <span class="slider round">
+                                            <span class="on">{{'Yes'}}</span>
+                                            <span class="off">{{'No'}}</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" v-if="item.purchase_unit_of_measurement">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
                                         <input type="text" class="form-control" v-model="item.purchase_unit_of_measurement.name" id="class" readonly>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" v-if="item.default_unit_of_measurement">
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <input type="text" class="form-control" v-model="item.default_unit_of_measurement.name" id="class" readonly>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-md-6" v-if="item.selling_unit_of_measurement">
+                                    <div class="form-group">
+                                        <label>Selling UOM</label>
+                                        <input type="text" class="form-control" v-model="item.selling_unit_of_measurement.name" id="class" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" v-show="item.item_conversions.length != 0">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -79,7 +101,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="conversion in conversions" :key="conversion.id">
+                                                    <tr v-for="conversion in item.item_conversions" :key="conversion.id">
                                                         <td>{{ conversion.conversion.from_value }} {{ conversion.conversion.convert_from.name }}</td>
                                                         <td>{{ conversion.conversion.to_value }} {{ conversion.conversion.convert_to.name }}</td>
                                                         <td v-if="conversion.module === 1">
@@ -88,6 +110,38 @@
                                                         <td v-if="conversion.module === 2">
                                                             Recipe
                                                         </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col" v-show="item.item_components.length != 0">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="text-success">Component Section</a>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover table-sm">
+                                                <caption>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                        </div>
+                                                    </div>
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Item</th>
+                                                        <th scope="col">Quantity</th>
+                                                        <th scope="col">UOM</th>
+                                                        <!-- <th scope="col">Unit Price</th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="component in item.item_components" :key="component.id">
+                                                        <td>{{ component.component.name }}</td>
+                                                        <td>{{ component.quantity}}</td>
+                                                        <td>{{ component.unit_of_measurement.name}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -141,13 +195,13 @@
                 componentVal: "Item",
                 ifReady: false,
                 accountType: "",
-                item: '',
+                item: {},
                 itemType: '',
                 itemClass: '',
                 item_type_id: '',
                 item_classification_id: '',
-                conversions: [],
-                price_histories: []
+                price_histories: [],
+                withComponent: null
             };
         },
 
@@ -161,7 +215,11 @@
                     axios.get("/api/items/" + this.$route.params.id).then(res => {
                         console.log(JSON.stringify(res.data.item));
                         this.item = res.data.item;
-                        this.conversions = res.data.item.item_conversions;
+                        if (this.item.with_component === 'yes') {
+                            this.withComponent = true;
+                        } else {
+                            this.withComponent = false;
+                        }
                         this.ifReady = true;
                         if (!res.data.response) {
                             return;

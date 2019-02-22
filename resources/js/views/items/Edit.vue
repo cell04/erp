@@ -43,22 +43,46 @@
                                         <vue-select v-model="itemClassId" @input="selectClassType()" label="name" :options="itemClassList"></vue-select>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>With Components</label><br />
+                                    <label class="switch">
+                                        <input type="checkbox" v-model="withComponent" @change="getWithComponentValue()">
+                                        <span class="slider round">
+                                            <span class="on">{{'Yes'}}</span>
+                                            <span class="off">{{'No'}}</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" v-if="!withComponent">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
                                         <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6" v-if="!withComponent">
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col" v-if="conversionsList.length != 0">
+                                <div class="col-md-6" v-if="withComponent">
+                                    <div class="form-group">
+                                        <label>Selling UOM</label>
+                                        <vue-select v-model="sellingItemUnitId" @input="selectSellingUnit()" label="name" :options="itemUnitList"></vue-select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -117,6 +141,71 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col" v-if="withComponent">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="text-success">Component Section</a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Item</label>
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedComponent.component" label="name" :options="items"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Quantity</label>
+                                                        <input class="form-control" v-model="selectedComponent.quantity" type="number"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>Unit</label>
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedComponent.unit_of_measurement" label="name" :options="itemUnitList"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>Action</label>
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-success" @click="addNewItemComponent"><i class="fas fa-plus"></i> Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover table-sm">
+                                                <caption>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                        </div>
+                                                    </div>
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Item</th>
+                                                        <th scope="col">Quantity</th>
+                                                        <th scope="col">UOM</th>
+                                                        <!-- <th scope="col">Unit Price</th> -->
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item_component, index) in item_components" :key="index">
+                                                        <td>{{ item_component.component.name }}</td>
+                                                        <td>{{ item_component.quantity }} </td>
+                                                        <td>{{ item_component.unit_of_measurement.name }}</td>
+                                                        <!-- <td>{{ item_component.unit_price }}</td> -->
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteComponentRow(index)"><i class="far fa-times-circle"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <br>
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewItems"><i class="fas fa-chevron-left"></i> Back</button>
@@ -139,19 +228,26 @@
         data() {
             return {
                 ifReady: true,
+                items: [],
+                withComponent: null,
                 itemTypeId: {},
                 itemClassId: {},
+                item_components: [],
                 defaultItemUnitId: {},
                 purchaseItemUnitId: {},
+                sellingItemUnitId: {},
                 itemTypesList: [],
                 itemClassList: [],
                 itemUnitList: [],
                 item_type_id: '',
+                selectedComponent: {},
                 item_classification_id: '',
                 id: '',
                 stock_keeping_unit: '',
                 default_unit_of_measurement_id: '',
                 purchase_unit_of_measurement_id: '',
+                selling_unit_of_measurement_id: null,
+                with_component: null,
                 name: '',
                 description: '',
                 status: 1,
@@ -184,16 +280,35 @@
                     this.item_classification_id = res.data.item.item_classification_id;
                     this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id;
                     this.purchase_unit_of_measurement_id = res.data.item.purchase_unit_of_measurement_id;
+                    this.selling_unit_of_measurement_id = res.data.item.selling_unit_of_measurement_id;
                     this.itemTypeId = res.data.item.item_type;
+                    this.item_components = res.data.item.item_components;
                     this.itemClassId = res.data.item.item_classification;
                     this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
                     this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
+                    this.sellingItemUnitId = res.data.item.selling_unit_of_measurement;
                     this.item_conversions = res.data.item.item_conversions;
                     this.itemClassList = res.data.item.item_type.item_classifications;
+                    this.with_component = res.data.item.with_component;
                     this.getItemType();
                     this.getClassType();
                     this.getUnit();
                     this.getConversions();
+                    if (this.with_component === 'yes') {
+                        this.withComponent = true;
+                    } else {
+                        this.withComponent = false;
+                    }
+                    resolve();
+                });
+
+                axios.get("/api/items/get-all-items").then(res => {
+                    console.log(res);
+                    this.ifReady = true;
+                    this.items = res.data.items;
+                    if (!res.data.response) {
+                        return;
+                    }
                     resolve();
                 });
             });
@@ -203,6 +318,27 @@
         },
 
         methods: {
+            getWithComponentValue() {
+                if (this.withComponent) {
+                    this.with_component = 'yes';
+                } else {
+                    this.with_component = 'no';
+                }
+            },
+            addNewItemComponent() {
+                this.item_components.push({
+                    component_id: this.selectedComponent.component.id,
+                    component: this.selectedComponent.component,
+                    unit_of_measurement: this.selectedComponent.unit_of_measurement,
+                    unit_of_measurement_id: this.selectedComponent.unit_of_measurement.id,
+                    quantity: this.selectedComponent.quantity,
+                    converter_value: 0
+                    // unit_price: 0
+                });
+
+                this.selectedComponent = {};
+            },
+
             refreshData() {
                 this.item_classifications = [];
             },
@@ -264,6 +400,10 @@
                 this.selectedConversion = {};
                 this.selectedConversionModule = {};
                 console.log('GetDefaultUnitId: ' + this.default_unit_of_measurement_id);
+            },
+
+            selectSellingUnit() {
+                this.selling_unit_of_measurement_id = this.sellingItemUnitId.id;
             },
 
             getConversions() {
@@ -332,8 +472,21 @@
                 this.item_conversions.splice(index, 1);
             },
 
+            deleteComponentRow(index) {
+                this.item_components.splice(index, 1);
+            },
+
             updateItem() {
                 this.ifReady = false;
+
+                if (this.withComponent) {
+                    this.item_conversions = [];
+                    this.default_unit_of_measurement_id = null;
+                    this.purchase_unit_of_measurement_id = null;
+                } else {
+                    this.selling_unit_of_measurement_id = null;
+                    this.item_components = [];
+                }
 
                 axios.patch('/api/items/' + this.$route.params.id, this.$data).then(res => {
                     this.$router.push({
