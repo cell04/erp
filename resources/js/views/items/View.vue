@@ -58,6 +58,12 @@
                                         </span>
                                     </label>
                                 </div>
+                                <div class="col-md-6" v-if="item.selling_unit_of_measurement">
+                                    <div class="form-group">
+                                        <label>Selling UOM</label>
+                                        <input type="text" class="form-control" v-model="item.selling_unit_of_measurement.name" id="class" readonly>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6" v-if="item.purchase_unit_of_measurement">
@@ -70,12 +76,6 @@
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <input type="text" class="form-control" v-model="item.default_unit_of_measurement.name" id="class" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6" v-if="item.selling_unit_of_measurement">
-                                    <div class="form-group">
-                                        <label>Selling UOM</label>
-                                        <input type="text" class="form-control" v-model="item.selling_unit_of_measurement.name" id="class" readonly>
                                     </div>
                                 </div>
                             </div>

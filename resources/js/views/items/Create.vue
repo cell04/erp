@@ -61,6 +61,12 @@
                                         </span>
                                     </label>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Selling UOM</label>
+                                        <vue-select v-model="sellingItemUnitId" @input="selectSellingItemUnit()" label="name" :options="itemUnitList" required></vue-select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6" v-show="!withComponent">
@@ -74,13 +80,6 @@
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="itemUnitList"></vue-select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" v-show="withComponent">
-                                    <div class="form-group">
-                                        <label>Selling UOM</label>
-                                        <vue-select v-model="sellingItemUnitId" @input="selectSellingItemUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
                             </div>
@@ -332,7 +331,6 @@
                     this.with_component = 'yes';
                 } else {
                     this.with_component = 'no';
-                    this.selling_unit_of_measurement_id = null;
                     this.item_components = [];
                 }
             },
