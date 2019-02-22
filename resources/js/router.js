@@ -266,11 +266,11 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
         { path: '/contacts/:id', name: 'contacts.view', component: ContactsView },
         { path: '/contacts/:id/edit', name: 'contacts.edit', component: ContactsEdit },
 
-        // Conversions
-        { path: '/conversions', name: 'conversions.index', component: ConversionsIndex },
-        { path: '/conversions/create', name: 'conversions.create', component: ConversionsCreate },
-        { path: '/conversions/:id', name: 'conversions.view', component: ConversionsView },
-        { path: '/conversions/:id/edit', name: 'conversions.edit', component: ConversionsEdit },
+        // // Conversions
+        // { path: '/conversions', name: 'conversions.index', component: ConversionsIndex },
+        // { path: '/conversions/create', name: 'conversions.create', component: ConversionsCreate },
+        // { path: '/conversions/:id', name: 'conversions.view', component: ConversionsView },
+        // { path: '/conversions/:id/edit', name: 'conversions.edit', component: ConversionsEdit },
 
         // Invoices
         { path: '/invoices', name: 'invoices.index', component: InvoicesIndex },
@@ -370,6 +370,12 @@ const UserRolesIndex = () => import('./views/user-roles/Index');
                 { path: 'unit-of-measurements/:id', name: 'unit-of-measurements.view', component: UnitOfMeasurementsView },
                 { path: 'unit-of-measurements/:id/edit', name: 'unit-of-measurements.edit', component: UnitOfMeasurementsEdit },
 
+                // Conversions
+                { path: '/conversions', name: 'conversions.index', component: ConversionsIndex },
+                { path: '/conversions/create', name: 'conversions.create', component: ConversionsCreate },
+                { path: '/conversions/:id', name: 'conversions.view', component: ConversionsView },
+                { path: '/conversions/:id/edit', name: 'conversions.edit', component: ConversionsEdit },
+                
                 // Users
                 { path: 'users', name: 'users.index', component: UsersIndex },
                 { path: 'users/create', name: 'users.create', component: UsersCreate },

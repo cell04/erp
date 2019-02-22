@@ -24,7 +24,7 @@ class UnitOfMeasurement extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'name', 'abbreviation'
+        'corporation_id', 'name', 'abbreviation', 'default_value'
     ];
 
     /**

@@ -22,6 +22,7 @@ class CreateUnitOfMeasurementsTable extends Migration
                 ->onDelete('cascade');
             $table->string('name');
             $table->string('abbreviation');
+            $table->string('default_value');
             $table->timestamps();
             $table->softDeletes();
         });

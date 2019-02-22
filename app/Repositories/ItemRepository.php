@@ -24,7 +24,7 @@ class ItemRepository extends Repository
 
     public function findOrFail($id)
     {
-        return $this->item->with('itemConversions')
+        return $this->item->with('itemConversions', 'itemComponents')
         ->findOrFail($id);
     }
 
@@ -39,7 +39,14 @@ class ItemRepository extends Repository
             ]);
             
             $item = $this->item->create($request->all());
-            $item->itemConversions()->createMany($request->item_conversions);
+
+            if ($request->item_conversions) {
+                $item->itemConversions()->createMany($request->item_conversions);
+            }
+
+            if ($request->item_components) {
+                $item->itemComponents()->createMany($request->item_components);
+            }
 
             return $item;
         });
@@ -77,9 +84,18 @@ class ItemRepository extends Repository
             $item = $this->item->findOrFail($id);
             $item->fill($request->all());
             $item->save();
-            $item->itemConversions()->delete();
 
-            return $item->itemConversions()->createMany($request->item_conversions);
+            if ($request->item_conversions) {
+                $item->itemConversions()->delete();
+                $item->itemConversions()->createMany($request->item_conversions);
+            }
+
+            if ($request->item_components) {
+                $item->itemComponents()->delete();
+                $item->itemComponents()->createMany($request->item_components);
+            }
+
+            return $item;
         });
     }
 }
