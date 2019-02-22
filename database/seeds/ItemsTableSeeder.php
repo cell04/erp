@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Item;
 
 class ItemsTableSeeder extends Seeder
 {
@@ -11,7 +12,7 @@ class ItemsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('items')->insert([
+        $item = Item::create([
             'corporation_id'                 => 1,
             'item_type_id'                   => 1,
             'item_classification_id'         => 1,
@@ -27,7 +28,11 @@ class ItemsTableSeeder extends Seeder
             'with_component'                 => 'no'
          ]);
 
-        DB::table('items')->insert([
+        $item->itemConversions()->createMany([
+            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 1]
+        ]);
+
+        $item = Item::create([
             'corporation_id'                 => 1,
             'item_type_id'                   => 1,
             'item_classification_id'         => 1,
@@ -43,7 +48,11 @@ class ItemsTableSeeder extends Seeder
             'with_component'                 => 'no'
         ]);
 
-        DB::table('items')->insert([
+        $item->itemConversions()->createMany([
+            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 1]
+        ]);
+
+        $item = Item::create([
             'corporation_id'                 => 1,
             'item_type_id'                   => 2,
             'item_classification_id'         => 3,
@@ -59,7 +68,11 @@ class ItemsTableSeeder extends Seeder
             'with_component'                 => 'no'
         ]);
 
-        DB::table('items')->insert([
+        $item->itemConversions()->createMany([
+            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1]
+        ]);
+
+        $item = Item::create([
             'corporation_id'                 => 1,
             'item_type_id'                   => 2,
             'item_classification_id'         => 3,
@@ -73,6 +86,10 @@ class ItemsTableSeeder extends Seeder
             'sales_account_id'               => 6,
             'expense_account_id'             => 8,
             'with_component'                 => 'no'
+        ]);
+
+        $item->itemConversions()->createMany([
+            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1]
         ]);
     }
 }
