@@ -31,19 +31,18 @@ class BillPaymentRepository extends Repository
             $billPayment = $this->billPayment->create($request->all());
             $this->generateBillPaymentEntries($billPayment);
             $bill = Bill::find($request->bill_id);
-            $oldAmountPaid = $bill->amount_paid;
+            $amount = $bill->amount;
+            $amountPaid = $bill->amount_paid + $request->amount;
 
-            $newAmountPaid = $bill->amount_paid + $request->amount;
-
-            if ($oldAmountPaid < $newAmountPaid) {
+            if ($amount > $amountPaid) {
                 $bill->status = 1;
             }
 
-            if ($newAmountPaid >= $oldAmountPaid) {
+            if ($amount <= $amountPaid) {
                 $bill->status = 2;
             }
 
-            $bill->amount_paid = $newAmountPaid;
+            $bill->amount_paid = $amountPaid;
 
             $bill->save();
 

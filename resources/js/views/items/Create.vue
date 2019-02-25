@@ -145,24 +145,31 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-4">
                                                     <label>Item</label>
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedComponent.item" label="name" :options="items"></vue-select>
+                                                        <vue-select v-model="selectedComponent.item" @input="selectComponent()" label="name" :options="items"></vue-select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Quantity</label>
                                                         <input class="form-control" v-model="selectedComponent.quantity" type="number"/>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <!-- <div class="col-md-3">
                                                     <label>Unit</label>
                                                     <div class="form-group">
                                                         <vue-select v-model="selectedComponent.unit" label="name" :options="itemUnitList"></vue-select>
                                                     </div>
+                                                </div> -->
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>UOM</label>
+                                                        <input type="text" class="form-control" v-model="selectedComponent.unit_name"  disabled>
+                                                    </div>
                                                 </div>
+
                                                 <div class="col-md-3">
                                                     <label>Action</label>
                                                     <div class="form-group">
@@ -333,6 +340,11 @@
                     this.with_component = 'no';
                     this.item_components = [];
                 }
+            },
+
+            selectComponent() {
+                this.selectedComponent.unit_name = this.selectedComponent.item.selling_unit_of_measurement.name;
+                this.selectedComponent.unit = this.selectedComponent.item.selling_unit_of_measurement;
             },
 
             addNewItem() {

@@ -34,7 +34,7 @@ class BillRepository extends Repository
             $contact = $this->contact->findOrFail($bill->contact_id);
             $journal = $this->generateBillEntries($bill);
             $bill->receiveOrder->update(['status' => 1]);
-            $contact->notify(new CreateInvoice($bill));
+            // $contact->notify(new CreateInvoice($bill));
 
             return $bill;
         });

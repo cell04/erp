@@ -138,6 +138,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'items/{item}/restore', 'ItemsController@restore');
     Route::delete('items/{item}/force-delete', 'ItemsController@forceDestroy');
     Route::get('items/get-all-items', 'ItemsController@getAllItems');
+    Route::get('items/get-all-items-without-components', 'ItemsController@getAllItemsWithOutComponents');
     Route::post('items/conversions', 'ItemsController@getItemConversions');
     Route::resource('items', 'ItemsController', [
         'only' => [
@@ -187,6 +188,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'receive-orders/{receiveOrder}/restore', 'ReceiveOrdersController@restore');
     Route::delete('receive-orders/{receiveOrder}/force-delete', 'ReceiveOrdersController@forceDestroy');
     Route::get('receive-orders/get-all-receive-orders', 'ReceiveOrdersController@getAllReceiveOrder');
+    Route::get('receive-orders/get-all-open-receive-orders', 'ReceiveOrdersController@getAllOpenReceiveOrder');
     Route::resource('receive-orders', 'ReceiveOrdersController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -286,6 +288,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'bills/{bill}/restore', 'BillsController@restore');
     Route::delete('bills/{bill}/force-delete', 'BillsController@forceDestroy');
     Route::get('bills/get-all-bills', 'BillsController@getAllBills');
+    Route::get('bills/get-all-open-bills', 'BillsController@getAllOpenBills');
     Route::resource('bills', 'BillsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'

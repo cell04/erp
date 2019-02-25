@@ -250,4 +250,33 @@ class ItemsController extends Controller
             'items'    => $items
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllItemsWithOutComponents()
+    {
+        if (cache()->has('items')) {
+            return response()->json([
+                'response' => true,
+                'message'  => 'Resources successfully retrieve.',
+                'items'    => cache('items', 5)
+            ], 200);
+        }
+
+        if (! $items = $this->item->withoutComponents()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resources successfully retrieve.',
+            'items'    => $items
+        ], 200);
+    }
 }
