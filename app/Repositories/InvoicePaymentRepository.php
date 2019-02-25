@@ -25,14 +25,34 @@ class InvoicePaymentRepository extends Repository
     {
         return DB::transaction(function () use ($request) {
             $invoicePayment = $this->invoicePayment->create($request->all());
-            $invoicePayment->invoice()->increment('amount_paid', $invoicePayment->amount);
             //update invoice status
-            // $this->updateInvoiceStatus($invoicePayment);
+            $this->updateStatus($invoicePayment);
             //Store Entries
-            $this->generateInvoicePaymentEntries($invoicePayment);
+            // $this->generateInvoicePaymentEntries($invoicePayment);
 
             return $invoicePayment;
         });
+    }
+
+    public function updateStatus($invoicePayment)
+    {
+        $amount = $invoicePayment->invoice->amount;
+        $amountPaid = $invoicePayment->invoice->amount_paid + $invoicePayment->amount;
+
+        if ($amount > $amountPaid) {
+            $status = 1;
+        }
+
+        if ($amount <= $amountPaid) {
+            $status = 2;
+        }
+
+        $invoicePayment->invoice()->update([
+            'amount_paid' => $amountPaid,
+            'status' => $status
+        ]);
+        
+        return $invoicePayment;
     }
 
     public function generateInvoicePaymentEntries($invoicePayment)

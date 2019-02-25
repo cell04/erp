@@ -42,7 +42,7 @@
                             <tr v-bind:key="invoice.reference_number" v-for="invoice in invoices">
                                 <td>{{invoice.reference_number}}</td>
                                 <td>{{invoice.contact.person | Upper}}</td>
-                                <td>{{ (invoice.status) == 0 ? 'Issued': 'Approved'}}</td>
+                                <td>{{ invoice.status }}</td>
                                 <td>{{invoice.due_date}}</td>
                                 <td>
                                     <router-link class="text-secondary" :to="{ name: 'service-invoices.view', params: { id: invoice.id }}"><i class="fas fa-envelope-open-text"></i> View</router-link>
@@ -378,6 +378,16 @@
                 if (err) {
                     this.error = err.toString();
                 } else {
+                    let status = {
+                        0: "Issued",
+                        1: "Partially Paid",
+                        2: "Fully Paid"
+                    };
+
+                    invoices.map(invoice => {
+                        invoice.status = status[invoice.status];
+                    });
+
                     this.invoices = invoices;
                     this.links = links;
                     this.meta = meta;

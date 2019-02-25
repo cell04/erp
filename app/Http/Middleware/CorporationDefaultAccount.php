@@ -16,6 +16,12 @@ class CorporationDefaultAccount
      */
     public function handle($request, Closure $next)
     {
+        if (request()->headers->get('user-id')) {
+            if (empty(session('user-id'))) {
+                session()->put('user-id', request()->headers->get('user-id'));
+            }
+        }
+
         if (request()->headers->get('CORPORATION-ID')) {
             $corporation = Corporation::findOrFail(request()->headers->get('CORPORATION-ID'));
             

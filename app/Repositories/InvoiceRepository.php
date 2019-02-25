@@ -33,7 +33,13 @@ class InvoiceRepository extends Repository
             $invoice = $this->invoice->create($request->all());
             if ($request->invoice_items) {
                 $invoice->invoiceItems()->createMany($request->invoice_items);
+                $invoice->quotation()->update(['status' => 5]);
+            } 
+
+            if ($invoice->bidSheet) {
+                $invoice->bidSheet()->update(['status' => 5]);
             }
+
             //Journal Entries
             $invoiceEntries = $this->generateQuotationEntries($invoice);
 
@@ -163,6 +169,7 @@ class InvoiceRepository extends Repository
     public function allServiceInvoice()
     {
         return $this->invoice->whereNull('quotation_id')
+        ->whereIn('status', array(0,1))
         ->get();
     }
 

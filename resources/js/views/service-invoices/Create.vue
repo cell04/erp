@@ -51,7 +51,7 @@
 
                             <div class="pt-3">
                                 <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewServiceInvoices"><i class="fas fa-chevron-left"></i> Back</button>
-                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Invoice</button>
+                                <button type="submit" class="btn btn-success btn-sm" :disabled="isDisabled"><i class="fas fa-plus"></i> Create New Service Invoice</button>
                             </div>
                         </form>
                     </div>
@@ -109,7 +109,7 @@
             });
 
             let getAllBidSheet = new Promise((resolve, reject) => {
-                axios.get("/api/bid-sheets/get-all-bid-sheets/").then(res => {
+                axios.get("/api/bid-sheets/get-all-open-bid-sheets/").then(res => {
                     this.bidsheets = res.data.bid_sheets;
                     // console.log('BIDSHEET: ' + JSON.stringify(res.data));
                     resolve();

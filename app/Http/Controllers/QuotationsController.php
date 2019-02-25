@@ -124,11 +124,13 @@ class QuotationsController extends Controller
             ], 400);
         }
 
-        if (! $this->quotation->update($request, $id)) {
-            return response()->json([
-                'message' => 'Failed to update resource'
-            ], 500);
-        }
+        return $this->quotation->update($request, $id);
+
+        // if (! $this->quotation->update($request, $id)) {
+        //     return response()->json([
+        //         'message' => 'Failed to update resource'
+        //     ], 500);
+        // }
 
         return response()->json([
             'message' => 'Resource successfully updated'
@@ -208,6 +210,22 @@ class QuotationsController extends Controller
         }
 
         if (! $quotations = $this->quotation->all()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'quotations' => $quotations
+        ], 200);
+    }
+
+    public function getAllOpenQuotations()
+    {
+        if (! $quotations = $this->quotation->getAllPerStatus([1,3])) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'

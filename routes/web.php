@@ -105,7 +105,7 @@ Auth::routes();
 // //Register
 // Route::get('register/', 'Auth\RegisterController@showRegistrationForm')->name('show-registration-form');
 // Route::post('register/', 'Auth\RegisterController@register')->name('register');
-
+// Route::get('bid-sheets/{bidSheet}/contact-approvals/{status}', 'BidSheetsController@contactApproval')->middleware('guest');
 Route::get('/{any}', 'SpaController@index')->where('any', '.*')->name('index');
 // Route::get('/{any}', 'SpaController@index')->where('any', '([A-z\d-\/_.]+)?')->name('index');
-Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
+// Route::get('guest/quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');

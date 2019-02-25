@@ -87,6 +87,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'invoices/{invoice}/restore', 'InvoicesController@restore');
     Route::delete('invoices/{invoice}/force-delete', 'InvoicesController@forceDestroy');
     Route::get('invoices/get-all-invoices/', 'InvoicesController@getAllIvoices');
+    Route::get('invoices/get-all-open-invoices/', 'InvoicesController@getAllOpenIvoices');
     Route::resource('invoices', 'InvoicesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -97,6 +98,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'service-invoices/{serviceInvoice}/restore', 'ServiceInvoicesController@restore');
     Route::delete('service-invoices/{serviceInvoice}/force-delete', 'ServiceInvoicesController@forceDestroy');
     Route::get('service-invoices/get-all-service-invoices/', 'ServiceInvoicesController@getAllServiceInvoices');
+    // Route::get('service-invoices/get-all-open-service-invoices/', 'ServiceInvoicesController@getAllOpenServiceInvoices');
     Route::resource('service-invoices', 'ServiceInvoicesController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -266,6 +268,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'quotations/{quotation}/restore', 'QuotationsController@restore');
     Route::delete('quotations/{quotation}/force-delete', 'QuotationsController@forceDestroy');
     Route::get('quotations/get-all-quotations', 'QuotationsController@getAllQuotations');
+    Route::get('quotations/get-all-open-quotations', 'QuotationsController@getAllOpenQuotations');
     Route::resource('quotations', 'QuotationsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -276,6 +279,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'bid-sheets/{bid-sheet}/restore', 'BidSheetsController@restore');
     Route::delete('bid-sheets/{bid-sheet}/force-delete', 'BidSheetsController@forceDestroy');
     Route::get('bid-sheets/get-all-bid-sheets', 'BidSheetsController@getAllBidSheets');
+    Route::get('bid-sheets/get-all-open-bid-sheets', 'BidSheetsController@getAllOpenBidSheets');
     Route::get('bid-sheets/{bidSheet}/contact-approvals/{status}', 'BidSheetsController@contactApproval');
     Route::resource('bid-sheets', 'BidSheetsController', [
         'only' => [

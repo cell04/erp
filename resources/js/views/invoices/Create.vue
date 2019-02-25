@@ -189,7 +189,7 @@
             });
 
             let getAllRo = new Promise((resolve, reject) => {
-                axios.get("/api/quotations/get-all-quotations/").then(res => {
+                axios.get("/api/quotations/get-all-open-quotations/").then(res => {
                     this.quotation = res.data.quotations;
                     // console.log('RO: ' + JSON.stringify(res.data));
                     resolve();

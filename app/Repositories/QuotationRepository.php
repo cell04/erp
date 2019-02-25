@@ -73,34 +73,35 @@ class QuotationRepository extends Repository
             //find quotation
             $quotation = $this->quotation->findOrFail($id);
             // check if status is equal to 0 = pending
-            if ($quotation->status == 0) {
-                if ($request->status) {
-                    $request->request->add(['approved_by' => auth('api')->user()->id]);
-                    // $request->request->add(['approved_by' => session('user-id')]);
-                }
-                //update stock request
-                $quotation->fill($request->all());
-                $quotation->save();
+            // if ($quotation->status == 0) {
+            //     if ($request->status) {
+            //         $request->request->add(['approved_by' => auth('api')->user()->id]);
+            //         // $request->request->add(['approved_by' => session('user-id')]);
+            //     }
+            //     //update stock request
+            //     $quotation->fill($request->all());
+            //     $quotation->save();
 
-                // check if stock request items is exist
-                if ($request->has('quotation_items')) {
-                    //soft delete the stock request items where not in the stock request items array
-                    $quotation->quotationItems()->delete();
-                    //create new stock request items
-                    $quotation->quotationItems()->createMany($request->quotation_items);
-                }
+            //     // check if stock request items is exist
+            //     if ($request->has('quotation_items')) {
+            //         //soft delete the stock request items where not in the stock request items array
+            //         $quotation->quotationItems()->delete();
+            //         //create new stock request items
+            //         $quotation->quotationItems()->createMany($request->quotation_items);
+            //     }
 
-                //check if quotation is approved
-                if ($quotation->status == 1 && ! empty($quotation->approved_by)) {
-                    //send email notification to quotation contact
-                    $contact = $this->contact->find($quotation->contact_id);
-                    $contact->notify(new QuotationApproval($quotation));
-                }
+            //     //check if quotation is approved
+            //     if ($quotation->status == 1 && ! empty($quotation->approved_by)) {
+            //         //send email notification to quotation contact
+            //         $this->deductStocksQuantity($quotation);
+            //         $contact = $this->contact->find($quotation->contact_id);
+            //         // $contact->notify(new QuotationApproval($quotation));
+            //     }
 
-                return $quotation;
-            }
+            //     return $quotation;
+            // }
 
-            return null;
+            return $this->deductStocksQuantity($quotation);
         });
     }
 
@@ -144,26 +145,75 @@ class QuotationRepository extends Repository
 
     public function deductStocksQuantity($quotation)
     {
+        $items = [];
+        $i = 0;
+
         foreach ($quotation->quotationItems as $quotationItem) {
-            $stocks = $quotation->quotable->stocks()->where('item_id', $quotationItem->item_id)->get();
-            $itemQuantity = $quotationItem->quantity;
-            foreach ($stocks as $stock) {
-                if ($stock->item_id == $quotationItem->item_id) {
-                    if ($stock->quantity > 0) {
-                        if ($stock->quantity >= $itemQuantity) {
-                            $stock->decrement('quantity', $itemQuantity);
-                            $itemQuantity = 0;
-                        } else {
-                            if ($itemQuantity > $stock->quantity) {
-                                $stock->decrement('quantity', $stock->quantity);
-                                $itemQuantity = $itemQuantity - $stock->quantity;
+            if ($quotationItem->item->with_component === 'yes') {
+                foreach ($quotationItem->item->itemComponents as $firstLayer) {
+                    if ($firstLayer->component->with_component === 'yes') {
+                        foreach ($firstLayer->component->itemComponents as $secondLayer) {
+                            if ($secondLayer->component->with_component == 'yes') {
+                                foreach ($secondLayer->component->itemComponents as $thirdLayer) {
+                                    if ($thirdLayer->component->with_component === 'yes') {
+                                        foreach ($thirdLayer->component->itemComponents as $forthLayer) {
+                                            $items[$i++] = array (
+                                                'item' => $forthLayer->component->name,
+                                                'item_id' => $forthLayer->component->id,
+                                                'quantity' => $forthLayer->quantity * $forthLayer->converter_value
+                                            );
+                                        }
+                                    } else {
+                                        $items[$i++] = array (
+                                            'item' => $thirdLayer->component->name,
+                                            'item_id' => $thirdLayer->component->id,
+                                            'quantity' => $thirdLayer->quantity * $thirdLayer->converter_value
+                                        );
+                                    }
+                                }
+                            } else {
+                                $items[$i++] = array (
+                                    'item' => $secondLayer->component->name,
+                                    'item_id' => $secondLayer->component->id,
+                                    'quantity' => $secondLayer->quantity * $secondLayer->converter_value 
+                                );
                             }
                         }
+                    } else {
+                        $items[$i++] = array (
+                            'item' => $firstLayer->component->name,
+                            'item_id' => $firstLayer->component->id,
+                            'quantity' => $firstLayer->quantity * $firstLayer->converter_value 
+                        );
                     }
                 }
-            }   
+            } else {
+                $items[$i++] = array (
+                    'item' => $quotationItem->item->name,
+                    'item_id' => $quotationItem->item->id,
+                    'quantity' => $quotationItem->quantity
+                );
+            }
+            
+            // $stocks = $quotation->quotable->stocks()->where('item_id', $quotationItem->item_id)->get();
+            // $itemQuantity = $quotationItem->quantity;
+            // foreach ($stocks as $stock) {
+            //     if ($stock->item_id == $quotationItem->item_id) {
+            //         if ($stock->quantity > 0) {
+            //             if ($stock->quantity >= $itemQuantity) {
+            //                 $stock->decrement('quantity', $itemQuantity);
+            //                 $itemQuantity = 0;
+            //             } else {
+            //                 if ($itemQuantity > $stock->quantity) {
+            //                     $stock->decrement('quantity', $stock->quantity);
+            //                     $itemQuantity = $itemQuantity - $stock->quantity;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }   
         }
 
-        return true;   
+        return collect($items)->unique('item_id');   
     }
 }

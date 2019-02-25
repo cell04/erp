@@ -324,8 +324,8 @@
 
             selectItem(index) {
                 this.quotation_items[index].item_id = this.quotation_items[index].item.id;
-                this.quotation_items[index].unitOfMeasurement = this.quotation_items[index].item.default_unit_of_measurement.name;
-                this.quotation_items[index].unit_of_measurement_id = this.quotation_items[index].item.default_unit_of_measurement.id;
+                this.quotation_items[index].unitOfMeasurement = this.quotation_items[index].item.selling_unit_of_measurement.name;
+                this.quotation_items[index].unit_of_measurement_id = this.quotation_items[index].item.selling_unit_of_measurement.id;
 
                 let promise = new Promise((resolve, reject) => {
                     axios.get("/api/item-pricelists/get-item-pricelists/" + this.quotation_items[index].item_id).then(res => {

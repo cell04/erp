@@ -69,7 +69,13 @@ class Quotation extends Model
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
             }
 
-            $model->user_id = auth('api')->user()->id;
+            if (session('user-id')) {
+                $model->user_id = session('user-id');
+            } 
+
+            if (! session('user-id')) {
+                $model->user_id = auth('api')->user()->id;
+            }
         });
 
         static::addGlobalScope(function ($model) {

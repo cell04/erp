@@ -435,11 +435,12 @@
                         1: "Admin Approved",
                         2: "Admin Cancelled",
                         3: "Customer Approved",
-                        4: "Customer Cancelled"
+                        4: "Customer Cancelled",
+                        5: "Closed"
                     };
 
-                    bidsheets.map(quotation => {
-                        quotation.status = status[quotation.status];
+                    bidsheets.map(bidsheet => {
+                        bidsheet.status = status[bidsheet.status];
                     });
 
                     this.bidsheets = bidsheets;
