@@ -108,3 +108,4 @@ Auth::routes();
 
 Route::get('/{any}', 'SpaController@index')->where('any', '.*')->name('index');
 // Route::get('/{any}', 'SpaController@index')->where('any', '([A-z\d-\/_.]+)?')->name('index');
+Route::get('quotations/{quotation}/contact-approvals/{status}', 'QuotationsController@contactApproval');
