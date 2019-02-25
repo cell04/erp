@@ -52,6 +52,12 @@ class ItemRepository extends Repository
         });
     }
 
+    public function withoutComponents()
+    {
+        return $this->item->where('with_component', 'no')
+        ->get();
+    }
+
     public function getConversions($from, $to)
     {
         $i = 0;

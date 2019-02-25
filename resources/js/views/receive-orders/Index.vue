@@ -48,8 +48,11 @@
                                     <router-link class="text-secondary" :to="{ name: 'receive-orders.view', params: { id: item.id }}">
                                         <i class="fas fa-envelope-open-text"></i> View
                                     </router-link>
-                                    |
-                                    <router-link class="text-secondary" :to="{ name: 'bills.receive', params: { id: item.id }}">
+                                        |
+                                    <router-link class="text-secondary" v-if="item.status === 'Issued'" :to="{ name: 'bills.receive', params: { id: item.id }}">
+                                        <i class="fas fa-receipt"></i> Create Purchase Invoice
+                                    </router-link>
+                                    <router-link class="text-secondary isDisabled" v-if="item.status !== 'Issued'" :to="{ name: 'bills.receive', params: { id: item.id }}">
                                         <i class="fas fa-receipt"></i> Create Purchase Invoice
                                     </router-link>
                                 </td>

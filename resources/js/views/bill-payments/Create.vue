@@ -33,7 +33,7 @@
 
                                 <div class="form-group col-md-6">
                                     <label for="name">Amount</label>
-                                    <input type="number" class="form-control" v-model="amount" autocomplete="off" minlength="2" maxlength="255" required>
+                                    <input type="number" class="form-control" v-model="amount" autocomplete="off" minlength="2" maxlength="255"  required>
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -117,7 +117,7 @@
 
         mounted() {
             let promiseBills = new Promise((resolve, reject) => {
-                axios.get("/api/bills/get-all-bills/").then(res => {
+                axios.get("/api/bills/get-all-open-bills/").then(res => {
                     this.bills = res.data.bills;
                     resolve();
                 }).catch(err => {

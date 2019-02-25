@@ -205,7 +205,7 @@
             });
 
             let getAllRo = new Promise((resolve, reject) => {
-                axios.get("/api/receive-orders/get-all-receive-orders/").then(res => {
+                axios.get("/api/receive-orders/get-all-open-receive-orders/").then(res => {
                     this.receiveOrders = res.data.receive_orders;
                     this.billsContact = res.data.receive_orders.contact;
                     // console.log('RO: ' + JSON.stringify(res.data));
@@ -309,10 +309,8 @@
                     amount: this.amount,
                     amount_paid: '0'
                 };
-
-                console.log(formData);
-                this.ifReady = true;
                 axios.post("/api/bills", formData).then(res => {
+                    console.log(res.data);
                     this.$router.push({ name: "bills.index" });
                 }).catch(err => {
                     alert(`Error! Can't create bill`);

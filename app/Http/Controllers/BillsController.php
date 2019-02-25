@@ -219,4 +219,20 @@ class BillsController extends Controller
             'bills'      => $bills
         ], 200);
     }
+
+    public function getAllOpenBills()
+    {
+        if (! $bills = $this->bill->getAllPerStatus([0,1])) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'bills'      => $bills
+        ], 200);
+    }
 }

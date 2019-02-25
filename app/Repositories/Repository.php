@@ -32,6 +32,22 @@ abstract class Repository
     }
 
     /**
+     * Get all resources in the storage using specified status.
+     *
+     * @return array json object
+     */
+
+    public function getAllPerStatus($status)
+    {
+        if (is_array($status)) {
+            return $this->model->whereIn('status', $status)
+            ->get();
+        }
+        return $this->model->where('status', $status)
+        ->get();
+    }
+
+    /**
      * Get all resources in the storage using specified id.
      *
      * @return array json object

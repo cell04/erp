@@ -170,7 +170,7 @@
             });
 
             let getAllItems = new Promise((resolve, reject) => {
-                axios.get("/api/items/get-all-items/").then(res => {
+                axios.get("/api/items/get-all-items-without-components/").then(res => {
                     this.items = res.data.items;
                     resolve();
                 }).catch(err => {
