@@ -222,7 +222,7 @@ class QuotationRepository extends Repository
                 $items[$i++] = array (
                     'item' => $quotationItem->item->name,
                     'item_id' => $quotationItem->item->id,
-                    'quantity' => $quotationItem->quantity * $quotationItem->quantity
+                    'quantity' => $quotationItem->quantity * $converter_value
                 );
             }
         }
