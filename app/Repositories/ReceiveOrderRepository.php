@@ -76,7 +76,7 @@ class ReceiveOrderRepository extends Repository
             if ($conversions) {
                 foreach ($conversions as $conversion) {
 
-                    if ($conversion->unit_of_measurement_from_id === $item->default_unit_of_measurement_id) {
+                    if ($conversion->unit_of_measurement_from_id === $item->default_unit_of_measurement_id || $conversion->unit_of_measurement_to_id === $item->default_unit_of_measurement_id) {
                         
                         $converterValue = $converterValue * $conversion->total;
                     }
