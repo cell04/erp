@@ -73,35 +73,35 @@ class QuotationRepository extends Repository
             //find quotation
             $quotation = $this->quotation->findOrFail($id);
             // check if status is equal to 0 = pending
-            // if ($quotation->status == 0) {
-            //     if ($request->status) {
-            //         $request->request->add(['approved_by' => auth('api')->user()->id]);
-            //         // $request->request->add(['approved_by' => session('user-id')]);
-            //     }
-            //     //update stock request
-            //     $quotation->fill($request->all());
-            //     $quotation->save();
+            if ($quotation->status == 0) {
+                if ($request->status) {
+                    $request->request->add(['approved_by' => auth('api')->user()->id]);
+                    // $request->request->add(['approved_by' => session('user-id')]);
+                }
+                //update stock request
+                $quotation->fill($request->all());
+                $quotation->save();
 
-            //     // check if stock request items is exist
-            //     if ($request->has('quotation_items')) {
-            //         //soft delete the stock request items where not in the stock request items array
-            //         $quotation->quotationItems()->delete();
-            //         //create new stock request items
-            //         $quotation->quotationItems()->createMany($request->quotation_items);
-            //     }
+                // check if stock request items is exist
+                if ($request->has('quotation_items')) {
+                    //soft delete the stock request items where not in the stock request items array
+                    $quotation->quotationItems()->delete();
+                    //create new stock request items
+                    $quotation->quotationItems()->createMany($request->quotation_items);
+                }
 
-            //     //check if quotation is approved
-            //     if ($quotation->status == 1 && ! empty($quotation->approved_by)) {
-            //         //send email notification to quotation contact
-            //         $this->deductStocksQuantity($quotation);
-            //         $contact = $this->contact->find($quotation->contact_id);
-            //         // $contact->notify(new QuotationApproval($quotation));
-            //     }
+                //check if quotation is approved
+                if ($quotation->status == 1 && ! empty($quotation->approved_by)) {
+                    //send email notification to quotation contact
+                    $this->deductStocksQuantity($quotation);
+                    $contact = $this->contact->find($quotation->contact_id);
+                    $contact->notify(new QuotationApproval($quotation));
+                }
 
-            //     return $quotation;
-            // }
+                return $quotation;
+            }
 
-            return $this->deductStocksQuantity($quotation);
+            return $quotation;
         });
     }
 
@@ -144,6 +144,37 @@ class QuotationRepository extends Repository
     }
 
     public function deductStocksQuantity($quotation)
+    {
+        $componentItems = $this->getTotalComponentQuantity($quotation);
+
+        foreach ($componentItems as $item) {
+            $stocks = $quotation->quotable->stocks()->where('item_id', $item['id'])
+            ->orderBy('id', 'desc')
+            ->get();
+
+            $itemQuantity = $item['quantity'];
+
+            foreach ($stocks as $stock) {
+                if ($stock->item_id == $item['id']) {
+                    if ($stock->quantity > 0) {
+                        if ($stock->quantity >= $itemQuantity) {
+                            $stock->decrement('quantity', $itemQuantity);
+                            $itemQuantity = 0;
+                        } else {
+                            if ($itemQuantity > $stock->quantity) {
+                                $stock->decrement('quantity', $stock->quantity);
+                                $itemQuantity = $itemQuantity - $stock->quantity;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $quotation;    
+    }
+
+    public function getTotalComponentQuantity($quotation) 
     {
         $items = [];
         $i = 0;
@@ -194,26 +225,20 @@ class QuotationRepository extends Repository
                     'quantity' => $quotationItem->quantity
                 );
             }
-            
-            // $stocks = $quotation->quotable->stocks()->where('item_id', $quotationItem->item_id)->get();
-            // $itemQuantity = $quotationItem->quantity;
-            // foreach ($stocks as $stock) {
-            //     if ($stock->item_id == $quotationItem->item_id) {
-            //         if ($stock->quantity > 0) {
-            //             if ($stock->quantity >= $itemQuantity) {
-            //                 $stock->decrement('quantity', $itemQuantity);
-            //                 $itemQuantity = 0;
-            //             } else {
-            //                 if ($itemQuantity > $stock->quantity) {
-            //                     $stock->decrement('quantity', $stock->quantity);
-            //                     $itemQuantity = $itemQuantity - $stock->quantity;
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }   
         }
 
-        return collect($items)->unique('item_id');   
+        $uniqueItems = collect($items)->unique('item_id')->values()->all();
+
+        $i = 0;
+
+        foreach ($uniqueItems as $item) {
+            $totalQuantityPerItems[$i++] = [
+                'name' => $item['item'],
+                'id' => $item['item_id'],
+                'quantity' => collect($items)->where('item_id', $item['item_id'])->sum('quantity')
+            ];
+        }
+
+        return $totalQuantityPerItems;
     }
 }

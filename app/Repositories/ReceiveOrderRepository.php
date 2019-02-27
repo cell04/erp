@@ -61,6 +61,7 @@ class ReceiveOrderRepository extends Repository
     {
         $i = 0;
         foreach ($request->receive_order_items as $receiveOrderItem) {
+            $multiplier = 1;
             $converterValue = 1;
             $item = $this->item->findOrFail($receiveOrderItem['item_id']);
 
@@ -70,18 +71,23 @@ class ReceiveOrderRepository extends Repository
                     ['item_id', $receiveOrderItem['item_id']],
                     ['module', 1]
                 ]);
-            })->where('unit_of_measurement_from_id', $item->default_unit_of_measurement_id)
-            ->get();
+            })->get();
 
             if ($conversions) {
                 foreach ($conversions as $conversion) {
-                    $converterValue = $converterValue * $conversion->total;
+
+                    if ($conversion->unit_of_measurement_from_id === $item->default_unit_of_measurement_id) {
+                        
+                        $converterValue = $converterValue * $conversion->total;
+                    }
+
+                    $multiplier = $multiplier * $conversion->total;
                 };
             }
             
             $receiveOrderItems[$i++] = [
                 'item_id' => $receiveOrderItem['item_id'],
-                'quantity' => $receiveOrderItem['quantity'] * $converterValue,
+                'quantity' => $receiveOrderItem['quantity'] * $multiplier,
                 'unit_of_measurement_id' => $item->default_unit_of_measurement_id,
                 'item_pricelist_id' => $receiveOrderItem['item_pricelist_id'],
                 'tracking_number' => $receiveOrderItem['tracking_number'],
