@@ -208,6 +208,22 @@ class BidSheetsController extends Controller
         ], 200);
     }
 
+    public function getAllOpenBidSheets()
+    {
+        if (! $bid_sheets = $this->bidSheet->getAllPerStatus([1,3])) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'bid_sheets' => $bid_sheets
+        ], 200);
+    }
+
     public function contactApproval($id, $status) 
     {
         if (! $quotation = $this->bidSheet->contactApproval($id, $status)) {

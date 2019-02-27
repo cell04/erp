@@ -228,4 +228,20 @@ class InvoicesController extends Controller
             'invoices' => $invoices
         ], 200);
     }
+
+    public function getAllOpenIvoices()
+    {
+        if (! $invoices = $this->invoice->getAllPerStatus([0,1])) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'   => true,
+            'message'    => 'Resources successfully retrieve.',
+            'invoices' => $invoices
+        ], 200);
+    }
 }

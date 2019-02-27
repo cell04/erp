@@ -435,7 +435,8 @@
                         1: "Admin Approved",
                         2: "Admin Cancelled",
                         3: "Customer Approved",
-                        4: "Customer Cancelled"
+                        4: "Customer Cancelled",
+                        5: "Closed"
                     };
 
                     quotations.map(quotation => {

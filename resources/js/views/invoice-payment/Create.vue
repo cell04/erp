@@ -21,6 +21,18 @@
                                 </div>
 
                                 <div class="col-md-6 form-group">
+                                    <div  v-show="selectedSales">
+                                        <label>Sales Invoices #</label>
+                                        <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
+                                    </div>
+
+                                    <div  v-show="selectedService">
+                                        <label>Service Invoices #</label>
+                                        <vue-select v-model="serviceInvoicesData" @input="selectServiceInvoices()" label="reference_number" :options="serviceInvoices" required></vue-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 form-group">
                                     <label>Invoice Payment #</label>
                                     <input type="text" class="form-control" v-model="invoice_payment_number" autocomplete="off" minlength="2" maxlength="255" required>
                                 </div>
@@ -30,16 +42,9 @@
                                     <input type="date" class="form-control" v-model="invoice_payment_date" autocomplete="off" minlength="2" maxlength="255" required>
                                 </div>
 
-                                <div class="col-md-6 form-group">
-                                    <div class="col-md-12" v-show="selectedSales">
-                                        <label>Sales Invoices #</label>
-                                        <vue-select v-model="invoicesData" @input="selectInvoices()" label="reference_number" :options="invoices" required></vue-select>
-                                    </div>
-
-                                    <div class="col-md-12" v-show="selectedService">
-                                        <label>Service Invoices #</label>
-                                        <vue-select v-model="serviceInvoicesData" @input="selectServiceInvoices()" label="reference_number" :options="serviceInvoices" required></vue-select>
-                                    </div>
+                                <div class="form-group col-md-6">
+                                    <label for="name">Remaining Amount</label>
+                                    <input type="number" class="form-control" v-model="remaining_amount" autocomplete="off" minlength="2" maxlength="255" disabled>
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -71,7 +76,7 @@
                             </div>
                             <br>
                             <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewInvoicePayment"><i class="fas fa-chevron-left"></i> Back</button>
-                            <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-chevron-left"></i> Create New Item Class</button>
+                            <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-chevron-left"></i> Create New Invoice Payment</button>
                         </form>
                     </div>
 
@@ -102,6 +107,7 @@
                 invoice_id: '',
                 mode_of_payment_id: '',
                 amount: '',
+                remaining_amount: null,
                 invoice_payment_number: '',
                 invoice_payment_date: '',
                 cr_number: '',
@@ -123,7 +129,7 @@
             ]
 
             let promiseIv = new Promise((resolve, reject) => {
-                axios.get("/api/invoices/get-all-invoices/").then(res => {
+                axios.get("/api/invoices/get-all-open-invoices/").then(res => {
                     this.invoices = res.data.invoices;
                     // console.log('IP: ' + JSON.stringify(res.data));
                     resolve();
@@ -167,11 +173,13 @@
 
             selectServiceInvoices() {
                 this.invoice_id = this.serviceInvoicesData.id;
+                this.remaining_amount = this.serviceInvoicesData.amount - this.serviceInvoicesData.amount_paid;
                 console.log('Service Invoice id: ' + this.invoice_id);
             },
 
             selectInvoices() {
                 this.invoice_id = this.invoicesData.id;
+                this.remaining_amount = this.invoicesData.amount - this.invoicesData.amount_paid;
                 console.log('Sales Invoice id: ' + this.invoice_id);
             },
 

@@ -366,7 +366,7 @@
                     unit: this.selectedComponent.unit,
                     unit_of_measurement_id: this.selectedComponent.unit.id,
                     quantity: this.selectedComponent.quantity,
-                    converter_value: 0
+                    converter_value: 1
                     // unit_price: 0
                 });
 
