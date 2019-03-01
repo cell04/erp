@@ -23,8 +23,9 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'item_type_id', 'item_classification_id','name', 'with_component',
-        'description', 'stock_keeping_unit', 'default_unit_of_measurement_id', 'purchase_unit_of_measurement_id',
+        'corporation_id', 'item_type_id', 'item_classification_id','name', 
+        'with_component', 'description', 'stock_keeping_unit', 'default_unit_of_measurement_id', 
+        'purchase_unit_of_measurement_id', 'default_converter', 'purchase_converter', 'selling_converter',
         'sales_account_id', 'cogs_account_id', 'expense_account_id', 'asset_account_id', 'selling_unit_of_measurement_id'
     ];
 

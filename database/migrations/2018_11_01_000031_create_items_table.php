@@ -30,16 +30,19 @@ class CreateItemsTable extends Migration
                 ->references('id')
                 ->on('unit_of_measurements')
                 ->onDelete('cascade');
+            $table->integer('default_converter')->default(0);
             $table->integer('purchase_unit_of_measurement_id')->unsigned()->nullable();
             $table->foreign('purchase_unit_of_measurement_id')
                 ->references('id')
                 ->on('unit_of_measurements')
                 ->onDelete('cascade');
+            $table->integer('purchase_converter')->default(0);
             $table->integer('selling_unit_of_measurement_id')->unsigned()->nullable();
             $table->foreign('selling_unit_of_measurement_id')
                 ->references('id')
                 ->on('unit_of_measurements')
                 ->onDelete('cascade');
+            $table->integer('selling_converter')->default(0);
             $table->integer('asset_account_id')->unsigned()->nullable();
             $table->integer('cogs_account_id')->unsigned()->nullable();
             $table->integer('sales_account_id')->unsigned()->nullable();
