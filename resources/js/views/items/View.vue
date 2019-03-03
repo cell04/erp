@@ -97,19 +97,19 @@
                                                     <tr>
                                                         <th scope="col">From</th>
                                                         <th scope="col">To</th>
-                                                        <th scope="col">Module</th>
+                                                        <!-- <th scope="col">Module</th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="conversion in item.item_conversions" :key="conversion.id">
                                                         <td>{{ conversion.conversion.from_value }} {{ conversion.conversion.convert_from.name }}</td>
                                                         <td>{{ conversion.conversion.to_value }} {{ conversion.conversion.convert_to.name }}</td>
-                                                        <td v-if="conversion.module === 1">
+                                                        <!-- <td v-if="conversion.module === 1">
                                                             Invetory
                                                         </td>
                                                         <td v-if="conversion.module === 2">
                                                             Recipe
-                                                        </td>
+                                                        </td> -->
                                                     </tr>
                                                 </tbody>
                                             </table>

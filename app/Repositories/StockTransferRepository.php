@@ -62,7 +62,16 @@ class StockTransferRepository extends Repository
         $stockTransferItems = $stockTransfer->stockTransferItems;
 
         foreach ($stockTransferItems as $stockTransferItem) {
-            $itemTransferQuantity = $stockTransferItem->quantity;
+            $multiplier = 1;
+            if ($stockTransferItem->item->purchase_unit_of_measurement_id === $stockTransferItem->unit_of_measurement_id) {
+                $multiplier = $stockTransferItem->item->purchase_converter;
+            }
+
+            if ($stockTransferItem->item->default_unit_of_measurement_id === $stockTransferItem->unit_of_measurement_id) {
+                $multiplier = $stockTransferItem->item->default_converter;
+            }
+
+            $itemTransferQuantity = $stockTransferItem->quantity * $multiplier;
             foreach ($stocks as $stock) {
                 if ($stock->item_id == $stockTransferItem->item_id) {
                     if ($stock->quantity > 0) {
@@ -80,7 +89,7 @@ class StockTransferRepository extends Repository
             }
         }
 
-        return 'ahehe';
+        return $stockTransfer;
     }
 
     public function all()

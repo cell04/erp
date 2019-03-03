@@ -30,7 +30,7 @@ class CreateItemConversionsTable extends Migration
                 ->references('id')
                 ->on('conversions')
                 ->onDelete('cascade');
-            $table->integer('module'); // 0 = inventory, 1 = recipe
+            $table->integer('module')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

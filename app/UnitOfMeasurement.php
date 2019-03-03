@@ -63,13 +63,33 @@ class UnitOfMeasurement extends Model
     }
 
     /**
-     * The unif of measurement has many conversions.
+     * The unit of measurement has many conversions.
      *
      * @return array object
      */
     public function conversions()
     {
         return $this->hasMany(Conversion::class);
+    }
+
+    /**
+     * The unit of measurement has many from conversions.
+     *
+     * @return array object
+     */
+    public function fromConversions()
+    {
+        return $this->hasMany(Conversion::class, 'unit_of_measurement_from_id');
+    }
+
+    /**
+     * The unit of measurement has many to conversions.
+     *
+     * @return array object
+     */
+    public function toConversions()
+    {
+        return $this->hasMany(Conversion::class, 'unit_of_measurement_to_id');
     }
 
     /**

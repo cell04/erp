@@ -66,23 +66,35 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6" v-if="!withComponent">
+                                <!-- <div class="col-md-6" v-if="availableUOM.length != 0">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
-                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseUnit()" label="name" :options="itemUnitList"></vue-select>
+                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseUnit()" label="name" :options="availableUOM" disabled></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6" v-if="!withComponent">
+                                <div class="col-md-6" v-if="availableUOM.length != 0">
                                     <div class="form-group">
                                         <label>Default UOM</label>
-                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="itemUnitList"></vue-select>
+                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="availableUOM" disabled></vue-select>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Purchase UOM</label>
+                                        <input type="text" class="form-control" v-model="purchaseItemUnitId.name" id="class" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Default UOM</label>
+                                        <input type="text" class="form-control" v-model="defaultItemUnitId.name" id="class" readonly>
                                     </div>
                                 </div>
 
                             </div>
                             <div class="row">
-                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
+                                <div class="col" v-if="conversionsList.length != 0">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -91,14 +103,14 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedConversion" label="name" :options="conversionsList"></vue-select>
+                                                        <vue-select v-model="selectedConversion.conversion" label="name" :options="conversionsList"></vue-select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <!-- <div class="col-md-3">
                                                     <div class="form-group">
                                                         <vue-select v-model="selectedConversionModule" label="name" :options="conversionModules"></vue-select>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
@@ -119,19 +131,19 @@
                                                         <th scope="col">From</th>
                                                         <th scope="col">To</th>
                                                         <th scope="col">Module</th>
-                                                        <th scope="col">Action</th>
+                                                        <!-- <th scope="col">Action</th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="(item_conversion, index) in item_conversions" :key="index">
                                                         <td>{{ item_conversion.conversion.from_value }} {{ item_conversion.conversion.convert_from.name }}</td>
                                                         <td>{{ item_conversion.conversion.to_value }} {{ item_conversion.conversion.convert_to.name }}</td>
-                                                        <td v-if="item_conversion.module === 1">
+                                                        <!-- <td v-if="item_conversion.module === 1">
                                                             Invetory
                                                         </td>
                                                         <td v-if="item_conversion.module === 2">
                                                             Recipe
-                                                        </td>
+                                                        </td> -->
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                                         </td>
@@ -141,6 +153,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col" v-if="withComponent">
                                     <div class="card">
                                         <div class="card-header">
@@ -151,7 +165,7 @@
                                                 <div class="col-md-3">
                                                     <label>Item</label>
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedComponent.component" label="name" :options="items"></vue-select>
+                                                        <vue-select v-model="selectedComponent.component" @input="selectComponent()" label="name" :options="items"></vue-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -161,9 +175,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label>Unit</label>
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedComponent.unit_of_measurement" label="name" :options="itemUnitList"></vue-select>
+                                                        <label>UOM</label>
+                                                        <input type="text" class="form-control" v-model="selectedComponent.unit_name"  disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -229,6 +243,7 @@
             return {
                 ifReady: true,
                 items: [],
+                availableUOM: [],
                 withComponent: null,
                 itemTypeId: {},
                 itemClassId: {},
@@ -255,16 +270,16 @@
                 item_conversions: [],
                 selectedConversionModule: {},
                 selectedConversion : {},
-                conversionModules : [
-                    {
-                        value : 1,
-                        name : "Inventory"
-                    },
-                    {
-                        value : 2,
-                        name : "Recipe"
-                    }
-                ]
+                // conversionModules : [
+                //     {
+                //         value : 1,
+                //         name : "Inventory"
+                //     },
+                //     {
+                //         value : 2,
+                //         name : "Recipe"
+                //     }
+                // ]
             };
         },
 
@@ -329,14 +344,19 @@
                 this.item_components.push({
                     component_id: this.selectedComponent.component.id,
                     component: this.selectedComponent.component,
-                    unit_of_measurement: this.selectedComponent.unit_of_measurement,
-                    unit_of_measurement_id: this.selectedComponent.unit_of_measurement.id,
+                    unit_of_measurement: this.selectedComponent.unit,
+                    unit_of_measurement_id: this.selectedComponent.unit.id,
                     quantity: this.selectedComponent.quantity,
                     converter_value: 0
                     // unit_price: 0
                 });
 
                 this.selectedComponent = {};
+            },
+
+            selectComponent() {
+                this.selectedComponent.unit_name = this.selectedComponent.component.selling_unit_of_measurement.name;
+                this.selectedComponent.unit = this.selectedComponent.component.selling_unit_of_measurement;
             },
 
             refreshData() {
@@ -353,40 +373,37 @@
 
                 // console.log(this.selectedConversion);
                 this.item_conversions.push({
-                    module: this.selectedConversionModule.value,
-                    module_name: this.selectedConversionModule.name,
-                    conversion_id: this.selectedConversion.id,
+                    // module: this.selectedConversionModule.value,
+                    // module_name: this.selectedConversionModule.name,
+                    conversion_id: this.selectedConversion.conversion.id,
                     conversion: 
                     {
-                        convert_from: this.selectedConversion.convert_from,
-                        from_value: this.selectedConversion.from_value,
-                        convert_to: this.selectedConversion.convert_to,
-                        to_value: this.selectedConversion.to_value
+                        convert_from: this.selectedConversion.conversion.convert_from,
+                        from_value: this.selectedConversion.conversion.from_value,
+                        convert_to: this.selectedConversion.conversion.convert_to,
+                        to_value: this.selectedConversion.conversion.to_value
                     }
                 });
 
                 console.log(this.item_conversions);
             },
-
-            getConversions() {
+            getConversions(){
                 let formData = {
-                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
-                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
+                    selling_unit_of_measurement_id: this.selling_unit_of_measurement_id
                 };
 
-                console.log(formData);
-
-                axios.post("/api/items/conversions", formData).then(res => {
+                if (this.selling_unit_of_measurement_id) {
+                    axios.post("/api/items/conversions", formData).then(res => {
                     console.log(res.data.conversions);
-                    this.conversionsList = res.data.conversions;
-                    // this.
-
-                    // this.$router.push({ name: "receive-orders.index" });
-                }).catch(err => {
-                    console.log(err);
-                    alert(`Error! No Result`);
-                    this.ifReady = true;
-                });
+                    this.availableUOM = res.data.conversions.availableUOM;
+                    this.conversionsList = res.data.conversions.conversions;
+                    }).catch(err => {
+                        console.log(err);
+                        alert(`Error! No Result`);
+                        this.conversionsList = [];
+                        this.ifReady = true;
+                    });
+                }
             },
 
             selectClassType() {
@@ -396,33 +413,15 @@
 
             selectDefaultUnit() {
                 this.default_unit_of_measurement_id = this.defaultItemUnitId.id;
-                this.getConversions();
-                this.selectedConversion = {};
-                this.selectedConversionModule = {};
+                // this.getConversions();
+                // this.selectedConversion = {};
+                // this.selectedConversionModule = {};
                 console.log('GetDefaultUnitId: ' + this.default_unit_of_measurement_id);
             },
 
             selectSellingUnit() {
                 this.selling_unit_of_measurement_id = this.sellingItemUnitId.id;
-            },
-
-            getConversions() {
-                let formData = {
-                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
-                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
-                };
-
-                if (this.purchase_unit_of_measurement_id && this.default_unit_of_measurement_id) {
-                    axios.post("/api/items/conversions", formData).then(res => {
-                    console.log(res.data.conversions);
-                    this.conversionsList = res.data.conversions;
-                    }).catch(err => {
-                        console.log(err);
-                        alert(`Error! No Result`);
-                        this.conversionsList = [];
-                        this.ifReady = true;
-                    });
-                }
+                this.getConversions();
             },
 
             selectPurchaseUnit() {
@@ -480,9 +479,9 @@
                 this.ifReady = false;
 
                 if (this.withComponent) {
-                    this.item_conversions = [];
-                    this.default_unit_of_measurement_id = null;
-                    this.purchase_unit_of_measurement_id = null;
+                    // this.item_conversions = [];
+                    // this.default_unit_of_measurement_id = null;
+                    // this.purchase_unit_of_measurement_id = null;
                 } else {
                     this.item_components = [];
                 }

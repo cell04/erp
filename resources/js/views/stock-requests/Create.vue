@@ -81,7 +81,9 @@
                                         <td>
                                             <input class="form-control" v-model.number="stock_request_item.quantity" required>
                                         </td>
-                                        <td>{{ stock_request_item.unitOfMeasurement }}</td>
+                                        <td>
+                                            <vue-select v-model="stock_request_item.unit_of_measurement" @input="selectedUnitOfMeasurement(index)" label="name" :options="itemSelectUOMList[index]"></vue-select>
+                                        </td>
                                         <td>
                                             <button type="button" class="btn btn-danger btn-sm" @click="removeItem(index)"><i class="fas fa-times-circle"></i></button>
                                         </td>
@@ -127,6 +129,7 @@
                 items: null,
                 number: null,
                 date: '',
+                itemSelectUOMList: [],
                 stock_requestable_from_id : null,
                 stock_requestable_from_type: null,
                 stock_requestable_to_id: null,
@@ -157,7 +160,7 @@
             });
 
             let promiseItems = new Promise((resolve, reject) => {
-                axios.get("/api/items/get-all-items/").then(res => {
+                axios.get("/api/items/get-all-items-without-components/").then(res => {
                     this.items = res.data.items;
                     resolve();
                 }).catch(err => {
@@ -185,6 +188,10 @@
                 this.stock_requestable_from_id = this.fromWarehouse.id;
                 this.stock_requestable_from_type = "App\\Warehouse";
             },
+
+            selectedUnitOfMeasurement(index) {
+                this.stock_request_items[index].unit_of_measurement_id = this.stock_request_items[index].unit_of_measurement.id;
+            },
             selectToBranch() {
                 this.stock_requestable_to_id = this.toBranch.id;
                 this.stock_requestable_to_type =" App\\Branch";
@@ -196,8 +203,18 @@
             selectItem(index) {
                 if (this.stock_request_items[index].item instanceof Object) {
                     this.stock_request_items[index].item_id = this.stock_request_items[index].item.id;
-                    this.stock_request_items[index].unitOfMeasurement = this.stock_request_items[index].item.default_unit_of_measurement.name;
-                    this.stock_request_items[index].unit_of_measurement_id = this.stock_request_items[index].item.default_unit_of_measurement.id;
+                    // this.stock_request_items[index].unitOfMeasurement = this.stock_request_items[index].item.default_unit_of_measurement.name;
+                    // this.stock_request_items[index].unit_of_measurement_id = this.stock_request_items[index].item.default_unit_of_measurement.id;
+                    this.itemSelectUOMList[index] = [
+                        {
+                            name: this.stock_request_items[index].item.default_unit_of_measurement.name,
+                            id: this.stock_request_items[index].item.default_unit_of_measurement.id
+                        },
+                        {
+                            name: this.stock_request_items[index].item.purchase_unit_of_measurement.name,
+                            id: this.stock_request_items[index].item.purchase_unit_of_measurement.id
+                        }
+                    ];
                 }
             },
             addItem() {

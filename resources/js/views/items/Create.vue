@@ -69,22 +69,22 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6" v-show="!withComponent">
+                                <div class="col-md-6" v-show="availableUOM.length != 0">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
-                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="availableUOM"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6" v-show="!withComponent">
+                                <div class="col-md-6" v-show="availableUOM.length != 0">
                                     <div class="form-group">
                                         <label>Default UOM</label>
-                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="availableUOM"></vue-select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
+                                <div class="col" v-if="conversionsList.length != 0">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -93,14 +93,14 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedConversion" label="name" :options="conversionsList"></vue-select>
+                                                        <vue-select v-model="selectedConversion.conversion" label="name" :options="conversionsList"></vue-select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <!-- <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedConversionModule" label="name" :options="conversionModules"></vue-select>
+                                                        <vue-select v-model="selectedConversion.module" label="name" :options="conversionModules"></vue-select>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
@@ -120,7 +120,7 @@
                                                     <tr>
                                                         <th scope="col">From</th>
                                                         <th scope="col">To</th>
-                                                        <th scope="col">Module</th>
+                                                        <!-- <th scope="col">Module</th> -->
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
@@ -128,7 +128,7 @@
                                                     <tr v-for="(item_conversion, index) in item_conversions" :key="index">
                                                         <td>{{ item_conversion.from_value }} {{ item_conversion.convertFrom.name }}</td>
                                                         <td>{{ item_conversion.to_value }} {{ item_conversion.convertTo.name }}</td>
-                                                        <td>{{ item_conversion.module_name }}</td>
+                                                        <!-- <td>{{ item_conversion.module_name }}</td> -->
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                                         </td>
@@ -138,6 +138,9 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <div class="col" v-if="withComponent">
                                     <div class="card">
                                         <div class="card-header">
@@ -251,8 +254,8 @@
                 items: [],
                 item_components: [],
                 selectedComponent: {},
-                withComponent: null,
-                with_component: null,
+                withComponent: false,
+                with_component: 'no',
                 itemTypeId: {},
                 itemClassId: {},
                 defaultItemUnitId: {},
@@ -269,24 +272,14 @@
                 itemTypesList: [],
                 itemClassList: [],
                 itemUnitList: [],
+                availableUOM: [],
                 selectedConversion : {},
-                selectedConversionModule : {},
                 accountsList: [],
                 itemClassificationsList: [],
                 unitsList: [],
                 defaultUnitsList: [],
                 conversionsList: [],
-                item_conversions: [],
-                conversionModules : [
-                    {
-                        value : 1,
-                        name : "Inventory"
-                    },
-                    {
-                        value : 2,
-                        name : "Recipe"
-                    }
-                ]
+                item_conversions: []
             };
         },
 
@@ -349,14 +342,14 @@
 
             addNewItem() {
                 this.item_conversions.push({
-                    module: this.selectedConversionModule.value,
-                    module_name: this.selectedConversionModule.name,
-                    conversion_id: this.selectedConversion.id,
-                    convertFrom: this.selectedConversion.convert_from,
-                    from_value: this.selectedConversion.from_value,
-                    convertTo: this.selectedConversion.convert_to,
-                    to_value: this.selectedConversion.to_value
+                    conversion_id: this.selectedConversion.conversion.id,
+                    convertFrom: this.selectedConversion.conversion.convert_from,
+                    from_value: this.selectedConversion.conversion.from_value,
+                    convertTo: this.selectedConversion.conversion.convert_to,
+                    to_value: this.selectedConversion.conversion.to_value
                 });
+
+                this.selectedConversion = {};
             },
 
             addNewItemComponent() {
@@ -396,16 +389,35 @@
                 this.item_components.splice(index, 1);
             },
 
+            // getConversions() {
+            //     let formData = {
+            //         purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
+            //         default_unit_of_measurement_id: this.default_unit_of_measurement_id
+            //     };
+
+            //     if (this.purchase_unit_of_measurement_id && this.default_unit_of_measurement_id) {
+            //         axios.post("/api/items/conversions", formData).then(res => {
+            //         console.log(res.data.conversions);
+            //         this.conversionsList = res.data.conversions;
+            //         }).catch(err => {
+            //             console.log(err);
+            //             alert(`Error! No Result`);
+            //             this.conversionsList = [];
+            //             this.ifReady = true;
+            //         });
+            //     }
+            // },
+
             getConversions() {
                 let formData = {
-                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
-                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
+                    selling_unit_of_measurement_id: this.selling_unit_of_measurement_id
                 };
 
-                if (this.purchase_unit_of_measurement_id && this.default_unit_of_measurement_id) {
+                if (this.selling_unit_of_measurement_id) {
                     axios.post("/api/items/conversions", formData).then(res => {
                     console.log(res.data.conversions);
-                    this.conversionsList = res.data.conversions;
+                    this.availableUOM = res.data.conversions.availableUOM;
+                    this.conversionsList = res.data.conversions.conversions;
                     }).catch(err => {
                         console.log(err);
                         alert(`Error! No Result`);
@@ -418,23 +430,25 @@
             selectDefaultItemUnit() {
                 this.default_unit_of_measurement_id = this.defaultItemUnitId.id;
                 console.log('GetDefaultItemUnitId: ' + this.default_unit_of_measurement_id);
-                this.getConversions();
-                this.item_conversions = [];
-                this.selectedConversion = {};
-                this.selectedConversionModule = {};
+                // this.getConversions();
+                // this.item_conversions = [];
+                // this.selectedConversion = {};
+                // this.selectedConversionModule = {};
             },
 
             selectSellingItemUnit() {
                 this.selling_unit_of_measurement_id = this.sellingItemUnitId.id;
+                this.getConversions();
+                this.conversionsList = [];
+                this.defaultItemUnitId = {};
+                this.purchaseItemUnitId = {};
+                this.item_conversions = [];
+                this.selectedConversion = {};
+                this.selectedConversionModule = {};
             },
 
             selectPurchaseItemUnit() {
                 this.purchase_unit_of_measurement_id = this.purchaseItemUnitId.id;
-                this.conversionsList = [];
-                this.defaultItemUnitId = {};
-                this.item_conversions = [];
-                this.selectedConversion = {};
-                this.selectedConversionModule = {};
                 console.log('GetPurchaseItemUnitId: ' + this.purchase_unit_of_measurement_id);
             },
 

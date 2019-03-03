@@ -61,38 +61,16 @@ class ReceiveOrderRepository extends Repository
     {
         $i = 0;
         foreach ($request->receive_order_items as $receiveOrderItem) {
-            $multiplier = 1;
-            $converterValue = 1;
             $item = $this->item->findOrFail($receiveOrderItem['item_id']);
-
-            $conversions = $this->conversion->selectRaw('from_value * to_value as total')
-            ->whereHas('itemConversions', function ($query)  use ($receiveOrderItem) {
-                $query->where([
-                    ['item_id', $receiveOrderItem['item_id']],
-                    ['module', 1]
-                ]);
-            })->get();
-
-            if ($conversions) {
-                foreach ($conversions as $conversion) {
-
-                    if ($conversion->unit_of_measurement_from_id === $item->default_unit_of_measurement_id || $conversion->unit_of_measurement_to_id === $item->default_unit_of_measurement_id) {
-                        
-                        $converterValue = $converterValue * $conversion->total;
-                    }
-
-                    $multiplier = $multiplier * $conversion->total;
-                };
-            }
             
             $receiveOrderItems[$i++] = [
                 'item_id' => $receiveOrderItem['item_id'],
-                'quantity' => $receiveOrderItem['quantity'] * $multiplier,
+                'quantity' => $receiveOrderItem['quantity'] * $item->purchase_converter,
                 'unit_of_measurement_id' => $item->default_unit_of_measurement_id,
                 'item_pricelist_id' => $receiveOrderItem['item_pricelist_id'],
                 'tracking_number' => $receiveOrderItem['tracking_number'],
                 'expiration_date' => $receiveOrderItem['expiration_date'],
-                'converter_value' => $converterValue
+                'converter_value' => $item->default_converter
             ];
         }
 

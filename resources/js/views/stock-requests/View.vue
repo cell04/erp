@@ -92,7 +92,7 @@
                                     <td>{{ stockRequestItem.item.stock_keeping_unit }}</td>
                                     <td>{{ stockRequestItem.item.name }}</td>
                                     <td>{{ stockRequestItem.quantity }}</td>
-                                    <td>{{ stockRequestItem.item.default_unit_of_measurement.name }}</td>
+                                    <td>{{ stockRequestItem.unit_of_measurement.name }}</td>
                                 </tr>
                             </tbody>
                         </table>

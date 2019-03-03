@@ -191,14 +191,14 @@ class QuotationRepository extends Repository
                                             $items[$i++] = array (
                                                 'item' => $forthLayer->component->name,
                                                 'item_id' => $forthLayer->component->id,
-                                                'quantity' => $quotationItem->quantity * ($forthLayer->quantity * $forthLayer->converter_value)
+                                                'quantity' => $quotationItem->quantity * ($forthLayer->quantity * $forthLayer->component->selling_converter)
                                             );
                                         }
                                     } else {
                                         $items[$i++] = array (
                                             'item' => $thirdLayer->component->name,
                                             'item_id' => $thirdLayer->component->id,
-                                            'quantity' => $quotationItem->quantity * ($thirdLayer->quantity * $thirdLayer->converter_value)
+                                            'quantity' => $quotationItem->quantity * ($thirdLayer->quantity * $thirdLayer->component->selling_converter)
                                         );
                                     }
                                 }
@@ -206,7 +206,7 @@ class QuotationRepository extends Repository
                                 $items[$i++] = array (
                                     'item' => $secondLayer->component->name,
                                     'item_id' => $secondLayer->component->id,
-                                    'quantity' => $quotationItem->quantity * ($secondLayer->quantity * $secondLayer->converter_value) 
+                                    'quantity' => $quotationItem->quantity * ($secondLayer->quantity * $secondLayer->component->selling_converter) 
                                 );
                             }
                         }
@@ -214,7 +214,7 @@ class QuotationRepository extends Repository
                         $items[$i++] = array (
                             'item' => $firstLayer->component->name,
                             'item_id' => $firstLayer->component->id,
-                            'quantity' => $quotationItem->quantity * ($firstLayer->quantity * $firstLayer->converter_value) 
+                            'quantity' => $quotationItem->quantity * ($firstLayer->quantity * $firstLayer->component->selling_converter) 
                         );
                     }
                 }
@@ -222,7 +222,7 @@ class QuotationRepository extends Repository
                 $items[$i++] = array (
                     'item' => $quotationItem->item->name,
                     'item_id' => $quotationItem->item->id,
-                    'quantity' => $quotationItem->quantity
+                    'quantity' => $quotationItem->quantity * $quotationItem->item->selling_converter
                 );
             }
         }

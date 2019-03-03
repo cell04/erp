@@ -47,18 +47,29 @@ class StockReceiveRepository extends Repository
         return DB::transaction(function () use ($request) {
             $stockReceive = $this->stockReceive->create($request->all());
             $stockReceiveItems = $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
-
+            $i =0;
             foreach ($stockReceiveItems as $stockReceiveItem){
-                $data = [
+                $multiplier = 1;
+                if ($stockReceiveItem->item->purchase_unit_of_measurement_id === $stockReceiveItem->unit_of_measurement_id) {
+                    $multiplier = $stockReceiveItem->item->purchase_converter;
+                }
+
+                if ($stockReceiveItem->item->default_unit_of_measurement_id === $stockReceiveItem->unit_of_measurement_id) {
+                    $multiplier = $stockReceiveItem->item->default_converter;
+                }
+
+                $data[$i++] = [
                     'stockable_id' => $stockReceive->stock_receivable_to_id,
                     'stockable_type' => $stockReceive->stock_receivable_to_type,
                     'item_id' => $stockReceiveItem->item_id,
-                    'quantity' => $stockReceiveItem->quantity,
-                    'unit_of_measurement_id' => $stockReceiveItem->unit_of_measurement_id
+                    'quantity' => $stockReceiveItem->quantity * $multiplier,
+                    'converter_value' => $stockReceiveItem->item->default_converter,
+                    'unit_of_measurement_id' => $stockReceiveItem->item->default_unit_of_measurement_id
                 ];
-
-                Stock::create($data);
             }
+
+            Stock::create($data);
+
             return $stockReceive;
         });
     }

@@ -73,7 +73,7 @@ class StockTransfersController extends Controller
             ], 400);
         }
 
-        return $this->stockTransfer->store($request);
+        // return $this->stockTransfer->store($request);
 
         if (! $this->stockTransfer->store($request)) {
             return response()->json([

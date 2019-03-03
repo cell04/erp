@@ -54,8 +54,8 @@
                 ifReady: true,
                 name:'',
                 abbreviation: '',
-                default_value: null,
-                defaultValue: null
+                default_value: 'no',
+                defaultValue: false
             };
         },
 
