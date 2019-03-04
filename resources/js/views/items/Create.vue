@@ -69,14 +69,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6" v-show="availableUOM.length != 0">
+                                <div class="col-md-6" v-show="!withComponent">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
-                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="availableUOM"></vue-select>
+                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6" v-show="availableUOM.length != 0">
+                                <div class="col-md-6" v-show="!withComponent">
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="availableUOM"></vue-select>
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col" v-if="conversionsList.length != 0">
+                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -325,13 +325,9 @@
 
             getWithComponentValue() {
                 if (this.withComponent) {
-                    this.item_conversions = [];
-                    this.default_unit_of_measurement_id = null;
-                    this.purchase_unit_of_measurement_id = null;
                     this.with_component = 'yes';
                 } else {
                     this.with_component = 'no';
-                    this.item_components = [];
                 }
             },
 
@@ -410,10 +406,10 @@
 
             getConversions() {
                 let formData = {
-                    selling_unit_of_measurement_id: this.selling_unit_of_measurement_id
+                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id
                 };
 
-                if (this.selling_unit_of_measurement_id) {
+                if (this.purchase_unit_of_measurement_id) {
                     axios.post("/api/items/conversions", formData).then(res => {
                     console.log(res.data.conversions);
                     this.availableUOM = res.data.conversions.availableUOM;
@@ -438,18 +434,19 @@
 
             selectSellingItemUnit() {
                 this.selling_unit_of_measurement_id = this.sellingItemUnitId.id;
-                this.getConversions();
-                this.conversionsList = [];
-                this.defaultItemUnitId = {};
-                this.purchaseItemUnitId = {};
-                this.item_conversions = [];
-                this.selectedConversion = {};
-                this.selectedConversionModule = {};
+                // this.conversionsList = [];
+                // this.defaultItemUnitId = {};
+                // this.purchaseItemUnitId = {};
+                // this.item_conversions = [];
+                // this.selectedConversion = {};
+                // this.selectedConversionModule = {};
             },
 
             selectPurchaseItemUnit() {
                 this.purchase_unit_of_measurement_id = this.purchaseItemUnitId.id;
                 console.log('GetPurchaseItemUnitId: ' + this.purchase_unit_of_measurement_id);
+                this.selectedConversion = {};
+                this.getConversions();
             },
 
             selectItemType() {
@@ -466,6 +463,16 @@
 
             createNewItem() {
                 this.ifReady = false;
+
+                if (this.withComponent) {
+                    this.item_conversions = [];
+                    this.default_unit_of_measurement_id = null;
+                    this.purchase_unit_of_measurement_id = null;
+                    this.with_component = 'yes';
+                } else {
+                    this.with_component = 'no';
+                    this.item_components = [];
+                }  
 
                 axios.post("/api/items", this.$data).then(res => {
                     this.$router.push({ name: "items.index" });

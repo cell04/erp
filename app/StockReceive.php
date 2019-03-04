@@ -66,7 +66,13 @@ class StockReceive extends Model
         static::creating(function ($model) {
             if (request()->headers->get('CORPORATION-ID')) {
                 $model->corporation_id = request()->headers->get('CORPORATION-ID');
-                $model->user_id = auth('api')->user()->id;
+                if (request()->headers->get('user-id')) {
+
+                    $model->user_id = session('user-id');
+                } else {
+
+                    $model->user_id = auth('api')->user()->id;
+                }
             }
         });
 

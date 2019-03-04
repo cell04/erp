@@ -301,4 +301,25 @@ class StockRequestsController extends Controller
             'message'  => 'Resource successfully updated.'
         ], 200);
     }
+
+    /**
+     * Retrieve all open resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllOpenStockRequests()
+    {
+        if (! $stock_requests = $this->stockRequest->getAllPerStatus(1)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'       => true,
+            'message'        => 'Resources successfully retrieve.',
+            'stock_requests' => $stock_requests
+        ], 200);
+    }
 }

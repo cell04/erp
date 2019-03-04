@@ -48,7 +48,7 @@ class ItemsController extends Controller
 
     public function getItemConversions(Request $request)
     {
-        if (! $conversions = $this->item->getConversions($request->selling_unit_of_measurement_id)) {
+        if (! $conversions = $this->item->getConversions($request->purchase_unit_of_measurement_id)) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'
@@ -70,39 +70,38 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'item_type_id'                              =>  'required|integer',
-        //     'item_classification_id'                    =>  'required|integer',
-        //     'default_unit_of_measurement_id'            =>  'integer|nullable',
-        //     'purchase_unit_of_measurement_id'           =>  'integer|nullable',
-        //     'selling_unit_of_measurement_id'            =>  'integer|nullable',
-        //     'sales_account_id'                          =>  'integer|nullable',
-        //     'cogs_account_id'                           =>  'integer|nullable',
-        //     'expense_account_id'                        =>  'integer|nullable',
-        //     'asset_account_id'                          =>  'integer|nullable',
-        //     'name'                                      =>  'required|string|max:255',
-        //     // 'description'                               =>  'required|string|max:255',
-        //     'stock_keeping_unit'                        =>  'required|string|max:255'  
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'item_type_id'                              =>  'required|integer',
+            'item_classification_id'                    =>  'required|integer',
+            'default_unit_of_measurement_id'            =>  'integer|nullable',
+            'purchase_unit_of_measurement_id'           =>  'integer|nullable',
+            'selling_unit_of_measurement_id'            =>  'integer|nullable',
+            'sales_account_id'                          =>  'integer|nullable',
+            'cogs_account_id'                           =>  'integer|nullable',
+            'expense_account_id'                        =>  'integer|nullable',
+            'asset_account_id'                          =>  'integer|nullable',
+            'name'                                      =>  'required|string|max:255',
+            // 'description'                               =>  'required|string|max:255',
+            'stock_keeping_unit'                        =>  'required|string|max:255'  
+        ]);
 
-        return $this->item->store($request);
 
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'message' => 'Validation failed',
-        //         'errors'  => $validator->errors()
-        //     ], 400);
-        // }
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors'  => $validator->errors()
+            ], 400);
+        }
 
-        // if (! $this->item->store($request)) {
-        //     return response()->json([
-        //         'message' => 'Failed to store resource'
-        //     ], 500);
-        // }
+        if (! $this->item->store($request)) {
+            return response()->json([
+                'message' => 'Failed to store resource'
+            ], 500);
+        }
 
-        // return response()->json([
-        //     'message' => 'Resource successfully stored'
-        // ], 200);
+        return response()->json([
+            'message' => 'Resource successfully stored'
+        ], 200);
     }
 
     /**

@@ -49,7 +49,7 @@
                                 <div class="col-md-6 form-group">
                                     <label>With Components</label><br />
                                     <label class="switch">
-                                        <input type="checkbox" v-model="withComponent" @change="getWithComponentValue()">
+                                        <input type="checkbox" v-model="withComponent" @change="getWithComponentValue()" disabled>
                                         <span class="slider round">
                                             <span class="on">{{'Yes'}}</span>
                                             <span class="off">{{'No'}}</span>
@@ -66,26 +66,26 @@
                             </div>
 
                             <div class="row">
-                                <!-- <div class="col-md-6" v-if="availableUOM.length != 0">
+                                <!-- <div class="col-md-6" v-if="!withComponent">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
-                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseUnit()" label="name" :options="availableUOM" disabled></vue-select>
+                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseUnit()" label="name" :options="itemUnitList" readonly></vue-select>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6" v-if="availableUOM.length != 0">
+                                <div class="col-md-6" v-if="!withComponent">
                                     <div class="form-group">
                                         <label>Default UOM</label>
-                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="availableUOM" disabled></vue-select>
+                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="availableUOM"></vue-select>
                                     </div>
                                 </div> -->
-                                <div class="col-md-6">
+                                <div class="col-md-6" v-show="purchase_unit_of_measurement_id">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
-                                        <input type="text" class="form-control" v-model="purchaseItemUnitId.name" id="class" readonly>
+                                        <input type="text" class="form-control" @input="selectPurchaseUnit()" v-model="purchaseItemUnitId.name" id="class" readonly>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" v-show="default_unit_of_measurement_id">
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <input type="text" class="form-control" v-model="defaultItemUnitId.name" id="class" readonly>
@@ -94,7 +94,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col" v-if="conversionsList.length != 0">
+                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -312,7 +312,8 @@
                         this.purchase_unit_of_measurement_id = res.data.item.purchase_unit_of_measurement_id;
                         this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
                         this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
-                        this.item_conversions = res.data.item.item_conversions;   
+                        this.item_conversions = res.data.item.item_conversions;
+                        this.getConversions();   
                     }
                     resolve();
                 });
@@ -389,10 +390,10 @@
             },
             getConversions(){
                 let formData = {
-                    selling_unit_of_measurement_id: this.selling_unit_of_measurement_id
+                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id
                 };
 
-                if (this.selling_unit_of_measurement_id) {
+                if (this.purchase_unit_of_measurement_id) {
                     axios.post("/api/items/conversions", formData).then(res => {
                     console.log(res.data.conversions);
                     this.availableUOM = res.data.conversions.availableUOM;
@@ -421,7 +422,6 @@
 
             selectSellingUnit() {
                 this.selling_unit_of_measurement_id = this.sellingItemUnitId.id;
-                this.getConversions();
             },
 
             selectPurchaseUnit() {
@@ -429,6 +429,7 @@
                 this.selectedConversion = {};
                 this.selectedConversionModule = {};
                 console.log('GetPurchaseUnitId: ' + this.purchase_unit_of_measurement_id);
+                // this.getConversions();
             },
 
             getItemType() {
@@ -479,9 +480,9 @@
                 this.ifReady = false;
 
                 if (this.withComponent) {
-                    // this.item_conversions = [];
-                    // this.default_unit_of_measurement_id = null;
-                    // this.purchase_unit_of_measurement_id = null;
+                    this.item_conversions = [];
+                    this.default_unit_of_measurement_id = null;
+                    this.purchase_unit_of_measurement_id = null;
                 } else {
                     this.item_components = [];
                 }

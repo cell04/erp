@@ -251,4 +251,25 @@ class StockTransfersController extends Controller
             'message'  => 'Resource successfully updated.'
         ], 200);
     }
+
+    /**
+     * Retrieve all open resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllOpenStockTransfers()
+    {
+        if (! $stock_transfers = $this->stockTransfer->getAllPerStatus(0)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'          => true,
+            'message'           => 'Resources successfully retrieve.',
+            'stock_transfers'   => $stock_transfers
+        ], 200);
+    }
 }

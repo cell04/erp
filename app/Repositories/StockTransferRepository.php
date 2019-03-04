@@ -51,6 +51,9 @@ class StockTransferRepository extends Repository
             $stockTransfer = $this->stockTransfer->create($request->all());
             $stockTransfer->stockTransferItems()->createMany($request->stock_transfer_items);
             $this->decrementStocksQuantity($stockTransfer);
+            $stockTransfer->stockRequest()->update([
+                'status' => 3
+            ]);
 
             return $stockTransfer;
         });

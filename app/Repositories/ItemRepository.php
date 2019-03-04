@@ -104,7 +104,7 @@ class ItemRepository extends Repository
             // return $request->all();
             $this->generateStoreConverters($request);
 
-            $request->request->replace([
+            $request->request->add([
                 'asset_account_id'    => 11,
                 'cogs_account_id'     => 9,
                 'sales_account_id'    => 6,

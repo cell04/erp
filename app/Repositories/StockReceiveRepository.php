@@ -47,7 +47,7 @@ class StockReceiveRepository extends Repository
         return DB::transaction(function () use ($request) {
             $stockReceive = $this->stockReceive->create($request->all());
             $stockReceiveItems = $stockReceive->stockReceiveItems()->createMany($request->stock_receive_items);
-            $i =0;
+
             foreach ($stockReceiveItems as $stockReceiveItem){
                 $multiplier = 1;
                 if ($stockReceiveItem->item->purchase_unit_of_measurement_id === $stockReceiveItem->unit_of_measurement_id) {
@@ -58,7 +58,7 @@ class StockReceiveRepository extends Repository
                     $multiplier = $stockReceiveItem->item->default_converter;
                 }
 
-                $data[$i++] = [
+                $data = [
                     'stockable_id' => $stockReceive->stock_receivable_to_id,
                     'stockable_type' => $stockReceive->stock_receivable_to_type,
                     'item_id' => $stockReceiveItem->item_id,
@@ -66,9 +66,13 @@ class StockReceiveRepository extends Repository
                     'converter_value' => $stockReceiveItem->item->default_converter,
                     'unit_of_measurement_id' => $stockReceiveItem->item->default_unit_of_measurement_id
                 ];
+
+                Stock::create($data);
             }
 
-            Stock::create($data);
+            $stockReceive->stockTransfer()->update([
+                'status' => 1
+            ]);
 
             return $stockReceive;
         });

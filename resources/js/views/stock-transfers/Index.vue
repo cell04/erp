@@ -370,7 +370,7 @@
                 } else {
                     let status = {
                         0: 'Transferring',
-                        1: 'Transferred'
+                        1: 'Closed'
                     };
 
                     stockTransfers.map(stockTransfer => {

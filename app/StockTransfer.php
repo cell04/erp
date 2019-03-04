@@ -112,4 +112,14 @@ class StockTransfer extends Model
     {
         return $this->hasMany(StockTransferItem::class);
     }
+
+    /**
+     * The stock request is belongs to a stock request.
+     *
+     * @return object
+     */
+    public function stockRequest()
+    {
+        return $this->belongsTo(StockRequest::class);
+    }
 }

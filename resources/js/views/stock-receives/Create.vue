@@ -173,7 +173,7 @@
             });
 
             let promiseStockTransfer = new Promise((resolve, reject) => {
-                axios.get("/api/stock-transfers/get-all-stock-transfers/").then(res => {
+                axios.get("/api/stock-transfers/get-all-open-stock-transfers/").then(res => {
                     // console.log('Stock Transfer: ' + JSON.stringify(res.data.stock_transfers));
                     this.stockTransfers = res.data.stock_transfers;
                     resolve();

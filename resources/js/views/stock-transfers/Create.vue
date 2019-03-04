@@ -143,7 +143,7 @@
 
         mounted() {
             let promiseStockRequests = new Promise((resolve, reject) => {
-                axios.get("/api/stock-requests/get-all-stock-requests").then(res => {
+                axios.get("/api/stock-requests/get-all-open-stock-requests").then(res => {
                     // console.log('SR: ' + JSON.stringify(res.data.stock_requests));
                     this.stockRequests = res.data.stock_requests;
                     resolve();

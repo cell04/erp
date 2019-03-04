@@ -407,7 +407,8 @@
                     let status = {
                         0: 'Pending',
                         1: 'Approved',
-                        2: 'Cancelled'
+                        2: 'Cancelled',
+                        3: 'Closed'
                     };
 
                     stockRequests.map(stockRequest => {

@@ -203,18 +203,27 @@
             selectItem(index) {
                 if (this.stock_request_items[index].item instanceof Object) {
                     this.stock_request_items[index].item_id = this.stock_request_items[index].item.id;
-                    // this.stock_request_items[index].unitOfMeasurement = this.stock_request_items[index].item.default_unit_of_measurement.name;
-                    // this.stock_request_items[index].unit_of_measurement_id = this.stock_request_items[index].item.default_unit_of_measurement.id;
-                    this.itemSelectUOMList[index] = [
-                        {
-                            name: this.stock_request_items[index].item.default_unit_of_measurement.name,
-                            id: this.stock_request_items[index].item.default_unit_of_measurement.id
-                        },
-                        {
-                            name: this.stock_request_items[index].item.purchase_unit_of_measurement.name,
-                            id: this.stock_request_items[index].item.purchase_unit_of_measurement.id
-                        }
-                    ];
+                    
+                    if (this.stock_request_items[index].item.default_unit_of_measurement.id === this.stock_request_items[index].item.purchase_unit_of_measurement.id) {
+                        this.itemSelectUOMList[index] = [
+                            {
+                                name: this.stock_request_items[index].item.default_unit_of_measurement.name,
+                                id: this.stock_request_items[index].item.default_unit_of_measurement.id
+                            }
+                        ];
+
+                    } else {
+                        this.itemSelectUOMList[index] = [
+                            {
+                                name: this.stock_request_items[index].item.default_unit_of_measurement.name,
+                                id: this.stock_request_items[index].item.default_unit_of_measurement.id
+                            },
+                            {
+                                name: this.stock_request_items[index].item.purchase_unit_of_measurement.name,
+                                id: this.stock_request_items[index].item.purchase_unit_of_measurement.id
+                            }
+                        ];
+                    }
                 }
             },
             addItem() {
