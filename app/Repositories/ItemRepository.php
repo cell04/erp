@@ -50,7 +50,7 @@ class ItemRepository extends Repository
                     }
                 }
 
-                if ($request->selling_unit_of_measurement_id === $conversion['convertFrom']['id']) {
+                if ($request->selling_unit_of_measurement_id === $conversion['convertFrom']['id'] && $conversion['module'] === 2) {
                     $sellingConvertToId = $conversion['convertTo']['id'];
                     $this->sellingConverter = $this->sellingConverter * ($conversion['from_value'] * $conversion['to_value']);
                 } else {
@@ -82,7 +82,7 @@ class ItemRepository extends Repository
                     }
                 }
 
-                if ($request->selling_unit_of_measurement_id === $conversion['conversion']['convert_from']['id']) {
+                if ($request->selling_unit_of_measurement_id === $conversion['conversion']['convert_from']['id'] && $conversion['module'] === 2) {
                     $sellingConvertToId = $conversion['conversion']['convert_to']['id'];                    
                     $this->sellingConverter = $this->sellingConverter * ($conversion['conversion']['from_value'] * $conversion['conversion']['to_value']);
                 } else {
@@ -141,7 +141,7 @@ class ItemRepository extends Repository
         $unit = $this->uom->findOrFail($uom);
 
         $conversions = $this->getUnitWithConversion($unit);
-        $availableUOM = $this->avaliableUnitBaseonSellingUOM($conversions);
+        $availableUOM = $this->avaliableUnitBaseonPurchaseUOM($conversions);
 
         return [
             'conversions' => $conversions,
@@ -149,7 +149,7 @@ class ItemRepository extends Repository
         ];
     }
 
-    public function avaliableUnitBaseonSellingUOM($conversions)
+    public function avaliableUnitBaseonPurchaseUOM($conversions)
     {
         $i = 0;
         $ids = [];

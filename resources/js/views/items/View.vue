@@ -97,19 +97,17 @@
                                                     <tr>
                                                         <th scope="col">From</th>
                                                         <th scope="col">To</th>
-                                                        <!-- <th scope="col">Module</th> -->
+                                                        <th scope="col">Module</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="conversion in item.item_conversions" :key="conversion.id">
                                                         <td>{{ conversion.conversion.from_value }} {{ conversion.conversion.convert_from.name }}</td>
                                                         <td>{{ conversion.conversion.to_value }} {{ conversion.conversion.convert_to.name }}</td>
-                                                        <!-- <td v-if="conversion.module === 1">
-                                                            Invetory
-                                                        </td>
+                                                        <td>{{ conversion.module }}</td>
                                                         <td v-if="conversion.module === 2">
                                                             Recipe
-                                                        </td> -->
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -215,6 +213,16 @@
                     axios.get("/api/items/" + this.$route.params.id).then(res => {
                         console.log(JSON.stringify(res.data.item));
                         this.item = res.data.item;
+
+                        let module = {
+                            1: 'Inventory',
+                            2: 'Recipe'
+                        };
+
+                        this.item.item_conversions.map(item_conversions => {
+                            item_conversions.module = module[item_conversions.module];
+                        });
+
                         if (this.item.with_component === 'yes') {
                             this.withComponent = true;
                         } else {

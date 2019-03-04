@@ -106,11 +106,11 @@
                                                         <vue-select v-model="selectedConversion.conversion" label="name" :options="conversionsList"></vue-select>
                                                     </div>
                                                 </div>
-                                                <!-- <div class="col-md-3">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedConversionModule" label="name" :options="conversionModules"></vue-select>
+                                                        <vue-select v-model="selectedConversion.module" label="name" :options="conversionModules"></vue-select>
                                                     </div>
-                                                </div> -->
+                                                </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
@@ -131,19 +131,14 @@
                                                         <th scope="col">From</th>
                                                         <th scope="col">To</th>
                                                         <th scope="col">Module</th>
-                                                        <!-- <th scope="col">Action</th> -->
+                                                        <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="(item_conversion, index) in item_conversions" :key="index">
                                                         <td>{{ item_conversion.conversion.from_value }} {{ item_conversion.conversion.convert_from.name }}</td>
                                                         <td>{{ item_conversion.conversion.to_value }} {{ item_conversion.conversion.convert_to.name }}</td>
-                                                        <!-- <td v-if="item_conversion.module === 1">
-                                                            Invetory
-                                                        </td>
-                                                        <td v-if="item_conversion.module === 2">
-                                                            Recipe
-                                                        </td> -->
+                                                        <td>{{ item_conversion.module_name }}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                                         </td>
@@ -270,16 +265,16 @@
                 item_conversions: [],
                 selectedConversionModule: {},
                 selectedConversion : {},
-                // conversionModules : [
-                //     {
-                //         value : 1,
-                //         name : "Inventory"
-                //     },
-                //     {
-                //         value : 2,
-                //         name : "Recipe"
-                //     }
-                // ]
+                conversionModules : [
+                    {
+                        value : 1,
+                        name : "Inventory"
+                    },
+                    {
+                        value : 2,
+                        name : "Recipe"
+                    }
+                ]
             };
         },
 
@@ -313,6 +308,14 @@
                         this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
                         this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
                         this.item_conversions = res.data.item.item_conversions;
+                        let module_name = {
+                            1: 'Inventory',
+                            2: 'Recipe'
+                        };
+
+                        this.item_conversions.map(item_conversions => {
+                            item_conversions.module_name = module_name[item_conversions.module];
+                        });
                         this.getConversions();   
                     }
                     resolve();
@@ -348,7 +351,7 @@
                     unit_of_measurement: this.selectedComponent.unit,
                     unit_of_measurement_id: this.selectedComponent.unit.id,
                     quantity: this.selectedComponent.quantity,
-                    converter_value: 0
+                    converter_value: this.selectedComponent.component.selling_converter
                     // unit_price: 0
                 });
 
@@ -374,8 +377,8 @@
 
                 // console.log(this.selectedConversion);
                 this.item_conversions.push({
-                    // module: this.selectedConversionModule.value,
-                    // module_name: this.selectedConversionModule.name,
+                    module: this.selectedConversion.module.value,
+                    module_name: this.selectedConversion.module.name,
                     conversion_id: this.selectedConversion.conversion.id,
                     conversion: 
                     {
@@ -484,6 +487,7 @@
                     this.default_unit_of_measurement_id = null;
                     this.purchase_unit_of_measurement_id = null;
                 } else {
+
                     this.item_components = [];
                 }
 

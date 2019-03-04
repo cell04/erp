@@ -96,11 +96,11 @@
                                                         <vue-select v-model="selectedConversion.conversion" label="name" :options="conversionsList"></vue-select>
                                                     </div>
                                                 </div>
-                                                <!-- <div class="col-md-3">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <vue-select v-model="selectedConversion.module" label="name" :options="conversionModules"></vue-select>
                                                     </div>
-                                                </div> -->
+                                                </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <button type="button" class="btn btn-success" @click="addNewItem"><i class="fas fa-plus"></i> Add</button>
@@ -120,7 +120,7 @@
                                                     <tr>
                                                         <th scope="col">From</th>
                                                         <th scope="col">To</th>
-                                                        <!-- <th scope="col">Module</th> -->
+                                                        <th scope="col">Module</th>
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
@@ -128,7 +128,7 @@
                                                     <tr v-for="(item_conversion, index) in item_conversions" :key="index">
                                                         <td>{{ item_conversion.from_value }} {{ item_conversion.convertFrom.name }}</td>
                                                         <td>{{ item_conversion.to_value }} {{ item_conversion.convertTo.name }}</td>
-                                                        <!-- <td>{{ item_conversion.module_name }}</td> -->
+                                                        <td>{{ item_conversion.module_name }}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" @click="deleteRow(index)"><i class="far fa-times-circle"></i></button>
                                                         </td>
@@ -279,7 +279,17 @@
                 unitsList: [],
                 defaultUnitsList: [],
                 conversionsList: [],
-                item_conversions: []
+                item_conversions: [],
+                conversionModules: [
+                    {
+                        value : 1,
+                        name : "Inventory"
+                    },
+                    {
+                        value : 2,
+                        name : "Recipe"
+                    }
+                ]
             };
         },
 
@@ -342,7 +352,9 @@
                     convertFrom: this.selectedConversion.conversion.convert_from,
                     from_value: this.selectedConversion.conversion.from_value,
                     convertTo: this.selectedConversion.conversion.convert_to,
-                    to_value: this.selectedConversion.conversion.to_value
+                    to_value: this.selectedConversion.conversion.to_value,
+                    module: this.selectedConversion.module.id,
+                    module_name: this.selectedConversion.module.name
                 });
 
                 this.selectedConversion = {};
@@ -355,7 +367,7 @@
                     unit: this.selectedComponent.unit,
                     unit_of_measurement_id: this.selectedComponent.unit.id,
                     quantity: this.selectedComponent.quantity,
-                    converter_value: 1
+                    converter_value: this.selectedComponent.item.selling_converter
                     // unit_price: 0
                 });
 
