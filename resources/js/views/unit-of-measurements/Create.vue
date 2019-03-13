@@ -17,7 +17,6 @@
                             <label>Abbreviation</label>
                             <input type="text" class="form-control" v-model="abbreviation" autocomplete="off" minlength="1" maxlength="255" required>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Default</label><br />
@@ -30,7 +29,12 @@
                                 </label>
                             </div>
                         </div>
-                        
+                        <div class="form-group" v-show="! defaultValue">
+                            <div class="form-group">
+                                <label>Base Unit</label>
+                                <vue-select v-model="base_unit" @input="selectBaseUnit()" label="name" :options="base_units"></vue-select>
+                            </div>
+                        </div>  
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent="viewUOM"><i class="fas fa-chevron-left"></i> Back</button>
                         <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Create New UOM</button>
                     </form>
@@ -53,10 +57,25 @@
             return {
                 ifReady: true,
                 name:'',
+                base_units : [],
+                base_unit : {},
+                base_unit_id : null,
                 abbreviation: '',
                 default_value: 'no',
                 defaultValue: false
             };
+        },
+
+        mounted() {
+
+            let promise = new Promise((resolve, reject) => {
+                
+                axios.get('/api/unit-of-measurements/get-all-base-unit-of-measurements').then(res => {
+                    console.log(res)
+                    this.base_units = res.data.unit_of_measurements; 
+                    resolve();
+                });
+            });
         },
 
         methods: {
@@ -74,6 +93,11 @@
 
             createNewUnitOfMeasurement() {
                 this.ifReady = false;
+
+                if (this.defaultValue) {
+                    this.unit_of_measurements.base_unit_id = null;
+                }
+
                 axios.post('/api/unit-of-measurements', this.$data).then(res => {
                     this.ifReady = true;
                     this.$router.push({ name: 'unit-of-measurements.index' });
@@ -82,7 +106,11 @@
                     alert("Error!");
                     console.log(err);
                 });
-            }
+            },
+
+            selectBaseUnit() {
+                this.base_unit_id = this.base_unit.id;  
+            },
         }
     }
 </script>

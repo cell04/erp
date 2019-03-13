@@ -24,7 +24,7 @@ class UnitOfMeasurement extends Model
      * @var array
      */
     protected $fillable = [
-        'corporation_id', 'name', 'abbreviation', 'default_value'
+        'corporation_id', 'name', 'abbreviation', 'default_value', 'base_unit_id'
     ];
 
     /**
@@ -42,6 +42,10 @@ class UnitOfMeasurement extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    protected $with = [
+        'baseUnit'
+    ];
 
     /**
      * Run functions on boot.
@@ -110,5 +114,15 @@ class UnitOfMeasurement extends Model
     public function receiveOrderItems()
     {
         return $this->hasMany(ReceiveOrderItem::class);
+    }
+
+    /**
+     * The unit of measurement has many base unit.
+     *
+     * @return array object
+     */
+    public function baseUnit()
+    {
+        return $this->belongsTo(UnitOfMeasurement::class);
     }
 }

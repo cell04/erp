@@ -22,7 +22,7 @@
                         </div>
                         <div class="form-group">
                             <label>Select UOM</label>
-                            <vue-select v-model="unitOfMeasurementTo" @input="selectUnitTo()" label="name" :options="units"></vue-select>
+                            <vue-select v-model="unitOfMeasurementTo" @input="selectUnitTo()" label="name" :options="fromUnits"></vue-select>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-sm">Create New Conversion</button>
@@ -49,6 +49,7 @@
                 unitOfMeasurementFrom: null,
                 unitOfMeasurementTo: null,
                 units: [],
+                fromUnits: [],
                 unit_of_measurement_from_id:'',
                 from_value: '',
                 unit_of_measurement_to_id: '',
@@ -72,7 +73,22 @@
         methods: {
             selectUnitFrom(){
                 this.unit_of_measurement_from_id = this.unitOfMeasurementFrom.id;
-                // console.log('unitMeasurementFrom: ' + this.unit_of_measurement_from_id);
+                this.loadSimilarBaseUnit();
+                this.unitOfMeasurementTo = {};
+            },
+
+            loadSimilarBaseUnit() {
+                let form = {
+                    unit_of_measurement_id : this.unit_of_measurement_from_id 
+                };
+
+                axios.post("/api/unit-of-measurements/get-the-same-base-unit-of-measurements/", form).then(res => {
+                    this.fromUnits = res.data.unit_of_measurements;
+                    if (!res.data.response) {
+                    return;
+                    }
+                    resolve();
+                });
             },
 
             selectUnitTo() {

@@ -12,12 +12,10 @@
                             <label for="name">Name</label>
                             <input type="text" class="form-control" v-model="unit_of_measurements.name">
                         </div>
-
                         <div class="form-group">
                             <label for="name">Abbreviation</label>
                             <input type="text" class="form-control" v-model="unit_of_measurements.abbreviation">
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Default</label><br />
@@ -30,9 +28,11 @@
                                 </label>
                             </div>
                         </div>
-
+                        <div class="form-group" v-if="unit_of_measurements.base_unit && unit_of_measurements.default_value == 'no'">
+                            <label for="name">Base Unit</label>
+                            <input type="text" class="form-control" v-model="unit_of_measurements.base_unit.name">
+                        </div>
                     </fieldset>
-
                     <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUnitOfMeasurements"><i class="fas fa-chevron-left"></i> Back</button>
                     <button type="button" class="btn btn-primary btn-sm" @click.prevent.default="editUnitOfMeasurements"><i class="fas fa-edit"></i>  Edit UOM</button>
                     <button type="button" class="btn btn-danger btn-sm" @click.prevent.default="openDeleteUnitOfMeasurementModal"><i class="fas fa-trash-alt"></i> Delete UOM</button>

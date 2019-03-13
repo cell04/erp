@@ -314,6 +314,17 @@ abstract class Repository
     }
 
     /**
+     * Retrieve where in resources for the model.
+     *
+     * @return array json object
+     */
+    public function whereIn($parameter, array $array)
+    {
+        return $this->model->whereIn($parameter, $array)
+        ->get();
+    }
+
+    /**
      * Create pagination with filters for the resources.
      *
      * @param  \Illuminate\Http\Request  $request

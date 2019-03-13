@@ -214,4 +214,46 @@ class UnitOfMeasurementsController extends Controller
             'unit_of_measurements' => $unitOfMeasurements
         ], 200);
     }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllBaseUnitOfMeasurements()
+    {
+        if (! $unitOfMeasurements = $this->unitOfMeasurement->allBaseUnit()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'             => true,
+            'message'              => 'Resources successfully retrieve.',
+            'unit_of_measurements' => $unitOfMeasurements
+        ], 200);
+    }
+
+    /**
+     * Retrieve all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllTheSameBaseUnitOfMeasurements(Request $request)
+    {
+        if (! $unitOfMeasurements = $this->unitOfMeasurement->allWithTheSameBaseUnit($request->unit_of_measurement_id)) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response'             => true,
+            'message'              => 'Resources successfully retrieve.',
+            'unit_of_measurements' => $unitOfMeasurements
+        ], 200);
+    }   
 }

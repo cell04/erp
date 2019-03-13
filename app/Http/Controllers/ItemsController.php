@@ -48,7 +48,7 @@ class ItemsController extends Controller
 
     public function getItemConversions(Request $request)
     {
-        if (! $conversions = $this->item->getConversions($request->purchase_unit_of_measurement_id)) {
+        if (! $conversions = $this->item->getConversions($request->default_unit_of_measurement_id)) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'
@@ -70,21 +70,21 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'item_type_id'                              =>  'required|integer',
-            'item_classification_id'                    =>  'required|integer',
-            'default_unit_of_measurement_id'            =>  'integer|nullable',
-            'purchase_unit_of_measurement_id'           =>  'integer|nullable',
-            'selling_unit_of_measurement_id'            =>  'integer|nullable',
-            'sales_account_id'                          =>  'integer|nullable',
-            'cogs_account_id'                           =>  'integer|nullable',
-            'expense_account_id'                        =>  'integer|nullable',
-            'asset_account_id'                          =>  'integer|nullable',
-            'name'                                      =>  'required|string|max:255',
-            // 'description'                               =>  'required|string|max:255',
-            'stock_keeping_unit'                        =>  'required|string|max:255'  
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'item_type_id'                              =>  'required|integer',
+        //     'item_classification_id'                    =>  'required|integer',
+        //     'default_unit_of_measurement_id'            =>  'integer|nullable',
+        //     'purchase_unit_of_measurement_id'           =>  'integer|nullable',
+        //     'sales_account_id'                          =>  'integer|nullable',
+        //     'cogs_account_id'                           =>  'integer|nullable',
+        //     'expense_account_id'                        =>  'integer|nullable',
+        //     'asset_account_id'                          =>  'integer|nullable',
+        //     'name'                                      =>  'required|string|max:255',
+        //     // 'description'                               =>  'required|string|max:255',
+        //     'stock_keeping_unit'                        =>  'required|string|max:255'  
+        // ]);
 
+        return $this->item->store($request);
 
         if ($validator->fails()) {
             return response()->json([
@@ -268,6 +268,22 @@ class ItemsController extends Controller
         }
 
         if (! $items = $this->item->withoutComponents()) {
+            return response()->json([
+                'response' => false,
+                'message'  => 'Resources does not exist.'
+            ], 400);
+        }
+
+        return response()->json([
+            'response' => true,
+            'message'  => 'Resources successfully retrieve.',
+            'items'    => $items
+        ], 200);
+    }
+
+    public function getItemRecipeUnits(Request $request)
+    {
+        if (! $items = $this->item->getRecipeUnitListPerItem($request->item_id)) {
             return response()->json([
                 'response' => false,
                 'message'  => 'Resources does not exist.'

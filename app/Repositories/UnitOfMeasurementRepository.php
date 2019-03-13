@@ -16,4 +16,28 @@ class UnitOfMeasurementRepository extends Repository
         parent::__construct($unitOfMeasurement);
         $this->unitOfMeasurement = $unitOfMeasurement;
     }
+
+    public function allBaseUnit() 
+    {
+        return $this->unitOfMeasurement->where('default_value', 'yes')
+        ->get();
+    }
+
+    public function allWithTheSameBaseUnit($id) 
+    {   
+        $unit = $this->unitOfMeasurement->findOrFail($id);
+
+        if ($unit->default_value === 'yes') {
+            return $this->unitOfMeasurement->where('id', $unit->id)
+            ->orWhere('base_unit_id', $unit->id)
+            ->get();
+        }
+
+        if ($unit->default_value === 'no') {
+            return $this->unitOfMeasurement->where('id', $unit->id)
+            ->orWhere('base_unit_id', $unit->base_unit_id)
+            ->orWhere('id', $unit->base_unit_id)
+            ->get();
+        }   
+    }
 }

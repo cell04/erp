@@ -25,7 +25,6 @@
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">From</th>
                             <th scope="col">To</th>
                             <th scope="col">Options</th>
@@ -33,7 +32,6 @@
                     </thead>
                     <tbody v-if="conversions">
                         <tr v-for="{ id, from_value, convert_from, to_value, convert_to } in conversions">
-                            <td>{{ id }}</td>
                             <td>{{ from_value }} {{ convert_from.name }}</td>
                             <td>{{ to_value }} {{ convert_to.name }}</td>
                             <td>

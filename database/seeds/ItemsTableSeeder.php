@@ -23,8 +23,6 @@ class ItemsTableSeeder extends Seeder
             'default_converter'              => 1,
             'purchase_unit_of_measurement_id'=> 2,
             'purchase_converter'             => 1000,
-            'selling_unit_of_measurement_id' => 1,
-            'selling_converter'              => 1,
             'asset_account_id'               => 11,
             'cogs_account_id'                => 9,
             'sales_account_id'               => 6,
@@ -33,7 +31,8 @@ class ItemsTableSeeder extends Seeder
          ]);
 
         $item->itemConversions()->createMany([
-            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 1]
+            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 1],
+            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 2]
         ]);
 
         $item = Item::create([
@@ -47,8 +46,6 @@ class ItemsTableSeeder extends Seeder
             'default_converter'              => 1,
             'purchase_unit_of_measurement_id'=> 2,
             'purchase_converter'             => 1000,
-            'selling_unit_of_measurement_id' => 1,
-            'selling_converter'              => 1,
             'asset_account_id'               => 11,
             'cogs_account_id'                => 9,
             'sales_account_id'               => 6,
@@ -57,7 +54,8 @@ class ItemsTableSeeder extends Seeder
         ]);
 
         $item->itemConversions()->createMany([
-            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 1]
+            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 1],
+            ['corporation_id' => 1, 'conversion_id' => 1, 'module' => 2]
         ]);
 
         $item = Item::create([
@@ -71,8 +69,6 @@ class ItemsTableSeeder extends Seeder
             'default_converter'              => 1,
             'purchase_unit_of_measurement_id'=> 3,
             'purchase_converter'             => 1000,
-            'selling_unit_of_measurement_id' => 4,
-            'selling_converter'              => 1,
             'asset_account_id'               => 11,
             'cogs_account_id'                => 9,
             'sales_account_id'               => 6,
@@ -82,6 +78,7 @@ class ItemsTableSeeder extends Seeder
 
         $item->itemConversions()->createMany([
             ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1]
+            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 2]
         ]);
 
         $item = Item::create([
@@ -95,8 +92,6 @@ class ItemsTableSeeder extends Seeder
             'default_converter'              => 1,
             'purchase_unit_of_measurement_id'=> 3,
             'purchase_converter'             => 1000,
-            'selling_unit_of_measurement_id' => 4,
-            'selling_converter'              => 1,
             'asset_account_id'               => 11,
             'cogs_account_id'                => 9,
             'sales_account_id'               => 6,
@@ -106,6 +101,7 @@ class ItemsTableSeeder extends Seeder
 
         $item->itemConversions()->createMany([
             ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1]
+            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 2]
         ]);
     }
 }

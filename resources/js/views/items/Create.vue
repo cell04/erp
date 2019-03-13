@@ -61,30 +61,23 @@
                                         </span>
                                     </label>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Selling UOM</label>
-                                        <vue-select v-model="sellingItemUnitId" @input="selectSellingItemUnit()" label="name" :options="itemUnitList" required></vue-select>
-                                    </div>
-                                </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Default UOM</label>
+                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="itemUnitList"></vue-select>
+                                    </div>
+                                </div>
                                 <div class="col-md-6" v-show="!withComponent">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
-                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="itemUnitList"></vue-select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" v-show="!withComponent">
-                                    <div class="form-group">
-                                        <label>Default UOM</label>
-                                        <vue-select v-model="defaultItemUnitId" @input="selectDefaultItemUnit()" label="name" :options="availableUOM"></vue-select>
+                                        <vue-select v-model="purchaseItemUnitId" @input="selectPurchaseItemUnit()" label="name" :options="availableUOM"></vue-select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
+                                <div class="col" v-if="conversionsList.length != 0">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -96,9 +89,14 @@
                                                         <vue-select v-model="selectedConversion.conversion" label="name" :options="conversionsList"></vue-select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-3" v-show="!withComponent">
                                                     <div class="form-group">
                                                         <vue-select v-model="selectedConversion.module" label="name" :options="conversionModules"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3" v-show="withComponent">
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedConversion.module" label="name" :options="conversionRecipeModules"></vue-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -160,18 +158,18 @@
                                                         <input class="form-control" v-model="selectedComponent.quantity" type="number"/>
                                                     </div>
                                                 </div>
-                                                <!-- <div class="col-md-3">
+                                                <div class="col-md-3">
                                                     <label>Unit</label>
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedComponent.unit" label="name" :options="itemUnitList"></vue-select>
+                                                        <vue-select v-model="selectedComponent.unit" label="name" :options="itemRecipeUnitList"></vue-select>
                                                     </div>
-                                                </div> -->
-                                                <div class="col-md-3">
+                                                </div>
+                                                <!-- <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>UOM</label>
                                                         <input type="text" class="form-control" v-model="selectedComponent.unit_name"  disabled>
                                                     </div>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="col-md-3">
                                                     <label>Action</label>
@@ -252,6 +250,7 @@
                     }]
                 },
                 items: [],
+                itemRecipeUnitList : [],
                 item_components: [],
                 selectedComponent: {},
                 withComponent: false,
@@ -260,14 +259,12 @@
                 itemClassId: {},
                 defaultItemUnitId: {},
                 purchaseItemUnitId: {},
-                sellingItemUnitId: {},
                 item_type_id: '',
                 item_classification_id: '',
                 name: '',
                 description: '',
                 stock_keeping_unit: '',
                 default_unit_of_measurement_id: '',
-                selling_unit_of_measurement_id: null,
                 purchase_unit_of_measurement_id: '',
                 itemTypesList: [],
                 itemClassList: [],
@@ -285,6 +282,13 @@
                         value : 1,
                         name : "Inventory"
                     },
+                    {
+                        value : 2,
+                        name : "Recipe"
+                    }
+                ],
+
+                conversionRecipeModules: [
                     {
                         value : 2,
                         name : "Recipe"
@@ -336,14 +340,29 @@
             getWithComponentValue() {
                 if (this.withComponent) {
                     this.with_component = 'yes';
+                    this.item_conversions = [];
+
                 } else {
                     this.with_component = 'no';
+                    this.item_conversions = [];
                 }
             },
 
+            loadAvailableUOM() {
+                let form = {
+                    item_id : this.selectedComponent.item.id
+                };
+
+                axios.post("/api/items/units/recipes", form).then(res => {
+                    this.itemRecipeUnitList = res.data.items;
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
+                });
+            },  
+
             selectComponent() {
-                this.selectedComponent.unit_name = this.selectedComponent.item.selling_unit_of_measurement.name;
-                this.selectedComponent.unit = this.selectedComponent.item.selling_unit_of_measurement;
+                this.loadAvailableUOM();
             },
 
             addNewItem() {
@@ -353,7 +372,7 @@
                     from_value: this.selectedConversion.conversion.from_value,
                     convertTo: this.selectedConversion.conversion.convert_to,
                     to_value: this.selectedConversion.conversion.to_value,
-                    module: this.selectedConversion.module.id,
+                    module: this.selectedConversion.module.value,
                     module_name: this.selectedConversion.module.name
                 });
 
@@ -366,28 +385,12 @@
                     item: this.selectedComponent.item,
                     unit: this.selectedComponent.unit,
                     unit_of_measurement_id: this.selectedComponent.unit.id,
-                    quantity: this.selectedComponent.quantity,
-                    converter_value: this.selectedComponent.item.selling_converter
-                    // unit_price: 0
+                    quantity: this.selectedComponent.quantity
                 });
 
                 this.selectedComponent = {};
+                this.itemRecipeUnitList = [];
             },
-
-            // selectConversion() {
-
-            //     let promise = new Promise((resolve, reject) => {
-            //         axios.get("/api/conversions/" + this.selectedConversion.id).then(res => {
-            //             this.selectedConversion = res.data.conversion;
-            //             resolve();
-            //         }).catch(err => {
-            //             console.log(err);
-            //             reject();
-            //         });
-            //     });
-
-            //     console.log(this.selectedConversion);
-            // },
 
             deleteRow(index) {
                 this.item_conversions.splice(index, 1);
@@ -397,31 +400,12 @@
                 this.item_components.splice(index, 1);
             },
 
-            // getConversions() {
-            //     let formData = {
-            //         purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id,
-            //         default_unit_of_measurement_id: this.default_unit_of_measurement_id
-            //     };
-
-            //     if (this.purchase_unit_of_measurement_id && this.default_unit_of_measurement_id) {
-            //         axios.post("/api/items/conversions", formData).then(res => {
-            //         console.log(res.data.conversions);
-            //         this.conversionsList = res.data.conversions;
-            //         }).catch(err => {
-            //             console.log(err);
-            //             alert(`Error! No Result`);
-            //             this.conversionsList = [];
-            //             this.ifReady = true;
-            //         });
-            //     }
-            // },
-
             getConversions() {
                 let formData = {
-                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id
+                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
                 };
 
-                if (this.purchase_unit_of_measurement_id) {
+                if (this.default_unit_of_measurement_id) {
                     axios.post("/api/items/conversions", formData).then(res => {
                     console.log(res.data.conversions);
                     this.availableUOM = res.data.conversions.availableUOM;
@@ -438,33 +422,18 @@
             selectDefaultItemUnit() {
                 this.default_unit_of_measurement_id = this.defaultItemUnitId.id;
                 console.log('GetDefaultItemUnitId: ' + this.default_unit_of_measurement_id);
-                // this.getConversions();
-                // this.item_conversions = [];
-                // this.selectedConversion = {};
-                // this.selectedConversionModule = {};
-            },
-
-            selectSellingItemUnit() {
-                this.selling_unit_of_measurement_id = this.sellingItemUnitId.id;
-                // this.conversionsList = [];
-                // this.defaultItemUnitId = {};
-                // this.purchaseItemUnitId = {};
-                // this.item_conversions = [];
-                // this.selectedConversion = {};
-                // this.selectedConversionModule = {};
+                this.getConversions();
+                this.item_conversions = [];
             },
 
             selectPurchaseItemUnit() {
                 this.purchase_unit_of_measurement_id = this.purchaseItemUnitId.id;
                 console.log('GetPurchaseItemUnitId: ' + this.purchase_unit_of_measurement_id);
-                this.selectedConversion = {};
-                this.getConversions();
             },
 
             selectItemType() {
                 this.item_type_id = this.itemTypeId.id;
                 this.itemClassList = this.itemTypeId.item_classifications;
-                // this.itemClassId = {};
                 console.log('GetItemTypeId: ' + this.item_type_id);
             },
 
@@ -477,8 +446,6 @@
                 this.ifReady = false;
 
                 if (this.withComponent) {
-                    this.item_conversions = [];
-                    this.default_unit_of_measurement_id = null;
                     this.purchase_unit_of_measurement_id = null;
                     this.with_component = 'yes';
                 } else {
@@ -493,7 +460,6 @@
                     console.log(err);
                 });
             }
-
         }
     };
 </script>

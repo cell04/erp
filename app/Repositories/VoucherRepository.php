@@ -4,9 +4,8 @@ namespace App\Repositories;
 
 use App\Voucher;
 use App\Repositories\Repository;
-use App\Contracts\RepositoryInterface;
 
-class VoucherRepository extends Repository implements RepositoryInterface
+class VoucherRepository extends Repository
 {
     public function __construct(Voucher $voucher)
     {

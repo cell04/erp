@@ -21,20 +21,6 @@ class UnitOfMeasurementsTableSeeder extends Seeder
 
         DB::table('unit_of_measurements')->insert([
             'corporation_id' => 1,
-            'name'           => 'kilograms',
-            'abbreviation'   => 'kg',
-            'default_value'  => 'no'
-        ]);
-
-        DB::table('unit_of_measurements')->insert([
-            'corporation_id' => 1,
-            'name'           => 'liters',
-            'abbreviation'   => 'l',
-            'default_value'  => 'no'
-        ]);
-
-        DB::table('unit_of_measurements')->insert([
-            'corporation_id' => 1,
             'name'           => 'milliliters',
             'abbreviation'   => 'ml',
             'default_value'  => 'yes'
@@ -49,14 +35,31 @@ class UnitOfMeasurementsTableSeeder extends Seeder
 
         DB::table('unit_of_measurements')->insert([
             'corporation_id' => 1,
+            'name'           => 'kilograms',
+            'abbreviation'   => 'kg',
+            'default_value'  => 'no',
+            'base_unit_id'   =>  1
+        ]);
+
+        DB::table('unit_of_measurements')->insert([
+            'corporation_id' => 1,
+            'name'           => 'liters',
+            'abbreviation'   => 'l',
+            'default_value'  => 'no',
+            'base_unit_id'   =>  2
+        ]);
+
+        DB::table('unit_of_measurements')->insert([
+            'corporation_id' => 1,
             'name'           => 'pack of 300 pcs',
             'abbreviation'   => 'pack(300pcs)',
-            'default_value'  => 'no'
+            'default_value'  => 'no',
+            'base_unit_id'   =>  3
         ]);
 
         DB::table('conversions')->insert([
             'corporation_id'                => 1,
-            'unit_of_measurement_from_id'   => 2,
+            'unit_of_measurement_from_id'   => 4,
             'from_value'                    => 1,
             'unit_of_measurement_to_id'     => 1,
             'to_value'                      => 1000
@@ -64,17 +67,17 @@ class UnitOfMeasurementsTableSeeder extends Seeder
 
         DB::table('conversions')->insert([
             'corporation_id'                => 1,
-            'unit_of_measurement_from_id'   => 3,
+            'unit_of_measurement_from_id'   => 2,
             'from_value'                    => 1,
-            'unit_of_measurement_to_id'     => 4,
+            'unit_of_measurement_to_id'     => 5,
             'to_value'                      => 1000
         ]);
 
         DB::table('conversions')->insert([
             'corporation_id'                => 1,
-            'unit_of_measurement_from_id'   => 6,
+            'unit_of_measurement_from_id'   => 3,
             'from_value'                    => 1,
-            'unit_of_measurement_to_id'     => 5,
+            'unit_of_measurement_to_id'     => 6,
             'to_value'                      => 300
         ]);
     }

@@ -17,7 +17,6 @@
                             <label>Abbreviation</label>
                             <input type="text" class="form-control" v-model="unit_of_measurements.abbreviation" autocomplete="off" minlength="2" maxlength="255" required>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Default</label><br />
@@ -30,7 +29,12 @@
                                 </label>
                             </div>
                         </div>
-
+                        <div class="form-group" v-show="! defaultValue">
+                            <div class="form-group">
+                                <label>Base Unit</label>
+                                <vue-select v-model="unit_of_measurements.base_unit" @input="selectBaseUnit()" label="name" :options="base_units"></vue-select>
+                            </div>
+                        </div>
                         <button type="button" class="btn btn-outline-success btn-sm" @click.prevent.default="viewUnitOfMeasurement"><i class="fas fa-chevron-left"></i> Back</button>
                         <button type="button" class="btn btn-success btn-sm" @click.prevent.default="updateUnitOfMeasurement"><i class="fas fa-edit"></i> Update UOM</button>
                     </form>
@@ -51,7 +55,8 @@
             return {
                 componentVal: 'UOM',
                 ifReady: false,
-                unit_of_measurements: '',
+                unit_of_measurements: {},
+                base_units : [],
                 defaultValue: null
             };
         },
@@ -66,6 +71,12 @@
                     } else {    
                         this.defaultValue = false;
                     }   
+                    resolve();
+                });
+
+                axios.get('/api/unit-of-measurements/get-all-base-unit-of-measurements').then(res => {
+                    console.log(res)
+                    this.base_units = res.data.unit_of_measurements; 
                     resolve();
                 });
             });
@@ -91,8 +102,17 @@
                 }
             },
 
+            selectBaseUnit() {
+                this.unit_of_measurements.base_unit_id = this.unit_of_measurements.base_unit.id;  
+            },
+
             updateUnitOfMeasurement() {
                 this.ifReady = false;
+
+                if (this.defaultValue) {
+                    this.unit_of_measurements.base_unit_id = null;
+                }
+
                 axios.put('/api/unit-of-measurements/' + this.$route.params.id, this.$data.unit_of_measurements).then(res => {
                     this.ifReady = true;
                     this.$router.push({ name: 'unit-of-measurements.index' });

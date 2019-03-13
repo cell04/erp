@@ -142,6 +142,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::get('items/get-all-items', 'ItemsController@getAllItems');
     Route::get('items/get-all-items-without-components', 'ItemsController@getAllItemsWithOutComponents');
     Route::post('items/conversions', 'ItemsController@getItemConversions');
+    Route::post('items/units/recipes', 'ItemsController@getItemRecipeUnits');
     Route::resource('items', 'ItemsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'
@@ -214,6 +215,8 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::match(['put', 'patch'], 'unit-of-measurements/{unitOfMeasurement}/restore', 'UnitOfMeasurementsController@restore');
     Route::delete('unit-of-measurements/{unitOfMeasurement}/force-delete', 'UnitOfMeasurementsController@forceDestroy');
     Route::get('unit-of-measurements/get-all-unit-of-measurements', 'UnitOfMeasurementsController@getAllUnitOfMeasurements');
+    Route::get('unit-of-measurements/get-all-base-unit-of-measurements', 'UnitOfMeasurementsController@getAllBaseUnitOfMeasurements');
+    Route::post('unit-of-measurements/get-the-same-base-unit-of-measurements', 'UnitOfMeasurementsController@getAllTheSameBaseUnitOfMeasurements');
     Route::resource('unit-of-measurements', 'UnitOfMeasurementsController', [
         'only' => [
             'index', 'store', 'show', 'update', 'destroy'

@@ -23,6 +23,11 @@ class CreateUnitOfMeasurementsTable extends Migration
             $table->string('name');
             $table->string('abbreviation');
             $table->string('default_value');
+            $table->integer('base_unit_id')->unsigned()->nullable();
+            $table->foreign('base_unit_id')
+                ->references('id')
+                ->on('unit_of_measurements')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

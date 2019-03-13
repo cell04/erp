@@ -25,8 +25,8 @@ class Item extends Model
     protected $fillable = [
         'corporation_id', 'item_type_id', 'item_classification_id','name', 
         'with_component', 'description', 'stock_keeping_unit', 'default_unit_of_measurement_id', 
-        'purchase_unit_of_measurement_id', 'default_converter', 'purchase_converter', 'selling_converter',
-        'sales_account_id', 'cogs_account_id', 'expense_account_id', 'asset_account_id', 'selling_unit_of_measurement_id'
+        'purchase_unit_of_measurement_id', 'default_converter', 'purchase_converter',
+        'sales_account_id', 'cogs_account_id', 'expense_account_id', 'asset_account_id'
     ];
 
     /**
@@ -42,7 +42,7 @@ class Item extends Model
      * @var array
      */
     protected $with = [
-        'itemType', 'itemClassification', 'defaultUnitOfMeasurement', 'purchaseUnitOfMeasurement', 'sellingUnitOfMeasurement'
+        'itemType', 'itemClassification', 'defaultUnitOfMeasurement', 'purchaseUnitOfMeasurement'
     ];
 
     /**
@@ -132,15 +132,5 @@ class Item extends Model
     public function purchaseUnitOfMeasurement()
     {
         return $this->belongsTo(UnitOfMeasurement::class, 'purchase_unit_of_measurement_id');
-    }
-
-    /**
-     * The item belongs to a default unit of measurement.
-     *
-     * @return object
-     */
-    public function sellingUnitOfMeasurement()
-    {
-        return $this->belongsTo(UnitOfMeasurement::class, 'selling_unit_of_measurement_id');
     }
 }
