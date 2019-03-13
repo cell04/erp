@@ -66,8 +66,8 @@ export default {
 }
 
 .content-title {
-  margin-top: -28.2px;
-  border-bottom: 28px solid #f5f8fa;
+  margin-top: -26.2px;
+  border-bottom: 27px solid #f5f8fa;
   border-left: 25px solid transparent;
   height: 0;
   width: 100%;
