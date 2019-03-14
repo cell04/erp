@@ -102,7 +102,7 @@
                                 <tr>
                                     <th scope="col">SKU</th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Desc</th>
+                                    <!-- <th scope="col">Desc</th> -->
                                     <th scope="col">Qty</th>
                                     <th scope="col">UoM</th>
                                     <th scope="col">Price</th>
@@ -113,7 +113,7 @@
                                 <tr :key="index" v-for="(quotation_item, index) in quotations.quotation_items">
                                     <td>{{ quotation_item.item.stock_keeping_unit }}</td>
                                     <td>{{ quotation_item.item.name }}</td>
-                                    <td>{{ quotation_item.item.description }}</td>
+                                    <!-- <td>{{ quotation_item.item.description }}</td> -->
                                     <td>{{ quotation_item.quantity }}</td>
                                     <td>{{ quotation_item.unit_of_measurement.name }}</td>
                                     <td>{{ quotation_item.price }}</td>
@@ -124,7 +124,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
+                                    <!-- <td></td> -->
                                     <td><b>Total</b></td>
                                     <td align="right"><b>{{ total | Decimal }}</b></td>
                                 </tr>

@@ -37,23 +37,43 @@ class ItemRepository extends Repository
         ->findOrFail($id);
     }
 
-    public function generateStoreConverters($request)
+    public function generateConverters($request, $action)
     {
         $defaultConvertToId = null;
         $defaultConversions = $this->getDefaultConversion($request->purchase_unit_of_measurement_id, $request->default_unit_of_measurement_id);
 
-        if ($request->item_conversions) {
-            foreach ($request->item_conversions as $conversion) {
-                if ($conversion['module'] === 1) {
+        
+        if ($action === 'store') {
+            if ($request->item_conversions) {
+                foreach ($request->item_conversions as $conversion) {
+                    if ($conversion['module'] === 1) {
 
-                    foreach ($defaultConversions as $default) {
-                        if ($default->id === $conversion['conversion_id']) {
-                            $this->defaultConverter = $this->defaultConverter * ($conversion['from_value'] * $conversion['to_value']);
+                        foreach ($defaultConversions as $default) {
+                            if ($default->id === $conversion['conversion_id']) {
+                                $this->defaultConverter = $this->defaultConverter * ($conversion['from_value'] * $conversion['to_value']);
+                            }
                         }
-                    }
 
-                    $this->purchaseConverter = $this->purchaseConverter * ($conversion['from_value'] * $conversion['to_value']);
-                } 
+                        $this->purchaseConverter = $this->purchaseConverter * ($conversion['from_value'] * $conversion['to_value']);
+                    } 
+                }
+            }
+        }
+
+        if ($action === 'update') {
+            if ($request->item_conversions) {
+                foreach ($request->item_conversions as $conversion) {
+                    if ($conversion['module'] === 1) {
+
+                        foreach ($defaultConversions as $default) {
+                            if ($default->id === $conversion['conversion_id']) {
+                                $this->defaultConverter = $this->defaultConverter * ($conversion['conversion']['from_value'] * $conversion['conversion']['to_value']);
+                            }
+                        }
+
+                        $this->purchaseConverter = $this->purchaseConverter * ($conversion['conversion']['from_value'] * $conversion['conversion']['to_value']);
+                    } 
+                }
             }
         }
 
@@ -77,33 +97,13 @@ class ItemRepository extends Repository
         })->get();
     }
 
-    public function generateUpdateConverters($request)
-    {
-        $defaultConvertToId = null;
-
-        if ($request->item_conversions) {
-            foreach ($request->item_conversions as $conversion) {
-                if ($request->default_unit_of_measurement_id === $conversion['conversion']['convert_from']['id']) {
-                    $defaultConvertToId = $conversion['conversion']['convert_to']['id'];
-                    $this->defaultConverter = $this->defaultConverter * ($conversion['conversion']['from_value'] * $conversion['conversion']['to_value']);
-                } else {
-                    if ($defaultConvertToId === $conversion['conversion']['convert_from']['id']) {
-                        $this->defaultConverter = $this->defaultConverter * ($conversion['conversion']['from_value'] * $conversion['conversion']['to_value']);
-                    }
-                }
-
-                $this->purchaseConverter = $this->purchaseConverter * ($conversion['conversion']['from_value'] * $conversion['conversion']['to_value']); 
-            }
-        }
-
-        return true;
-    }
-
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
 
-            $this->generateStoreConverters($request);
+            if ($request->item_conversions) {
+                $this->generateConverters($request, 'store');
+            }
 
             $request->request->add([
                 'asset_account_id'    => 11,
@@ -112,7 +112,6 @@ class ItemRepository extends Repository
                 'expense_account_id'  => 8,
                 'purchase_converter'  => $this->purchaseConverter,
                 'default_converter'   => $this->defaultConverter,
-                'default_conversions' => $this->getDefaultConversion($request->purchase_unit_of_measurement_id, $request->default_unit_of_measurement_id)
             ]);
 
             $item = $this->item->create($request->all());
@@ -207,12 +206,13 @@ class ItemRepository extends Repository
     {
         return DB::transaction(function () use ($request, $id) {
 
-            $this->generateUpdateConverters($request);
+            if ($request->item_conversions) {
+                $this->generateConverters($request, 'update');
+            }
 
             $request->request->add([
                 'purchase_converter'  => $this->purchaseConverter,
-                'default_converter'   => $this->defaultConverter,
-                'selling_converter'   => $this->sellingConverter
+                'default_converter'   => $this->defaultConverter
             ]);
 
             $item = $this->item->findOrFail($id);

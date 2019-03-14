@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\PurchaseOrder;
 use App\Quotation;
+use App\ReceiveOrder;
 use App\Stock;
 use App\StockRequest;
 use App\StockTransfer;
@@ -17,6 +18,7 @@ class DashboardRepository
     protected $stockTransfer;
     protected $purchaseOrder;
     protected $stock;
+    protected $receiveOrder;
     protected $limit = 10;
     protected $orderBy = 'desc';
 
@@ -25,7 +27,8 @@ class DashboardRepository
         StockRequest $stockRequest, 
         StockTransfer $stockTransfer, 
         PurchaseOrder $purchaseOrder, 
-        Stock $stock
+        Stock $stock,
+        ReceiveOrder $receiveOrder
     )
     {
         $this->today = Carbon::today();
@@ -34,6 +37,7 @@ class DashboardRepository
         $this->stockTransfer = $stockTransfer;
         $this->purchaseOrder = $purchaseOrder;
         $this->stock = $stock;
+        $this->receiveOrder = $receiveOrder;
     }
 
     // All functions here
@@ -58,15 +62,24 @@ class DashboardRepository
             'pending_stock_requests' => $this->pendingStockRequests(),
             'pending_stock_transfers' => $this->pendingStockTransfers(),
             'pending_purchase_orders' => $this->pendingPurchaseOrders(),
-            'today_purchase_orders' => $this->todayPurchaseOrders(),
+            'today_issued_purchase_orders' => $this->todayIssuedPurchaseOrders(),
+            'today_issued_receive_orders' => $this->todayIssuedReceiveOrders(),
             'today_quotations' => $this->todayQuotations(),
-            'shelf_days_per_item' => $this->shelfDaysPerItem()
+            'shelf_days_per_item' => $this->shelfDaysPerItem(),
+            'latest_quotations' => $this->latestQuotations()
         );
     }
 
     public function pendingQuotations()
     {
         return $this->quotation->where('status', 0)
+        ->orderBy('created_at', $this->orderBy)
+        ->get();
+    }
+
+    public function latestQuotations()
+    {
+        return $this->quotation->where('status','!=', 0)
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }
@@ -92,9 +105,18 @@ class DashboardRepository
         ->get();
     }
 
-    public function todayPurchaseOrders()
+    public function todayIssuedPurchaseOrders()
     {
-        return $this->purchaseOrder->whereDate('created_at', $this->today)
+        return $this->purchaseOrder->where('status', 0)
+        ->whereDate('created_at', $this->today)
+        ->orderBy('created_at', $this->orderBy)
+        ->get();
+    }
+
+    public function todayIssuedReceiveOrders()
+    {
+        return $this->receiveOrder->where('status', 0)
+        ->whereDate('created_at', $this->today)
         ->orderBy('created_at', $this->orderBy)
         ->get();
     }

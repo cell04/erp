@@ -369,7 +369,7 @@
                 };
 
                 axios.post("/api/items/get-total-component-value", form).then(res => {
-                    this.selectComponent.converter_value = res.data.items;
+                    this.selectedComponent.converter_value = res.data.items;
                 }).catch(err => {
                     this.ifReady = true;
                     console.log(err);

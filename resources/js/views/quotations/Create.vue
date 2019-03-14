@@ -324,11 +324,11 @@
 
             loadAvailableUnits(index) {
                 let form = {
-                    unit_of_measurement_id : this.quotation_items[index].item.default_unit_of_measurement_id
+                    item_id : this.quotation_items[index].item.id
                 }
 
-                axios.post("/api/unit-of-measurements/get-the-same-base-unit-of-measurements/", form).then(res => {
-                    this.quotation_items[index].unitOfMeasurements = res.data.unit_of_measurements;
+                axios.post("/api/items/units/recipes/", form).then(res => {
+                    this.quotation_items[index].unitOfMeasurements = res.data.items;
                     resolve();
                 }).catch(err => {
                     console.log(err);

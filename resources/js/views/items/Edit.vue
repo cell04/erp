@@ -67,16 +67,16 @@
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="availableUOM"></vue-select>
                                     </div>
                                 </div> -->
-                                <div class="col-md-6" v-if="purchase_unit_of_measurement_id">
-                                    <div class="form-group">
-                                        <label>Purchase UOM</label>
-                                        <input type="text" class="form-control" @input="selectPurchaseUnit()" v-model="purchaseItemUnitId.name" id="class" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6" v-if="default_unit_of_measurement_id">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <input type="text" class="form-control" v-model="defaultItemUnitId.name" id="class" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" v-show="!withComponent">
+                                    <div class="form-group">
+                                        <label>Purchase UOM</label>
+                                        <input type="text" class="form-control" @input="selectPurchaseUnit()" v-model="purchaseItemUnitId.name" id="class" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -93,9 +93,14 @@
                                                         <vue-select v-model="selectedConversion.conversion" label="name" :options="conversionsList"></vue-select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-3" v-show="!withComponent">
                                                     <div class="form-group">
                                                         <vue-select v-model="selectedConversion.module" label="name" :options="conversionModules"></vue-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3" v-show="withComponent">
+                                                    <div class="form-group">
+                                                        <vue-select v-model="selectedConversion.module" label="name" :options="conversionRecipeModules"></vue-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -231,6 +236,7 @@
                 itemTypeId: {},
                 itemClassId: {},
                 item_components: [],
+                itemRecipeUnitList : [],
                 defaultItemUnitId: {},
                 purchaseItemUnitId: {},
                 sellingItemUnitId: {},
@@ -258,6 +264,12 @@
                         value : 1,
                         name : "Inventory"
                     },
+                    {
+                        value : 2,
+                        name : "Recipe"
+                    }
+                ],
+                conversionRecipeModules: [
                     {
                         value : 2,
                         name : "Recipe"
@@ -332,25 +344,6 @@
                 }
             },
 
-            selectComponentUnit() {
-                this.getComponentTotalValue();
-            },
-
-            getComponentTotalValue() {
-                let form = {
-                    item_id: this.selectedComponent.component.id,
-                    unit_of_measurement_id: this.selectedComponent.unit.id,
-                    quantity: this.selectComponent.quantity 
-                };
-
-                axios.post("/api/items/get-total-component-value", form).then(res => {
-                    this.selectComponent.converter_value = res.data.items;
-                }).catch(err => {
-                    this.ifReady = true;
-                    console.log(err);
-                });
-            }, 
-
             addNewItemComponent() {
                 this.item_components.push({
                     component_id: this.selectedComponent.component.id,
@@ -364,10 +357,42 @@
                 this.selectedComponent = {};
             },
 
-            selectComponent() {
-                this.selectedComponent.unit_name = this.selectedComponent.component.selling_unit_of_measurement.name;
-                this.selectedComponent.unit = this.selectedComponent.component.selling_unit_of_measurement;
+            selectComponentUnit() {
+                this.getComponentTotalValue();
             },
+
+            getComponentTotalValue() {
+                let form = {
+                    item_id: this.selectedComponent.component.id,
+                    unit_of_measurement_id: this.selectedComponent.unit.id,
+                    quantity: this.selectComponent.quantity 
+                };
+
+                axios.post("/api/items/get-total-component-value", form).then(res => {
+                    this.selectedComponent.converter_value = res.data.items;
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
+                });
+            }, 
+
+            selectComponent() {
+                this.loadAvailableUOM();
+            },
+
+            loadAvailableUOM() {
+                let form = {
+                    item_id : this.selectedComponent.component.id
+                };
+
+                axios.post("/api/items/units/recipes", form).then(res => {
+                    this.itemRecipeUnitList = res.data.items;
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
+                });
+            },
+
 
             refreshData() {
                 this.item_classifications = [];
@@ -490,13 +515,14 @@
 
                 if (this.withComponent) {
                     this.item_conversions = [];
-                    this.default_unit_of_measurement_id = null;
                     this.purchase_unit_of_measurement_id = null;
                 } else {
 
                     this.item_components = [];
                 }
 
+                console.log(this.$data);
+                
                 axios.patch('/api/items/' + this.$route.params.id, this.$data).then(res => {
                     this.$router.push({
                         name: 'items.view',

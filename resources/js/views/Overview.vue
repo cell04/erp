@@ -148,7 +148,7 @@
                     <div class="card card-min">
                       <div class="card-body row">
                         <div class="col-md-12 col-sm-12 text-center center">
-                          <span class="display-4">{{todaysPurchaseOrders.length}}</span>
+                          <span class="display-4">{{todaysIssuedPurchaseOrders.length}}</span>
                         </div>
                       </div>
                       <div class="card-footer text-center">
@@ -162,7 +162,7 @@
                     <div class="card card-min">
                       <div class="card-body row">
                         <div class="col-md-12 col-sm-12 text-center center">
-                          <span class="display-4">{{todaysReceiveOrders.length}}</span>
+                          <span class="display-4">{{todaysIssuedReceiveOrders.length}}</span>
                         </div>
                       </div>
                       <div class="card-footer text-center">
@@ -240,17 +240,17 @@
                     <strong>Latest Quotations</strong>
                   </span>
                 </div>
-                <span v-if="this.quotations && this.quotations.length > 0">
+                <span v-if="this.latestQuotations && this.latestQuotations.length > 0">
                   <ul
                     class="list-group list-group-flush"
                     :key="quote.id"
-                    v-for="quote in this.quotations"
+                    v-for="quote in this.latestQuotations"
                   >
                     <li class="list-group-item">
                       {{quote.number}}
                       <router-link
                         tag="button"
-                        :to="{ name: 'quotations.view', params: { id: quote.id } }"
+                        :to="{ name: 'latestQuotations.view', params: { id: quote.id } }"
                         type="button"
                         class="btn float-right btn-sm btn-secondary"
                       >View</router-link>
@@ -462,39 +462,6 @@ export default {
     // console.log(this.salesTypeTableData);
     this.options = createOptions(this.salesTypeChartData);
 
-    //console.clear();
-    const getAllQuotations = () => {
-      axios
-        .get("/api/quotations/get-all-quotations")
-        .then(res => {
-          const allQuotations = res.data.quotations;
-          //   // console.groupCollapsed("Quotation Request");
-
-          const log = JSON.stringify(allQuotations);
-          //console.log('All Quotation', JSON.parse(log));
-
-          this.quotations = allQuotations
-            ? allQuotations.sort(
-                (a, b) => new Date(a.created_at) - new Date(b.created_at)
-              )
-            : [];
-
-          const issuedQuotations = (this.quotationsForApproval = allQuotations.filter(
-            quo => quo.status === 0
-          ));
-
-          this.todaysQuotations = allQuotations.filter(
-            quo =>
-              quo.status === 0 &&
-              new Date(quo.created_at).getDate() === this.dateToday.getDate()
-          );
-
-          //console.log('Issued Quotations',issuedQuotations)
-          //   // console.groupEnd();
-        })
-        .catch(error => console.error(error));
-    };
-
     const getAllInvoices = () => {
       axios
         .get("/api/invoices/get-all-invoices")
@@ -591,48 +558,6 @@ export default {
         .catch(error => console.error(error));
     };
 
-    const getAllPurchaseOrders = () => {
-      axios
-        .get("/api/purchase-orders/get-all-purchase-orders")
-        .then(res => {
-          //   // console.groupCollapsed("Purchase Orders");
-          const allPurchaseOrders = res.data.purchase_orders;
-          //console.log('All Purchase Orders ->',JSON.parse(JSON.stringify({res:res.data.purchase_orders})))
-          const issuedReceiveOrders = allPurchaseOrders.filter(
-            data => data.status === 0
-          );
-          //console.log('Issued Purchase Orders ->', allPurchaseOrders)
-          this.todaysPurchaseOrders = allPurchaseOrders.sort(
-            (a, b) => new Date(a.created_at) - new Date(b.created_at)
-          );
-          this.purchaseOrders = this.todaysPurchaseOrders.filter(
-            (val, i) => i < 10
-          );
-          //   // console.groupEnd();
-        })
-        .catch(error => console.error(error));
-    };
-
-    const getAllReceiveOrder = () => {
-      axios
-        .get("/api/receive-orders/get-all-receive-orders")
-        .then(res => {
-          // console.groupCollapsed("Receive Orders");
-          const allReceiveOrders = res.data.receive_orders;
-          //console.log('All receive Orders ->', allReceiveOrders)
-          this.todaysReceiveOrders = allReceiveOrders
-            ? allReceiveOrders.sort(
-                (a, b) => new Date(a.created_at) - new Date(b.created_at)
-              )
-            : [];
-          this.todaysReceiveOrders = this.todaysReceiveOrders.filter(
-            (val, i) => i < 10
-          );
-          // console.groupEnd();
-        })
-        .catch(error => console.error(error));
-    };
-
     const getAllStockTransfer = () => {
       axios
         .get("/api/stock-transfers/get-all-stock-transfers")
@@ -697,7 +622,10 @@ export default {
         today_purchase_orders,
         today_quotations,
         shelf_days_per_item,
-        pending_purchase_orders
+        pending_purchase_orders,
+        latest_quotations,
+        today_issued_purchase_orders,
+        today_issued_receive_orders
       } = res.data.dashboard_payload;
 
       // limiter
@@ -717,6 +645,9 @@ export default {
       this.stocks = shelf_days_per_item;
       this.todaysQuotations = today_quotations;
       this.todaysPurchaseOrders = today_purchase_orders;
+      this.todaysIssuedPurchaseOrders = today_issued_purchase_orders;
+      this.todaysIssuedReceiveOrders = today_issued_receive_orders;
+      this.latestQuotations = latest_quotations;
     //   [{id:12312,number:12312}]
     };
 
