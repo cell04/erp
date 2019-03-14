@@ -161,7 +161,7 @@
                                                 <div class="col-md-3">
                                                     <label>Unit</label>
                                                     <div class="form-group">
-                                                        <vue-select v-model="selectedComponent.unit" label="name" :options="itemRecipeUnitList"></vue-select>
+                                                        <vue-select v-model="selectedComponent.unit" @input="selectComponentUnit()" label="name" :options="itemRecipeUnitList"></vue-select>
                                                     </div>
                                                 </div>
                                                 <!-- <div class="col-md-3">
@@ -201,7 +201,7 @@
                                                         <td>{{ item_component.item.name }}</td>
                                                         <td>{{ item_component.quantity }} </td>
                                                         <td>{{ item_component.unit.name }}</td>
-                                                        <!-- <td>{{ item_component.unit_price }}</td> -->
+                                                        <!-- <td>{{ item_component.converter_value }}</td> -->
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" @click="deleteComponentRow(index)"><i class="far fa-times-circle"></i></button>
                                                         </td>
@@ -359,10 +359,29 @@
                     this.ifReady = true;
                     console.log(err);
                 });
+            },
+
+            getComponentTotalValue() {
+                let form = {
+                    item_id: this.selectedComponent.item.id,
+                    unit_of_measurement_id: this.selectedComponent.unit.id,
+                    quantity: this.selectComponent.quantity 
+                };
+
+                axios.post("/api/items/get-total-component-value", form).then(res => {
+                    this.selectComponent.converter_value = res.data.items;
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
+                });
             },  
 
             selectComponent() {
                 this.loadAvailableUOM();
+            },
+
+            selectComponentUnit() {
+                this.getComponentTotalValue();
             },
 
             addNewItem() {
@@ -380,12 +399,14 @@
             },
 
             addNewItemComponent() {
+
                 this.item_components.push({
                     component_id: this.selectedComponent.item.id,
                     item: this.selectedComponent.item,
                     unit: this.selectedComponent.unit,
                     unit_of_measurement_id: this.selectedComponent.unit.id,
-                    quantity: this.selectedComponent.quantity
+                    quantity: this.selectedComponent.quantity,
+                    converter_value:  this.selectComponent.converter_value
                 });
 
                 this.selectedComponent = {};

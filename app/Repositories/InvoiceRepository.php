@@ -33,6 +33,7 @@ class InvoiceRepository extends Repository
             $invoice = $this->invoice->create($request->all());
             if ($request->invoice_items) {
                 $invoice->invoiceItems()->createMany($request->invoice_items);
+                $this->deductStocksQuantity($invoice);
                 $invoice->quotation()->update(['status' => 5]);
             } 
 
@@ -45,6 +46,105 @@ class InvoiceRepository extends Repository
 
             return $invoice;
         });
+    }
+
+    public function deductStocksQuantity($invoice)
+    {
+        $componentItems = $this->getTotalComponentQuantity($invoice);
+
+        foreach ($componentItems as $item) {
+            $stocks = $invoice->quotation->quotable->stocks()->where('item_id', $item['id'])
+            ->orderBy('id', 'desc')
+            ->get();
+
+            $itemQuantity = $item['quantity'];
+
+            foreach ($stocks as $stock) {
+                if ($stock->item_id == $item['id']) {
+                    if ($stock->quantity > 0) {
+                        if ($stock->quantity >= $itemQuantity) {
+                            $stock->decrement('quantity', $itemQuantity);
+                            $itemQuantity = 0;
+                        } else {
+                            if ($itemQuantity > $stock->quantity) {
+                                $stock->decrement('quantity', $stock->quantity);
+                                $itemQuantity = $itemQuantity - $stock->quantity;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $invoice;    
+    }
+
+    public function getTotalComponentQuantity($invoice) 
+    {
+        $items = [];
+        $i = 0;
+
+        foreach ($invoice->invoiceItems as $invoiceItem) {
+            if ($invoiceItem->item->with_component === 'yes') {
+                foreach ($invoiceItem->item->itemComponents as $firstLayer) {
+                    if ($firstLayer->component->with_component === 'yes') {
+                        foreach ($firstLayer->component->itemComponents as $secondLayer) {
+                            if ($secondLayer->component->with_component == 'yes') {
+                                foreach ($secondLayer->component->itemComponents as $thirdLayer) {
+                                    if ($thirdLayer->component->with_component === 'yes') {
+                                        foreach ($thirdLayer->component->itemComponents as $forthLayer) {
+                                            $items[$i++] = array (
+                                                'item' => $forthLayer->component->name,
+                                                'item_id' => $forthLayer->component->id,
+                                                'quantity' => $invoiceItem->quantity * ($forthLayer->quantity * $forthLayer->converter_value)
+                                            );
+                                        }
+                                    } else {
+                                        $items[$i++] = array (
+                                            'item' => $thirdLayer->component->name,
+                                            'item_id' => $thirdLayer->component->id,
+                                            'quantity' => $invoiceItem->quantity * ($thirdLayer->quantity * $thirdLayer->converter_value)
+                                        );
+                                    }
+                                }
+                            } else {
+                                $items[$i++] = array (
+                                    'item' => $secondLayer->component->name,
+                                    'item_id' => $secondLayer->component->id,
+                                    'quantity' => $invoiceItem->quantity * ($secondLayer->quantity * $secondLayer->converter_value) 
+                                );
+                            }
+                        }
+                    } else {
+                        $items[$i++] = array (
+                            'item' => $firstLayer->component->name,
+                            'item_id' => $firstLayer->component->id,
+                            'quantity' => $invoiceItem->quantity * ($firstLayer->quantity * $firstLayer->converter_value) 
+                        );
+                    }
+                }
+            } else {
+                $items[$i++] = array (
+                    'item' => $invoiceItem->item->name,
+                    'item_id' => $invoiceItem->item->id,
+                    'quantity' => $invoiceItem->quantity * $invoiceItem->converter_value
+                );
+            }
+        }
+
+        $uniqueItems = collect($items)->unique('item_id')->values()->all();
+
+        $i = 0;
+
+        foreach ($uniqueItems as $item) {
+            $totalQuantityPerItems[$i++] = [
+                'name' => $item['item'],
+                'id' => $item['item_id'],
+                'quantity' => collect($items)->where('item_id', $item['item_id'])->sum('quantity')
+            ];
+        }
+
+        return $totalQuantityPerItems;
     }
 
     public function generateQuotationEntries($invoice)

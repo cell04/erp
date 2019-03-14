@@ -114,6 +114,9 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <div class="col" v-show="item.item_components.length != 0">
                                     <div class="card">
                                         <div class="card-header">

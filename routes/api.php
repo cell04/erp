@@ -142,6 +142,7 @@ Route::group(['middleware' => ['api', 'corporation.default.account']], function 
     Route::get('items/get-all-items', 'ItemsController@getAllItems');
     Route::get('items/get-all-items-without-components', 'ItemsController@getAllItemsWithOutComponents');
     Route::post('items/conversions', 'ItemsController@getItemConversions');
+    Route::post('items/get-total-component-value', 'ItemsController@getTotalComponentValue');
     Route::post('items/units/recipes', 'ItemsController@getItemRecipeUnits');
     Route::resource('items', 'ItemsController', [
         'only' => [

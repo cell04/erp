@@ -77,7 +77,7 @@ class ItemsTableSeeder extends Seeder
         ]);
 
         $item->itemConversions()->createMany([
-            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1]
+            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1],
             ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 2]
         ]);
 
@@ -100,7 +100,7 @@ class ItemsTableSeeder extends Seeder
         ]);
 
         $item->itemConversions()->createMany([
-            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1]
+            ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 1],
             ['corporation_id' => 1, 'conversion_id' => 2, 'module' => 2]
         ]);
     }

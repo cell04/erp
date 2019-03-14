@@ -115,10 +115,10 @@
                                             <vue-select v-model="quotation_item.item" @input="selectItem(index)" label="name" :options="items"></vue-select>
                                         </td>
                                         <td>
-                                            <input class="form-control" v-model.number="quotation_item.quantity" required>
+                                            <input class="form-control" @input="calculate(index)" v-model.number="quotation_item.quantity" required>
                                         </td>
                                         <td>
-                                            {{ quotation_item.unitOfMeasurement }}
+                                            <vue-select v-model="quotation_item.unitOfMeasurement" @input="selectUnit(index)" label="name" :options="quotation_item.unitOfMeasurements"></vue-select>
                                         </td>
                                         <td>
                                             <input class="form-control" @input="calculate(index)" v-model.number="quotation_item.price" required>
@@ -183,12 +183,12 @@
                     {
                         item: '',
                         item_id: '',
-                        quantity: '',
+                        quantity: 0,
                         unitOfMeasurements: [],
                         unitOfMeasurement: '',
                         unit_of_measurement_id: '',
                         price: 0,
-                        subTotal: 0
+                        subTotal: 0,
                     }
                 ],
                 amount: 0,
@@ -322,10 +322,35 @@
                 console.log('Warehouse - From: ' + this.stock_receivable_from_id + ' type: ' +  this.stock_receivable_from_type);
             },
 
+            loadAvailableUnits(index) {
+                let form = {
+                    unit_of_measurement_id : this.quotation_items[index].item.default_unit_of_measurement_id
+                }
+
+                axios.post("/api/unit-of-measurements/get-the-same-base-unit-of-measurements/", form).then(res => {
+                    this.quotation_items[index].unitOfMeasurements = res.data.unit_of_measurements;
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                    reject();
+                });
+            },
+
             selectItem(index) {
+
                 this.quotation_items[index].item_id = this.quotation_items[index].item.id;
-                this.quotation_items[index].unitOfMeasurement = this.quotation_items[index].item.selling_unit_of_measurement.name;
-                this.quotation_items[index].unit_of_measurement_id = this.quotation_items[index].item.selling_unit_of_measurement.id;
+
+                if (this.quotation_items[index].item) {
+                    this.loadAvailableUnits(index);
+                    this.loadItemPriceList(index);
+                }
+            },
+
+            selectUnit(index) {
+                this.quotation_items[index].unit_of_measurement_id = this.quotation_items[index].unitOfMeasurement.id;
+            },  
+
+            loadItemPriceList(index) {
 
                 let promise = new Promise((resolve, reject) => {
                     axios.get("/api/item-pricelists/get-item-pricelists/" + this.quotation_items[index].item_id).then(res => {
@@ -337,6 +362,7 @@
                     });
                 });
             },
+
             calculate(index) {
                 this.quotation_items[index].subTotal = (parseFloat(this.quotation_items[index].quantity) * parseFloat(this.quotation_items[index].price));
                 this.updateTotalAmount();

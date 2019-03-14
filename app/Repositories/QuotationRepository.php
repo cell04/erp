@@ -93,7 +93,7 @@ class QuotationRepository extends Repository
                 //check if quotation is approved
                 if ($quotation->status == 1 && ! empty($quotation->approved_by)) {
                     //send email notification to quotation contact
-                    $this->deductStocksQuantity($quotation);
+                    // $this->deductStocksQuantity($quotation);
                     $contact = $this->contact->find($quotation->contact_id);
                     $contact->notify(new QuotationApproval($quotation));
                 }
@@ -141,104 +141,5 @@ class QuotationRepository extends Repository
 
             return array('quotation' => $quotation, 'message' => 'Quotation is already Managed');
         });
-    }
-
-    public function deductStocksQuantity($quotation)
-    {
-        $componentItems = $this->getTotalComponentQuantity($quotation);
-
-        foreach ($componentItems as $item) {
-            $stocks = $quotation->quotable->stocks()->where('item_id', $item['id'])
-            ->orderBy('id', 'desc')
-            ->get();
-
-            $itemQuantity = $item['quantity'];
-
-            foreach ($stocks as $stock) {
-                if ($stock->item_id == $item['id']) {
-                    if ($stock->quantity > 0) {
-                        if ($stock->quantity >= $itemQuantity) {
-                            $stock->decrement('quantity', $itemQuantity);
-                            $itemQuantity = 0;
-                        } else {
-                            if ($itemQuantity > $stock->quantity) {
-                                $stock->decrement('quantity', $stock->quantity);
-                                $itemQuantity = $itemQuantity - $stock->quantity;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $quotation;    
-    }
-
-    public function getTotalComponentQuantity($quotation) 
-    {
-        $items = [];
-        $i = 0;
-
-        foreach ($quotation->quotationItems as $quotationItem) {
-            if ($quotationItem->item->with_component === 'yes') {
-                foreach ($quotationItem->item->itemComponents as $firstLayer) {
-                    if ($firstLayer->component->with_component === 'yes') {
-                        foreach ($firstLayer->component->itemComponents as $secondLayer) {
-                            if ($secondLayer->component->with_component == 'yes') {
-                                foreach ($secondLayer->component->itemComponents as $thirdLayer) {
-                                    if ($thirdLayer->component->with_component === 'yes') {
-                                        foreach ($thirdLayer->component->itemComponents as $forthLayer) {
-                                            $items[$i++] = array (
-                                                'item' => $forthLayer->component->name,
-                                                'item_id' => $forthLayer->component->id,
-                                                'quantity' => $quotationItem->quantity * ($forthLayer->quantity * $forthLayer->component->selling_converter)
-                                            );
-                                        }
-                                    } else {
-                                        $items[$i++] = array (
-                                            'item' => $thirdLayer->component->name,
-                                            'item_id' => $thirdLayer->component->id,
-                                            'quantity' => $quotationItem->quantity * ($thirdLayer->quantity * $thirdLayer->component->selling_converter)
-                                        );
-                                    }
-                                }
-                            } else {
-                                $items[$i++] = array (
-                                    'item' => $secondLayer->component->name,
-                                    'item_id' => $secondLayer->component->id,
-                                    'quantity' => $quotationItem->quantity * ($secondLayer->quantity * $secondLayer->component->selling_converter) 
-                                );
-                            }
-                        }
-                    } else {
-                        $items[$i++] = array (
-                            'item' => $firstLayer->component->name,
-                            'item_id' => $firstLayer->component->id,
-                            'quantity' => $quotationItem->quantity * ($firstLayer->quantity * $firstLayer->component->selling_converter) 
-                        );
-                    }
-                }
-            } else {
-                $items[$i++] = array (
-                    'item' => $quotationItem->item->name,
-                    'item_id' => $quotationItem->item->id,
-                    'quantity' => $quotationItem->quantity * $quotationItem->item->selling_converter
-                );
-            }
-        }
-
-        $uniqueItems = collect($items)->unique('item_id')->values()->all();
-
-        $i = 0;
-
-        foreach ($uniqueItems as $item) {
-            $totalQuantityPerItems[$i++] = [
-                'name' => $item['item'],
-                'id' => $item['item_id'],
-                'quantity' => collect($items)->where('item_id', $item['item_id'])->sum('quantity')
-            ];
-        }
-
-        return $totalQuantityPerItems;
     }
 }

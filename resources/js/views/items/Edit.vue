@@ -4,7 +4,6 @@
             <h4 class="module-title">ITEM</h4>
             <hr class="title-border">
         </div>
-
         <div class="p-md-4">
             <div class="card">
                 <div class="card-header">
@@ -18,17 +17,10 @@
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" v-model="name" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-
                             <div class="form-group">
                                 <label for="name">SKU</label>
                                 <input type="text" class="form-control" v-model="stock_keeping_unit" autocomplete="off" minlength="2" maxlength="255" required>
                             </div>
-
-                            <!-- <div class="form-group">
-                                <label for="description">Description</label>
-                                <textarea class="form-control" v-model="description" autocomplete="off" minlength="2" maxlength="255" required ></textarea>
-                            </div> -->
-
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -36,7 +28,6 @@
                                         <vue-select v-model="itemTypeId" @input="selectItemType()" label="name" :options="itemTypesList"></vue-select>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label> Item Subtype</label>
@@ -44,7 +35,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-md-6 form-group">
                                     <label>With Components</label><br />
@@ -56,15 +46,13 @@
                                         </span>
                                     </label>
                                 </div>
-
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Selling UOM</label>
                                         <vue-select v-model="sellingItemUnitId" @input="selectSellingUnit()" label="name" :options="itemUnitList"></vue-select>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
-
                             <div class="row">
                                 <!-- <div class="col-md-6" v-if="!withComponent">
                                     <div class="form-group">
@@ -79,22 +67,21 @@
                                         <vue-select v-model="defaultItemUnitId" @input="selectDefaultUnit()" label="name" :options="availableUOM"></vue-select>
                                     </div>
                                 </div> -->
-                                <div class="col-md-6" v-show="purchase_unit_of_measurement_id">
+                                <div class="col-md-6" v-if="purchase_unit_of_measurement_id">
                                     <div class="form-group">
                                         <label>Purchase UOM</label>
                                         <input type="text" class="form-control" @input="selectPurchaseUnit()" v-model="purchaseItemUnitId.name" id="class" readonly>
                                     </div>
                                 </div>
-                                <div class="col-md-6" v-show="default_unit_of_measurement_id">
+                                <div class="col-md-6" v-if="default_unit_of_measurement_id">
                                     <div class="form-group">
                                         <label>Default UOM</label>
                                         <input type="text" class="form-control" v-model="defaultItemUnitId.name" id="class" readonly>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="row">
-                                <div class="col" v-if="conversionsList.length != 0 && !withComponent">
+                                <div class="col" v-if="conversionsList.length != 0">
                                     <div class="card">
                                         <div class="card-header">
                                             <a class="text-success">Conversion Section</a>
@@ -149,6 +136,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <br>
                             <div class="row">
                                 <div class="col" v-if="withComponent">
                                     <div class="card">
@@ -170,9 +158,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
+                                                    <label>Unit</label>
                                                     <div class="form-group">
-                                                        <label>UOM</label>
-                                                        <input type="text" class="form-control" v-model="selectedComponent.unit_name"  disabled>
+                                                        <vue-select v-model="selectedComponent.unit" @input="selectComponentUnit()" label="name" :options="itemRecipeUnitList"></vue-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -196,7 +184,7 @@
                                                         <th scope="col">Item</th>
                                                         <th scope="col">Quantity</th>
                                                         <th scope="col">UOM</th>
-                                                        <!-- <th scope="col">Unit Price</th> -->
+                                                        <!-- <th scope="col">Converter Value</th> -->
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
@@ -205,7 +193,7 @@
                                                         <td>{{ item_component.component.name }}</td>
                                                         <td>{{ item_component.quantity }} </td>
                                                         <td>{{ item_component.unit_of_measurement.name }}</td>
-                                                        <!-- <td>{{ item_component.unit_price }}</td> -->
+                                                        <!-- <td>{{ item_component.converter_value }}</td> -->
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm" @click="deleteComponentRow(index)"><i class="far fa-times-circle"></i></button>
                                                         </td>
@@ -292,31 +280,30 @@
                     this.itemClassId = res.data.item.item_classification;               
                     this.itemClassList = res.data.item.item_type.item_classifications;
                     this.with_component = res.data.item.with_component;
-                    this.sellingItemUnitId = res.data.item.selling_unit_of_measurement;
-                    this.selling_unit_of_measurement_id = res.data.item.selling_unit_of_measurement_id;
+                    this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id;
+                    this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
+                    this.item_conversions = res.data.item.item_conversions;
                     this.getItemType();
                     this.getClassType();
                     this.getUnit();
                     this.getConversions();
+
+                    let module_name = {
+                            1: 'Inventory',
+                            2: 'Recipe'
+                    };
+
+                    this.item_conversions.map(item_conversions => {
+                        item_conversions.module_name = module_name[item_conversions.module];
+                    });
+
                     if (this.with_component === 'yes') {
                         this.withComponent = true;
                         this.item_components = res.data.item.item_components;
                     } else {
                         this.withComponent = false;
-                        this.default_unit_of_measurement_id = res.data.item.default_unit_of_measurement_id;
                         this.purchase_unit_of_measurement_id = res.data.item.purchase_unit_of_measurement_id;
-                        this.defaultItemUnitId = res.data.item.default_unit_of_measurement;
-                        this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;
-                        this.item_conversions = res.data.item.item_conversions;
-                        let module_name = {
-                            1: 'Inventory',
-                            2: 'Recipe'
-                        };
-
-                        this.item_conversions.map(item_conversions => {
-                            item_conversions.module_name = module_name[item_conversions.module];
-                        });
-                        this.getConversions();   
+                        this.purchaseItemUnitId = res.data.item.purchase_unit_of_measurement;   
                     }
                     resolve();
                 });
@@ -344,6 +331,26 @@
                     this.with_component = 'no';
                 }
             },
+
+            selectComponentUnit() {
+                this.getComponentTotalValue();
+            },
+
+            getComponentTotalValue() {
+                let form = {
+                    item_id: this.selectedComponent.component.id,
+                    unit_of_measurement_id: this.selectedComponent.unit.id,
+                    quantity: this.selectComponent.quantity 
+                };
+
+                axios.post("/api/items/get-total-component-value", form).then(res => {
+                    this.selectComponent.converter_value = res.data.items;
+                }).catch(err => {
+                    this.ifReady = true;
+                    console.log(err);
+                });
+            }, 
+
             addNewItemComponent() {
                 this.item_components.push({
                     component_id: this.selectedComponent.component.id,
@@ -351,8 +358,7 @@
                     unit_of_measurement: this.selectedComponent.unit,
                     unit_of_measurement_id: this.selectedComponent.unit.id,
                     quantity: this.selectedComponent.quantity,
-                    converter_value: this.selectedComponent.component.selling_converter
-                    // unit_price: 0
+                    converter_value: this.selectedComponent.converter_value
                 });
 
                 this.selectedComponent = {};
@@ -393,10 +399,10 @@
             },
             getConversions(){
                 let formData = {
-                    purchase_unit_of_measurement_id: this.purchase_unit_of_measurement_id
+                    default_unit_of_measurement_id: this.default_unit_of_measurement_id
                 };
 
-                if (this.purchase_unit_of_measurement_id) {
+                if (this.default_unit_of_measurement_id) {
                     axios.post("/api/items/conversions", formData).then(res => {
                     console.log(res.data.conversions);
                     this.availableUOM = res.data.conversions.availableUOM;

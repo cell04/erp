@@ -67,17 +67,17 @@ class UnitOfMeasurementsTableSeeder extends Seeder
 
         DB::table('conversions')->insert([
             'corporation_id'                => 1,
-            'unit_of_measurement_from_id'   => 2,
+            'unit_of_measurement_from_id'   => 5,
             'from_value'                    => 1,
-            'unit_of_measurement_to_id'     => 5,
+            'unit_of_measurement_to_id'     => 2,
             'to_value'                      => 1000
         ]);
 
         DB::table('conversions')->insert([
             'corporation_id'                => 1,
-            'unit_of_measurement_from_id'   => 3,
+            'unit_of_measurement_from_id'   => 6,
             'from_value'                    => 1,
-            'unit_of_measurement_to_id'     => 6,
+            'unit_of_measurement_to_id'     => 3,
             'to_value'                      => 300
         ]);
     }

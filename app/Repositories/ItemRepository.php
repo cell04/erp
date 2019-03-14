@@ -15,6 +15,7 @@ class ItemRepository extends Repository
     protected $defaultConverter = 1;
     protected $uom;
     protected $itemConversion;
+    protected $quantity = 1;
 
     /**
      * Create new instance of item repository.
@@ -101,7 +102,7 @@ class ItemRepository extends Repository
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
-            // return $request->all();
+
             $this->generateStoreConverters($request);
 
             $request->request->add([
@@ -126,6 +127,31 @@ class ItemRepository extends Repository
 
             return $item;
         });
+    }
+
+    public function getTotalComponentValue($request)
+    {
+        $i = 0;
+        $uom = [];
+
+        foreach ($this->uom->allWithTheSameBaseUnit($request->unit_of_measurement_id) as $unit) {
+            $uom[$i++] = $unit->id;     
+        }
+
+        $conversions = $this->conversion->where('unit_of_measurement_from_id', $request->unit_of_measurement_id)
+        ->whereIn('unit_of_measurement_to_id', $uom)
+        ->whereHas('itemConversions', function($query) use ($request) {
+            $query->where('module', 2)
+            ->where('item_id', $request->item_id);
+        })->get();
+
+        if (!empty($conversions)) {
+            foreach ($conversions as $conversion) {
+                $this->quantity = $this->quantity * ($conversion->from_value * $conversion->to_value);
+            }
+        }
+
+        return $this->quantity;
     }
 
     public function withoutComponents()
@@ -181,7 +207,6 @@ class ItemRepository extends Repository
     {
         return DB::transaction(function () use ($request, $id) {
 
-            // return $request->all();
             $this->generateUpdateConverters($request);
 
             $request->request->add([
